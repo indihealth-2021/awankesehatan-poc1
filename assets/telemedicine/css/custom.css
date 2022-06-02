@@ -1,0 +1,194 @@
+.btn-cstm {
+  background-color: #00a99d;
+  color: #FFF;
+  font-weight: bold;
+  padding: 2px;
+  cursor: pointer;
+  border: 1px solid #FFF;
+}
+
+.btn-cstm {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+
+.dataTables_filter input {
+  border-radius: 0px !important;
+}
+
+.ui-autocomplete {
+  z-index: 1051 !important;
+  padding: 10px;
+  cursor: pointer;
+  width: 50px;
+  background: #dddddd;
+  border: 1px solid #333;
+}
+.dataTables_processing {
+  color: black !important;
+}
+button:disabled{
+  background: #dddddd !important;
+  border: 1px solid #dddddd;
+}
+button:hover:disabled{
+  background: #dddddd !important;
+  border: 1px solid #dddddd;
+}
+input:read-only {
+  background: #dddddd !important;
+}
+input:-moz-read-only {
+  background: #dddddd !important;
+}
+
+.modal .dataTables_filter input{
+  border:1px solid #666;
+}
+.modal .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .tab-pane .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .tab-pane .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{
+  color:#000 !important;
+}
+.modal label {color:#000 !important;}
+.modal .dataTables_wrapper .dataTables_paginate .paginate_button {color:black !important;}
+.modal .dataTables_wrapper .dataTables_paginate .paginate_button:hover {color:white !important;}
+.modal .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {color:black !important;}
+
+.alert-fixed {
+    position: fixed !important;
+
+    z-index: 100;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+.hide {
+    display: none;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#tbl-kirim-chat {
+  border: 1px solid #CCC;
+  float: right;
+  cursor: pointer;
+  padding: 8px;
+}
+
+#input-message {
+  padding: 8px;
+}
+
+.from-me,
+.from-other {
+    padding: 5px 15px;
+    margin: 5px 10px;
+    width: 65% !important;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.from-me strong,
+.from-other strong {
+    font-size: 13px;
+}
+
+.from-me span,
+.from-other span {
+    font-size: 10px;
+}
+
+.from-me span {
+  float: right;
+}
+
+.from-other span {
+  float: left;
+}
+
+.from-me {
+    text-align: left;
+    background: #00a99d;
+    float: left;
+}
+
+.from-other {
+    text-align: right;
+    background: #ABABAB;
+    float: right;
+}
+
+@media screen and (max-width: 1024px) {
+    .tab-tele { font-size: 0.6em !important; }
+    .tab-evaluasi-tele { font-size: 0.6em !important; }
+    .durasi-conference {display: none !important;}
+}
+
+@media screen and (max-width: 960px) {
+    .tab-tele { font-size: 0.55em !important; }
+    .tab-evaluasi-tele { font-size: 0.55em !important; }
+}
+
+@media screen and (max-width: 768px) {
+    .tab-tele { font-size: 0.4em !important; }
+    .tab-evaluasi-tele { font-size: 0.4em !important; }
+    .data-pasien-tele td { font-size: 0.7em !important }
+}
+
+#pilihan-conference-pengampu {
+    margin-top: 10px;
+}
+
+#konsultasi {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    right: 10px;
+    height: 100%;
+}
+
+.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix.ui-draggable-handle {
+  background: #00a99d !important;
+  color: white;
+  border-left: 1px solid #cfd6eb;
+  border-right: 1px solid #cfd6eb;
+  border-top: 1px solid #cfd6eb;
+  padding: 10px;
+}
+
+#dialogConfirmationDelete{
+  border-left: 1px solid #cfd6eb;
+  border-right: 1px solid #cfd6eb;
+  padding: 10px;
+  text-align: center;
+}
+
+.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix {
+  background: white;
+  color: white;
+  border-left: 1px solid #cfd6eb;
+  border-right: 1px solid #cfd6eb;
+  border-bottom: 1px solid #cfd6eb;
+  padding: 10px;
+  text-align: center;
+}
+
+.ui-dialog-buttonset button {
+  background: #00a99d;
+  margin: 5px;
+  padding: 5px 20px;
+  color: white;
+  cursor: pointer;
+}

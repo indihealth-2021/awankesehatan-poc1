@@ -1,0 +1,29 @@
+{
+  "name": "rtc-server",
+  "version": "4.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cisco-vpn": "^1.0.2",
+    "coffee-script": "^1.12.6",
+    "connect": "^3.6.2",
+    "core-js": "^3.6.5",
+    "express-http-proxy": "^1.6.0",
+    "express.io": "^1.1.13",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mysql": "^2.13.0",
+    "peerjs": "^1.2.0",
+    "socket.io-proxy": "^1.0.3",
+    "webrtc-ips": "^0.1.4"
+  },
+  "devDependencies": {
+    "http-proxy-middleware": "^1.0.3"
+  }
+}

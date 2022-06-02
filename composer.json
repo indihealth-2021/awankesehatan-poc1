@@ -1,0 +1,7 @@
+{
+    "require": {
+      
+        "google/recaptcha": "1.2",
+        "irfa/php-sn-generator": "^1.1"
+    }
+}

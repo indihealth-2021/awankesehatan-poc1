@@ -1,0 +1,163 @@
+.tabs {
+	position: absolute;
+	padding:10px;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index: 2;
+}
+
+.tabs__head {
+	position: relative;
+	z-index: 1;
+
+	display: block;
+	margin: 0;
+	padding: 0;
+
+	list-style-type: none;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	zoom: 1;
+
+	-webkit-touch-callout: none;
+}
+
+.tabs__head:before, .tabs__head:after {
+	content: "";
+
+	display: table;
+}
+
+.tabs__head:after {
+	clear: both;
+}
+
+.lt-ie8 .tabs__head {
+	zoom: 1;
+}
+
+.tabs__body {
+	position: absolute;
+	top:50px;
+	bottom:10px;
+	left:10px;
+	right:10px;
+}
+
+.tabs__tab {
+	position: relative;
+
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 0;
+
+	list-style-type: none;
+
+	background: none;
+	cursor: pointer;
+}
+
+.tabs__tab_active {
+	cursor: default;
+}
+
+.tabs__icon, .tabs__head-text {
+	display: inline-block;
+
+	vertical-align: middle;
+}
+
+.tabs__icon {
+	min-height: 30px;
+	margin-right: 6px;
+}
+
+.tabs__icon svg {
+	-webkit-transition: 125ms all ease;
+	transition: 125ms all ease;
+
+	fill: currentColor;
+}
+
+.tabs__preloader {
+	position: relative;
+}
+
+.tabs__pane {
+	position: absolute;
+	display: none;
+	
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+}
+
+.tabs__pane_active {
+	display: block;
+}
+
+// Default
+.tabs_style_default {
+	margin: 0 0 30px;
+}
+
+.tabs_style_default .tabs__head {
+	border-bottom:2px solid #FFF;
+}
+
+.tabs_style_default .tabs__tab {
+	margin-bottom: -1px;
+	padding: 5px 70px 5px 10px;
+
+	font-size: 13px;
+	line-height: 1.2;
+	color: #FFF;
+	font-weight:bold;
+	text-align:left;
+}
+
+.tabs_style_default .tabs__tab:last-child {
+	margin-right: 0;
+}
+
+.tabs_style_default .tabs__tab_active {
+	background: #fff;
+	color:#000;
+}
+
+.tabs_style_default .tabs__preloader {
+	height: 80px;
+
+	background: url("tabs__preloader.svg") no-repeat 50% 20px;
+	background-size: 30px;
+}
+
+.tabs_style_default .tabs__head_inverted {
+	border-bottom: none;
+	border-top-width: 1px;
+}
+
+.tabs_style_default .tabs__head_inverted .tabs__tab{
+	border-width: 0 1px 1px 1px;
+	margin-top: -1px;
+}
+
+.tabs_style_default .tabs__pane {
+	margin: 20px 0 0 0;
+}
+
+.tabs_style_default.tabs_color_blue .tabs__tab_active {
+	border-color: #2ea9fa;
+}
+
+.tabs_style_default.tabs_color_blue .tabs__head {
+	border-color: #2ea9fa;
+}
+

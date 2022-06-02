@@ -1,0 +1,49 @@
+body{
+	background: #f7f7f7;
+}
+.card{
+	border-radius: 0;
+	border: 0;
+}
+.card > .card-header{
+	background: transparent;
+	border-bottom:1px solid #eee; ; 
+}
+.form-control{
+	border-radius: 0;
+}
+.form-control:focus{
+	box-shadow: none;
+}
+.icon-user{
+	float: right;
+	top: 18px;
+	right: 18px;
+}
+.mt-12{
+	margin-top: 2px;
+}
+.border-box{
+	box-shadow: 0 1px 1px rgbs(0,0,0,0.04);
+	border: 1px solid rgbs(171,169,169,0,06);
+}
+.btn-primary{
+	border-radius: 0;
+	background-color: #2C94D2;
+}
+.navbar button{
+  background-color: ;
+  color: #000;
+  font-size: 16px;
+  width: 100px;
+}
+.navbar button:hover{
+  color: #fff;
+  background-color: #00A99D; 
+}
+.ftco-tampilan{
+	
+}
+/*.card-body-image{
+	background-image: url(assets/telemedicine/img/wave.svg);
+}*/

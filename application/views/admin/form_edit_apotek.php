@@ -93,6 +93,21 @@
                     <input type="text" class="form-control floating" name="alamat_jalan" id="alamat_jalan" value="<?php echo $data->alamat_jalan ?>" required placeholder="Masukan Alamat Jalan">
                 </div>
               </div>
+            </div>
+            <div class="row ml-2">
+              <div class="col-sm-6">
+                <div class="form-group form-focus">
+                    <label class="focus-label">Latitude</label>
+                    <input type="text" class="form-control floating" name="latitude" <?php echo isset($old) ? 'value="'.$old['latitude'].'"' : ''; ?> required placeholder="Masukkan latitude" value="<?php echo $data->latitude ?>">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group form-focus">
+                  <label for="" class="focus-label">Longitude</label>
+                  <input type="text" name="longitude" id="longitude" class="form-control floating" <?php echo isset($old) ? 'value="'.$old['longitude'].'"' : ''; ?> placeholder="Masukkan longitude" value="<?php echo $data->longitude ?>">
+                </div>
+              </div>
+            </div>
             <div class="row ml-2">
               <div class="col-sm-12 font-14">
                 <label class="gen-label text-label-form">Status :</label>

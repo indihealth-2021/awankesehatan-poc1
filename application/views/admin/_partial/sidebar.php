@@ -45,6 +45,25 @@
                             </ul>
                         </li>
                         <li class="submenu">
+                            <a href="#" class=""><!-- <i class="fas fa-user"></i> -->
+                                <i class="fa fa-h-square"></i>
+                                <span>
+                                    Apotek Management
+                                </span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li class="<?php if (isset($this->uri->segments[2])) {
+                                        echo strtolower($this->uri->segments[2]) == 'apotek' ? 'active' : '';
+                                    } ?>">
+                                    <a href="<?php echo base_url('admin/Apotek') ?>"><span>Apotek</span></a>
+                                </li>
+                                <li class="<?php if (isset($this->uri->segments[2])) {
+                                        echo strtolower($this->uri->segments[2]) == 'adminapotek' ? 'active' : '';
+                                    } ?>">
+                                    <a href="<?php echo base_url('admin/AdminApotek') ?>"><span>Admin Apotek</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
                             <a href="#" ><!-- <i class="fas fa-hospital"></i> --> 
                                 <i class="stroke"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                     <path d="M2.25 15.75H15.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

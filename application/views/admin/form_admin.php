@@ -14,8 +14,8 @@
           </div>
       </div> 
       <div class="row">
-        <div class="col-lg-12">         
-          <form method="post" id="form-add-admin" onsubmit="return ubah();" action="<?php echo base_url('admin/Admin/addAdmin') ?>" enctype="multipart/form-data" autocomplete="off">
+        <div class="col-lg-12">
+          <?= form_open_multipart('admin/Admin/addAdmin', 'id="form-add-admin" onsubmit="return ubah();" autocomplete="off"'); ?>
             <p class="title-form">Akun</p>
             <div class="row">
               <div class="col-md-4">
@@ -192,7 +192,7 @@
                 <a href="<?php echo base_url('admin/admin/manage_admin') ?>"><button type="button" class="btn btn-batal ml-4"  id="btn-add-admin">Batal</button></a>
               </div>
             </div>
-          </form>
+          <?= form_close(); ?>
         </div>
       </div> 
 

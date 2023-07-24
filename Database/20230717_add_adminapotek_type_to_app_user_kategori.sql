@@ -1,0 +1,1 @@
+INSERT INTO `app_user_kategori` (`id`, `nama`, `show_on_form`, `show_layanan`, `show_level`, `show_fasyankes`, `need_all_layanan`, `aktif`, `created_at`, `updated_at`, `created_by`, `updated_by`, `id_parent`) VALUES (NULL, 'Admin Apotek', '0', '0', '0', '0', '0', '0', current_timestamp(), NULL, '386', NULL, NULL);

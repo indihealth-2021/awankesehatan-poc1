@@ -15,4 +15,24 @@ class Home extends CI_Controller {
 	// $this->session->sess_destroy();
         $this->load->view('home', $menu);
     }
+
+    private function getNearest() {
+        $key = "AuPkBhRU1tlp5gG2Vki8-LpP7ooPssnBv_MQ_u1BNoPXIWZiY7AF_3BVvpLQz7XC";
+        $url = 'https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?origins=47.6044,-122.3345;47.6731,-122.1185;47.6149,-122.1936&destinations=47.6044,-122.3345;47.6731,-122.1185;47.6149,-122.1936&travelMode=driving&key='.$key;
+        
+        return json_decode(file_get_contents($url));
+    }
+
+    private function func($foo) {
+        $n = "<br>";
+        return "Hello".$n."World";
+    }
+
+    public function test() {
+        // $results = $this->getNearest();
+        // $results = $results->resourceSets[0]->resources[0]->results;
+        // $br = "<br";
+        echo $this->func("Hello");
+        
+    }
 }

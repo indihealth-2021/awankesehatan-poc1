@@ -188,6 +188,14 @@
                     <input type="hidden" name="id_registrasi" value="<?php echo $id_registrasi ?>" required>
                   </div>
               </div>
+            <p class="py-2 font-12">Apotek</p>
+              <div class="col-md-12" id="apotek">
+                  <div class="form-group row">
+                    <select id='apotek' name='apotek' style="width: 100%">
+                        <option value='0'>-- Pilih Apotek --</option>
+                    </select>
+                  </div>
+              </div>
               <div class="row">
                 <div class="col-md-9">
                   <p class="font-12">Resep</p>

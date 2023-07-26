@@ -9,6 +9,36 @@ class Pembayaran extends CI_Controller
 {
     public $data;
 
+    private function getIndoDay($dayInEnglish) {
+        switch ($dayInEnglish) {
+            case "Mon":
+                $value = "Senin";
+                break;
+            case "Tue":
+                $value = "Selasa";
+                break;
+            case "Wed":
+                $value = "Rabu";
+                break;
+            case "Thu":
+                $value = "Kamis";
+                break;
+            case "Fri":
+                $value = "Jumat";
+                break;
+            case "Sat":
+                $value = "Sabtu";
+                break;
+            case "Sun":
+                $value = "Minggu";
+                break;
+            default:
+              $value = "Unknown";
+        }
+
+        return $value;
+    }
+
     public function __construct()
     {
         parent::__construct();
@@ -30,10 +60,12 @@ class Pembayaran extends CI_Controller
             }
         }
         $data['registrasi'] = $this->db->query('SELECT reg.id as registrasi_id, reg.keterangan, reg.id_status_pembayaran, reg.id_pasien, d.name as nama_dokter,d.foto as foto_dokter, p.poli, d.id as id_dokter, p.id as jadwal_id, nominal.biaya_adm as biaya_adm_poli, bukti_pembayaran.biaya_adm as biaya_adm_bukti, nominal.harga as biaya_konsultasi_poli,bukti_pembayaran.biaya_konsultasi as biaya_konsultasi_bukti, jk.tanggal as tanggal_konsultasi, jk.jam as waktu_konsultasi FROM data_registrasi reg INNER JOIN jadwal_dokter p ON reg.id_jadwal=p.id INNER JOIN master_user d ON p.id_dokter = d.id INNER JOIN detail_dokter ON d.id = detail_dokter.id_dokter INNER JOIN nominal ON nominal.id = detail_dokter.id_poli LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = reg.id LEFT JOIN jadwal_konsultasi jk ON reg.id = jk.id_registrasi WHERE reg.id = "' . $this->input->get('regid') . '" AND reg.id_pasien = ' . $this->session->userdata('id_user'))->row();
+
         if (!$data['registrasi']) {
             show_404();
         }
         $data['bukti_pembayaran'] = $this->db->query('SELECT bukti_pembayaran.*, (SELECT payment FROM payment WHERE payment_id = bukti_pembayaran.id_payment) as payment_name, (SELECT logo FROM payment WHERE payment_id = bukti_pembayaran.id_payment) as payment_logo, (SELECT payment FROM master_manual_payment WHERE payment_id = bukti_pembayaran.id_payment) as manual_payment_name, (SELECT logo FROM master_manual_payment WHERE payment_id = bukti_pembayaran.id_payment) as manual_payment_logo FROM bukti_pembayaran WHERE bukti_pembayaran.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.id_registrasi = "' . $this->input->get('regid') . '" and bukti_pembayaran.status != 2')->row();
+
         if ($data['bukti_pembayaran']) {
             if ($data['bukti_pembayaran']->metode_pembayaran == 3 && $data['bukti_pembayaran']->status == 0) {
                 redirect(base_url('pasien/Pembayaran/transfer_va/' . $this->input->get('regid') . '/' . $data['bukti_pembayaran']->id_payment));
@@ -562,32 +594,23 @@ class Pembayaran extends CI_Controller
         curl_close($curl);
         // ==
 
-        if (!$result->status) {
-            $day_eng = (new DateTime($data['registrasi']->tanggal_konsultasi))->format('D');
-            if ($day_eng == 'Mon') {
-                $day_ind = 'Senin';
-            } else if ($day_eng == 'Tue') {
-                $day_ind = 'Selasa';
-            } else if ($day_eng == 'Wed') {
-                $day_ind = 'Rabu';
-            } else if ($day_eng == 'Thu') {
-                $day_ind = 'Kamis';
-            } else if ($day_eng == 'Fri') {
-                $day_ind = 'Jum\'at';
-            } else if ($day_eng == 'Sat') {
-                $day_ind = 'Sabtu';
-            } else if ($day_eng == 'Sun') {
-                $day_ind = 'Minggu';
-            } else {
-                $day_ind = 'Unkown';
+        $day_ind = $this->getIndoDay($dayInEnglish=(new DateTime($data['registrasi']->tanggal_konsultasi))->format('D'));
+
+        if($result) {
+            if ($result->status) {
+                $data['tanggal_konsultasi'] = $result->status ? $result->data->tanggal_konsultasi : $day_ind . ', ' . (new DateTime($data['registrasi']->tanggal_konsultasi))->format('d/m/Y');
+                $data['waktu_konsultasi'] = $result->status ? '' : $data['registrasi']->waktu_konsultasi;
+                $data['waktu_konsultasi_berakhir'] = $result->status ? '' : (new DateTime($data['registrasi']->waktu_konsultasi))->modify('+30 Minutes')->format('H:i');
             }
+        }else {
+            $data['tanggal_konsultasi'] = $day_ind . ', ' . (new DateTime($data['registrasi']->tanggal_konsultasi))->format('d/m/Y');
+            $data['waktu_konsultasi'] = $data['registrasi']->waktu_konsultasi;
+            $data['waktu_konsultasi_berakhir'] = (new DateTime($data['registrasi']->waktu_konsultasi))->modify('+30 Minutes')->format('H:i');
         }
-        $data['tanggal_konsultasi'] = $result->status ? $result->data->tanggal_konsultasi : $day_ind . ', ' . (new DateTime($data['registrasi']->tanggal_konsultasi))->format('d/m/Y');
-        $data['waktu_konsultasi'] = $result->status ? '' : $data['registrasi']->waktu_konsultasi;
-        $data['waktu_konsultasi_berakhir'] = $result->status ? '' : (new DateTime($data['registrasi']->waktu_konsultasi))->modify('+30 Minutes')->format('H:i');
 
         $this->load->view('template', $data);
     }
+
 
     public function transfer_va($id_registrasi = null, $bank_id = null)
     {
@@ -606,12 +629,19 @@ class Pembayaran extends CI_Controller
             show_404();
         }
 
-        $data['registrasi'] = $this->db->query('SELECT reg.id as registrasi_id, reg.keterangan, reg.id_status_pembayaran, reg.id_pasien, d.name as nama_dokter, p.poli, d.id as id_dokter, p.id as jadwal_id, nominal.biaya_adm as biaya_adm_poli, bukti_pembayaran.biaya_adm as biaya_adm_bukti, bukti_pembayaran.expired_date, bukti_pembayaran.id_payment, nominal.harga as biaya_konsultasi_poli,bukti_pembayaran.biaya_konsultasi as biaya_konsultasi_bukti, jk.tanggal as tanggal_konsultasi, jk.jam as waktu_konsultasi, bukti_pembayaran.va_number FROM data_registrasi reg INNER JOIN jadwal_dokter p ON reg.id_jadwal=p.id INNER JOIN master_user d ON p.id_dokter = d.id INNER JOIN detail_dokter ON d.id = detail_dokter.id_dokter INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = reg.id LEFT JOIN jadwal_konsultasi jk ON reg.id = jk.id_registrasi WHERE reg.id = "' . $id_registrasi . '" AND reg.id_status_pembayaran = 0 AND bukti_pembayaran.status = 0 AND reg.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.metode_pembayaran = 3')->row();
-        if (!$data['registrasi']) {
+        // $data['bukti_pembayaran'] = $this->db->query('SELECT * FROM bukti_pembayaran WHERE id_pasien = ' . $this->session->userdata('id_user') . ' AND id_registrasi = "' . $this->input->get('regid') . '"')->row();
+
+        // $data['registrasi'] = $this->db->query('SELECT reg.id as registrasi_id, reg.keterangan, reg.id_status_pembayaran, reg.id_pasien, d.name as nama_dokter, p.poli, d.id as id_dokter, p.id as jadwal_id, nominal.biaya_adm as biaya_adm_poli, bukti_pembayaran.biaya_adm as biaya_adm_bukti, bukti_pembayaran.expired_date, bukti_pembayaran.id_payment, nominal.harga as biaya_konsultasi_poli,bukti_pembayaran.biaya_konsultasi as biaya_konsultasi_bukti, jk.tanggal as tanggal_konsultasi, jk.jam as waktu_konsultasi, bukti_pembayaran.va_number FROM data_registrasi reg INNER JOIN jadwal_dokter p ON reg.id_jadwal=p.id INNER JOIN master_user d ON p.id_dokter = d.id INNER JOIN detail_dokter ON d.id = detail_dokter.id_dokter INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = reg.id LEFT JOIN jadwal_konsultasi jk ON reg.id = jk.id_registrasi WHERE reg.id = "' . $id_registrasi . '" AND reg.id_status_pembayaran = 0 AND bukti_pembayaran.status = 0 AND reg.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.metode_pembayaran = 3')->row();
+
+        $data['registrasi'] = $this->db->query('SELECT reg.id as registrasi_id, reg.keterangan, reg.id_status_pembayaran, reg.id_pasien, d.name as nama_dokter, p.poli, d.id as id_dokter, p.id as jadwal_id, nominal.biaya_adm as biaya_adm_poli, bukti_pembayaran.biaya_adm as biaya_adm_bukti, bukti_pembayaran.expired_date, bukti_pembayaran.id_payment, nominal.harga as biaya_konsultasi_poli,bukti_pembayaran.biaya_konsultasi as biaya_konsultasi_bukti, jk.tanggal as tanggal_konsultasi, jk.jam as waktu_konsultasi, bukti_pembayaran.va_number FROM data_registrasi reg INNER JOIN jadwal_dokter p ON reg.id_jadwal=p.id INNER JOIN master_user d ON p.id_dokter = d.id INNER JOIN detail_dokter ON d.id = detail_dokter.id_dokter INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = reg.id LEFT JOIN jadwal_konsultasi jk ON reg.id = jk.id_registrasi WHERE reg.id = "' . $id_registrasi . '" AND reg.id_status_pembayaran = 0 AND reg.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.metode_pembayaran = 3')->row();
+
+        $data['payment'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND payment_id = '.$data['registrasi']->id_payment)->row();
+
+        if(!$data['payment'] || !$data["registrasi"]){
             show_404();
         }
+        
         $data['web'] = $this->db->query("SELECT * FROM master_web")->row();
-        // $data['bukti_pembayaran'] = $this->db->query('SELECT * FROM bukti_pembayaran WHERE id_pasien = ' . $this->session->userdata('id_user') . ' AND id_registrasi = "' . $this->input->get('regid') . '"')->row();
         $data['view'] = 'pasien/transfer_virtual_account';
         $data['title'] = 'Transfer Virtual Account';
         $data['user'] = $this->db->query('SELECT id, name, foto, lahir_tanggal FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
@@ -619,10 +649,6 @@ class Pembayaran extends CI_Controller
         $data['js_addons'] = '';
         $data['css_addons'] = '';
 
-        $data['payment'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND payment_id = '.$data['registrasi']->id_payment)->row();
-        if(!$data['payment']){
-            show_404();
-        }
 
         $this->load->view('template', $data);
     }
@@ -647,6 +673,8 @@ class Pembayaran extends CI_Controller
         $alamat_kelurahan = $post_data['alamat_kelurahan'];
         $kode_pos = $post_data['kode_pos'];
         $alamat_detail = $post_data['alamat_detail'];
+
+        
         if (!$bank_id || !$alamat_provinsi || !$alamat_kota || !$alamat_kecamatan || !$alamat_kelurahan || !$kode_pos || !$alamat_detail) {
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi));
@@ -713,8 +741,34 @@ class Pembayaran extends CI_Controller
         ";
         $data['css_addons'] = '';
 
-        $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1 AND payment_id = '.$bank_id)->row();
+        switch ($bank_id) {
+            case 1:
+                $bank_name = 'Permata';
+                $bank_logo = 'permata.png';
+                break;
+            case 2:
+                $bank_name = 'BNI';
+                $bank_logo = 'bni.png';
+                break;
+            case 3:
+                $bank_name = 'CIMB';
+                $bank_logo = 'cimb.png';
+                break;
+            default:
+                $bank_name = '';
+                $bank_logo = '';
+                show_404();
+                break;
+        }
 
+        $data['data_bank'] = array(
+            "id_bank" => $bank_id,
+            'nama_bank' => $bank_name,
+            'logo_bank' => $bank_logo,
+        );
+
+        $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1 AND payment_id = '.$bank_id)->row();
+        
         if(!$data['manual_payment']){
             show_404();
         }

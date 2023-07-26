@@ -101,6 +101,24 @@ class Teleconsultasi extends CI_Controller
         $this->load->view('template', $data);
     }
 
+    public function get_active_apotek() {
+        $searchTerm = $this->input->get('searchTerm');
+
+        $pglm = $this->input->get("page_limit");
+        $page_lim = (empty($pglm) ? 10 : $pglm);
+        $pg = $this->input->get("page");
+        $page =  (empty($pg) ? 0 : $pg);
+        $limit = $page * $page_lim;
+        $cnt = $this->db->query("select id from master_apotek WHERE aktif = 1")->result();
+        $filteredValues = $this->db->query("select id, nama as text FROM master_apotek WHERE aktif = 1 AND nama LIKE '%" . $searchTerm . "%' LIMIT $limit , $page_lim ;")->result_array();
+
+        echo json_encode(array(
+            'incomplete_results' => false,
+            'items' => $filteredValues,
+            'total' => count($cnt) // Total rows without LIMIT on SQL query
+        ));
+    }
+
     public function get_active_diagnoses()
     {
         $searchTerm = $this->input->get('searchTerm');
@@ -490,6 +508,34 @@ $(document).ready(function() {
             cache: true
         }
     });
+
+    $('select[name=apotek]').select2({
+        ajax: {
+          url: '" . base_url('dokter/Teleconsultasi/get_active_apotek') . "',
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+              return {
+                  searchTerm: params.term, // search term
+                  page_limit: 50,
+                  page: params.page || 0
+              };
+          },
+          processResults: function (data, params) {
+              // console.log(params.page);
+              // console.log(data.total);
+              // console.log((params.page * 50) < data.total);
+              params.page = params.page || 0; 
+              return {
+                  results: data.items,
+                  pagination: {
+                      more: (params.page * 50) < data.total
+                    }
+              };
+          },
+          cache: true
+      }
+  });
 });
 </script>
 <script src='" . base_url('assets/js/message.js') . "'></script>

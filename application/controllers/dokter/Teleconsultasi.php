@@ -508,17 +508,20 @@ $(document).ready(function() {
             cache: true
         }
     });
-
     $('select[name=apotek]').select2({
         ajax: {
-          url: '" . base_url('dokter/Teleconsultasi/get_active_apotek') . "',
+          url: '" . base_url('Apotek/findNearest'). "',
           dataType: 'json',
-          delay: 250,
+          method: 'POST',
+          //delay: 250,
           data: function (params) {
               return {
                   searchTerm: params.term, // search term
                   page_limit: 50,
-                  page: params.page || 0
+                  page: params.page || 0,
+                  id_kota: ".$data["pasien"]->alamat_kota.",
+                  lat: ".$data["pasien"]->latitude.",
+                  long: ".$data["pasien"]->longitude."
               };
           },
           processResults: function (data, params) {
@@ -526,6 +529,8 @@ $(document).ready(function() {
               // console.log(data.total);
               // console.log((params.page * 50) < data.total);
               params.page = params.page || 0; 
+
+              console.log(data.items);
               return {
                   results: data.items,
                   pagination: {
@@ -533,9 +538,9 @@ $(document).ready(function() {
                     }
               };
           },
-          cache: true
+          cache: true,
       }
-  });
+    });
 });
 </script>
 <script src='" . base_url('assets/js/message.js') . "'></script>

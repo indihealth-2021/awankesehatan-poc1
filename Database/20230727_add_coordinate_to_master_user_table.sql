@@ -1,0 +1,1 @@
+ALTER TABLE `master_user`ADD `latitude` VARCHAR(100); ALTER TABLE `master_user` ADD `longitude` VARCHAR(100);

@@ -68,6 +68,34 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
+                    <label class="focus-label">Nomor Telepon</label>
+                    <input type="number" class="form-control floating" name="telp" value="<?php noxss($user->telp) ?>" placeholder="Masukan Nomor Telepon">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="profile-upload">
+                    <div class="upload-img">
+                      <img alt="" src="<?php echo $user->foto ? base_url('assets/images/users/'.$user->foto) : base_url('assets/telemedicine/img/default.png') ; ?>">
+                    </div>
+                    <div class="upload-input">
+                      <input type="file" class="form-control" name="foto" id="foto" size="10024" accept=".gif,.jpg,.jpeg,.jfif,.png">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                
+              </div>  
+            </div>
+
+            
+            <div class="row mt-5">
+              <div class="col-12">
+            <span class="title">Alamat</span>
+              </div>
+            <div class="col-md-4 mt-2">
+                <div class="form-group form-focus">
                     <label class="focus-label">Provinsi</label>
                       <select class="form-control floating" name="alamat_provinsi" id="provinsi">
                           <?php if($user->id_provinsi){ ?>
@@ -126,30 +154,21 @@
                     <input type="text" class="form-control floating" name="alamat_jalan" value="<?php noxss(ucwords($user->alamat_jalan)); ?>"  placeholder="Masukan Alamat Jalan">
                 </div>
               </div>
-              <div class="col-md-4">
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-6">
                 <div class="form-group form-focus">
-                    <label class="focus-label">Nomor Telepon</label>
-                    <input type="number" class="form-control floating" name="telp" value="<?php noxss($user->telp) ?>" placeholder="Masukan Nomor Telepon">
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <div class="profile-upload">
-                    <div class="upload-img">
-                      <img alt="" src="<?php echo $user->foto ? base_url('assets/images/users/'.$user->foto) : base_url('assets/telemedicine/img/default.png') ; ?>">
-                    </div>
-                    <div class="upload-input">
-                      <input type="file" class="form-control" name="foto" id="foto" size="10024" accept=".gif,.jpg,.jpeg,.jfif,.png">
-                    </div>
+                      <label class="focus-label">Latitude</label>
+                      <input type="text" class="form-control floating" name="latitude" value="<?php noxss($user->latitude) ?>" placeholder="Masukan Latitude">
                   </div>
-                </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group form-focus">
-                    <label class="focus-label">Email</label>
-                    <input type="email" class="form-control floating" name="email" value="<?php noxss($user->email) ?>" placeholder="Masukan Email">
-                </div>
-              </div>  
+              <div class="col-md-6">
+              <div class="form-group form-focus">
+                      <label class="focus-label">Longitude</label>
+                      <input type="text" class="form-control floating" name="longitude" value="<?php noxss($user->latitude) ?>" placeholder="Masukan Latitude">
+                  </div>
+              </div>
             </div>
 
             <div class="row mt-5">

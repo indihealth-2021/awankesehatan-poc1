@@ -3,7 +3,7 @@ defined('BASEPATH') or exit ('No direct script access allowed');
 
 class Apotek_model extends CI_Model{
     public function get_all($aktif = null, $limit = null){
-        $this->db->select("master_apotek.id,master_apotek.nama,master_apotek.alamat_jalan,master_provinsi.name as alamat_provinsi,master_kota.name as alamat_kota,master_kelurahan.name as alamat_kelurahan,master_kecamatan.name as alamat_kecamatan,master_apotek.telp,master_apotek.aktif");
+        $this->db->select("master_apotek.id,master_apotek.nama,master_apotek.alamat_jalan,master_provinsi.name as alamat_provinsi,master_kota.name as alamat_kota,master_kelurahan.name as alamat_kelurahan,master_kecamatan.name as alamat_kecamatan,master_apotek.telp,master_apotek.aktif, master_apotek.latitude, master_apotek.longitude");
 
         $this->db->from('master_apotek');
         $this->db->join('master_provinsi', 'master_apotek.alamat_provinsi = master_provinsi.id', 'left');

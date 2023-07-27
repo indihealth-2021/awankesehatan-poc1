@@ -29,16 +29,19 @@ class Register extends CI_Controller {
 			$this->session->set_flashdata('msg_regis',$this->result->message);
 			redirect('Register');
 		}
-		$uppercase = preg_match('@[A-Z]@', $this->input->post('password'));
-      $lowercase = preg_match('@[a-z]@', $this->input->post('password'));
-      $number    = preg_match('@[0-9]@', $this->input->post('password'));
-      $specialChars = preg_match('@[^\w]@', $this->input->post('password'));
+		$password = $this->input->post("password");
+		$uppercase = preg_match('@[A-Z]@', $password);
+		$lowercase = preg_match('@[a-z]@', $password);
+		$number    = preg_match('@[0-9]@', $password);
+		$specialChars = preg_match('@[^\w]@', $password);
 
-      if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-				$this->session->set_flashdata('msg_regis', 'Kata sandi harus setidaknya 8 karakter dan harus mencakup setidaknya satu huruf besar, satu angka, dan satu karakter khusus.');
-				$this->session->set_flashdata('error_on_regis', 'password');
-					redirect('Register');
-      }
+		$requirement_satisfied = $uppercase && $lowercase && $number && $specialChars && strlen($password) >= 8;
+		if( !$requirement_satisfied ) {
+			echo json_encode($requirement_satisfied); exit();
+			$this->session->set_flashdata('msg_regis', 'Kata sandi harus setidaknya 8 karakter dan harus mencakup setidaknya satu huruf besar, satu angka, dan satu karakter khusus.');
+			$this->session->set_flashdata('error_on_regis', 'password');
+			redirect('Register');
+		}
 
 		if(!$this->session->has_userdata('id_user')){
 			$id_pasyankes = $this->db->query('SELECT id FROM master_fasyankes')->row();
@@ -47,7 +50,7 @@ class Register extends CI_Controller {
 				'name'=>$this->input->post('name'),
 				'username'=>$this->input->post('username'),
 				'email'=>$this->input->post('email'),
-				'password'=> password_hash($this->input->post('password'), PASSWORD_DEFAULT,$this->config->item('hash_config')),
+				'password'=> password_hash($password, PASSWORD_DEFAULT,$this->config->item('hash_config')),
 				// 'alamat_jalan'=>$this->input->post('alamat_jalan'),
 				// 'alamat_kota'=>$this->input->post('alamat_kota'),
 				// 'alamat_kelurahan'=>$this->input->post('alamat_kelurahan'),

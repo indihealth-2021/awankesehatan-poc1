@@ -533,33 +533,40 @@
 
 
 <script type="text/javascript">
-    name = '<?php echo $user->name; ?>';
-    var room_name = '<?php echo $roomName ?>';
-    var userName = name;
-    const domain = 'telekonsultasi2.telemedical.id';
-    const options = {
-        roomName: room_name,
-        width: 535,
-        height: 400,
-        parent: undefined,
-        parentNode: document.querySelector('#ketemu'),
-        configOverwrite: {
-            disableDeepLinking: true
-        }
-    };
-    const api = new JitsiMeetExternalAPI(domain, options);
-    api.executeCommand('displayName', userName);
-    api.addEventListener('participantRoleChanged', function(event) {
-        if (event.role === 'moderator') {
-            api.executeCommand('toggleLobby', true);
-        }
-    });
-    api.on('passwordRequired', function() {
-        api.executeCommand('password', '123456');
-    });
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    }).then(function(stream) {
+        name = '<?php echo $user->name; ?>';
+        var room_name = '<?php echo $roomName ?>';
+        var userName = name;
+        const domain = 'telekonsultasi2.telemedical.id';
+        const options = {
+            roomName: room_name,
+            width: 535,
+            height: 400,
+            parent: undefined,
+            parentNode: document.querySelector('#ketemu'),
+            configOverwrite: {
+                disableDeepLinking: true
+            }
+        };
+        const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+            document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+        });
+        api.executeCommand('displayName', userName);
+        api.addEventListener('participantRoleChanged', function(event) {
+            if (event.role === 'moderator') {
+                api.executeCommand('toggleLobby', true);
+            }
+        });
+        api.on('passwordRequired', function() {
+            api.executeCommand('password', '123456');
+        });
+    }
 </script>
 
-<script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>
+<!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script> -->
 <?php $foto_pasien = $user->foto ? base_url('assets/images/users/' . $user->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <?php $foto_dokter = $dokter->foto ? base_url('assets/images/users/' . $dokter->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <script>

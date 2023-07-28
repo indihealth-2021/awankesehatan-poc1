@@ -520,8 +520,9 @@ $(document).ready(function() {
                   page_limit: 50,
                   page: params.page || 0,
                   id_kota: ".$data["pasien"]->alamat_kota.",
-                  lat: ".$data["pasien"]->latitude.",
-                  long: ".$data["pasien"]->longitude."
+                  id_kecamatan: ".$data["pasien"]->alamat_kecamatan.",
+                  lat: ".($data["pasien"]->latitude ? $data["pasien"]->latitude : 'null').",
+                  long: ".($data["pasien"]->longitude ? $data["pasien"]->longitude : 'null')."
               };
           },
           processResults: function (data, params) {

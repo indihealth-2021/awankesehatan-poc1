@@ -66,14 +66,16 @@ class Apotek extends CI_Controller {
 	}
 
 	private function approximateLocation($query) {
-		$base = "http://dev.virtualearth.net/REST/v1/Locations/".$query."?o=json&key=".$this->bingMapsAPIKey;
-		echo file_get_contents($base);
+		# docs: https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query#url-template
+		$base = "http://dev.virtualearth.net/REST/v1/Locations/".urlencode($query)."?o=json&key=".$this->bingMapsAPIKey;
+		return json_decode(file_get_contents($base), $associative=true)["resourceSets"][0]["resources"][0];
 	}
 
 	public function findNearest() {
-		$id_kota	= $this->input->post("id_kota");
-		$lat		= $this->input->post("lat");
-		$long		= $this->input->post("long");
+		$id_kota		=	$this->input->post("id_kota");
+		$id_kecamatan 	=	$this->input->post("id_kecamatan");
+		$lat			=	$this->input->post("lat");
+		$long			=	$this->input->post("long");
 
 		$searchTerm	= $this->input->post('searchTerm');
 		$pglm 		= $this->input->post("page_limit");
@@ -82,7 +84,6 @@ class Apotek extends CI_Controller {
 		$page 		= (empty($pg) ? 0 : $pg);
 		$limit 		= $page * $page_lim;
 		
-
 		$query = "SELECT master_apotek.id, master_apotek.nama as text, master_apotek.latitude, master_apotek.longitude FROM master_apotek WHERE master_apotek.alamat_kota=".$id_kota;
 
 		if ($searchTerm) {
@@ -90,23 +91,38 @@ class Apotek extends CI_Controller {
 		}
 
 		$apotek = $this->db->query($query)->result_array();
-
 		$total	= $this->apotek_model->get_all();
 
-		for( $i = 0; $i < count($apotek); $i ++ ) {
-			$origin			= $lat.",".$long;
-			$destination	= $apotek[$i]["latitude"].",".$apotek[$i]["longitude"];
+		if( $apotek != null ) {
+			if( ($lat == null && $long == null) ) {
+				if($id_kecamatan != null) {
+					$executable_query = "SELECT master_kecamatan.name FROM master_kecamatan WHERE master_kecamatan.id=".$id_kecamatan;
+					$kecamatan = $this->db->query($executable_query)->result()[0]->name;
 
-			$distanceAndDuration = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination);
+					[$lat, $long] = $this->approximateLocation($kecamatan)["point"]["coordinates"];
+				}else {
+					$executable_query = "SELECT master_kota.name FROM master_kota WHERE master_kota.id=".$id_kota;
+					$kota = $this->db->query($executable_query)->result()[0]->name;
 
-			$apotek[$i]["distanceAndDuration"] = $distanceAndDuration;
-			$apotek[$i]["text"] .= ", ±".$distanceAndDuration["travelDistance"]. " km dari lokasi pasien";
+					[$lat, $long] = $this->approximateLocation($kota)["point"]["coordinates"];
+				}
+			}
+
+			for( $i = 0; $i < count($apotek); $i ++ ) {
+				$origin			= $lat.",".$long;
+				$destination	= $apotek[$i]["latitude"].",".$apotek[$i]["longitude"];
+
+				$distanceAndDuration = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination);
+
+				$apotek[$i]["distanceAndDuration"] = $distanceAndDuration;
+				$apotek[$i]["text"] .= ", ±".$distanceAndDuration["travelDistance"]. " km dari lokasi pasien";
+			}
+
+			# Sorting (ASC) an associative array
+			usort($apotek, function ($item1, $item2) {
+				return $item1['distanceAndDuration']["travelDistance"] <=> $item2['distanceAndDuration']["travelDistance"];
+			});
 		}
-
-		# Sorting (ASC) an associative array
-		usort($apotek, function ($item1, $item2) {
-			return $item1['distanceAndDuration']["travelDistance"] <=> $item2['distanceAndDuration']["travelDistance"];
-		});
 
 		echo json_encode(array(
             'incomplete_results' => false,

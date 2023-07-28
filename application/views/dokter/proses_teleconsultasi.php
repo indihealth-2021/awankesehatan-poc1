@@ -188,6 +188,32 @@
                     <input type="hidden" name="id_registrasi" value="<?php echo $id_registrasi ?>" required>
                   </div>
               </div>
+              <p class="py-2 font-12">Planning</p>
+              <div class="col-md-12" id="diagnosis">
+                  <div class="form-group row">
+                    <textarea name="planning" class="form-control" id="planning"></textarea>
+                  </div>
+              </div>
+              <p class="py-2 font-12">Pemeriksaan Penunjang</p>
+              <div class="col-md-12" id="diagnosis">
+                  <div class="form-group row">
+                    <div class="form-check form-check-inline">
+                        <input name="laboratorium" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-1" value="1">
+                        <label  class="form-check-label" for="tipe-pemeriksaan-1">Laboratorium</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input name="radiologi" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2" value="1">
+                        <label class="form-check-label" for="tipe-pemeriksaan-2">Radiologi</label>
+                    </div>
+                    <textarea name="pemeriksaan" class="form-control mt-2" id="pemeriksaan"></textarea>
+                  </div>
+              </div>
+              <p class="py-2 font-12">Kesimpulan</p>
+              <div class="col-md-12" id="diagnosis">
+                  <div class="form-group row">
+                    <textarea name="kesimpulan" class="form-control" id="kesimpulan"></textarea>
+                  </div>
+              </div>
             <p class="py-2 font-12">Apotek</p>
               <div class="col-md-12" id="apotek">
                   <div class="form-group row">

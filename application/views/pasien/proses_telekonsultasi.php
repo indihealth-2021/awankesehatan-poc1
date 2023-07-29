@@ -533,11 +533,7 @@
 
 
 <script type="text/javascript">
-    navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true
-    }).then(function(stream) {
-        name = '<?php echo $user->name; ?>';
+    name = '<?php echo $user->name; ?>';
         var room_name = '<?php echo $roomName ?>';
         var userName = name;
         const domain = 'telekonsultasi2.telemedical.id';
@@ -551,6 +547,10 @@
                 disableDeepLinking: true,
             },
         };
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    }).then(function(stream) {
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
             document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
         });

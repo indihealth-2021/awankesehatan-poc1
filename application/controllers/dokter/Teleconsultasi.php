@@ -231,6 +231,8 @@ class Teleconsultasi extends CI_Controller
                 "id_pasien" => $data['id_pasien'],
                 "id_dokter" => $this->session->userdata('id_user'),
                 "id_obat" => $data['id_obat'][$i],
+                "id_apotek" => $data["apotek"], //id_apotek
+
                 "jumlah_obat" => $data['jumlah_obat'][$i],
                 "keterangan" => $data['keterangan'][$i]
             );

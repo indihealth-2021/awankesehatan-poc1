@@ -347,6 +347,15 @@ class Pendaftaran extends CI_Controller {
 
         if($regis){
             $this->session->set_flashdata('msg', 'Pendaftaran Berhasil! Segera lakukan pembayaran.');
+
+            $data3 = array(
+                "id_dokter" => $jadwal->id_dokter,
+                "id_pasien" => $pasien->id,
+                "id_registrasi" => $id_registrasi,
+                "tanggal" => (new DateTime("now"))->format("Y-m-d"),
+                "jam" => (new DateTime("now"))->format("h:i"),
+            );
+            $this->db->insert('jadwal_konsultasi', $data3);
         }
         else{
             $this->session->set_flashdata('msg', 'Pendaftaran Gagal!');

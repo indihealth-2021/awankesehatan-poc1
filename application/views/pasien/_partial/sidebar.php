@@ -34,9 +34,9 @@
                                     </svg></i>
                              <span>Jadwal</span><span class="menu-arrow"></span></a>
                             <ul>
-                                <li class="<?php if(isset($this->uri->segments[2])){echo strtolower($this->uri->segments[2]) == 'jadwalterdaftar' ? 'active' : '';} ?>">
+                                <!-- <li class="<?php if(isset($this->uri->segments[2])){echo strtolower($this->uri->segments[2]) == 'jadwalterdaftar' ? 'active' : '';} ?>">
                                     <a href="<?php echo base_url('pasien/JadwalTerdaftar') ?>"><span>Jadwal Terdaftar</span></a>
-                                </li>
+                                </li> -->
                                 <li class="<?php if(isset($this->uri->segments[2])){echo strtolower($this->uri->segments[2]) == 'telekonsultasi' ? 'active' : '';} ?>">
                                     <a href="<?php echo base_url('pasien/Telekonsultasi/jadwal') ?>"><span>Jadwal Telekonsultasi</span></a>
                                 </li>

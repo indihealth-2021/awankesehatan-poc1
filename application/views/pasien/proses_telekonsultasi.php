@@ -548,8 +548,8 @@
             parent: undefined,
             parentNode: document.querySelector('#ketemu'),
             configOverwrite: {
-                disableDeepLinking: true
-            }
+                disableDeepLinking: true,
+            },
         };
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
             document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
@@ -566,7 +566,7 @@
     }
 </script>
 
-<!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script> -->
+<script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>
 <?php $foto_pasien = $user->foto ? base_url('assets/images/users/' . $user->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <?php $foto_dokter = $dokter->foto ? base_url('assets/images/users/' . $dokter->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <script>

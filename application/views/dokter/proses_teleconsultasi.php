@@ -502,9 +502,10 @@
             roomName: room_name,
             width: 535,
             height: 400,
-
-            parentNode: document.querySelector('#meet')
-
+            parentNode: document.querySelector('#meet'),
+            configOverwrite: {
+                disableDeepLinking: true,
+            },
         };
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
             document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
@@ -540,7 +541,7 @@
         }
     }
 </script>
-<!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>" delay=1000></script> -->
+<script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>
 <?php $foto_pasien = $pasien->foto ? base_url('assets/images/users/' . $pasien->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <?php $foto_dokter = $user->foto ? base_url('assets/images/users/' . $user->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <script>

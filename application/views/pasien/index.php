@@ -4,7 +4,8 @@
     <div class="row mb-3">
       <div class="col-sm-12 col-12 ">
         <p class="font-18">Hallo,</p>
-        <p class="font-24">Selamat Datang, <?php echo $user->name ?></p>
+        <?php $vip_span = '<br><br><span class="btn btn-warning" style="color: white;">⭐ Layanan VIP</span>'?>
+        <p class="font-24">Selamat Datang, <?php echo $user->name ?> <?= $user->vip ? $vip_span : "" ?> </p>
       </div>
     </div>
     <div class="d-mobile-none">

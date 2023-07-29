@@ -1,0 +1,1 @@
+ALTER TABLE `master_user` ADD vip TINYINT(1) DEFAULT 0;

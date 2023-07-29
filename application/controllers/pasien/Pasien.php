@@ -27,7 +27,7 @@ class Pasien extends CI_Controller {
         }
         $data['view'] = 'pasien/index';
         $data['title'] = 'Dashboard';
-        $data['user'] = $this->db->query('SELECT id,name, foto FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
+        $data['user'] = $this->db->query('SELECT id,name, foto, vip FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("'.$this->session->userdata('id_user').'", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $news = $this->db->query('SELECT * FROM data_news ORDER BY created_at DESC limit 0,2')->result();
         foreach ($news as $key => $value) {

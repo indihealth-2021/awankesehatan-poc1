@@ -486,18 +486,15 @@
         }
         return result;
     }
-    navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true
-    }).then(function(stream) {
-        var uniqid = makeid(12);
-        reg_id = '<?php echo $pasien->reg_id; ?>';
-        name = '<?php echo $user->name; ?>';
-        var room_name = 'telemedicine_lintas_' + <?php echo $id_jadwal_konsultasi ?> + '_' + <?php echo $user->id ?> + '_' + uniqid;
-        document.querySelector("#user-call").value = '<?php echo $pasien->id ?>';
-        var userName = name;
-        const domain = 'telekonsultasi2.telemedical.id';
-        const options = {
+
+    var uniqid = makeid(12);
+    reg_id = '<?php echo $pasien->reg_id; ?>';
+    name = '<?php echo $user->name; ?>';
+    var room_name = 'telemedicine_lintas_' + <?php echo $id_jadwal_konsultasi ?> + '_' + <?php echo $user->id ?> + '_' + uniqid;
+    document.querySelector("#user-call").value = '<?php echo $pasien->id ?>';
+    var userName = name;
+    const domain = 'telekonsultasi2.telemedical.id';
+    const options = {
             roomName: room_name,
             width: 535,
             height: 400,
@@ -506,6 +503,11 @@
                 disableDeepLinking: true,
             },
         };
+
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    }).then(function(stream) {
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
             document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
         });
@@ -540,7 +542,7 @@
         }
     }
 </script>
-<script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>
+<!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script> -->
 <?php $foto_pasien = $pasien->foto ? base_url('assets/images/users/' . $pasien->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <?php $foto_dokter = $user->foto ? base_url('assets/images/users/' . $user->foto) : base_url('assets/telemedicine/img/default.png'); ?>
 <script>

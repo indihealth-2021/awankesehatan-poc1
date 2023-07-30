@@ -1,5 +1,5 @@
 <!-- Main content -->
-  <div class="page-wrapper">
+<div class="page-wrapper">
     <div class="content">
       <div class="row mb-3">
         <div class="col-sm-12 col-12 ">
@@ -232,7 +232,7 @@
               </div>
               <div class="row">
                 <div class="table-responsive p-3">
-                    <table class="table table-border table-hover custom-table mb-0">
+                    <table class="table table-border table-hover custom-table mb-0" id="table-obat">
                         <thead class="font-12">
                             <tr class="text-abu">
                                 <td>Nama Obat</td>
@@ -249,6 +249,7 @@
               </div>
               <input type="hidden" name="id_pasien" value=<?php echo $pasien->id ?>>
               <input type="hidden" name="id_jadwal_konsultasi" value=<?php echo $id_jadwal_konsultasi ?>>
+            <button type="button" id="update_diagnosa" class="btn btn-primary mt-4">Update diagnosa</button>
             </form>
           </div>
         </div>

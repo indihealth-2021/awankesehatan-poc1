@@ -146,6 +146,12 @@ class Conference extends CI_Controller
     echo $result;
   }
 
+  public function end() {
+    $id_jadwal_konsultasi = $this->input->get("id_jadwal_konsultasi");
+    $id_pasien = $this->input->get("id_pasien");
+  }
+  
+
   public function end_call()
   {
     // echo var_dump($this->input->post('data_konsultasi').'&'.$this->input->post('data_konsultasi_2'));

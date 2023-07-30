@@ -234,7 +234,7 @@ class Teleconsultasi extends CI_Controller
                 "id_apotek" => $data["apotek"], //id_apotek
 
                 "jumlah_obat" => $data['jumlah_obat'][$i],
-                "keterangan" => $data['keterangan'][$i]
+                // "keterangan" => $data['keterangan'][$i]
             );
             $this->db->insert('resep_dokter', $data_resep);
         }
@@ -377,6 +377,37 @@ class Teleconsultasi extends CI_Controller
         echo "OK";
     }
 
+    public function update_diagnosa() {
+        $id_jadwal_konsultasi = $this->input->post("id_jadwal_konsultasi");
+        $id_pasien = $this->input->post("id_pasien");
+        $data_konsultasi = $this->input->post("data_konsultasi");
+
+        $data_resep = [];
+        $data = $this->input->post();
+        $jml_data = count($data['keterangan']);
+        for ($i = 0; $i < $jml_data; $i++) {
+            $data_resep[$i] = array(
+                "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
+                "id_pasien" => $data['id_pasien'],
+                "id_dokter" => $this->session->userdata('id_user'),
+                "id_obat" => $data['id_obat'][$i],
+                "id_apotek" => $data["apotek"], //id_apotek
+
+                "jumlah_obat" => $data['jumlah_obat'][$i],
+                // "keterangan" => $data['keterangan'][$i]
+            );
+            // $this->db->insert('resep_dokter', $data_resep);
+        }
+        echo json_encode($data_resep); exit();
+        // $this->db->insert("resep_dokter", [
+        //     "id_jadwal_konsultasi" => $id_jadwal_konsultasi,
+        //     "id_pasien" => $id_pasien,
+        //     "id_dokter" => $id_dokter,
+        //     "id_obat" => $data_konsultasi,
+        // ]);
+        $resep_dokter = $this->db->query("SELECT * FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$id_jadwal_konsultasi)->row();
+    }
+
     public function proses_teleconsultasi()
     {
         if (!$this->session->userdata('is_login')) {
@@ -467,6 +498,7 @@ $(document).ready(function() {
 
     $('#formResepDokter').submit(function(e){
         var dataResep = $(this).serializeArray();
+        alert(dataResep); console.log(dataResep);
         var namaObat = $('select[name=id_obat] option:selected').text();
         var listResep = $('#listResep');
         var countTr = $('#listResep tr');
@@ -475,7 +507,7 @@ $(document).ready(function() {
             countTr = 0;
         }
         countTr+=1;
-        var templateListResep = '<tr><td>'+namaObat+'</td><td>'+dataResep[1].value+' '+dataResep[3].value+'<td>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
+        var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td>'+dataResep[1].value+' '+dataResep[3].value+'<td>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
         listResep.append(templateListResep);
         $(this)[0].reset();
         $('#ModalResep').modal('hide');

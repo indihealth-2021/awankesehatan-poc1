@@ -238,6 +238,7 @@
                                 <td>Nama Obat</td>
                                 <td>Jumlah</td>
                                 <td>Aturan Pakai</td>
+                                <td>Keterangan</td>
                                 <td>Aksi</td>
                             </tr>
                          </thead>

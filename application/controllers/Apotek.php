@@ -115,7 +115,7 @@ class Apotek extends CI_Controller {
 				$distanceAndDuration = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination);
 
 				$apotek[$i]["distanceAndDuration"] = $distanceAndDuration;
-				$apotek[$i]["text"] .= ", ±".$distanceAndDuration["travelDistance"]. " km dari lokasi pasien";
+				$apotek[$i]["text"] .= " - ±".$distanceAndDuration["travelDistance"]. " km dari lokasi pasien";
 			}
 
 			# Sorting (ASC) an associative array

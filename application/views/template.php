@@ -875,44 +875,62 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
     $("#update_diagnosa").click(function() {
-      var data_konsultasi_2 = $('#formKonsultasi_2').serializeArray();
+      let data_konsultasi_2 = $('#formKonsultasi_2').serializeArray();
       let list_id_obat = [];
+      let list_keterangan_obat = [];
+      let list_jumlah_obat = [];
+
       $('tr').each(function() {
         let temp = $(this).attr("id");
         if(!(temp == undefined)) {
           list_id_obat.push(temp);
         } 
       });
-      console.log(list_id_obat); alert(list_id_obat);
+      $('td#keterangan').each(function() {
+        let temp = $(this).text();
+        list_keterangan_obat.push(temp);
+      });
+      $('td#jumlah_obat').each(function() {
+        let temp = $(this).text();
+        list_jumlah_obat.push(temp);
+      });
+
       let id_pasien = getParameterByName("id_pasien");
       let id_jadwal_konsultasi = getParameterByName("id_jadwal_konsultasi");
-      alert($("#listResep").value());
-      // let count = 0;
-      // data_konsultasi_2.forEach(item => {
-      //   if(item.value == "0" || item.value == "") {
-      //     count ++;
-      //   }
-      // });
+      let invalid = 0;
+      
+      data_konsultasi_2.forEach(item => {
+        if(item.value == "0" || item.value == "" || item.value=="-- Pilih Apotek --" || item.value=="-- Pilih Diagnosa --") {
+          invalid ++;
+        }
+      });
 
-      // if(count > 0) {
-      //   alert("Form masih kosong!");
-      // }else {
-        
-      // }
+      if(invalid > 0) {
+        alert("Form masih kosong!");
+      }else {
+        $.ajax({
+            method: 'POST',
+            url: baseUrl + "dokter/Teleconsultasi/update_diagnosa",
+            data: { 
+              id_pasien: id_pasien, 
+              id_jadwal_konsultasi: id_jadwal_konsultasi, 
+              data_konsultasi: data_konsultasi_2, 
+              list_id_obat: list_id_obat, 
+              list_keterangan_obat: list_keterangan_obat ,
+              list_jumlah_obat: list_jumlah_obat,
+              apotek: $('#apotek option:selected').text()
+              
+            },success: function (data) {
+              alert(data);
+              console.log(data);
+            },
+            error: function (data) {
+              // alert(data);
+              console.log(data);
+            }
+          });
+      }
 
-      // $.ajax({
-      //     method: 'POST',
-      //     url: baseUrl + "dokter/Teleconsultasi/update_diagnosa",
-      //     data: { id_pasien: id_pasien, id_jadwal_konsultasi: id_jadwal_konsultasi, data_konsultasi: data_konsultasi_2 },
-      //     success: function (data) {
-      //       alert(data);
-      //       console.log(data);
-      //     },
-      //     error: function (data) {
-      //       // alert(data);
-      //       console.log(data);
-      //     }
-      //   });
     });
     function readNotif(id_notif) {
       $.ajax({

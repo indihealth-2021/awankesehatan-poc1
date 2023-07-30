@@ -898,7 +898,7 @@
       let id_pasien = getParameterByName("id_pasien");
       let id_jadwal_konsultasi = getParameterByName("id_jadwal_konsultasi");
       let invalid = 0;
-      
+
       data_konsultasi_2.forEach(item => {
         if(item.value == "0" || item.value == "" || item.value=="-- Pilih Apotek --" || item.value=="-- Pilih Diagnosa --") {
           invalid ++;
@@ -918,14 +918,14 @@
               list_id_obat: list_id_obat, 
               list_keterangan_obat: list_keterangan_obat ,
               list_jumlah_obat: list_jumlah_obat,
-              apotek: $('#apotek option:selected').text()
+              apotek: $('#apotek option:selected').text(),
+              diagnosis: $('#diagnosis option:selected').text()
               
             },success: function (data) {
-              alert(data);
-              console.log(data);
+              alert("Berhasil menyelesaikan telekonsultasi!");
+              location.href = baseUrl+"dokter/HistoryMedisPasien/index/all";
             },
             error: function (data) {
-              // alert(data);
               console.log(data);
             }
           });

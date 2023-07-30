@@ -378,30 +378,46 @@ class Teleconsultasi extends CI_Controller
     }
 
     public function update_diagnosa() {
-        $id_jadwal_konsultasi = $this->input->post("id_jadwal_konsultasi");
-        $id_pasien = $this->input->post("id_pasien");
-        $data_konsultasi = $this->input->post("data_konsultasi");
-
-        $data_resep = [];
         $data = $this->input->post();
+        $resep_dokter = $this->db->query("SELECT * FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"])->row();
 
-        $apotek = $this->db->query("SELECT id FROM master_apotek WHERE master_apotek.nama='".explode(" - ", $data["apotek"])[0]."'")->row();
+        if(false) {
+            show_404();
+        }else {
+            $id_pasien = $data["id_pasien"];
+            $data_konsultasi = $data["data_konsultasi"];
+    
+            $data_resep = [];
+    
+            $apotek = $this->db->query("SELECT id FROM master_apotek WHERE master_apotek.nama='".explode(" - ", $data["apotek"])[0]."'")->row();
+            for ($i = 0; $i < count($data["list_id_obat"]); $i++) {
+                $data_resep[$i] = array(
+                    "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
+                    "id_pasien" => $data['id_pasien'],
+                    "id_dokter" => $this->session->userdata('id_user'),
+                    "id_obat" => $data['list_id_obat'][$i],
+                    "id_apotek" => $apotek->id, // id apotek
+                    "jumlah_obat" => $data['list_jumlah_obat'][$i],
+                    "keterangan" => $data['list_keterangan_obat'][$i]
+                );
+                $this->db->insert('resep_dokter', $data_resep[$i]);
+            }
+            
+            $diagnosis = $this->db->query("SELECT id FROM master_diagnosa WHERE master_diagnosa.nama='".$data["diagnosis"]."'")->row()->id; 
+            $regId = $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
+            $this->db->insert("diagnosis_dokter", [
+                "id_dokter" => $this->session->userdata("id_user"),
+                "id_pasien" => $data["id_pasien"],
+                "id_jadwal_konsultasi" => $data["id_jadwal_konsultasi"],
+                "id_registrasi" => $regId,
+                "diagnosis" => $diagnosis
+            ]);
 
-        for ($i = 0; $i < count($data["list_id_obat"]); $i++) {
-            $data_resep[$i] = array(
-                "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
-                "id_pasien" => $data['id_pasien'],
-                "id_dokter" => $this->session->userdata('id_user'),
-                "id_obat" => $data['list_id_obat'][$i],
-                "id_apotek" => $apotek->id, // id apotek
-                "jumlah_obat" => $data['list_jumlah_obat'][$i],
-                "keterangan" => $data['list_keterangan_obat'][$i]
-            );
-            $this->db->insert('resep_dokter', $data_resep[$i]);
+            $this->db->delete('jadwal_konsultasi', ['id' => $data["id_jadwal_konsultasi"]]);
+    
+            echo "OK";
         }
-
-        echo json_encode($this->db->error());
-        // $resep_dokter = $this->db->query("SELECT * FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$id_jadwal_konsultasi)->row();
+        
     }
 
     public function proses_teleconsultasi()
@@ -494,7 +510,6 @@ $(document).ready(function() {
 
     $('#formResepDokter').submit(function(e){
         var dataResep = $(this).serializeArray();
-        alert(dataResep); console.log(dataResep);
         var namaObat = $('select[name=id_obat] option:selected').text();
         var listResep = $('#listResep');
         var countTr = $('#listResep tr');
@@ -503,7 +518,6 @@ $(document).ready(function() {
             countTr = 0;
         }
         countTr+=1;
-        console.log(dataResep);
         var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td>'+dataResep[3].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
         listResep.append(templateListResep);
         $(this)[0].reset();

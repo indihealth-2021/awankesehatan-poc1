@@ -250,7 +250,7 @@
               </div>
               <input type="hidden" name="id_pasien" value=<?php echo $pasien->id ?>>
               <input type="hidden" name="id_jadwal_konsultasi" value=<?php echo $id_jadwal_konsultasi ?>>
-            <button type="button" id="update_diagnosa" class="btn btn-primary mt-4">Update diagnosa</button>
+            <button type="button" id="update_diagnosa" class="btn btn-primary mt-4"><i class="fas fa-hourglass-end mr-4"></i> Selesaikan telekonsultasi</button>
             </form>
           </div>
         </div>

@@ -687,6 +687,40 @@
         showToken('Unable to retrieve refreshed token ', err);
       });
     });
+    var userid = <?php echo $user->id ?>;
+      <?php if (isset($teleconsul_admin_js)) {
+        echo $teleconsul_admin_js;
+      } ?>
+      let notificationTitle = 'Background Message Title';
+      let notificationOptions = {
+        body: 'Background Message body.',
+      };
+    pesan.onBackgroundMessage((payload) =>{
+      var test = payload || {};
+      loadData = test.data.body;
+      console.log(payload);
+      if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_pasien')) {
+        const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;
+        const id_dokter = JSON.parse(payload.data.body).id_dokter;
+        const roomName = JSON.parse(payload.data.body).roomName;
+        notificationTitle = "Panggilan konsultasi dari dokter";
+
+        const url = $(this).jawab(id_dokter, id_jadwal_konsultasi, roomName);
+
+        notificationOptions.data = {
+          url: url
+        };
+
+        self.registration.showNotification(notificationTitle, notificationOptions);
+      }
+    });
+    self.addEventListener('notificationclick', (event) => {
+      event.notification.close();
+      const url = event.notification.data.url;
+      if (url) {
+        clients.openWindow(url);
+      }
+    });
     pesan.onMessage(function(payload) {
       var test = payload || {};
       loadData = test.data.body;
@@ -695,10 +729,6 @@
       if (loadData == "ok") {
         $('#memanggil').modal('hide');
       }
-      var userid = <?php echo $user->id ?>;
-      <?php if (isset($teleconsul_admin_js)) {
-        echo $teleconsul_admin_js;
-      } ?>
       if (JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())) {
         if (JSON.parse(JSON.parse(payload.data.body).name == 'unshow')) {
           if (JSON.parse(JSON.parse(payload.data.body).sub_name == 'submit_assesment_pasien')) {

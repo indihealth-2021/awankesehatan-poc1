@@ -562,7 +562,7 @@
         api.on('passwordRequired', function() {
             api.executeCommand('password', '123456');
         });
-    }
+    });
 </script>
 
 // <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>

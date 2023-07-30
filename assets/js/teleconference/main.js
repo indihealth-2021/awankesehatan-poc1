@@ -246,6 +246,10 @@ btnAnswer.click(function (e) {
   var id_dokter = $(this).data('id-dokter');
   var roomName = $(this).data('room-name');
 
+  jawab(id_dokter, id_jadwal_konsultasi, roomName);
+});
+
+function jawab(id_dokter, id_jadwal_konsultasi, roomName){
   var ok = false;
   $.ajax({
     method: 'POST',
@@ -264,9 +268,10 @@ btnAnswer.click(function (e) {
     error: function (data) {
       alert('Terjadi kesalahan sistem, silahkan hubungi administrator.');
     }
-
-
   });
+}
+
+
   // e.preventDefault();
   //    io.emit('answered', {room: conference_room});
   //    io.emit('add::member', {
@@ -280,7 +285,6 @@ btnAnswer.click(function (e) {
   //window.open(siteUrl + 'conference/room/' + room, '_blank', 'location=yes,height='+$(window).height()+',width='+$(window).width()+',scrollbars=yes,status=yes');
 
   // window.location.href = '/indihealth/conference/room/' + room;
-});
 
 btnClose.click(function(e){
   $.ajax({

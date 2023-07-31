@@ -827,13 +827,14 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
             }
         }
         $data = $this->input->post();
-        $list_resep = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'] . ' AND id_obat = ' . $data['id_obat'])->result();  
-        foreach ($list_resep as $resep) {
-            $data_resep_update = array(
+
+        foreach ($data['id_obat'] as $id_obat) {
+            $data_update = array(
                 'dibatalkan' => 1
             );
-            $this->db->where('id', $resep->id);
-            $this->db->update('resep_dokter', $data_resep_update);
+            $this->db->where('id', $id_obat);
+            $this->db->where('id_jadwal_konsultasi', $data['id_jadwal_konsultasi']);
+            $this->db->update('resep_dokter', $data_update);
         }
     }
 

@@ -832,9 +832,8 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
             $data_resep_update = array(
                 'dibatalkan' => 1
             );
-            $this->db->query('UPDATE resep_dokter SET dibatalkan = 1 WHERE id = ' . $resep->id);
-            // $this->db->where('id', $resep->id);
-            // $this->db->update('resep_dokter', $data_resep_update);
+            $this->db->where('id', $resep->id);
+            $this->db->update('resep_dokter', $data_resep_update);
         }
     }
 

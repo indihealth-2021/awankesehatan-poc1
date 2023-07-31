@@ -69,7 +69,7 @@ class Login extends CI_Controller {
 		try{
 			$post = [
 						'app_id' => 'TK-IDOKLINTAS',
-						'project_name' => 'LINTASARTA TELEKONSULTASI iDok',
+						'project_name' => 'LINTASARTA TELEKONSULTASI TUNTAS',
 						'domain' => $_SERVER['SERVER_NAME'],
 						'server_ip' => gethostbyname($_SERVER['SERVER_NAME']),
 						'type' => 'WEB-APP',
@@ -98,6 +98,7 @@ class Login extends CI_Controller {
 		$this->db->from('master_user');
 		$this->db->where('email', $this->input->post('email'));
 		$this->db->or_where('username', $this->input->post('email'));
+		$this->db->or_where('card_number', $this->input->post('email'));
 		$this->data = $this->db->get()->row();
 
 

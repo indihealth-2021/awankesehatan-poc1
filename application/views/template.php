@@ -973,7 +973,7 @@
         $('#simpan_tac').click(function(e) {
           $.ajax({
             method: 'GET',
-            url: baseUrl + "pasien/Pasien/accept_tac",
+            url: "<?= base_url("pasien/Pasien/accept_tac") ?>",
             success: function(data) {
               $('#tac_modal').modal('hide');
               alert('Terima kasih, anda telah menyetujui syarat dan ketentuan penggunaan!');

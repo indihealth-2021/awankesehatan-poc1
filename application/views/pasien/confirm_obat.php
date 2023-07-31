@@ -45,13 +45,6 @@
                                                 <td><?php echo $list_obat[$i]['nama_obat'] ?></td>
                                                 <td><?php echo $list_obat[$i]['jumlah'] ?></td>
                                                 <td><?php echo $list_obat[$i]['harga'] ?></td>
-                                                <td>
-                                                    <form action="<?php echo base_url('pasien/ResepDokter/batalkan_pembelian_obat') ?>"     method="POST">
-                                                        <input type="hidden" name="id_jadwal_konsultasi" value=<?php echo $id_jadwal_konsultasi ?>>
-                                                        <input type="hidden" name="id_obat" value=<?php echo $list_obat[$i]['id_obat'] ?>>
-                                                        <button type="submit" class="btn btn-danger btn-sm">Batalkan <?php echo $list_obat[$i]['id_obat'] ?></button>
-                                                    </form>
-                                                </td>
                                             </tr> 
                                             <?php } ?>
                                     </tbody>
@@ -60,9 +53,7 @@
                             <div id="resepDokter">
                             </div>
                         </div>
-                        <!-- <?php if ($user->vip) { ?>
-
-                        <?php } ?> -->
+                        <button type="button" id="btn-konfirmasi-obat" class="btn btn-primary">Konfirmasi</button>
                     </form>
                     <p id="total">Total Biaya: <?php echo $total_biaya; ?></p>
                 </div>
@@ -88,6 +79,25 @@
     id_dokter = <?php echo $user->id ?>;
     foto_pasien = '<?php echo $foto_pasien ?>';
     foto_dokter = '<?php echo $foto_dokter ?>';
+</script>
+
+<script>
+    var btnKonfirmasiObat = $('#btn-konfirmasi-obat');
+    const id_jadwal_konsultasi = <?php $data['id_jadwal_konsultasi'];
+    btnKonfirmasiObat.click(function (e) {
+        $.ajax({
+        method: 'POST',
+        url: baseUrl + "ResepDokter/batalkan_pembelian_obat",
+        data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
+        success: function (data) {
+        console.log(data);
+        },
+        error: function (data) {
+            console.log(data)
+        }
+  });
+
+    });
 </script>
 
 

@@ -45,6 +45,7 @@
                                                 <td><?php echo $list_obat[$i]['nama_obat'] ?></td>
                                                 <td><?php echo $list_obat[$i]['jumlah'] ?></td>
                                                 <td><?php echo $list_obat[$i]['harga'] ?></td>
+                                                <td><input type="checkbox" name="id_obat[]" value="<?php echo $list_obat[$i]['id_obat'] ?>" class="obat-checkbox"></td>
                                             </tr> 
                                             <?php } ?>
                                     </tbody>
@@ -53,7 +54,7 @@
                             <div id="resepDokter">
                             </div>
                         </div>
-                        <button type="button" id="btn-konfirmasi-obat" class="btn btn-primary">Konfirmasi</button>
+                        <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
                     </form>
                     <p id="total">Total Biaya: <?php echo $total_biaya; ?></p>
                 </div>
@@ -82,21 +83,27 @@
 </script>
 
 <script>
-    var btnKonfirmasiObat = $('#btn-konfirmasi-obat');
-    const id_jadwal_konsultasi = <?php $data['id_jadwal_konsultasi'];
-    btnKonfirmasiObat.click(function (e) {
+    var btnBatalkanObat = $('#btn-batalkan-obat');
+    const id_jadwal_konsultasi = <?php $data['id_jadwal_konsultasi'] ?>;
+    btnBatalkanObat.click(function (e) {
+        e.preventDefault();
+        var id_obat = [];
+        $('.obat-checkbox:checked').each(function () {
+            id_obat.push($(this).val());
+        });
         $.ajax({
         method: 'POST',
         url: baseUrl + "ResepDokter/batalkan_pembelian_obat",
         data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
         success: function (data) {
+            alert('berhasil');
         console.log(data);
         },
         error: function (data) {
-            console.log(data)
+            console.log(data);
+            alert('gagal')
         }
   });
-
     });
 </script>
 

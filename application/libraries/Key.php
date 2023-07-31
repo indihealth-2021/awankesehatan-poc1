@@ -1,22 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Key{
+
+//	 private $fcm_server_key = 'AAAAd4kHX6E:APA91bFsPLVh_mjl7UqxhlcMe0vffYIyL40sTbH_JndVsK3TrHoeHvd6TZ5cOB0Ou24BFj44zcON2uxqKl15b81WKQr7u8tXhsU_Vd_6Wz0x-VbpN6G6sVTzvUttbHgu0Tc2VL4iuyGJ';
+    private $fcm_server_key = 'AAAAJ7sJXKM:APA91bFv0NCL29gtdiDXYhpw7tYLMGXmfplED9nsGkAL0hjeLRRVpWZ_CwMJyR2c4CohEIokCJpeikl1jAJ2N9v5lRtSBuTJeQJ2SvPY9wyHJU6-N57qs9vgC1yHGMn11SK8jzH1DFah';
     
-	 private $fcm_server_key = 'AAAAd4kHX6E:APA91bFsPLVh_mjl7UqxhlcMe0vffYIyL40sTbH_JndVsK3TrHoeHvd6TZ5cOB0Ou24BFj44zcON2uxqKl15b81WKQr7u8tXhsU_Vd_6Wz0x-VbpN6G6sVTzvUttbHgu0Tc2VL4iuyGJ';
 	private function get_fcm_server_key() {
         return $this->fcm_server_key;
     }
      public function _send_fcm($reg_id,$message) {
-         if(json_decode($message)->direct_link == '#'){
+         $direct_link = isset(json_decode($message)->direct_link) ? json_decode($message)->direct_link:'#';
+         if($direct_link == '#'){
              $direct_link = base_url('login');
-         }
-         else{
-             $direct_link = json_decode($message)->direct_link;
          }
 //         $fields = array(
 //            'to' => $reg_id,
 //            'data' => array(
-//                'title' => 'TELEMEDICINE', 
+//                'title' => 'TELEMEDICINE',
 //                'body' => $message
 //            ),
 //            'notification' => array(
@@ -29,19 +29,19 @@ class Key{
          $fields = array(
             'to' => $reg_id,
             'data' => array(
-                'title' => 'TELEMEDICINE', 
+                'title' => 'TELEMEDICINE',
                 'body' => $message
             )
         );
         $headers = array(
             'Authorization:key=' . $this->get_fcm_server_key(),
             'Content-Type:application/json'
-        );       
+        );
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
@@ -50,7 +50,7 @@ class Key{
 
         curl_close($ch);
 
-        echo $response;
+        return $response;
     }
 }
 

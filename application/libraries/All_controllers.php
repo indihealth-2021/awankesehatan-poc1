@@ -16,7 +16,6 @@ class ALL_Controllers{
         if($data['user']->id_user_kategori == 5){
             $data['menu'] = 0;
         }
-
         return $data;
     }
 
@@ -49,26 +48,18 @@ class ALL_Controllers{
         if ($valid->id_user_kategori != 5) {
             if ($valid->id_user_kategori == 0) {
                 redirect(base_url('pasien/Pasien'));
-            } else {
+            } else if($valid->id_user_kategori == 6){
+                if($valid->id_user_level == 1){
+                    redirect(base_url('diampu/Diampu/list_pengampu'));
+                }else{
+                    redirect(base_url('pengampu/Pengampu/dashboard'));
+                }
+            }else {
                 redirect(base_url('dokter/Dashboard'));
             }
         } else {
             if ($valid->id_user_level == 2) {
                 redirect(base_url('admin/FarmasiVerifikasiObat'));
-            }
-        }
-    }
-
-    public function check_user_admin_farmasi(){
-        if (!$this->CI->session->userdata('is_login')) {
-            redirect(base_url('Login'));
-        }
-        $valid = $this->CI->db->query('SELECT id_user_kategori, id_user_level FROM master_user WHERE id = ' . $this->CI->session->userdata('id_user'))->row();
-        if ($valid->id_user_kategori != 5) {
-            if ($valid->id_user_kategori == 0) {
-                redirect(base_url('pasien/Pasien'));
-            } else {
-                redirect(base_url('dokter/Dashboard'));
             }
         }
     }
@@ -81,6 +72,12 @@ class ALL_Controllers{
         if($valid->id_user_kategori != 5){
             if($valid->id_user_kategori == 0){
                 redirect(base_url('pasien/Pasien'));
+            } else if($valid->id_user_kategori == 6){
+                if($valid->id_user_level == 1){
+                    redirect(base_url('diampu/Diampu/list_pengampu'));
+                }else{
+                    redirect(base_url('pengampu/Pengampu/dashboard'));
+                }
             }
             else{
                 redirect(base_url('dokter/Dashboard'));
@@ -93,6 +90,27 @@ class ALL_Controllers{
         }
     }
 
+    public function check_user_admin_farmasi(){
+        if(!$this->CI->session->userdata('is_login')){
+            redirect(base_url('Login'));
+        }
+        $valid = $this->CI->db->query('SELECT id_user_kategori,id_user_level FROM master_user WHERE id = '.$this->CI->session->userdata('id_user'))->row();
+        if($valid->id_user_kategori != 5){
+            if($valid->id_user_kategori == 0){
+                redirect(base_url('pasien/Pasien'));
+            } else if($valid->id_user_kategori == 6){
+                if($valid->id_user_level == 1){
+                    redirect(base_url('diampu/Diampu/list_pengampu'));
+                }else{
+                    redirect(base_url('pengampu/Pengampu/dashboard'));
+                }
+            }
+            else{
+                redirect(base_url('dokter/Dashboard'));
+            }
+        }
+    }
+
     public function check_user_pasien(){
         if(!$this->session->userdata('is_login')){
             redirect(base_url('Login'));
@@ -101,6 +119,12 @@ class ALL_Controllers{
         if($valid->id_user_kategori != 0){
             if($valid->id_user_kategori == 2){
                 redirect(base_url('dokter/Dashboard'));
+            } else if($valid->id_user_kategori == 6){
+                if($valid->id_user_level == 1){
+                    redirect(base_url('diampu/Diampu/list_pengampu'));
+                }else{
+                    redirect(base_url('pengampu/Pengampu/dashboard'));
+                }
             }
             else{
                 if($valid->id_user_level == 1){
@@ -109,6 +133,58 @@ class ALL_Controllers{
                 else{
                     redirect(base_url('admin/FarmasiVerifikasiObat'));
                 }
+            }
+        }
+    }
+
+    public function check_user_diampu(){
+        if(!$this->CI->session->userdata('is_login')){
+            redirect(base_url('Login'));
+        }
+        $valid = $this->CI->db->query('SELECT id_user_kategori,id_user_level FROM master_user WHERE id = '.$this->CI->session->userdata('id_user'))->row();
+        if($valid->id_user_kategori != 6){
+            if($valid->id_user_kategori == 0){
+                redirect(base_url('pasien/Pasien'));
+            } else if($valid->id_user_kategori == 5){
+                if($valid->id_user_level == 1){
+                    redirect(base_url('admin/Admin'));
+                }else{
+                    redirect(base_url('admin/FarmasiVerifikasiObat'));
+                }
+            }
+            else{
+                redirect(base_url('dokter/Dashboard'));
+            }
+        }
+        else{
+            if($valid->id_user_level == 2){
+                redirect(base_url('pengampu/Pengampu'));
+            }
+        }
+    }
+
+    public function check_user_pengampu(){
+        if(!$this->CI->session->userdata('is_login')){
+            redirect(base_url('Login'));
+        }
+        $valid = $this->CI->db->query('SELECT id_user_kategori,id_user_level FROM master_user WHERE id = '.$this->CI->session->userdata('id_user'))->row();
+        if($valid->id_user_kategori != 6){
+            if($valid->id_user_kategori == 0){
+                redirect(base_url('pasien/Pasien'));
+            } else if($valid->id_user_kategori == 5){
+                if($valid->id_user_level == 1){
+                    redirect(base_url('admin/Admin'));
+                }else{
+                    redirect(base_url('admin/FarmasiVerifikasiObat'));
+                }
+            }
+            else{
+                redirect(base_url('dokter/Dashboard'));
+            }
+        }
+        else{
+            if($valid->id_user_level == 1){
+                redirect(base_url('diampu/Diampu/list_pengampu'));
             }
         }
     }

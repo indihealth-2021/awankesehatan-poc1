@@ -44,12 +44,9 @@ class Pdf extends Dompdf{
         ini_set("memory_limit", "800M"); ini_set("max_execution_time", "800");
         $html = $this->ci()->load->view($view, $data, TRUE);
         $this->set_paper('letter', 'landscape');
-        $this->getOptions()->set([
-            'isHtml5ParserEnabled' => true,
-            'defaultFont' => 'helvetica'
-        ]);
+        $this->set_option('isHtml5ParserEnabled', true);
         $this->load_html($html);
-        $this->set_base_path('/var/www/html/telemedicinelintas2');
+        $this->set_base_path("/var/www/html/telemedicinelintasdemo2");
         // Render the PDF
         $this->render();
         // Output the generated PDF to Browser

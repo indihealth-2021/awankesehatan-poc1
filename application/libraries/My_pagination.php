@@ -2,10 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class My_pagination{
-    public function __construct(){
-        $this->CI =& get_instance();
-    }
-
+    
     public function paginate($per_page, $uri_segment, $count_rows, $url){
         $config['total_rows'] = $count_rows; //total row
         $config['base_url'] = $url; //site url

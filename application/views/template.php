@@ -746,7 +746,7 @@
           }
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_berakhir_pasien')) {
-          location.href = "<?php echo base_url('pasien/ResepDokter') ?>";
+          location.href = "<?php echo base_url('pasien/Pasien') ?>";
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'pendaftaran_konsultasi')) {
           var audio = document.getElementById('bell-ring');

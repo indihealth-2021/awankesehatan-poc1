@@ -251,7 +251,7 @@ class Pendaftaran extends CI_Controller {
                 $id_dokter = $jadwal_dokter->id_dokter;
                 $id_notif = $this->db->insert_id();
                 $notifikasi = "Ada pasien yang mendaftar konsultasi.";
-                $dokter = $this->db->query('SELECT * FROM user WHERE id = '.$this->db->escape($id_dokter))->row();
+                $dokter = $this->db->query('SELECT * FROM master_user WHERE id = '.$this->db->escape($id_dokter))->row();
                 $msg_notif = array(
                     'name' => 'pendaftaran_konsultasi',
                     'id_notif' => $id_notif,

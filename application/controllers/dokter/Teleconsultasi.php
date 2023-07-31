@@ -287,6 +287,12 @@ class Teleconsultasi extends CI_Controller
         $data['dirawat'] = isset($data['dirawat']) ? $data['dirawat'] : '0';
         $data['keluhan'] = isset($data['keluhan']) ? $data['keluhan'] : '0';
 
+        // from new button
+        $keys = ["berat_badan", "tinggi_badan", "tekanan_darah", "suhu", "merokok", "alkohol". "kecelakaan", "operasi", "dirawat", "keluhan"];
+        foreach($keys as $key) {
+            $data[$key] = isset($data[$key]) ? $data[$key] : "-";
+        }
+
         $data_assesment = array(
             "id_pasien" => $data['id_pasien'],
             "id_dokter" => $id_dokter,
@@ -323,6 +329,9 @@ class Teleconsultasi extends CI_Controller
         $data_history = array("activity" => "Assesment", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
+        $data["id_registrasi"] = isset($data["id_registrasi"]) ? 
+            $data["id_registrasi"]  : $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
+
         $data_diagnosis_dokter = array(
             "id_dokter" => $id_dokter,
             "id_pasien" => $data['id_pasien'],
@@ -356,21 +365,28 @@ class Teleconsultasi extends CI_Controller
         $data_history = array("activity" => "Diagnosis", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
-        $jml_data_resep = count($data['keterangan']);
-        for ($i = 0; $i < $jml_data_resep; $i++) {
-            $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = '.$data['id_obat'][$i])->row();
-            $data_resep = array(
-                "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
-                "id_pasien" => $data['id_pasien'],
-                "id_dokter" => $id_dokter,
-                "id_obat" => $data['id_obat'][$i],
-                "jumlah_obat" => $data['jumlah_obat'][$i],
-                "harga_per_n_unit" => $obat->harga_per_n_unit,
-                "harga" => $obat->harga,
-                "keterangan" => $data['keterangan'][$i],
-            );
-            $this->db->insert('resep_dokter', $data_resep);
+        $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id=".$data["id_jadwal_konsultasi"]." AND resep_dokter.pasien=".$data["id_pasien"])->row();
+
+        if(!$exist) {
+            $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0])->result()[0];
+            $jml_data_resep = count($data['keterangan']);
+            for ($i = 0; $i < $jml_data_resep; $i++) {
+                $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = '.$data['id_obat'][$i])->row();
+                $data_resep = array(
+                    "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
+                    "id_pasien" => $data['id_pasien'],
+                    "id_dokter" => $id_dokter,
+                    "id_obat" => $data['id_obat'][$i],
+                    "jumlah_obat" => $data['jumlah_obat'][$i],
+                    "harga_per_n_unit" => $obat->harga_per_n_unit,
+                    "id_apotek" => $apotek->id,
+                    "harga" => $obat->harga,
+                    "keterangan" => $data['keterangan'][$i],
+                );
+                $this->db->insert('resep_dokter', $data_resep);
+            }
         }
+        
         $data_history = array("activity" => "Resep Dokter", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
@@ -412,6 +428,8 @@ class Teleconsultasi extends CI_Controller
                 "id_registrasi" => $regId,
                 "diagnosis" => $diagnosis
             ]);
+
+            $this->send_data_konsultasi();
 
             $this->db->delete('jadwal_konsultasi', ['id' => $data["id_jadwal_konsultasi"]]);
     

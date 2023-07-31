@@ -65,7 +65,7 @@
                           <span><b><?php echo $resep->nama_dokter; ?></b></span><br>
                           <span class="font-12"><?php echo $resep->nama_poli; ?></span>
                         </td>
-                        <!-- <td><?php //echo 'Jalan '.ucwords(strtolower($resep->alamat_jalan)).', Kel '.ucwords(strtolower($resep->nama_kelurahan)).', Kec '.ucwords(strtolower($resep->nama_kecamatan)).', Kab/Kota '.ucwords(strtolower($resep->nama_kota)).', Kode Pos '.$resep->kode_pos.', Provinsi '.ucwords(strtolower($resep->nama_provinsi)) 
+                        <!-- <td><?php //echo 'Jalan '.ucwords(strtolower($resep->alamat_jalan)).', Kel '.ucwords(strtolower($resep->nama_kelurahan)).', Kec '.ucwords(strtolower($resep->nama_kecamatan)).', Kab/Kota '.ucwords(strtolower($resep->nama_kota)).', Kode Pos '.$resep->kode_pos.', Provinsi '.ucwords(strtolower($resep->nama_provinsi))
                                   ?></td> -->
                         <td><?php echo $resep->detail_obat ?></td>
                         <?php
@@ -76,12 +76,7 @@
                         $list_total_harga = [];
                         $total_harga = 0;
                         for ($i = 0; $i < $jml_data; $i++) {
-                          if($list_harga_obat_per_n_unit[$i] == 0){
-                            $total_harga_obat_n = 0;
-                          }else{
-                            $total_harga_obat_n = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]);
-                          }
-                          $list_total_harga[$i] = $total_harga_obat_n * $list_harga_obat[$i];
+                          $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
                         }
 
                         foreach ($list_total_harga as $tot_harga) {
@@ -94,14 +89,16 @@
                         <!-- <td>Rp. 15.000</td> -->
                         <td width="25%" class="text-center">
                           <!-- <input type="number" name="harga_ongkir" class="form-control" id="id-jadwal-konsultasi-<?php echo $resep->id_jadwal_konsultasi; ?>" placeholder="Biaya Pengiriman"> -->
-                          <button class="btn btn-submit-biaya btnEdit" data-lat="<?php echo $resep->lat ?>" data-lng="<?php echo $resep->lng ?>" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman; ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->nama_provinsi && $resep->nama_kota && $resep->nama_kelurahan && $resep->nama_kecamatan && $resep->alamat_jalan && $resep->kode_pos ? '' : ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-is-alamat-kustom="<?php if (!empty($resep->alamat_kustom)) {
+                          <button class="btn btn-submit-biaya btnEdit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman; ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->nama_provinsi && $resep->nama_kota && $resep->nama_kelurahan && $resep->nama_kecamatan && $resep->alamat_jalan && $resep->kode_pos ? '' : ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-is-alamat-kustom="<?php if (!empty($resep->alamat_kustom)) {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       echo $resep->alamat_kustom == 1 ? '1' : '0';
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } else {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       echo '0';
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } ?>" data-alamat-kustom="<?php if (!empty($resep->alamat_kustom)) {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     echo $resep->alamat_kustom ? $resep->alamat_pengiriman : '';
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   } ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalBiayaPengiriman">Submit Biaya</button>
-                          <button class="btn btn-kirim-biaya btnSubmit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->alamat_pengiriman ?: ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-tipe="submit" data-harga-obat="<?php echo $total_harga; ?>" data-harga-obat-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga, 2, ',', '.')); ?>" data-total-harga="<?php echo $total_harga + $biaya_pengiriman ?>" data-total-harga-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga + $biaya_pengiriman, 2, ',', '.')); ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-toggle="modal" data-target="#modalBiayaPengiriman">Kirim</button>
+                          <?php if($resep->pasien_is_vip)  {?>
+                            <button class="btn btn-kirim-biaya btnSubmit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->alamat_pengiriman ?: ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-tipe="submit" data-harga-obat="<?php echo $total_harga; ?>" data-harga-obat-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga, 2, ',', '.')); ?>" data-total-harga="<?php echo $total_harga + $biaya_pengiriman ?>" data-total-harga-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga + $biaya_pengiriman, 2, ',', '.')); ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-toggle="modal" data-target="#modalBiayaPengiriman">Kirim</button>
+                            <?php } ?>
                         </td>
                       </tr>
                     <?php } ?>
@@ -129,7 +126,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST" action="<?php echo base_url('admin/PengirimanObat/rilis_obat') ?>">
+      <?= form_open('admin/PengirimanObat/rilis_obat'); ?>
+
         <div class="modal-body font-12">
           <div class="form-group">
             <label for="nama-pasien">Nama Pasien</label>
@@ -146,7 +144,7 @@
           <hr>
           <div class="form-group">
             <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
-            <textarea class="form-control" id="alamat" name="alamat" readonly></textarea>
+            <textarea class="form-control" id="alamat" name="alamat"></textarea>
             <!-- <span class="edit-form form-text text-muted">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="alamat_kustom" id="inlineRadio1" value="0">
@@ -164,7 +162,7 @@
             <small id="hargaObatHelp" class="form-text text-muted">Rp. 0,0</small>
           </div>
           <div class="form-group">
-            <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman</label> <a href="#" id="get-ongkir-jne" class="bg-tele text-light p-1" data-lat="" data-lng="" data-alamat=""><i class="fa fa-truck"></i> Get Biaya Ongkir JNE</a>
+            <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman</label>
             <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required>
             <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small>
           </div>
@@ -182,8 +180,8 @@
             <button type="submit" class="btn btn-simpan-2 buttonSave" id="saveBiayaPengiriman">Simpan</button>
           </div>
         </div>
-    </div>
-    </form>
+        </div>
+      <?= form_close(); ?>
   </div>
 </div>
 

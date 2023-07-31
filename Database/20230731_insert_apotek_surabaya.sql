@@ -1,0 +1,8 @@
+INSERT INTO `master_apotek` (`id`, `nama`, `alamat_jalan`, `alamat_kelurahan`, `alamat_kecamatan`, `alamat_kota`, `alamat_provinsi`, `latitude`, `longitude`, `kode_pos`, `telp`, `created_at`, `updated_at`, `created_by`, `updated_by`, `aktif`) VALUES
+(1, 'Apotek  Apotek', 'Jalan Bandung', '1807062001', '1807062', '1807', '18', '-6.932134', '107.617958', '111', '111', '2023-07-24 04:22:12', NULL, 0, NULL, 1),
+(2, 'Apotek Indihealth', 'Jalan Tubagus Ismail No. 5', '3273220004', '3273220', '3273', '32', '-6.885122901865443', '107.61953211446155', '1234', '0223214587', '2023-07-26 05:41:12', NULL, 0, NULL, 1),
+(3, 'Apotek K-24 Terusan Jakarta', 'Jl. Terusan Jakarta No.37, Cicaheum, Kec. Kiaracondong, Kota Bandung, Jawa Barat 40281', '3273150006', '3273150', '3273', '32', '-6.912964070526489', '107.64789679509123', '402900', '0812233445', '2023-07-26 23:39:04', NULL, 0, NULL, 1),
+(4, 'Kimia Farma 25 Darmo Pandegiling', 'Jalan Raya Darmo No. 6', '3578180002', '3578180', '3578', '35', '-7.29409101639923\n', '112.7385781628862', '40000', '0315677777', '2023-07-31 05:40:49', NULL, 0, NULL, 1),
+(5, 'Kimia Farma Banyu Urip', 'Jalan Banyu Urip 213', '3578170003', '3578170', '3578', '35', '-7.268684355199772', ' 112.7147228359007', '4000', '03199533772', '2023-07-31 05:42:37', NULL, 0, NULL, 1),
+(6, 'Kimia Farma Siwalankerto', 'Jalan Siwalankerto Timur No. 221', '3578040001', '3578040', '3578', '35', '-7.336944944967926', '112.74117692240961', '40000', '03199852478', '2023-07-31 05:44:36', NULL, 0, NULL, 1),
+(7, 'Kimia Farma Mulyosari', 'Jalan Mulyosari No. 157', '3578090004', '3578090', '3578', '35', '-7.269353670358937', '112.7968187935725', '4000', '0315953547', '2023-07-31 05:46:20', NULL, 0, NULL, 1);

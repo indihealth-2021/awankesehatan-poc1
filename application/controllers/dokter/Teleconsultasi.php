@@ -429,7 +429,7 @@ class Teleconsultasi extends CI_Controller
                 "diagnosis" => $diagnosis
             ]);
 
-            $this->send_data_konsultasi();
+            //$this->send_data_konsultasi();
 
             $this->db->delete('jadwal_konsultasi', ['id' => $data["id_jadwal_konsultasi"]]);
     

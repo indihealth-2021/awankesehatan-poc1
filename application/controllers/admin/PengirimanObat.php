@@ -252,7 +252,10 @@ class PengirimanObat extends CI_Controller {
         $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
         $id_registrasi = $this->input->post('id_registrasi');
         $diagnosis_dokter = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
-        $id_registrasi = $id_registrasi ? $id_registrasi:$diagnosis_dokter->id_registrasi;
+
+        echo json_encode($this->db->last_query()); exit();
+        $id_registrasi = $id_registrasi ? 
+            $id_registrasi : $diagnosis_dokter->id_registrasi;
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');
         $alamat = $this->input->post('alamat');
 

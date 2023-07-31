@@ -68,7 +68,7 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    if($resep->status_bukti != null){
+                                                    if($resep->status_bukti){
                                                         if($resep->status_bukti == 1){
                                                             $button = 'Lunas';
                                                             $warna = 'lunas';

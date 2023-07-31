@@ -276,12 +276,33 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->all_controllers->check_user_farmasi();
 
         $list_resep = $this->db->query('SELECT id FROM resep_dokter WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
+        $id_pasien = 0;
         foreach ($list_resep as $resep) {
             $data_resep_update = array("diverifikasi" => 1);
             $this->all_model->update('resep_dokter', $data_resep_update, array('id' => $resep->id));
+            $id_pasien = $resep->id_pasien;
         }
 
-        $this->session->set_flashdata('msg_verif_resep', 'Resep Obat telah diverifikasi!');
+        $id_notif = $this->db->insert_id();
+        $notifikasi = "Resep Obat telah diverifikasi!";
+        $now = (new DateTime('now'))->format('Y-m-d H:i:s');
+        $pasien = $this->db->query('SELECT * FROM master_user WHERE id = '. $id_pasien)->row();
+        $msg_notif = array(
+            'name' => 'resep_obat_diverifikasi',
+            'id_notif' => $id_notif,
+            'keterangan' => $notifikasi,
+            'tanggal' => $now,
+            'id_jadwal_konsultasi' => $id_jadwal_konsultasi,
+            'id_user' => json_encode(array($id_pasien)),
+            'direct_link' => base_url('pasien/ResepDokter'),
+          );
+          $msg_notif = json_encode($msg_notif);
+          $this->key->_send_fcm($pasien->reg_id, $msg_notif);
+
+          $data_notif = array("id_user"=>$dokter->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('pasien/ResepDokter/konfirmasi/?id_jadwal_konsultasi='.$id_jadwal_konsultasi));
+          $this->db->insert('data_notifikasi', $data_notif);
+
+        $this->session->set_flashdata('msg_verif_resep', $notifikasi);
         redirect(base_url('admin/FarmasiVerifikasiObat'));
     }
 }

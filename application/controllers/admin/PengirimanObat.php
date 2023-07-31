@@ -357,7 +357,7 @@ class PengirimanObat extends CI_Controller {
         $verifier = $this->db->query('SELECT name FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
 
         // $notifikasi = 'Resep Obat anda telah dirilis! dengan total harga Rp. '.number_format($total_harga,2,',','.');
-        $notifikasi = 'Salah satu Resep Obat anda telah dirilis!';
+        $notifikasi = 'Salah satu Resep Obat anda telah dirilis dan sedang disiapkan!';
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         
         $data_notif = array("id_user"=>$pasien->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('pasien/ResepDokter'));

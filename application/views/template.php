@@ -748,6 +748,59 @@
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_berakhir_pasien')) {
           location.href = "<?php echo base_url('pasien/Pasien') ?>";
         }
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_pasien')){
+          $("#jawab_farmasi").attr('data-room-name', JSON.parse(payload.data.body).room_name);
+          $('#jawab_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#tolak_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#jawaban_farmasi').modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+          $("#jawaban_farmasi").modal('show');
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_pasien')){
+          $('#memanggil').modal('hide');
+          $('#konten-panggilan').prop('hidden', false);
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'reject_panggilan_farmasi_pasien')){
+          $('#memanggil').modal('hide');
+          $('#konten-panggilan').prop('hidden', true);
+
+          alert('Panggilan ditolak oleh pasien');
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_dokter')){
+          $("#jawab_farmasi").attr('data-room-name', JSON.parse(payload.data.body).room_name);
+          $('#jawab_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#tolak_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#jawaban_farmasi').modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+          $("#jawaban_farmasi").modal('show');
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_dokter')){
+          $('#memanggil').modal('hide');
+          $('#konten-panggilan').prop('hidden', false);
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'reject_panggilan_farmasi_dokter')){
+          $('#memanggil').modal('hide');
+          $('#konten-panggilan').prop('hidden', true);
+
+          alert('Panggilan ditolak oleh dokter');
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'akhiri_panggilan_farmasi_pasien')){
+          location.href = baseUrl+'pasien/Pasien';
+        }
+
+        if(JSON.parse(JSON.parse(payload.data.body).name == 'akhiri_panggilan_farmasi_dokter')){
+          location.href = baseUrl+'dokter/Dashboard';
+        }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'pendaftaran_konsultasi')) {
           var audio = document.getElementById('bell-ring');
           audio.play();

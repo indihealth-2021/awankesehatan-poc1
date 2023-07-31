@@ -17,6 +17,11 @@ var btnStop = $('#btn-stop');
 
 var btnReject = $('#tolak');
 
+
+var btnAnswerFarmasi = $('#jawab_farmasi');
+var btnRejectFarmasi = $('#tolak_farmasi');
+var btnEndCallFarmasi = $('#btn-stop-farmasi');
+
 function checkform(form) {
   // get all the inputs within the submitted form
   var inputs = form.getElementsByTagName('input');
@@ -107,6 +112,62 @@ function checkform(form) {
 //     //  $('#receiver').html('<strong>' + result.receiver.nama + '</strong>');
 //   }, logError);
 // }
+
+btnAnswerFarmasi.click(function(e){
+  const p_o_d = $(this).data('pd') == 'p' ? 'pasien':'dokter';
+  const id_farmasi = $(this).data('id-farmasi');
+  const room_name = $(this).data('room-name');
+  $.ajax({
+    url: baseUrl+p_o_d+'/FarmasiCall/jawab',
+    method: 'POST',
+    data: 'id_farmasi='+id_farmasi,
+    success: function(data){
+      post(baseUrl+p_o_d+'/FarmasiCall', {room_name:room_name, id_farmasi:id_farmasi});
+    },
+    error: function(err){
+      console.log('GAGAL: Laporkan hal ini pada admin!');
+    }
+  });
+})
+
+btnRejectFarmasi.click(function(e){
+  const p_o_d = $(this).data('pd') == 'p' ? 'pasien':'dokter';
+  const id_farmasi = $(this).data('id-farmasi');
+
+  $.ajax({
+    url: baseUrl+p_o_d+'/FarmasiCall/tolak',
+    method: 'POST',
+    data: 'id_farmasi='+id_farmasi,
+    success: function(data){
+      $('#jawaban_farmasi').modal('hide');
+    },
+    error: function(err){
+      console.log('GAGAL: Laporkan hal ini pada admin!');
+    }
+  })
+});
+
+btnEndCallFarmasi.click(function(e){
+  const id_user = $(this).data('id-user');
+  const p_or_d = $(this).data('pd');
+
+  $.ajax({
+    url: baseUrl+'admin/FarmasiCall/akhiri',
+    method: 'POST',
+    data: 'id_user='+id_user+'&p_or_d='+p_or_d,
+    success: function(data){
+      var iframes = document.getElementsByTagName('iframe');
+      for (var i = 0; i < iframes.length; i++) {
+          iframes[i].parentNode.removeChild(iframes[i]);
+      }
+      $('#konten-panggilan').prop('hidden', true);
+    },
+    error: function(err){
+      console.log('GAGAL: Laporkan hal ini pada admin!');
+    }
+  })
+});
+
 btnCall.click(function (e) {
   $('#memanggil').modal('show');
   // callResult();

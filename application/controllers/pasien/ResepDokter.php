@@ -31,7 +31,8 @@ class ResepDokter extends CI_Controller
         $data['user'] = $this->db->query('SELECT id,name, foto FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
 
-        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, bpo.status as status_bukti, bpo.id as id_bukti_obat, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter,GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND bukti_pembayaran.status = 1 AND (bpo.status = 0 OR bpo.status IS NULL OR bpo.status = 2) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
+        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, bpo.status as status_bukti, bpo.id as id_bukti_obat, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter,GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status = 0 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
+
         $data['css_addons'] = '<link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">';
         $data['js_addons'] = '
                                 <script src="' . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . '"></script>
@@ -52,13 +53,13 @@ class ResepDokter extends CI_Controller
                                         table_resep.search($(this).val()).draw();
                                     });
 
-                                    $("#modalHapus").on("show.bs.modal", function(e) {  
+                                    $("#modalHapus").on("show.bs.modal", function(e) {
                                         var nama = $(e.relatedTarget).data("nama");
                                         $(e.currentTarget).find("#nama").html(nama);
 
                                         var href_input = $(e.relatedTarget).data("href");
                                         $(e.currentTarget).find("#buttonHapus").attr("href", href_input);
-                                        
+
 										var title = $(e.relatedTarget).data("title");
 										$(e.currentTarget).find(".title").text(title);
                                         $(e.currentTarget).find(".tipe").text(title);
@@ -89,12 +90,11 @@ class ResepDokter extends CI_Controller
         $data['title'] = 'Pembayaran Obat';
         $data['js_addons'] = "
         <script>
-        $('.no-hp').hide();
         $('#file_upload').change(function() {
         var file = $('#file_upload')[0].files[0].name;
         var file_substr = file.length > 40 ? file.substr(0, 39)+'...':file;
         $('#filename').html('<span title=\"' + file + '\">' + file_substr + '</span>');
-        });    
+        });
         $('#btnKirim').click(function(){
             if($('select[name=metode_pembayaran]').val() == '1'){
                 $('#form-transfer').submit();
@@ -111,7 +111,11 @@ class ResepDokter extends CI_Controller
                 $('#form-owlexa').hide();
                 $('#cc_debit').hide();
 
-                $('#btnBayar').attr('href', '" . base_url('pasien/ResepDokter/bayar_va/' . $id_jadwal_konsultasi) . "//');
+                $('#btnBayar').attr('href', '" . base_url('pasien/ResepDokter/bayar_va/' . $id_jadwal_konsultasi) . "/');
+                // $('#btnBayar').click(function(e){
+                //     e.preventDefault();
+                //     $('#form-va').submit();
+                // });
             }else if(this.value == '2'){
                 $('#transfer_va').hide();
                 $('#transfer_manual').show();
@@ -119,7 +123,7 @@ class ResepDokter extends CI_Controller
                 $('#form-owlexa').hide();
                 $('#cc_debit').hide();
 
-                $('#btnBayar').attr('href', '" . base_url('pasien/ResepDokter/transfer_manual/' . $id_jadwal_konsultasi) . "//');
+                $('#btnBayar').attr('href', '" . base_url('pasien/ResepDokter/transfer_manual/' . $id_jadwal_konsultasi) . "/');
                 $('#btnBayar').click(function(e){
                     let href_btn =  $('#btnBayar').attr('href').split('/');
                     if(href_btn.length <= 8){
@@ -134,33 +138,13 @@ class ResepDokter extends CI_Controller
                 $('#form-owlexa').hide();
                 $('#cc_debit').hide();
 
-                let no_hp = $('input[name=no_hp]');
-                no_hp.val('');
-
                 $('#btnBayar').attr('href', '#');
-                $('#btnBayar').click(function(e){
-                    e.preventDefault();
-                    platform = $('input[name=platform]:checked').val();
-                    if(platform == undefined){
-                        alert('GAGAL: Pilih Platform Terlebih Dahulu!');
-                        return false;
-                    }
-    
-                    if(platform == '3'){
-                        if(no_hp.val() === ''){
-                            alert('GAGAL: No HP Harus diisi!');
-                            return false;
-                        }
-                    }
-
-                    $('#form-dompet-digital').submit();
-                });
             }
             else if(this.value == '4'){
                 $('#transfer_va').hide();
                 $('#transfer_manual').hide();
                 $('#dompet_digital').hide();
-                $('#form-owlexa').show();     
+                $('#form-owlexa').show();
                 $('#cc_debit').hide();
 
                 $('#btnBayar').attr('href', '#');
@@ -172,16 +156,16 @@ class ResepDokter extends CI_Controller
                 $('#transfer_va').hide();
                 $('#transfer_manual').hide();
                 $('#dompet_digital').hide();
-                $('#form-owlexa').hide();  
-                $('#cc_debit').show();  
+                $('#form-owlexa').hide();
+                $('#cc_debit').show();
 
-                $('#btnBayar').attr('href', '".base_url('pasien/ResepDokter/bayar_va/'.$id_jadwal_konsultasi.'/6')."');
+                $('#btnBayar').attr('href', '#');
             }else{
                 $('#transfer_va').hide();
                 $('#transfer_manual').hide();
                 $('#dompet_digital').hide();
-                $('#form-owlexa').hide();  
-                $('#cc_debit').hide();  
+                $('#form-owlexa').hide();
+                $('#cc_debit').hide();
 
                 $('#btnBayar').attr('href', '#');
             }
@@ -199,38 +183,25 @@ class ResepDokter extends CI_Controller
                     url    : baseUrl+'pasien/Pembayaran/generate_otp',
                     data   : {cardNumber:cardNumber},
                     success : function(data){
-                       alert(data);             
+                       alert(data);
                     },
                     error : function(data){
                          alert('Send OTP Gagal! Laporkan hal ini pada Admin!'+JSON.stringify(data));
-                    }      
+                    }
                 });
             }
         });
 
-        $('input[name=platform]').change(function(e){
-            if($(this).val() == 4 || $(this).val() == 5){
-                $('.no-hp').hide();
-            }else{
-                $('.no-hp').show();
-            }
-
-            let href_btn = $('#form-dompet-digital').attr('action').split('/');
-            href_btn = href_btn.slice(0, href_btn.length-2);
-            href_btn = href_btn.join('/');
-            $('#form-dompet-digital').attr('action', href_btn+'/'+this.value+'/');
-        });
-
         $('input[name=bank_id]').change(function(e){
             let href_btn = $('#btnBayar').attr('href').split('/');
-            href_btn = href_btn.slice(0, href_btn.length-2);
+            href_btn = href_btn.slice(0, href_btn.length-1);
             href_btn = href_btn.join('/');
             $('#btnBayar').attr('href', href_btn+'/'+this.value+'/');
         });
-    
+
         $('input[name=bank_id_2]').change(function(e){
             let href_btn = $('#btnBayar').attr('href').split('/');
-            href_btn = href_btn.slice(0, href_btn.length-2);
+            href_btn = href_btn.slice(0, href_btn.length-1);
             href_btn = href_btn.join('/');
             $('#btnBayar').attr('href', href_btn+'/'+this.value+'/');
         });
@@ -245,7 +216,7 @@ class ResepDokter extends CI_Controller
                 $('#cc_debit').hide();
                 $('#form-owlexa').show();
                 $('select[name=metode_pembayaran]').val('4');
-                
+
                 $('#btnBayar').click(function(e){
                     e.preventDefault()
                     $('#form-owlexa').submit();
@@ -262,12 +233,9 @@ class ResepDokter extends CI_Controller
         </script>
         ";
 
-        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND bukti_pembayaran.status = 1 AND (bpo.status = 0 OR bpo.status IS NULL OR bpo.status = 2) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
-        $data['list_bank_va'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND vendor = "arthajasa"')->result();
-        $data['list_e_wallet'] = $this->db->query('SELECT * FROM payment WHERE type = "ewallet" AND vendor = "arthajasa"')->result();
-        $data['list_manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1')->result();
+        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
 
-        $data['bukti_pembayaran_obat'] = $this->db->query('SELECT status,foto,metode_pembayaran,claim_number,va_number,id_payment, (SELECT payment FROM payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as payment_name,(SELECT logo FROM payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as payment_logo, (SELECT payment FROM master_manual_payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as manual_payment_name, (SELECT logo FROM master_manual_payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as manual_payment_logo FROM bukti_pembayaran_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $this->session->userdata('id_user').' AND status = 0')->row();
+        $data['bukti_pembayaran_obat'] = $this->db->query('SELECT status,foto,metode_pembayaran,claim_number,va_number,id_payment FROM bukti_pembayaran_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $this->session->userdata('id_user'))->row();
 
         if ($data['bukti_pembayaran_obat']) {
             if ($data['bukti_pembayaran_obat']->status == 0 && $data['bukti_pembayaran_obat']->metode_pembayaran == 3) {
@@ -308,18 +276,54 @@ class ResepDokter extends CI_Controller
             var file = $('#file_upload')[0].files[0].name;
             var file_substr = file.length > 40 ? file.substr(0, 39)+'...':file;
             $('#filename').html('<span title=\"' + file + '\">' + file_substr + '</span>');
-          }); 
+          });
         </script>
         ";
         $data['css_addons'] = '';
 
-        $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1 AND payment_id = '.$bank_id)->row();
-
-        if(!$data['manual_payment']){
-            show_404();
+        switch ($bank_id) {
+                // case 1:
+                //     $bank_name = 'BCA';
+                //     $bank_logo = 'bca.png';
+                //     break;
+                case 2:
+                    $bank_name = 'Mandiri';
+                    $bank_logo = 'mandiri.png';
+                    break;
+                // case 3:
+                //     $bank_name = 'BNI';
+                //     $bank_logo = 'bni.png';
+                //     break;
+                // case 4:
+                //     $bank_name = 'BRI';
+                //     $bank_logo = 'bri.png';
+                //     break;
+            case 22:
+                $bank_name = 'Permata';
+                $bank_logo = 'permata.png';
+                break;
+            case 28:
+                $bank_name = 'BNI';
+                $bank_logo = 'bni.png';
+                break;
+            case 37:
+                $bank_name = 'CIMB';
+                $bank_logo = 'cimb.png';
+                break;
+            default:
+                $bank_name = '';
+                $bank_logo = '';
+                show_404();
+                break;
         }
 
-        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter, bpo.metode_pembayaran FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status = 0 OR bpo.status IS NULL OR bpo.status = 2) AND bukti_pembayaran.status = 1 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
+        $data['data_bank'] = array(
+            'id_bank' => $bank_id,
+            'nama_bank' => $bank_name,
+            'logo_bank' => $bank_logo,
+        );
+
+        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
         if (!$data['resep']) {
             show_404();
         }
@@ -351,13 +355,49 @@ class ResepDokter extends CI_Controller
         $data['js_addons'] = '';
         $data['css_addons'] = '';
 
-
-        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter, bpo.va_number, bpo.id_payment, bpo.metode_pembayaran FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
-        if (!$data['resep'] || !$data['resep']->va_number || $data['resep']->metode_pembayaran != 3) {
-            show_404();
+        switch ($bank_id) {
+                // case 1:
+                //     $bank_name = 'BCA';
+                //     $bank_logo = 'bca.png';
+                //     break;
+                // case 2:
+                //     $bank_name = 'Mandiri';
+                //     $bank_logo = 'mandiri.png';
+                //     break;
+                // case 3:
+                //     $bank_name = 'BNI';
+                //     $bank_logo = 'bni.png';
+                //     break;
+                // case 4:
+                //     $bank_name = 'BRI';
+                //     $bank_logo = 'bri.png';
+                //     break;
+            case 22:
+                $bank_name = 'Permata';
+                $bank_logo = 'permata.png';
+                break;
+            case 28:
+                $bank_name = 'BNI';
+                $bank_logo = 'bni.png';
+                break;
+            case 37:
+                $bank_name = 'CIMB';
+                $bank_logo = 'cimb.png';
+                break;
+            default:
+                $bank_name = '';
+                $bank_logo = '';
+                show_404();
+                break;
         }
-        $data['payment'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND payment_id = '.$data['resep']->id_payment)->row();
-        if(!$data['payment']){
+
+        $data['data_bank'] = array(
+            'nama_bank' => $bank_name,
+            'logo_bank' => $bank_logo,
+        );
+
+        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter, bpo.va_number FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
+        if (!$data['resep']) {
             show_404();
         }
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
@@ -568,10 +608,7 @@ class ResepDokter extends CI_Controller
 
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
-        $bukti_pembayaran_obat = $this->db->query('SELECT id FROM bukti_pembayaran_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi.' AND status = 0')->row();
-        if($bukti_pembayaran_obat){
-            $this->upload->overwrite = true;
-        }
+        $this->upload->overwrite = true;
 
         if (!$this->upload->do_upload('bukti_pembayaran')) {
             $error = array('error' => $this->upload->display_errors());
@@ -597,6 +634,7 @@ class ResepDokter extends CI_Controller
                 $admins_regid[$i] = $admins[$i]->reg_id;
             }
 
+            $bukti_pembayaran_obat = $this->db->query('SELECT id FROM bukti_pembayaran_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
             if ($bukti_pembayaran_obat) {
                 $notifikasi = 'Bukti Pembayaran Obat diupload ulang oleh ' . $uploader->name;
                 $data_update = array('foto' => $data['foto']);
@@ -668,14 +706,16 @@ class ResepDokter extends CI_Controller
             redirect(base_url('Login'));
         }
         $paymentId = $bank_id;
+        $merchantCode = 'IF00350';
         $id_registrasi = $biaya_pengiriman_obat->id_registrasi;
         $name = $pasien->name;
         $email = $pasien->email;
-        $phone = $this->input->get('no_hp') ? $this->input->get('no_hp') : $pasien->telp;
+        $phone = $pasien->telp;
         $id_pasien = $pasien->id;
 
         $dataRaw = array(
             'paymentId' => $paymentId,
+            'merchantCode' => $merchantCode,
             'idRegistrasi' => $id_registrasi,
             'name' => $name,
             'email' => $email,
@@ -687,7 +727,7 @@ class ResepDokter extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_api') . 'arthajasa/Api/purchaseObat',
+            CURLOPT_URL => $this->config->item('path_to_api') . 'e2pay/Api/purchaseObat',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -704,7 +744,7 @@ class ResepDokter extends CI_Controller
 
         if ($result->status) {
             $this->session->set_flashdata('msg_pmbyrn_obat', $result->msg);
-            redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi));
+            redirect(base_url('pasien/ResepDokter/transfer_va/' . $id_jadwal_konsultasi . '/' . $paymentId));
         } else {
             $this->session->set_flashdata('msg_pmbyrn_obat', $result->msg);
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi));

@@ -211,6 +211,9 @@ class Login extends CI_Controller {
 					redirect(base_url('admin/FarmasiVerifikasiObat'));
 				}
 				break;
+			case '55':
+				redirect(base_url("apoteker/Apoteker"));
+				break;
 		}
 	}
 

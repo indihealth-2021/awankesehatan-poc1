@@ -215,7 +215,7 @@
  -->
 
 
-    <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ' . $user->id)->row(); ?>
+    <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ?',[$user->id])->row(); ?>
     <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
       <div class="modal fade" id="jawaban" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -235,15 +235,16 @@
           </div>
         </div>
       </div>
+
       <?php if ($user_2->accept_tac == 0) { ?>
         <div class="modal fade" id="tac_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-scrollable" role="document" style="max-width: 800px;">
-            <div class="modal-content" style="height: 500px; width: 800px;">
+          <div class="modal-dialog modal-dialog-scrollable" role="document" style="">
+            <div class="modal-content" style="height: 600px;">
               <div class="modal-header text-modal-header">
                 <h5 class="modal-title font-16" id="exampleModalScrollableTitle">SYARAT DAN KETENTUAN PENGGUNAAN</h5>
               </div>
               <div class="modal-body">
-                <div class="font-16 text-justify" style="overflow-y: scroll; max-height: 300px; padding: 5px;" id="tac_body">
+                <div class="font-16 text-justify" style="overflow-y: scroll; max-height: 400px; padding: 5px;" id="tac_body">
                   <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;vertical-align:baseline;'><strong><span style='font-size:15px;font-family:"Calibri",sans-serif;'>SYARAT DAN KETENTUAN PENGGUNAAN</span></strong></p>
                   <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;vertical-align:baseline;'><strong><span style='font-size:15px;font-family:"Calibri",sans-serif;'>SI TUNTAS</span></strong></p>
                   <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;vertical-align:baseline;'><span style='font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</span></p>
@@ -497,13 +498,13 @@
                   </ol>
                 </div>
                 <hr>
-                <input type="checkbox" value="" id="tac_checkbox" disabled> <label for="tac_checkbox"><b class="ml-3">Saya menyetujui syarat dan ketentuan penggunaan</b></label>
-              </div>
-              <div class="modal-footer">
-                <div style="float: right!important;">
-                  <button type="button" class="btn btn-simpan-sm mr-5" id="simpan_tac" disabled>Simpan</button>
+                <input type="checkbox" value="" id="tac_checkbox" disabled> <label style="font-size: 14px;" for="tac_checkbox">Saya menyetujui syarat dan ketentuan penggunaan</label>
+                 <div style="float: right!important;">
+                <button type="button" style="width:100% !important;" class="btn btn-simpan-sm  mr-5" id="simpan_tac" disabled>Simpan</button>
                 </div>
+                  
               </div>
+            
             </div>
           </div>
         </div>
@@ -751,6 +752,12 @@
           var audio = document.getElementById('bell-ring');
           audio.play();
         }
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_obat_diverifikasi')) {
+          var audio = document.getElementById('bell-ring');
+          const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;
+          audio.play();
+          location.href = "<?php echo base_url('pasien/ResepDokter/konfirmasi?id_jadwal_konsultasi=' . $id_jadwal_konsultasi) ?>";
+        }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'vp') || JSON.parse(JSON.parse(payload.data.body).name == 'universal')) {
           $("#isinotifmodal").text(JSON.parse(payload.data.body).keterangan);
           $("#ModalNotif").modal('show');
@@ -966,7 +973,7 @@
         $('#simpan_tac').click(function(e) {
           $.ajax({
             method: 'GET',
-            url: baseUrl + "pasien/Pasien/accept_tac",
+            url: "<?= base_url("pasien/Pasien/accept_tac") ?>",
             success: function(data) {
               $('#tac_modal').modal('hide');
               alert('Terima kasih, anda telah menyetujui syarat dan ketentuan penggunaan!');

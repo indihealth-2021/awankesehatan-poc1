@@ -121,7 +121,7 @@ class Pendaftaran extends CI_Controller {
 		if(!$id_jadwal){
 			show_404();
 		}
-        $jadwal_dokter = $this->db->query('SELECT id,hari,tanggal,waktu FROM jadwal_dokter WHERE id = '.$this->db->escape($id_jadwal))->row();
+        $jadwal_dokter = $this->db->query('SELECT id,hari,tanggal,waktu,id_dokter FROM jadwal_dokter WHERE id = '.$this->db->escape($id_jadwal))->row();
 
         if($jadwal_dokter->tanggal){
             $tanggal_jadwal_dokter = new DateTime($jadwal_dokter->tanggal);
@@ -248,8 +248,22 @@ class Pendaftaran extends CI_Controller {
                     </script>
                 ';
                 //$this->session->set_flashdata('msg', 'Jadwal Konsultasi untuk jadwal ini di minggu ini sudah penuh! Daftar di hari lain atau setelah jadwal dokter selesai!');
-                $this->session->set_flashdata('msg_2', $msg);
-                redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+                $id_dokter = $jadwal_dokter->id_dokter;
+                $id_notif = $this->db->insert_id();
+                $notifikasi = "Ada pasien yang mendaftar konsultasi.";
+                $dokter = $this->db->query('SELECT * FROM user WHERE id = '.$this->db->escape($id_dokter))->row();
+                $msg_notif = array(
+                    'name' => 'pendaftaran_konsultasi',
+                    'id_notif' => $id_notif,
+                    'keterangan' => $notifikasi,
+                    'tanggal' => $now,
+                    'id_user' => json_encode(array($id_pasien)),
+                    'direct_link' => base_url('pasien/Pasien/#'),
+                  );
+                  $msg_notif = json_encode($msg_notif);
+                  $this->key->_send_fcm($dokter->reg_id, $msg_notif);
+                  $this->session->set_flashdata('msg_2', $msg);
+                  redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
             }
 
             // if(($spare_waktu_jd[1] == $last_jam_konsultasi && ($diff_spare_last->invert || ($diff_spare_last->d == 0 && $diff_spare_last->h == 0 && $diff_spare_last->i < 30)))){

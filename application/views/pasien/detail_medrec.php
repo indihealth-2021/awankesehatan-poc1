@@ -75,6 +75,8 @@
             </div>
           </div>
           <div class="row">
+            <?php $plafon = 1000000; ?>
+          <span id="total" class="m-4">Total Harga: Rp.<?php echo $total; ?>,  Plafon setelah pembayaran: Rp.<?php echo $plafon-(int)$total; ?></span>
             <div class="col-md-12 mb-3">
               <p class="font-24 font-bold-7">Pemeriksaan</p>
             </div>
@@ -103,6 +105,8 @@
                           $status = '<font style="background-color:green;color:white;">SUDAH DIVERIFIKASI & SUDAH DIRILIS</font>';
                       }
                   ?>
+                  
+                  
                   <label class="col-md-2 col-4">Resep Obat</label>
                   <div class="col-md-10 col-10">
                       <?php echo $rekam_medis->list_obat ? '<ol>'.$rekam_medis->list_obat.'</ol>( '.$status.' )':'<p>: -</p>'; ?>

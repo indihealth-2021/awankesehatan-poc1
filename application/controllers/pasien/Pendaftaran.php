@@ -98,6 +98,7 @@ class Pendaftaran extends CI_Controller {
         if(!$this->session->userdata('is_login')){
             redirect(base_url('Login'));
         }
+
         $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = '.$this->db->escape($this->session->userdata('id_user')))->row();
         if($valid->id_user_kategori != 0){
             if($valid->id_user_kategori == 2){
@@ -348,14 +349,14 @@ class Pendaftaran extends CI_Controller {
         if($regis){
             $this->session->set_flashdata('msg', 'Pendaftaran Berhasil! Segera lakukan pembayaran.');
 
-            $data3 = array(
-                "id_dokter" => $jadwal->id_dokter,
-                "id_pasien" => $pasien->id,
-                "id_registrasi" => $id_registrasi,
-                "tanggal" => (new DateTime("now"))->format("Y-m-d"),
-                "jam" => (new DateTime("now"))->format("h:i"),
-            );
-            $this->db->insert('jadwal_konsultasi', $data3);
+            // $data3 = array(
+            //     "id_dokter" => $jadwal->id_dokter,
+            //     "id_pasien" => $pasien->id,
+            //     "id_registrasi" => $id_registrasi,
+            //     "tanggal" => (new DateTime("now"))->format("Y-m-d"),
+            //     "jam" => (new DateTime("now"))->format("h:i"),
+            // );
+            // $this->db->insert('jadwal_konsultasi', $data3);
         }
         else{
             $this->session->set_flashdata('msg', 'Pendaftaran Gagal!');

@@ -13,7 +13,7 @@ class JadwalTerdaftar extends CI_Controller {
     }
 
     public function index(){
-        redirect(base_url("pasien/Telekonsultasi/jadwal")); exit();
+        // redirect(base_url("pasien/Telekonsultasi/jadwal")); exit();
         
         if(!$this->session->userdata('is_login')){
             redirect(base_url('Login'));

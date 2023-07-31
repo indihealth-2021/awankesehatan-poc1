@@ -14,58 +14,15 @@ class PengirimanObat extends CI_Controller {
     }
 
     public function index(){
-		$this->all_controllers->check_user_admin();
+		$this->all_controllers->check_user_farmasi();
 		$data = $this->all_controllers->get_data_view(
 			$title = "Biaya Pengiriman Obat",
 			$view = "admin/pengiriman_obat"
         );
 
-        $data['list_resep'] = $this->db->query("
-            SELECT 
-                (SELECT bukti_pembayaran.tanggal_konsultasi FROM bukti_pembayaran WHERE bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi) as tanggal_konsultasi, 
-                (SELECT bukti_pembayaran.status FROM bukti_pembayaran WHERE bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi) as status,
-                biaya_pengiriman_obat.biaya_pengiriman, 
-                biaya_pengiriman_obat.alamat_kustom, 
-                biaya_pengiriman_obat.alamat as alamat_pengiriman, 
-                biaya_pengiriman_obat.lat, 
-                biaya_pengiriman_obat.lng, 
-                resep_dokter.id,
-                resep_dokter.created_at, 
-                resep_dokter.id_jadwal_konsultasi, 
-                d.name as nama_dokter, 
-                p.name as nama_pasien, 
-                p.telp as telp_pasien, 
-                p.email as email_pasien, 
-                master_kelurahan.name as nama_kelurahan, 
-                master_kecamatan.name as nama_kecamatan, 
-                master_kota.name as nama_kota, 
-                master_provinsi.name as nama_provinsi, 
-                p.alamat_jalan, 
-                p.kode_pos, 
-                nominal.poli as nama_poli, 
-                GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, 
-                GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, 
-                GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, 
-                GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat 
-                FROM resep_dokter 
-                    INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id 
-                    INNER JOIN master_user d ON resep_dokter.id_dokter = d.id 
-                    INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id 
-                    INNER JOIN nominal ON nominal.id = detail_dokter.id_poli 
-                    INNER JOIN master_user p ON resep_dokter.id_pasien = p.id 
-                    LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan 
-                    LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan 
-                    LEFT JOIN master_kota ON master_kota.id = p.alamat_kota 
-                    LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi 
-                    LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi 
-                    INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_registrasi = diagnosis_dokter.id_registrasi 
-                        WHERE resep_dokter.dibatalkan = 0 
-                        AND resep_dokter.dirilis = 0 
-                        AND resep_dokter.diverifikasi = 1 
-                            GROUP BY resep_dokter.id_jadwal_konsultasi 
-                                ORDER BY resep_dokter.created_at DESC")->result();
-        // var_dump($data['list_resep']);
-        // die;
+        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat_kustom, biaya_pengiriman_obat.alamat as alamat_pengiriman, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, p.telp as telp_pasien, p.email as email_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 1 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
+
+        echo json_encode($data["list_resep"][0]); exit();
 
         $data['css_addons'] = '<link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css').'"><link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css').'">';
         $data['js_addons'] = '
@@ -100,8 +57,6 @@ class PengirimanObat extends CI_Controller {
                                         modal.find("#email-pasien").val(button.data("email-pasien"));
 
                                         modal.find("#alamat").val(button.data("alamat"));
-                                        modal.find("#get-ongkir-jne").show();
-                                        modal.find("#get-ongkir-jne").attr("data-alamat", button.data("alamat"));
                                         modal.find("#id_jadwal_konsultasi").val(button.data("id-jadwal-konsultasi"));
                                         modal.find("#biaya-pengiriman").val(button.data("biaya-pengiriman"));
                                         modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
@@ -114,15 +69,26 @@ class PengirimanObat extends CI_Controller {
                                             modal.find("#saveBiayaPengiriman").attr("type", "button");
                                             modal.find("#biaya-pengiriman").removeAttr("readonly");
 
-                                            modal.find("#get-ongkir-jne").attr("data-lat", button.data("lat"));
-                                            modal.find("#get-ongkir-jne").attr("data-lng", button.data("lng"));
-                                            modal.find("#get-ongkir-jne").attr("data-alamat", button.data("alamat"));
-
                                             var is_alamat_kustom = button.data("is-alamat-kustom");
                                             var alamat_kustom = button.data("alamat-kustom");
                                             var alamat = button.data("alamat");
 
                                             $("#alamat").prop("required",true);
+
+                                            // if(is_alamat_kustom == 1){
+                                            //     modal.find("textarea[name=alamat]").prop("readonly",false);
+                                            //     modal.find("textarea[name=alamat]").val(button.data("alamat-kustom"));
+                                            //     modal.find("input[name=alamat_kustom][value=1]").prop("checked",true);
+                                            //     modal.find("#isAlamatLengkap").html("");
+                                            // } 
+                                            // else{
+                                            //     modal.find("textarea[name=alamat]").val(button.data("alamat"));
+                                            //     modal.find("textarea[name=alamat]").prop("readonly",true);
+
+                                            //     modal.find("input[name=alamat_kustom][value=0]").prop("checked",true);
+
+                                            //     modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
+                                            // }
 
                                             $("#saveBiayaPengiriman").html("Simpan");
                                             $("#saveBiayaPengiriman").off("click");
@@ -131,7 +97,7 @@ class PengirimanObat extends CI_Controller {
                                                     $.ajax({
                                                         method : "POST",
                                                         url    : baseUrl+"admin/PengirimanObat/submit_biaya_pengiriman",
-                                                        data   : {biaya_pengiriman:modal.find("#biaya-pengiriman").val(), id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(), alamat_kustom:modal.find("input[name=alamat_kustom]:checked").val(), alamat:modal.find("#alamat").val()},
+                                                        data   : {biaya_pengiriman:modal.find("#biaya-pengiriman").val(), id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(), alamat_kustom:modal.find("input[name=alamat_kustom]:checked").val(), alamat:modal.find("#alamat").val(), _csrf:modal.find("input[name=_csrf]").val()},
                                                         success : function(data){
                                                             console.log(data);
                                                             data = JSON.parse(data);
@@ -219,44 +185,18 @@ class PengirimanObat extends CI_Controller {
                                             modal.find("#alamat").attr("readonly","readonly");
                                             modal.find("#biaya-pengiriman").attr("readonly","readonly");
 
-                                            modal.find("#get-ongkir-jne").hide();
-
                                             $("#saveBiayaPengiriman").off("click");
                                             $("#saveBiayaPengiriman").html("Submit");         
                                             $("#saveBiayaPengiriman").attr("type", "submit");
                                         }
                                     });
                                 });
-
-                                $("#get-ongkir-jne").click(function(e){
-                                    if($(this).data("lat") && $(this).data("lng")){
-                                        e.preventDefault();
-
-                                        const latitude = $(this).data("lat");
-                                        const longitude = $(this).data("lng");
-                                        const alamat = $(this).data("alamat").split(" ");
-                                        const zip_dest = alamat[alamat.length-1];
-                                        let koordinat = "penerima_lat="+latitude+"&penerima_lng="+longitude+"&zip_dest="+zip_dest;
-                                        $.ajax({
-                                            method: "POST",
-                                            url: baseUrl+"admin/PengirimanObat/get_biaya_ongkir",
-                                            data: koordinat,
-                                            success: function(data){
-                                                data = JSON.parse(data);
-                                                console.log(data);
-                                                const biaya_pengiriman = data.tarif.toString();
-                                                $("#modalBiayaPengiriman").find("#biaya-pengiriman").val(biaya_pengiriman);
-                                                $("#modalBiayaPengiriman").find("#biayaPengirimanHelp").html(formatRupiah(biaya_pengiriman, "Rp. "));
-                                            }
-                                        });
-                                    }
-                                });
                             </script>';
         $this->load->view('template', $data);
     }
 
     public function history_pengiriman_obat(){
-		$this->all_controllers->check_user_admin();
+		$this->all_controllers->check_user_farmasi();
 		$data = $this->all_controllers->get_data_view(
 			$title = "Riwayat Pengiriman Obat",
 			$view = "admin/history_pengiriman_obat"
@@ -307,7 +247,7 @@ class PengirimanObat extends CI_Controller {
     }
 
     public function submit_biaya_pengiriman(){
-        $this->all_controllers->check_user_admin();
+        $this->all_controllers->check_user_farmasi();
     
 
         $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
@@ -344,7 +284,7 @@ class PengirimanObat extends CI_Controller {
     }
 
     public function rilis_obat(){
-		$this->all_controllers->check_user_admin();
+		$this->all_controllers->check_user_farmasi();
 
         // $biaya_pengiriman = $this->input->post('biaya_pengiriman');
         $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
@@ -478,14 +418,13 @@ class PengirimanObat extends CI_Controller {
     }
 
     public function status_resep(){
-		$this->all_controllers->check_user_admin();
+		$this->all_controllers->check_user_farmasi();
 		$data = $this->all_controllers->get_data_view(
 			$title = "Pengiriman Obat",
 			$view = "admin/manage_status_pengiriman_obat"
         );
 
-        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, bpo.foto as foto_bukti, bpo.status as status_bukti, bpo.created_at as tanggal_pembayaran, bpo.id as id_bukti, bpo.claim_number, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, nominal.poli as nama_poli, p.name as nama_pasien, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.id as id_biaya_pengiriman_obat, biaya_pengiriman_obat.lat, biaya_pengiriman_obat.lng, biaya_pengiriman_obat.alamat, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id INNER JOIN bukti_pembayaran_obat bpo ON resep_dokter.id_jadwal_konsultasi = bpo.id_jadwal_konsultasi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE bpo.status = 1 AND bpo.order_status = 0 AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 AND bukti_pembayaran.status = 1 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bpo.updated_at DESC, resep_dokter.created_at DESC")->result();
-
+        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, bpo.foto as foto_bukti, bpo.status as status_bukti, bpo.created_at as tanggal_pembayaran, bpo.id as id_bukti, bpo.claim_number, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, nominal.poli as nama_poli, p.name as nama_pasien, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id INNER JOIN bukti_pembayaran_obat bpo ON resep_dokter.id_jadwal_konsultasi = bpo.id_jadwal_konsultasi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE bpo.status = 1 AND bpo.order_status = 0 AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bpo.updated_at DESC, resep_dokter.created_at DESC")->result();
         $data['css_addons'] = '<link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css').'"><link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css').'">';
         $data['js_addons'] = '
                                 <script src="'.base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js').'"></script>
@@ -513,65 +452,6 @@ class PengirimanObat extends CI_Controller {
                                         var modal = $(e.currentTarget);
 
                                         modal.find("#link-delete").attr("href", button.data("link"));
-
-                                        modal.find(".alamat").html(button.data("alamat"));
-                                        modal.find(".biaya-obat").html(button.data("biaya-obat"));
-                                        modal.find(".biaya-pengiriman").html(button.data("biaya-pengiriman"));
-                                        modal.find(".total-harga").html(button.data("total-harga"));
-                                    });
-
-                                    $("#modalPengirimanJNE").on("show.bs.modal", function (e) {
-                                        var button = $(e.relatedTarget);
-                                        var modal = $(e.currentTarget);
-
-                                        modal.find(".alamat").html(button.data("alamat"));
-                                        modal.find(".biaya-obat").html(button.data("biaya-obat"));
-                                        modal.find(".biaya-pengiriman").html(button.data("biaya-pengiriman"));
-                                        modal.find(".total-harga").html(button.data("total-harga"));
-                                        modal.find(".driver-terdekat").html("0");
-                                        modal.find(".get-driver-terdekat").attr("data-lat", button.data("lat"));
-                                        modal.find(".get-driver-terdekat").attr("data-lng", button.data("lng"));
-                                        modal.find("#kirimObatJNE").attr("data-bukti-pembayaran-obat-id", button.data("bukti-pembayaran-obat-id"));
-                                    });
-                                    $(".get-driver-terdekat").click(function(e){
-                                        const lat = $(this).data("lat");
-                                        const lon = $(this).data("lng");
-                                        const koordinat = "lat="+lat+"&lon="+lon;
-
-                                        $.ajax({
-                                            method: "POST",
-                                            url: baseUrl+"admin/PengirimanObat/get_driver_terdekat",
-                                            data: koordinat,
-                                            success: function(data){
-                                                data = JSON.parse(data);
-                                                if(data.data.length > 0){
-                                                    $("#kirimObatJNE").prop("disabled", false);
-                                                    $(".driver-terdekat").html(data.data.length);
-                                                    $(".buttonSave").attr("title", "");
-                                                }else{
-                                                    $("#kirimObatJNE").prop("disabled", true);
-                                                    $(".driver-terdekat").html(data.data.length);
-                                                    $(".buttonSave").attr("title", "Tidak ada driver di area ini, pakai pengiriman manual!");
-                                                    alert("Tidak ada driver di area ini, pakai pengiriman manual!");
-                                                }
-                                            }
-                                        });
-                                    });
-                                    $("#kirimObatJNE").click(function(e){
-                                        e.preventDefault();
-
-                                        const data = "bukti_pembayaran_obat_id="+$(this).data("bukti-pembayaran-obat-id");
-                                        $.ajax({
-                                            method: "POST",
-                                            url: baseUrl+"admin/PengirimanObat/kirim_obat_jne",
-                                            data: data,
-                                            success: function(data){
-                                                location.href = baseUrl+"admin/PengirimanObat/status_resep";
-                                            },
-                                            error: function(err){
-                                                console.log(err);
-                                            }
-                                        });
                                     });
                                 });
                                 </script>
@@ -581,7 +461,7 @@ class PengirimanObat extends CI_Controller {
     }
 
     public function kirim_obat($id){
-		$this->all_controllers->check_user_admin();
+		$this->all_controllers->check_user_farmasi();
 
         $bukti_pembayaran_obat = $this->db->query('SELECT id, id_pasien,id_jadwal_konsultasi FROM bukti_pembayaran_obat WHERE id = '.$id)->row();
         if(!$bukti_pembayaran_obat){
@@ -619,102 +499,5 @@ class PengirimanObat extends CI_Controller {
 
         $this->session->set_flashdata('msg_kirim_obat', 'SUKSES: Resep obat telah dikirim!');
         redirect(base_url('admin/PengirimanObat/status_resep'));
-    }
-    public function get_biaya_ongkir(){
-        $this->all_controllers->check_user_admin();
-        $data = $this->input->post();
-        $dataRaw = [
-            "penerima_lat"=>$data['penerima_lat'],
-            "penerima_lng"=>$data['penerima_lng'],
-            "zip_dest"=>$data['zip_dest']
-        ];
-    
-        $curl = curl_init();
-    
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_api').'jne/Api/tarif',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $dataRaw,
-        ));
-    
-        $result = json_decode(curl_exec($curl));
-        if (curl_errno($curl)) {
-            $error_msg = curl_error($curl);
-        }
-    
-        curl_close($curl);
-    
-        echo json_encode($result);
-    }
-    
-    public function get_driver_terdekat(){
-        $this->all_controllers->check_user_admin();
-        $data = $this->input->post();
-        $dataRaw = [
-            'lat'=>$data['lat'],
-            'lon'=>$data['lon']
-        ];
-    
-        $curl = curl_init();
-    
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_api').'jne/Api/kurirSkitar',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $dataRaw,
-        ));
-    
-        $result = json_decode(curl_exec($curl));
-        if (curl_errno($curl)) {
-            $error_msg = curl_error($curl);
-        }
-    
-        curl_close($curl);
-    
-        echo json_encode($result);
-    }
-    
-    public function kirim_obat_jne(){
-        $this->all_controllers->check_user_admin();
-        $data = $this->input->post();
-        $dataRaw = [
-            'bukti_pembayaran_obat_id'=>$data['bukti_pembayaran_obat_id'],
-        ];
-    
-        $curl = curl_init();
-    
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_api').'jne/Api/createOrder',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $dataRaw,
-        ));
-    
-        $result = json_decode(curl_exec($curl));
-        if (curl_errno($curl)) {
-            $error_msg = curl_error($curl);
-            echo $error_msg;
-            die;
-        }
-    
-        curl_close($curl);
-    
-        echo json_encode($result);
     }
 }

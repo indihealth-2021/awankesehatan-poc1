@@ -8,6 +8,8 @@
              <li class="breadcrumb-item active"><a href="<?php echo base_url('farmasi/FarmasiVerifikasiObat/#'); ?>" class="text-black">Dashboard</a></li>
              <li class="breadcrumb-item active"><a href="" class="text-black font-bold-7">Dashboard</a></li>
          </nav>
+         
+         <span class="btn btn-info p-1 m-3"><span class="p-2">📌 <?= "#".$apotek->id." - ".$apotek->nama." , ".$apotek->alamat_jalan ?></span></span>
        </div>
        <div class="col-sm-12 col-12">
          <h3 class="page-title">Verifikasi Obat</h3>
@@ -110,11 +112,11 @@
            <div class="row pt-3">
              <div class="col-sm-12">
                <div>
-                 <nav aria-label="Page navigation example">
+                 <!-- <nav aria-label="Page navigation example">
                    <ul class="pagination justify-content-center">
                      <?php echo $pagination ?>
                    </ul>
-                 </nav>
+                 </nav> -->
                </div>
              </div>
            </div>

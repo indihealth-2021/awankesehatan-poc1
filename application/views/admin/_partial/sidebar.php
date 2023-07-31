@@ -296,6 +296,43 @@
                         <li class="<?php echo strtolower($this->uri->segments[2]) == 'farmasiverifikasiobat' ? 'active' : ''; ?>">
                             <a href="<?php echo base_url('admin/FarmasiVerifikasiObat') ?>"><i class="fa fa-money"></i> <span>Verifikasi Resep Obat</span></a>
                         </li>
+                        <li class="submenu">
+                            <a href="#" class=""><!-- <i class="fas fa-truck"></i> -->
+                                <i><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 7C19 5.9 18.1 5 17 5H14V7H17V9.65L13.52 14H10V9H6C3.79 9 2 10.79 2 13V16H4C4 17.66 5.34 19 7 19C8.66 19 10 17.66 10 16H14.48L19 10.35V7ZM4 14V13C4 11.9 4.9 11 6 11H8V14H4ZM7 17C6.45 17 6 16.55 6 16H8C8 16.55 7.55 17 7 17Z" fill="black"/>
+                                    <path d="M5 6H10V8H5V6ZM19 13C17.34 13 16 14.34 16 16C16 17.66 17.34 19 19 19C20.66 19 22 17.66 22 16C22 14.34 20.66 13 19 13ZM19 17C18.45 17 18 16.55 18 16C18 15.45 18.45 15 19 15C19.55 15 20 15.45 20 16C20 16.55 19.55 17 19 17Z" fill="black"/>
+                                    </svg></i>
+                             <span>Pengiriman Obat</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li class="<?php if (!isset($this->uri->segments[3])) {
+                                        echo strtolower($this->uri->segments[2]) == 'pengirimanobat' ? 'active' : '';
+                                    } ?>">
+                                    <a href="<?php echo base_url('admin/PengirimanObat') ?>"><span>Biaya Pengiriman</span></a>
+                                </li>
+                                <li class="<?php if (isset($this->uri->segments[3])) {echo strtolower($this->uri->segments[3]) == 'status_resep' ? 'active' : '';
+                            } ?>">
+                                    <a href="<?php echo base_url('admin/PengirimanObat/status_resep') ?>"><span>Pengiriman</span></a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#" class=""><!-- <i class="fas fa-truck"></i> -->
+                                <i class="fa fa-phone"></i>
+                             <span>Panggil</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li class="<?php if (isset($this->uri->segments[3])) {
+                                        echo strtolower($this->uri->segments[3]) == 'pasien' ? 'active' : '';
+                                    } ?>">
+                                    <a href="<?php echo base_url('admin/FarmasiCall/pasien') ?>"><span>Pasien</span></a>
+                                </li>
+                                <li class="<?php if (isset($this->uri->segments[3])) {echo strtolower($this->uri->segments[3]) == 'dokter' ? 'active' : '';
+                            } ?>">
+                                    <a href="<?php echo base_url('admin/FarmasiCall/dokter') ?>"><span>Dokter</span></a>
+                                </li>
+
+                            </ul>
+                        </li>
                         <li class="d-mobile-show">
                         <a href="<?php echo base_url('admin/Profil'); ?>"><!-- <i class="fas fa-cog"></i> -->
                             <i><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">

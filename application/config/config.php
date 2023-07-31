@@ -468,7 +468,30 @@ $config['csrf_token_name'] = '_csrf';
 $config['csrf_cookie_name'] = '_csrf_cookie';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_exclude_uris'] = array(
+    'Alamat/.*',
+    'Conference/.*',
+    'pasien/Telekonsultasi/konsultasi/[0-9]+/[0-9]+',
+    'dokter/Chat/send_notif',
+    'pasien/Chat/send_notif',
+    'Login/Login',
+    'admin/KonfigurasiAkun/update_password',
+    'FileAttachment/upload/.*',
+    'dokter/Teleconsultasi/send_data_konsultasi',
+    'admin/Dokter/.*',
+    'admin/PengirimanObat/.*',
+    'admin/Profil/Update',
+    'admin/FarmasiCall/.*',
+    'pasien/FarmasiCall',
+    'pasien/FarmasiCall/.*',
+    'dokter/FarmasiCall',
+    'dokter/FarmasiCall/.*',
+    'pasien/Alamat/.*',
+    'pasien/Assesment/upload_attachment/.*',
+    'pasien/Assesment/delete_attachment/.*',
+    'pasien/.*',
+    'admin/.*',
+);
 
 /*
 |--------------------------------------------------------------------------

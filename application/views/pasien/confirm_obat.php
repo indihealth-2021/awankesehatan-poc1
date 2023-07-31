@@ -60,7 +60,6 @@
                 </div>
             </div>
 
-
             <!-- batas col-md-7 -->
         </div>
     </div>
@@ -84,26 +83,27 @@
 
 <script>
     var btnBatalkanObat = $('#btn-batalkan-obat');
-    const id_jadwal_konsultasi = <?php $data['id_jadwal_konsultasi'] ?>;
-    btnBatalkanObat.click(function (e) {
-        e.preventDefault();
-        var id_obat = [];
-        $('.obat-checkbox:checked').each(function () {
-            id_obat.push($(this).val());
+    const id_jadwal_konsultasi = <?php echo $id_jadwal_konsultasi; ?>;
+    $(document).ready(function () {
+        btnBatalkanObat.click(function (e) {
+            var id_obat = [];
+            $('.obat-checkbox:checked').each(function () {
+                id_obat.push($(this).val());
+            });
+            $.ajax({
+            method: 'POST',
+            url: baseUrl + "pasien/ResepDokter/batalkan_pembelian_obat",
+            data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
+            success: function (data) {
+                alert('berhasil');
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+                alert('gagal')
+            }
         });
-        $.ajax({
-        method: 'POST',
-        url: baseUrl + "ResepDokter/batalkan_pembelian_obat",
-        data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
-        success: function (data) {
-            alert('berhasil');
-        console.log(data);
-        },
-        error: function (data) {
-            console.log(data);
-            alert('gagal')
-        }
-  });
+      });
     });
 </script>
 

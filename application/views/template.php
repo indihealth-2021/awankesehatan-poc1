@@ -519,7 +519,7 @@
                   </ol>
                 </div>
                 <hr>
-                <input type="checkbox" value="" id="tac_checkbox" disabled> <label style="font-size: 14px;" for="tac_checkbox">Saya menyetujui syarat dan ketentuan penggunaan</label>
+                <input type="checkbox" value="" id="tac_checkbox" > <label style="font-size: 14px;" for="tac_checkbox">Saya menyetujui syarat dan ketentuan penggunaan</label>
                  <div style="float: right!important;">
                 <button type="button" style="width:100% !important;" class="btn btn-simpan-sm  mr-5" id="simpan_tac" disabled>Simpan</button>
                 </div>
@@ -642,14 +642,24 @@
   <script>
     baseUrl = '<?php echo base_url(); ?>';
 
-    var firebaseConfig = {
-      apiKey: "AIzaSyD936QRnRMkq02IgQ1kMg5ZYB1hEcuTwUM",
-      authDomain: "telehealth-6a164.firebaseapp.com",
-      databaseURL: "https://telehealth-6a164.firebaseio.com",
-      projectId: "telehealth-6a164",
-      storageBucket: "telehealth-6a164.appspot.com",
-      messagingSenderId: "513400070049",
-      appId: "1:513400070049:web:7da9b8978395a153a875e0"
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyBQVFzlB_hnd8Td48GuQSUbhV60DXENiRw",
+
+      authDomain: "telemedicine-poc2.firebaseapp.com",
+
+      databaseURL: "https://telemedicine-poc2-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+      projectId: "telemedicine-poc2",
+
+      storageBucket: "telemedicine-poc2.appspot.com",
+
+      messagingSenderId: "170641677475",
+
+      appId: "1:170641677475:web:dbfdb8df11cb068ba27316",
+
+      measurementId: "G-LHGYJ33LGE"
+
     };
     firebase.initializeApp(firebaseConfig);
     const pesan = firebase.messaging();
@@ -712,7 +722,8 @@
     pesan.onMessage(function(payload) {
       var test = payload || {};
       loadData = test.data.body;
-      console.log(payload);
+      console.log('payload',payload);
+       // console.log('name',JSON.parse(JSON.parse(payload.data.body).name);
       //  $("#jawaban").modal('show');
       if (loadData == "ok") {
         $('#memanggil').modal('hide');
@@ -721,6 +732,7 @@
       <?php if (isset($teleconsul_admin_js)) {
         echo $teleconsul_admin_js;
       } ?>
+      
       if (JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())) {
         if (JSON.parse(JSON.parse(payload.data.body).name == 'unshow')) {
           if (JSON.parse(JSON.parse(payload.data.body).sub_name == 'submit_assesment_pasien')) {
@@ -850,6 +862,7 @@
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_dokter')) {
           $('#memanggil').modal('hide');
         }
+
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_pasien')) {
           $("#jawab").data('id-jadwal-konsultasi', JSON.parse(payload.data.body).id_jadwal_konsultasi);
           $("#jawab").data('id-dokter', JSON.parse(payload.data.body).id_dokter);

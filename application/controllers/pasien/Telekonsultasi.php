@@ -98,7 +98,7 @@ class Telekonsultasi extends CI_Controller {
         if(!$id_dokter || !$id_jadwal_konsultasi){
             show_404();
         }
-        $jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id = '.$id_jadwal_konsultasi)->row();
+        $jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id = ?',[$id_jadwal_konsultasi])->row();
         if(!$jadwal_konsultasi){
             show_404();
         }
@@ -121,7 +121,10 @@ class Telekonsultasi extends CI_Controller {
           show_404();
       }
       $roomName = $post_data['roomName'];
-
+       $now = new DateTime('now');
+        $now = $now->format('Y-m-d H:i:s');
+      $jkb = $this->db->query('SELECT bukti_pembayaran.id as id_bp FROM jadwal_konsultasi INNER JOIN bukti_pembayaran ON jadwal_konsultasi.id_registrasi = bukti_pembayaran.id_registrasi WHERE jadwal_konsultasi.id = ? AND bukti_pembayaran.status = 1',[$id_jadwal_konsultasi])->row();
+      $this->all_model->update('bukti_pembayaran', array('tanggal_konsultasi'=>$now), array('id'=>$jkb->id_bp));
       $data['title'] = 'Telekonsultasi';
       $data['roomName'] = $roomName;
       $data['view'] = 'pasien/proses_telekonsultasi';

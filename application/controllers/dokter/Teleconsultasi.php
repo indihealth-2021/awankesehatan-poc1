@@ -365,7 +365,7 @@ class Teleconsultasi extends CI_Controller
         $data_history = array("activity" => "Diagnosis", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
-        $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id=".$data["id_jadwal_konsultasi"]." AND resep_dokter.pasien=".$data["id_pasien"])->row();
+        $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"]." AND resep_dokter.id_pasien=".$data["id_pasien"])->row();
 
         if(!$exist) {
             $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0])->result()[0];

@@ -89,29 +89,29 @@
 </script>
 
 <script>
-    var btnBatalkanObat = $('#btn-batalkan-obat');
-    const id_jadwal_konsultasi = <?php echo $id_jadwal_konsultasi; ?>;
-    $(document).ready(function () {
-        btnBatalkanObat.click(function (e) {
-            var id_obat = [];
-            $('.obat-checkbox:checked').each(function () {
-                id_obat.push($(this).val());
-            });
-            $.ajax({
+    var btnBatalkanObat = document.getElementById('btn-batalkan-obat');
+    const id_jadwal_konsultasi = <?php echo $id_jadwal_konsultasi; ?>
+    btnBatalkanObat.addEventListener('click', function (e) {
+        e.preventDefault();
+        const id_obat = [];
+        let checkboxes = document.querySelectorAll('.obat-checkbox:checked');
+        checkboxes.forEach(function (checkbox) {
+          id_obat.push(checkbox.value);
+        });
+        $.ajax({
             method: 'POST',
             url: baseUrl + "pasien/ResepDokter/batalkan_pembelian_obat",
             data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
-                alert('berhasil');
+                alert('Berhasil membatalkan obat.');
                 console.log(data);
             },
             error: function (data) {
                 console.log(data);
                 alert('gagal')
             }
-        });
-      });
     });
+});
 </script>
 
 

@@ -386,6 +386,7 @@ class Teleconsultasi extends CI_Controller
                 $this->db->insert('resep_dokter', $data_resep);
             }
         }
+        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2 AND id = ?')->row();
         $id_notif = $this->db->insert_id();
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         $notifikasi = "Ada resep baru yang dikirimkan dokter.";
@@ -397,10 +398,10 @@ class Teleconsultasi extends CI_Controller
             'id_jadwal_konsultasi' => $data["id_jadwal_konsultasi"],
           );
           $msg_notif = json_encode($msg_notif);
-          $this->key->_send_fcm($pasien->reg_id, $msg_notif); //!!Cara kirim ke farmasi?
+          $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
 
-        //   $data_notif = array("id_user"=>$dokter->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('pasien/ResepDokter/konfirmasi/?id_jadwal_konsultasi='.$data["id_jadwal_konsultasi"]));
-        // $this->db->insert('data_notifikasi', $data_notif);
+          $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
+        $this->db->insert('data_notifikasi', $data_notif);
         
         $data_history = array("activity" => "Resep Dokter", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);

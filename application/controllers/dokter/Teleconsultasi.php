@@ -386,7 +386,7 @@ class Teleconsultasi extends CI_Controller
                 $this->db->insert('resep_dokter', $data_resep);
             }
         }
-        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2 AND id = ?')->row();
+        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         $notifikasi = "Ada resep baru yang dikirimkan dokter.";

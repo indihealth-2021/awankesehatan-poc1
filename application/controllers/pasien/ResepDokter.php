@@ -813,6 +813,49 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
         $this->load->view('template', $data);
     }
 
+    public function diverifikasi_user(){
+        if (!$this->session->userdata('is_login')) {
+            redirect(base_url('Login'));
+        }
+        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        if ($valid->id_user_kategori != 0) {
+            if ($valid->id_user_kategori == 2) {
+                redirect(base_url('dokter/Dokter'));
+            } else {
+                redirect(base_url('admin/Admin'));
+            }
+        }
+
+        if (isset($_POST['id_jadwal_telekonsultasi'])) {
+            $data = $this->input->post();
+            $list_resep = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'])->result();
+            foreach ($list_resep as $resep) {
+                $data_resep_update = array(
+                    'diverifikasi_user' => 1
+                );
+                $this->db->where('id', $resep->id);
+                $this->db->update('resep_dokter', $data_resep_update);
+            }
+        }
+
+        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
+        $id_notif = $this->db->insert_id();
+        $now = (new DateTime('now'))->format('Y-m-d H:i:s');
+        $notifikasi = "Ada resep yang sudah diverifikasi pasien.";
+        $msg_notif = array(
+            'name' => 'resep_diverifikasi_pasien',
+            'id_notif' => $id_notif,
+            'keterangan' => $notifikasi,
+            'tanggal' => $now,
+            'id_jadwal_konsultasi' => $data["id_jadwal_konsultasi"],
+          );
+          $msg_notif = json_encode($msg_notif);
+          $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
+
+          $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
+        $this->db->insert('data_notifikasi', $data_notif);
+    }
+    
     public function batalkan_pembelian_obat()
     {
         if (!$this->session->userdata('is_login')) {

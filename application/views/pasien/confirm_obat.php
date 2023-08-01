@@ -63,7 +63,9 @@
                             </div>
                         </div>
                         <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
+                        <button type="button" id="btn-verifikasi-obat" class="btn btn-primary">Verifikasi</button>
                     </form>
+                    <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>
             </div>
 
@@ -90,7 +92,9 @@
 
 <script>
     var btnBatalkanObat = document.getElementById('btn-batalkan-obat');
-    const id_jadwal_konsultasi = <?php echo $id_jadwal_konsultasi; ?>
+    var btnVerifikasiObat = document.getElementById('btn-verifikasi-obat');
+    const id_jadwal_konsultasi = document.getElementById('id-jadwal-konsultasi').innerText;
+    const id_obat = [];
     btnBatalkanObat.addEventListener('click', function (e) {
         e.preventDefault();
         const id_obat = [];
@@ -108,7 +112,20 @@
             },
             error: function (data) {
                 console.log(data);
-                alert('gagal')
+            }
+    });
+    btnVerifikasiObat.addEventListener('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+            method: 'POST',
+            url: baseUrl + "pasien/ResepDokter/diverifikasi_user",
+            data: { id_jadwal_konsultasi: id_jadwal_konsultasi},
+            success: function (data) {
+                alert('Berhasil verifikasi obat.');
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
             }
     });
 });

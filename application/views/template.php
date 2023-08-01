@@ -830,6 +830,10 @@
           var audio = document.getElementById('bell-ring');
           audio.play();
         }
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_diverifikasi_pasien')) {
+          var audio = document.getElementById('bell-ring');
+          audio.play();
+        }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_obat_diverifikasi')) {
           var audio = document.getElementById('bell-ring');
           const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;

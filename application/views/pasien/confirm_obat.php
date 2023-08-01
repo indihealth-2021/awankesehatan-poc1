@@ -63,6 +63,7 @@
                             </div>
                         </div>
                         <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
+                        <button type="button" id="btn-verifikasi-obat" class="btn btn-primary">Verifikasi</button>
                     </form>
                     <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>
@@ -91,6 +92,7 @@
 
 <script>
     var btnBatalkanObat = document.getElementById('btn-batalkan-obat');
+    var btnVerifikasiObat = document.getElementById('btn-verifikasi-obat');
     const id_jadwal_konsultasi = document.getElementById('id-jadwal-konsultasi').innerText;
     const id_obat = [];
     btnBatalkanObat.addEventListener('click', function (e) {
@@ -106,6 +108,20 @@
             data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
                 alert('Berhasil membatalkan obat.');
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+    });
+    btnVerifikasiObat.addEventListener('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+            method: 'POST',
+            url: baseUrl + "pasien/ResepDokter/diverifikasi_user",
+            data: { id_jadwal_konsultasi: id_jadwal_konsultasi},
+            success: function (data) {
+                alert('Berhasil verifikasi obat.');
                 console.log(data);
             },
             error: function (data) {

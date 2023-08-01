@@ -705,7 +705,9 @@ class ResepDokter extends CI_Controller
 
         for ($i = 0; $i < count($data['list_resep']); $i++) {
             $obat = $this->db->query('SELECT name FROM master_obat WHERE id = ' . $data['list_resep'][$i]->id_obat)->row();
-            $data['total_biaya'] += $data['list_resep'][$i]->harga;
+            if ($data['list_resep'][$i]->dibatalkan == 0) {
+                $data['total_biaya'] += $data['list_resep'][$i]->harga;   
+            }
             if ($obat) {
                 array_push($data['list_obat'], [
                     'id_obat' => $data['list_resep'][$i]->id_obat,

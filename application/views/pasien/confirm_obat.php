@@ -28,7 +28,12 @@
                             <div class="col-md-3">
                             </div>
                         </div>
-                        <p id="total">Total Biaya: <?php echo $total_biaya; ?></p>
+                        <?php $plafon = 1000000; ?>
+                        <p id="total">Total Biaya: Rp. <?php echo $total_biaya; ?></p>
+                        <?php if ($user->vip == 0){ ?>
+                        <p>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?></p>
+                        <p>Jumlah setelah pembayaran: Rp. <?php echo $plafon - (int)$total_biaya; ?></p>
+                        <?php } ?>
                         <div class="row">
                             <div class="table-responsive p-3">
                                 <table class="table table-border table-hover custom-table mb-0" id="table-obat">
@@ -45,7 +50,7 @@
                                             <tr>
                                                 <td><?php echo $list_obat[$i]['nama_obat'] ?></td>
                                                 <td><?php echo $list_obat[$i]['jumlah'] ?></td>
-                                                <td><?php echo $list_obat[$i]['harga'] ?></td>
+                                                <td>Rp. <?php echo $list_obat[$i]['harga'] ?></td>
                                                 <td>
                                                     <?php if ($list_obat[$i]['dibatalkan'] == 1) { ?>
                                                         <span class="badge badge-danger">Dibatalkan</span>
@@ -122,6 +127,7 @@
             data: { id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
                 alert('Berhasil verifikasi obat.');
+                location.reload()
                 console.log(data);
             },
             error: function (data) {

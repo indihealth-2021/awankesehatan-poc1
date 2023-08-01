@@ -28,6 +28,7 @@
                             <div class="col-md-3">
                             </div>
                         </div>
+                        <p id="total">Total Biaya: <?php echo $total_biaya; ?></p>
                         <div class="row">
                             <div class="table-responsive p-3">
                                 <table class="table table-border table-hover custom-table mb-0" id="table-obat">
@@ -45,7 +46,14 @@
                                                 <td><?php echo $list_obat[$i]['nama_obat'] ?></td>
                                                 <td><?php echo $list_obat[$i]['jumlah'] ?></td>
                                                 <td><?php echo $list_obat[$i]['harga'] ?></td>
-                                                <td><input type="checkbox" name="id_obat[]" value="<?php echo $list_obat[$i]['id_obat'] ?>" class="obat-checkbox"></td>
+                                                <td>
+                                                    <?php if ($list_obat[$i]['dibatalkan'] == 1) { ?>
+                                                        <span class="badge badge-danger">Dibatalkan</span>
+                                                    <?php } ?>
+                                                    <?php if ($list_obat[$i]['dibatalkan'] == 0) { ?>
+                                                    <input type="checkbox" name="id_obat[]" value="<?php echo $list_obat[$i]['id_obat'] ?>" class="obat-checkbox">
+                                                    <?php } ?>
+                                                </td>
                                             </tr> 
                                             <?php } ?>
                                     </tbody>
@@ -56,7 +64,6 @@
                         </div>
                         <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
                     </form>
-                    <p id="total">Total Biaya: <?php echo $total_biaya; ?></p>
                 </div>
             </div>
 

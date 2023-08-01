@@ -58,7 +58,7 @@ foreach ($list_total_harga as $tot_harga) {
         <div class="col-md-9 col-12 d-mobile-none_">
           <div id="mandiri">
             <div class="py-4 font-18">
-              <img src="<?php echo base_url($manual_payment->logo); ?>" width="60" class="mr-4">Bank <?php echo $manual_payment->payment ?> (Dicek Manual)
+              <img src="<?php echo base_url($manual_payment->logo); ?>" width="60" class="mr-4"><?php echo $manual_payment->payment ?> (Dicek Manual)
             </div>
             <p class="mb-5">1 Gunakan ATM, iBanking, Mbanking atau SMS Banking untuk setor tunai ke Rekening berikut ini</p>
             <div class="font-18">
@@ -66,7 +66,7 @@ foreach ($list_total_harga as $tot_harga) {
                 <div class="font-18 mb-3">
                   <img src="<?php echo base_url($manual_payment->logo); ?>" width="60" class="mr-4">Bank <?php echo $manual_payment->payment ?>
                 </div>
-                <p class="mb-4">No. Rekening:</p>
+                <!-- <p class="mb-4">No. Rekening:</p>
                 <div width="180">
                   <div class="d-inline-flex">
                     <input type="text" readonly class="form-control-plaintext font-24 font-rek" value="8806 081 3161 0746 4" id="salin">
@@ -75,7 +75,7 @@ foreach ($list_total_harga as $tot_harga) {
                 </div>
                 
 
-                <p class="pt-4 mb-4">Atas Nama : PT Sejahtera WAW</p>
+                <p class="pt-4 mb-4">Atas Nama : PT Sejahtera WAW</p> -->
               </div>
               <p class="mt-5">2 Silahkan upload bukti bayar</p>
               <p>3 Demi Keamanan dan Kenyamanan, jangan meyebarkan bukti pembayaran kepada siapapun</p>

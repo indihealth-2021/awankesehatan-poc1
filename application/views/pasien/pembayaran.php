@@ -188,11 +188,11 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                         <?php if ($registrasi->id_status_pembayaran == 0 && !$bukti_pembayaran) { ?>
                           <select class="form-control form-select-bayar col-10" name="metode_pembayaran" id="metode-pembayaran">
                             <option value="0" selected>Pilih Metode</option>
-                            <option value="1">Transfer Bank (Virtual Account)</option>
+                            <!-- <option value="1">Transfer Bank (Virtual Account)</option> -->
                             <option value="2">Transfer Bank (Upload Manual)</option>
-                            <option value="3">Dompet Digital</option>
+                            <!-- <option value="3">Dompet Digital</option> -->
                             <option value="4">Owlexa</option>
-                            <option value="5">Credit Card / Debit Card</option>
+                            <!-- <option value="5">Credit Card / Debit Card</option> -->
                           </select>
                         <?php } else { ?>
                           <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran->metode_pembayaran == 3 ? 'Virtual Account' : ($bukti_pembayaran->metode_pembayaran == 4 ? 'Dompet Digital' : 'Credit Card / Debit Card'))); ?></p>
@@ -220,7 +220,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                   <?php if($bukti_pembayaran->metode_pembayaran == 1){ ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark">BANK </label>
+                      <label class="col-md-3 col-4 mt-2 text-dark"></label>
                         <div class="col-md-7 col-8">
                           <div class="row">
                           <p class="text-abu mt-2">:&nbsp&nbsp</p>
@@ -244,7 +244,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                   <?php }else if($bukti_pembayaran->metode_pembayaran == 3){ ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark">BANK: </label>
+                      <label class="col-md-3 col-4 mt-2 text-dark"> </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
                           <p class="text-abu mt-2">:&nbsp&nbsp</p>
@@ -304,12 +304,14 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                         <p class="text-abu mt-2">:&nbsp</p>
                         <div class="pl-3 mt-2">
                         <?php foreach($list_bank_va as $bank_va){ ?>
-                          <div class="form-check mb-4">
+                          <?php if($bank_va->payment=="OWLEXA HEALTHCARE") { ?>
+                            <div class="form-check mb-4">
                             <input class="form-check-input" type="radio" name="bank_id" id="bank_<?php echo $bank_va->payment_id ?>" value="<?php echo $bank_va->payment_id ?>">
                             <label class="form-check-label font-bank" for="bank_<?php echo $bank_va->payment_id ?>" style="margin-top: -20px">
-                              <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata">Bank <?php echo $bank_va->payment ?>
+                              <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata"> <?php echo $bank_va->payment ?>
                             </label>
-                          </div>
+                          </div>  
+                          <?php }?>
                         <?php } ?>
                         </div>
                       </div>
@@ -336,7 +338,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                       <div class="form-check mb-4">
                         <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
                         <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
-                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata">Bank <?php echo $manual_payment->payment ?>
+                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"> <?php echo $manual_payment->payment ?>
                         </label>
                       </div>
                     <?php } ?>

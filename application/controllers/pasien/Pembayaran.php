@@ -754,6 +754,10 @@ class Pembayaran extends CI_Controller
                 $bank_name = 'CIMB';
                 $bank_logo = 'cimb.png';
                 break;
+            case 4:
+                $bank_name = "OWLEXA HEALTHCARE";
+                $bank_logo = "owlexa.png";
+                break;
             default:
                 $bank_name = '';
                 $bank_logo = '';

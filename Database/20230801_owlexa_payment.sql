@@ -1,0 +1,3 @@
+INSERT INTO `payment` (`payment_id`, `payment`, `logo`, `vendor`, `type`) VALUES ('8', 'OWLEXA HEALTHCARE', '/assets/dashboard/img/pngicon/owlexa.png', 'arthajasa', 'va');
+INSERT INTO `master_manual_payment` (`payment_id`, `payment`, `logo`, `no_rekening`, `aktif`) VALUES (NULL, 'OWLEXA HEALTHCARE', '/assets/dashboard/img/pngicon/owlexa.png', '8806081316107464', '1');
+UPDATE `master_manual_payment` SET `aktif`=0 WHERE master_manual_payment.payment!="OWLEXA HEALTHCARE";

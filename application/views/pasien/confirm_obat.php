@@ -28,6 +28,12 @@
                             <div class="col-md-3">
                             </div>
                         </div>
+                        <?php $plafon = 1000000; ?>
+                        <p id="total">Total Biaya: Rp. <?php echo $total_biaya; ?></p>
+                        <?php if ($user->vip == 0){ ?>
+                        <p>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?></p>
+                        <p>Jumlah setelah pembayaran: Rp. <?php echo $plafon - (int)$total_biaya; ?></p>
+                        <?php } ?>
                         <div class="row">
                             <div class="table-responsive p-3">
                                 <table class="table table-border table-hover custom-table mb-0" id="table-obat">
@@ -44,8 +50,15 @@
                                             <tr>
                                                 <td><?php echo $list_obat[$i]['nama_obat'] ?></td>
                                                 <td><?php echo $list_obat[$i]['jumlah'] ?></td>
-                                                <td><?php echo $list_obat[$i]['harga'] ?></td>
-                                                <td><input type="checkbox" name="id_obat[]" value="<?php echo $list_obat[$i]['id_obat'] ?>" class="obat-checkbox"></td>
+                                                <td>Rp. <?php echo $list_obat[$i]['harga'] ?></td>
+                                                <td>
+                                                    <?php if ($list_obat[$i]['dibatalkan'] == 1) { ?>
+                                                        <span class="badge badge-danger">Dibatalkan</span>
+                                                    <?php } ?>
+                                                    <?php if ($list_obat[$i]['dibatalkan'] == 0) { ?>
+                                                    <input type="checkbox" name="id_obat[]" value="<?php echo $list_obat[$i]['id_obat'] ?>" class="obat-checkbox">
+                                                    <?php } ?>
+                                                </td>
                                             </tr> 
                                             <?php } ?>
                                     </tbody>
@@ -55,8 +68,9 @@
                             </div>
                         </div>
                         <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
+                        <button type="button" id="btn-verifikasi-obat" class="btn btn-primary">Verifikasi</button>
                     </form>
-                    <p id="total">Total Biaya: <?php echo $total_biaya; ?></p>
+                    <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>
             </div>
 
@@ -82,29 +96,45 @@
 </script>
 
 <script>
-    var btnBatalkanObat = $('#btn-batalkan-obat');
-    const id_jadwal_konsultasi = <?php echo $id_jadwal_konsultasi; ?>;
-    $(document).ready(function () {
-        btnBatalkanObat.click(function (e) {
-            var id_obat = [];
-            $('.obat-checkbox:checked').each(function () {
-                id_obat.push($(this).val());
-            });
-            $.ajax({
+    var btnBatalkanObat = document.getElementById('btn-batalkan-obat');
+    var btnVerifikasiObat = document.getElementById('btn-verifikasi-obat');
+    const id_jadwal_konsultasi = document.getElementById('id-jadwal-konsultasi').innerText;
+    const id_obat = [];
+    btnBatalkanObat.addEventListener('click', function (e) {
+        e.preventDefault();
+        const id_obat = [];
+        let checkboxes = document.querySelectorAll('.obat-checkbox:checked');
+        checkboxes.forEach(function (checkbox) {
+          id_obat.push(checkbox.value);
+        });
+        $.ajax({
             method: 'POST',
             url: baseUrl + "pasien/ResepDokter/batalkan_pembelian_obat",
             data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
-                alert('berhasil');
+                alert('Berhasil membatalkan obat.');
                 console.log(data);
             },
             error: function (data) {
                 console.log(data);
-                alert('gagal')
             }
-        });
-      });
     });
+    btnVerifikasiObat.addEventListener('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+            method: 'POST',
+            url: baseUrl + "pasien/ResepDokter/diverifikasi_user",
+            data: { id_jadwal_konsultasi: id_jadwal_konsultasi},
+            success: function (data) {
+                alert('Berhasil verifikasi obat.');
+                location.reload()
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+    });
+});
 </script>
 
 

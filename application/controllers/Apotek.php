@@ -144,10 +144,10 @@ class Apotek extends CI_Controller {
 		$query 	= 'SELECT * FROM master_apotek WHERE master_apotek.aktif=1';
 
 		if($id_apotek)   	{$query .= "AND master_apotek.id=".$id_apotek;}
-		if($id_provinsi) 	{$query .= "AND master_apotek.alamat_provinsi=".$id_provinsi;}
-		if($id_kota) 		{$query .= "AND master_apotek.alamat_kota=".$id_kota;}
-		if($id_kecamatan)	{$query .= "AND master_apotek.alamat_kecamatan=".$id_kecamatan;}
-		if($id_kelurahan)	{$query .= "AND master_apotek.alamat_kelurahan=".$id_kelurahan;}
+		// if($id_provinsi) 	{$query .= "AND master_apotek.alamat_provinsi=".$id_provinsi;}
+		// if($id_kota) 		{$query .= "AND master_apotek.alamat_kota=".$id_kota;}
+		// if($id_kecamatan)	{$query .= "AND master_apotek.alamat_kecamatan=".$id_kecamatan;}
+		// if($id_kelurahan)	{$query .= "AND master_apotek.alamat_kelurahan=".$id_kelurahan;}
 
 		if($return == "json") {
 			$searchTerm	= $this->input->get('searchTerm');
@@ -209,5 +209,10 @@ class Apotek extends CI_Controller {
 			}	
 
 		echo json_encode($list_apotek);
+	}
+
+	public function getAll() {
+		$allApotek = $this->db->query("SELECT * FROM master_apotek")->result_array();
+		echo json_encode($allApotek);
 	}
 }

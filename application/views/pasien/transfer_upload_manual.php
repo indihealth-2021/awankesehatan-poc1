@@ -49,15 +49,15 @@
           <div class="col-md-9 col-12">
           <div id="mandiri">
             <div class="py-4 font-18">
-              <img src="<?php echo base_url('assets/dashboard/img/pngicon/'.$data_bank['logo_bank']); ?>" width="60" class="mr-4">Bank <?php echo $data_bank['nama_bank'] ?> (Dicek Manual)
+              <img src="<?php echo base_url('assets/dashboard/img/pngicon/'.$data_bank['logo_bank']); ?>" width="60" class="mr-4"><?php echo $data_bank['nama_bank'] ?> (Dicek Manual)
             </div>
             <p class="mb-5">1 Gunakan ATM, iBanking, Mbanking atau SMS Banking untuk setor tunai ke Rekening berikut ini</p>
             <div class="font-18">
               <div class="ml-3 card py-2 px-4">
                 <div class="font-18 mb-3">
-                  <img src="<?php echo base_url('assets/dashboard/img/pngicon/'.$data_bank['logo_bank']); ?>" width="60" class="mr-4">Bank <?php echo $data_bank['nama_bank'] ?>
+                  <img src="<?php echo base_url('assets/dashboard/img/pngicon/'.$data_bank['logo_bank']); ?>" width="60" class="mr-4"> <?php echo $data_bank['nama_bank'] ?>
                 </div>
-                <p class="mb-4">No. Rekening:</p>
+                <!-- <p class="mb-4">No. Rekening:</p>
                 <div width="180">
                   <div class="d-inline-flex">
                     <input type="text" readonly class="form-control-plaintext font-24 font-rek" value="1440056700609" id="salin">
@@ -66,7 +66,7 @@
                 </div>
 
 
-                <p class="pt-4 mb-4">Atas Nama : RPL 032 BLU RSJ LAWANG UTK OPS-P</p>
+                <p class="pt-4 mb-4">Atas Nama : RPL 032 BLU RSJ LAWANG UTK OPS-P</p> -->
               </div>
               <p class="mt-5">2 Silahkan upload bukti bayar</p>
               <p>3 Demi Keamanan dan Kenyamanan, jangan meyebarkan bukti pembayaran kepada siapapun</p>

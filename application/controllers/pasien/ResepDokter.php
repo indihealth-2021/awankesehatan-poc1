@@ -838,7 +838,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
             }
         }
 
-        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2 AND id = ?')->row();
+        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         $notifikasi = "Ada resep yang sudah diverifikasi pasien.";

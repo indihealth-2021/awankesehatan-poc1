@@ -386,6 +386,21 @@ class Teleconsultasi extends CI_Controller
                 $this->db->insert('resep_dokter', $data_resep);
             }
         }
+        $id_notif = $this->db->insert_id();
+        $now = (new DateTime('now'))->format('Y-m-d H:i:s');
+        $notifikasi = "Ada resep baru yang dikirimkan dokter.";
+        $msg_notif = array(
+            'name' => 'resep_dari_dokter',
+            'id_notif' => $id_notif,
+            'keterangan' => $notifikasi,
+            'tanggal' => $now,
+            'id_jadwal_konsultasi' => $data["id_jadwal_konsultasi"],
+          );
+          $msg_notif = json_encode($msg_notif);
+          $this->key->_send_fcm($pasien->reg_id, $msg_notif); //!!Cara kirim ke farmasi?
+
+        //   $data_notif = array("id_user"=>$dokter->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('pasien/ResepDokter/konfirmasi/?id_jadwal_konsultasi='.$data["id_jadwal_konsultasi"]));
+        // $this->db->insert('data_notifikasi', $data_notif);
         
         $data_history = array("activity" => "Resep Dokter", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);

@@ -188,11 +188,11 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                         <?php if ($registrasi->id_status_pembayaran == 0 && !$bukti_pembayaran) { ?>
                           <select class="form-control form-select-bayar col-10" name="metode_pembayaran" id="metode-pembayaran">
                             <option value="0" selected>Pilih Metode</option>
-                            <option value="1">Transfer Bank (Virtual Account)</option>
+                            <!-- <option value="1">Transfer Bank (Virtual Account)</option>
                             <option value="2">Transfer Bank (Upload Manual)</option>
-                            <option value="3">Dompet Digital</option>
+                            <option value="3">Dompet Digital</option> -->
                             <option value="4">Owlexa</option>
-                            <option value="5">Credit Card / Debit Card</option>
+                            <!-- <option value="5">Credit Card / Debit Card</option> -->
                           </select>
                         <?php } else { ?>
                           <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran->metode_pembayaran == 3 ? 'Virtual Account' : ($bukti_pembayaran->metode_pembayaran == 4 ? 'Dompet Digital' : 'Credit Card / Debit Card'))); ?></p>

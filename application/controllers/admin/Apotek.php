@@ -1,25 +1,27 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Apotek extends CI_Controller {
+class Apotek extends CI_Controller
+{
     var $menu = 1;
     public function __construct()
     {
         parent::__construct();
         $this->load->model("all_model");
-        $this->load->model("apotek_model");
-        $this->load->model("adminapotek_model");
+        $this->load->model("Apotek_model");
+        $this->load->model("AdminApotek_model");
 
         $this->load->library('session');
         $this->load->library('all_controllers');
     }
 
-    public function index() {
+    public function index()
+    {
         $this->output->set_header('Feature-Policy: geolocation \'self\'; camera \'self\'; microphone \'self\'');
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
-            $title="Manage Apotek",
-            $view="admin/manage_apotek"
+            $title = "Manage Apotek",
+            $view = "admin/manage_apotek"
         );
 
         $data['list_apotek'] = $this->apotek_model->get_all();
@@ -55,7 +57,8 @@ class Apotek extends CI_Controller {
         $this->load->view('template', $data);
     }
 
-    private function _get_json_data($status = FALSE, $message = '', $data = NULL) {
+    private function _get_json_data($status = FALSE, $message = '', $data = NULL)
+    {
         $result = new stdClass();
 
         $result->status = $status;
@@ -65,7 +68,8 @@ class Apotek extends CI_Controller {
         return $result;
     }
 
-    public function addApotek() {
+    public function addApotek()
+    {
         $this->all_controllers->check_user_admin();
 
         $result = $this->_get_json_data();
@@ -125,8 +129,8 @@ class Apotek extends CI_Controller {
     {
         $this->all_controllers->check_user_admin();
         $hasil = $this->all_controllers->get_data_view(
-            $title="Edit Apotek",
-            $view="admin/form_edit_apotek"
+            $title = "Edit Apotek",
+            $view = "admin/form_edit_apotek"
         );
 
         $result = $this->_get_json_data();
@@ -245,7 +249,8 @@ class Apotek extends CI_Controller {
         $this->load->view('template', $hasil);
     }
 
-    public function updateApotek($id) {
+    public function updateApotek($id)
+    {
         $this->all_controllers->check_user_admin();
 
         $result = $this->_get_json_data();
@@ -270,7 +275,8 @@ class Apotek extends CI_Controller {
         redirect(base_url('admin/apotek'));
     }
 
-    public function hapusApotek($id) {
+    public function hapusApotek($id)
+    {
         $this->all_controllers->check_user_admin();
 
         // if ($id == $this->session->userdata('id_user')) {
@@ -284,17 +290,18 @@ class Apotek extends CI_Controller {
             $this->session->set_flashdata('msg_hps_apotek', $result->message);
         } else {
             $result->message = "Data apotek gagal dihapus";
-        $this->session->set_flashdata('msg_hps_apotek', $result->message);
+            $this->session->set_flashdata('msg_hps_apotek', $result->message);
         }
 
         redirect(base_url('admin/apotek/'));
     }
 
-    public function form_apotek() {
+    public function form_apotek()
+    {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
-            $title="Tambah Apotek",
-            $view="admin/form_apotek"
+            $title = "Tambah Apotek",
+            $view = "admin/form_apotek"
         );
 
         if ($this->session->flashdata('old_form')) {

@@ -837,6 +837,23 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
                 $this->db->update('resep_dokter', $data_resep_update);
             }
         }
+
+        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2 AND id = ?')->row();
+        $id_notif = $this->db->insert_id();
+        $now = (new DateTime('now'))->format('Y-m-d H:i:s');
+        $notifikasi = "Ada resep yang sudah diverifikasi pasien.";
+        $msg_notif = array(
+            'name' => 'resep_diverifikasi_pasien',
+            'id_notif' => $id_notif,
+            'keterangan' => $notifikasi,
+            'tanggal' => $now,
+            'id_jadwal_konsultasi' => $data["id_jadwal_konsultasi"],
+          );
+          $msg_notif = json_encode($msg_notif);
+          $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
+
+          $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
+        $this->db->insert('data_notifikasi', $data_notif);
     }
     
     public function batalkan_pembelian_obat()

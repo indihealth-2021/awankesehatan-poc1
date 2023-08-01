@@ -5,11 +5,11 @@ class PengirimanObat extends CI_Controller {
 	var $menu = 6;
 
 	public function __construct() {
-        parent::__construct();       
+        parent::__construct();
 		$this->load->model('all_model');
-        $this->load->library(array('Key'));   
-        $this->load->library('session');     
-        $this->load->library('all_controllers');   
+        $this->load->library(array('Key'));
+        $this->load->library('session');
+        $this->load->library('all_controllers');
         $this->load->library('my_pagination');
     }
 
@@ -79,7 +79,7 @@ class PengirimanObat extends CI_Controller {
                                             //     modal.find("textarea[name=alamat]").val(button.data("alamat-kustom"));
                                             //     modal.find("input[name=alamat_kustom][value=1]").prop("checked",true);
                                             //     modal.find("#isAlamatLengkap").html("");
-                                            // } 
+                                            // }
                                             // else{
                                             //     modal.find("textarea[name=alamat]").val(button.data("alamat"));
                                             //     modal.find("textarea[name=alamat]").prop("readonly",true);
@@ -107,15 +107,15 @@ class PengirimanObat extends CI_Controller {
                                                                 var total_harga_rp = formatRupiah(total_harga.toString(), "Rp. ");
                                                                 total_harga_rp = total_harga_rp.replace(",00","");
                                                                 document.getElementById("biaya-pengiriman-"+modal.find("#id_jadwal_konsultasi").val()).innerHTML = modal.find("#biayaPengirimanHelp").html()+",00";
-                                                                
+
                                                                 button.parent().find(".btnSubmit").data("biaya-pengiriman", modal.find("#biaya-pengiriman").val());
                                                                 button.parent().find(".btnEdit").data("biaya-pengiriman", modal.find("#biaya-pengiriman").val());
-    
+
                                                                 button.parent().find(".btnSubmit").data("biaya-pengiriman-rp", biaya_pengiriman_rp);
                                                                 button.parent().find(".btnEdit").data("biaya-pengiriman-rp", biaya_pengiriman_rp);
-    
+
                                                                 button.parent().find(".btnSubmit").data("alamat", modal.find("#alamat").val());
-    
+
                                                                 if(modal.find("input[name=alamat_kustom]:checked").val() == 1){
                                                                     button.parent().find(".btnEdit").data("alamat-kustom", modal.find("#alamat").val());
                                                                     button.parent().find(".btnEdit").data("is-alamat-kustom", 1);
@@ -123,7 +123,7 @@ class PengirimanObat extends CI_Controller {
                                                                 else{
                                                                     button.parent().find(".btnEdit").data("is-alamat-kustom", 0);
                                                                 }
-    
+
                                                                 button.parent().find(".btnSubmit").data("total-harga", total_harga);
                                                                 button.parent().find(".btnSubmit").data("total-harga-rp", total_harga_rp);
                                                                 modal.modal("hide");
@@ -133,10 +133,10 @@ class PengirimanObat extends CI_Controller {
                                                                 else{
                                                                     alert("SUKSES: Data telah disimpan "+data.jml_edit+"x!");
                                                                 }
-                                                            }   
+                                                            }
                                                             else{
                                                                 alert("GAGAL: Pastikan data yang anda isi lengkap!");
-                                                            }          
+                                                            }
                                                         },
                                                         error : function(data){
                                                                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
@@ -154,14 +154,14 @@ class PengirimanObat extends CI_Controller {
                                                 if(val_alamat_kustom == 1){
                                                     modal.find("textarea[name=alamat]").prop("readonly",false);
                                                     modal.find("textarea[name=alamat]").val(button.data("alamat-kustom"));
-                                                    modal.find("#isAlamatLengkap").html("");    
+                                                    modal.find("#isAlamatLengkap").html("");
 
                                                     modal.find("input[name=alamat_kustom][value=1]").prop("checked",true);
                                                 }
                                                 else{
                                                     modal.find("textarea[name=alamat]").val(button.data("alamat"));
                                                     modal.find("textarea[name=alamat]").prop("readonly",true);
-                                                    
+
                                                     modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
 
                                                     modal.find("input[name=alamat_kustom][value=0]").prop("checked",true);
@@ -185,7 +185,7 @@ class PengirimanObat extends CI_Controller {
                                             modal.find("#biaya-pengiriman").attr("readonly","readonly");
 
                                             $("#saveBiayaPengiriman").off("click");
-                                            $("#saveBiayaPengiriman").html("Submit");         
+                                            $("#saveBiayaPengiriman").html("Submit");
                                             $("#saveBiayaPengiriman").attr("type", "submit");
                                         }
                                     });
@@ -207,7 +207,7 @@ class PengirimanObat extends CI_Controller {
         $count_rows = count($count_rows);
 
         $config = $this->my_pagination->paginate(5, 4, $count_rows, base_url('admin/PengirimanObat/history_pengiriman_obat'));
- 
+
         $this->pagination->initialize($config);
         $data['page'] = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $data['uri_segment'] = $this->uri->segment(4);
@@ -215,7 +215,7 @@ class PengirimanObat extends CI_Controller {
 
         $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, bpo.order_status, resep_dokter.id, resep_dokter.created_at, bpo.foto as foto_bukti, bpo.status as status_bukti, bpo.created_at as tanggal_pembayaran, bpo.id as id_bukti, bpo.claim_number, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, nominal.poli as nama_poli, p.name as nama_pasien, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.tanggal_pengiriman, biaya_pengiriman_obat.alamat, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id INNER JOIN bukti_pembayaran_obat bpo ON resep_dokter.id_jadwal_konsultasi = bpo.id_jadwal_konsultasi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE bpo.status != 0 AND bpo.order_status = 1 AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1".$where." GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY biaya_pengiriman_obat.tanggal_pengiriman DESC".$limit)->result();
         $data['pagination'] = $this->pagination->create_links();
-        
+
         $data['css_addons'] = '<link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css').'"><link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css').'">';
         $data['js_addons'] = '
                                 <script src="'.base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js').'"></script>
@@ -241,20 +241,20 @@ class PengirimanObat extends CI_Controller {
                                     $("#searchButton").click(function(){
                                         $("#searchForm").submit();
                                     });
-                            ';        
+                            ';
         $this->load->view('template', $data);
     }
 
     public function submit_biaya_pengiriman(){
         $this->all_controllers->check_user_farmasi();
-    
+
 
         $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
         $id_registrasi = $this->input->post('id_registrasi');
         $diagnosis_dokter = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
 
         echo json_encode($this->db->last_query()); exit();
-        $id_registrasi = $id_registrasi ? 
+        $id_registrasi = $id_registrasi ?
             $id_registrasi : $diagnosis_dokter->id_registrasi;
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');
         $alamat = $this->input->post('alamat');
@@ -359,11 +359,11 @@ class PengirimanObat extends CI_Controller {
         // $notifikasi = 'Resep Obat anda telah dirilis! dengan total harga Rp. '.number_format($total_harga,2,',','.');
         $notifikasi = 'Salah satu Resep Obat anda telah dirilis dan sedang disiapkan!';
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
-        
+
         $data_notif = array("id_user"=>$pasien->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('pasien/ResepDokter'));
         $this->db->insert('data_notifikasi', $data_notif);
         $id_notif = $this->db->insert_id();
-        
+
         $msg_notif = array(
             'name'=>'universal',
             'judul'=>'Resep Obat',
@@ -481,11 +481,11 @@ class PengirimanObat extends CI_Controller {
         // $notifikasi = 'Resep Obat anda telah dirilis! dengan total harga Rp. '.number_format($total_harga,2,',','.');
         $notifikasi = 'Salah satu Resep Obat anda telah dikirim ke alamat yang telah ditentukan!';
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
-        
+
         $data_notif = array("id_user"=>$pasien->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('pasien/Pembayaran/history_obat'));
         $this->db->insert('data_notifikasi', $data_notif);
         $id_notif = $this->db->insert_id();
-        
+
         $msg_notif = array(
             'name'=>'vp',
             'id_notif'=>$id_notif,

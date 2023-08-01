@@ -64,6 +64,7 @@
                         </div>
                         <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
                     </form>
+                    <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>
             </div>
 
@@ -90,7 +91,8 @@
 
 <script>
     var btnBatalkanObat = document.getElementById('btn-batalkan-obat');
-    const id_jadwal_konsultasi = <?php echo $id_jadwal_konsultasi; ?>
+    const id_jadwal_konsultasi = document.getElementById('id-jadwal-konsultasi').innerText;
+    const id_obat = [];
     btnBatalkanObat.addEventListener('click', function (e) {
         e.preventDefault();
         const id_obat = [];
@@ -108,7 +110,6 @@
             },
             error: function (data) {
                 console.log(data);
-                alert('gagal')
             }
     });
 });

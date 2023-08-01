@@ -72,6 +72,15 @@ class Apotek extends CI_Controller {
 	}
 
 	public function findNearest() {
+		if($this->input->post("get_all")) {
+			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text FROM master_apotek")->result_array();
+			echo json_encode(array(
+				'incomplete_results' => false,
+				'items' => $temp,
+				'total' => count($temp) // Total rows without LIMIT on SQL query
+			)); exit();
+		}
+
 		$id_kota		=	$this->input->post("id_kota");
 		$id_kecamatan 	=	$this->input->post("id_kecamatan");
 		$lat			=	$this->input->post("lat");
@@ -83,7 +92,7 @@ class Apotek extends CI_Controller {
 		$pg 		= $this->input->post("page");
 		$page 		= (empty($pg) ? 0 : $pg);
 		$limit 		= $page * $page_lim;
-		
+
 		$query = "SELECT master_apotek.id, master_apotek.nama as text, master_apotek.latitude, master_apotek.longitude FROM master_apotek WHERE master_apotek.alamat_kota=".$id_kota;
 
 		if ($searchTerm) {
@@ -140,7 +149,7 @@ class Apotek extends CI_Controller {
 		$id_kelurahan 	= $this->input->get("id_kelurahan");
 
 		$return			= $this->input->get("return");
-		
+
 		$query 	= 'SELECT * FROM master_apotek WHERE master_apotek.aktif=1';
 
 		if($id_apotek)   	{$query .= "AND master_apotek.id=".$id_apotek;}
@@ -157,9 +166,9 @@ class Apotek extends CI_Controller {
 			$page 		= (empty($pg) ? 0 : $pg);
 			$limit 		= $page * $page_lim;
 			$cnt 		= $this->db->query("select id from master_apotek WHERE aktif = 1")->result();
-			
+
 			$query 	.= "AND master_apotek.nama LIKE '%" . $searchTerm . "%' LIMIT $limit , $page_lim ;";
-			
+
 			$list_apotek = $this->db->query($query)->result_array();
 
 			$result = array(
@@ -168,7 +177,7 @@ class Apotek extends CI_Controller {
 				'total' => count($cnt) // Total rows without LIMIT on SQL query
 			);
 		}else  {
-			$result = $this->db->query($query)->result_array();	
+			$result = $this->db->query($query)->result_array();
 		}
 
 		echo $result;
@@ -187,14 +196,14 @@ class Apotek extends CI_Controller {
 		// 				$list_apotek[$idx]['selected'] = '';
 		// 			}
 		// 	}
-			
+
 		// }
 		// else{
 			if($id_user){
 				$user = $this->db->query('SELECT id_apotek FROM master_user WHERE id = '.$id_user)->row();
 				if(!$user){
 					show_404();
-				} 
+				}
 			}
 			$list_apotek = $this->db->query('SELECT * FROM master_apotek ORDER BY nama')->result_array();
 			if($id_user){
@@ -206,7 +215,7 @@ class Apotek extends CI_Controller {
 						$list_apotek[$idx]['selected'] = '';
 					}
 				}
-			}	
+			}
 
 		echo json_encode($list_apotek);
 	}

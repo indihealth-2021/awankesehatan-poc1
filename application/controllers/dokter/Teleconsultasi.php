@@ -329,7 +329,7 @@ class Teleconsultasi extends CI_Controller
         $data_history = array("activity" => "Assesment", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
-        $data["id_registrasi"] = isset($data["id_registrasi"]) ? 
+        $data["id_registrasi"] = isset($data["id_registrasi"]) ?
             $data["id_registrasi"]  : $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
 
         $data_diagnosis_dokter = array(
@@ -402,7 +402,7 @@ class Teleconsultasi extends CI_Controller
 
           $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
         $this->db->insert('data_notifikasi', $data_notif);
-        
+
         $data_history = array("activity" => "Resep Dokter", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
@@ -418,9 +418,9 @@ class Teleconsultasi extends CI_Controller
         }else {
             $id_pasien = $data["id_pasien"];
             $data_konsultasi = $data["data_konsultasi"];
-    
+
             $data_resep = [];
-    
+
             $apotek = $this->db->query("SELECT id FROM master_apotek WHERE master_apotek.nama='".explode(" - ", $data["apotek"])[0]."'")->row();
             for ($i = 0; $i < count($data["list_id_obat"]); $i++) {
                 $data_resep[$i] = array(
@@ -434,8 +434,8 @@ class Teleconsultasi extends CI_Controller
                 );
                 $this->db->insert('resep_dokter', $data_resep[$i]);
             }
-            
-            $diagnosis = $this->db->query("SELECT id FROM master_diagnosa WHERE master_diagnosa.nama='".$data["diagnosis"]."'")->row()->id; 
+
+            $diagnosis = $this->db->query("SELECT id FROM master_diagnosa WHERE master_diagnosa.nama='".$data["diagnosis"]."'")->row()->id;
             $regId = $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
             $this->db->insert("diagnosis_dokter", [
                 "id_dokter" => $this->session->userdata("id_user"),
@@ -448,10 +448,10 @@ class Teleconsultasi extends CI_Controller
             //$this->send_data_konsultasi();
 
             $this->db->delete('jadwal_konsultasi', ['id' => $data["id_jadwal_konsultasi"]]);
-    
+
             echo "OK";
         }
-        
+
     }
 
     public function proses_teleconsultasi()
@@ -501,9 +501,9 @@ class Teleconsultasi extends CI_Controller
           <script src="https://meet.jit.si/external_api.js"></script>
           ';
         $data['js_addons'] = "
-<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js'></script> 
+<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js'></script>
 <script>
-    
+
     <script src='" . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . "'></script>
                                 <script src='" . base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') . "'></script>
                                 <script src='" . base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') . "'></script>
@@ -576,7 +576,7 @@ $(document).ready(function() {
                 // console.log(params.page);
                 // console.log(data.total);
                 // console.log((params.page * 50) < data.total);
-                params.page = params.page || 0; 
+                params.page = params.page || 0;
                 return {
                     results: data.items,
                     pagination: {
@@ -601,14 +601,15 @@ $(document).ready(function() {
                   id_kota: ".$data["pasien"]->alamat_kota.",
                   id_kecamatan: ".$data["pasien"]->alamat_kecamatan.",
                   lat: ".($data["pasien"]->latitude ? $data["pasien"]->latitude : 'null').",
-                  long: ".($data["pasien"]->longitude ? $data["pasien"]->longitude : 'null')."
+                  long: ".($data["pasien"]->longitude ? $data["pasien"]->longitude : 'null').",
+                  get_all: true
               };
           },
           processResults: function (data, params) {
               // console.log(params.page);
               // console.log(data.total);
               // console.log((params.page * 50) < data.total);
-              params.page = params.page || 0; 
+              params.page = params.page || 0;
 
               console.log(data.items);
               return {
@@ -656,16 +657,16 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
 										console.error('Error removing document: ', error);
 								});
                         }
-                    });      
+                    });
                 },
                 error : function(request, status, error){
                     console.log(request);
                     console.log(status);
                     console.log(error);
                 }
-            }); 
+            });
         }
-    }   
+    }
         ";
         $data['diagnoses'] = $this->db->query('SELECT * FROM master_diagnosa WHERE aktif = 1')->result();
         $this->load->view('template', $data);

@@ -210,4 +210,9 @@ class Apotek extends CI_Controller {
 
 		echo json_encode($list_apotek);
 	}
+
+	public function getAll() {
+		$allApotek = $this->db->query("SELECT * FROM master_apotek")->result_array();
+		echo json_encode($allApotek);
+	}
 }

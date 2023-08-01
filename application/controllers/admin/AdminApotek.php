@@ -76,6 +76,7 @@ class AdminApotek extends CI_Controller {
       );
 
 		$data['list_poli'] = $this->db->query('SELECT id,poli FROM nominal WHERE aktif=1 ORDER BY nominal.poli')->result();
+        $data["list_apotek"] = $this->db->query("SELECT * FROM master_apotek")->result();
 		if ($this->session->flashdata('old_form')) {
 			$data['js_addons'] = '
       <script>
@@ -84,23 +85,39 @@ class AdminApotek extends CI_Controller {
           $("#kotkab").empty();
           $("#kecamatan").empty();
           $("#kelurahan").empty();
+          $("#apotek").empty();
 
           $.ajax({
-              method : "POST",
-              url    : baseUrl+"Alamat/getProvinsi/",
-              data   : {id_provinsi:"' . $this->session->flashdata('old_form')['alamat_provinsi'] . '"},
-              success : function(data){
-                  data = JSON.parse(data);
-                  $.each(data, function(index, item){
-                      var template_provinsi = "<option value=\""+item.id+"\" "+item.selected+">"+item.name+"</option>";
-                      $("#provinsi").append(template_provinsi);
-                  });
-                  
-              },
-              error : function(data){
-                  alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
-              }
-          });
+            method : "POST",
+            url    : baseUrl+"Apotek/getAll",
+            success : function(data){
+                data = JSON.parse(data);
+                $.each(data, function(index, item){
+                    var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
+                    $("#apotek").append(template_apotek);
+                });
+                
+            },
+            error : function(data){
+                alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
+            }
+        });
+        $.ajax({
+            method : "POST",
+            url    : baseUrl+"Alamat/getProvinsi/",
+            data   : {id_provinsi:"' . $this->session->flashdata('old_form')['alamat_provinsi'] . '"},
+            success : function(data){
+                data = JSON.parse(data);
+                $.each(data, function(index, item){
+                    var template_provinsi = "<option value=\""+item.id+"\" "+item.selected+">"+item.name+"</option>";
+                    $("#provinsi").append(template_provinsi);
+                });
+                
+            },
+            error : function(data){
+                alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
+            }
+        });
           
           $.ajax({
               method : "POST",
@@ -244,6 +261,21 @@ class AdminApotek extends CI_Controller {
 			$data['js_addons'] = '
 			<script>
 			$(document).ready(function(){
+                $.ajax({
+                    method : "POST",
+                    url    : baseUrl+"Apotek/getAll",
+                    success : function(data){
+                        data = JSON.parse(data);
+                        $.each(data, function(index, item){
+                            var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
+                            $("#apotek").append(template_apotek);
+                        });
+                        
+                    },
+                    error : function(data){
+                        alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
+                    }
+                });
 				$.ajax({
 					method : "POST",
 					url    : baseUrl+"Alamat/getProvinsi/",
@@ -441,7 +473,9 @@ class AdminApotek extends CI_Controller {
                 redirect(base_url($redirect));
             }
 
-            $data["id_user_kategori"] = 55;
+            $data["id_user_kategori"] = 5;
+            $data["id_user_level"] = 2;
+
             if ($this->all_model->insert('master_user', $data) == 1) {
                 $result->status = TRUE;
                 $result->message = 'Data user admin berhasil disimpan';

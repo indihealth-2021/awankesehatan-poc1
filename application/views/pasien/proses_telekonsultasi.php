@@ -533,10 +533,10 @@
 
 
 <script type="text/javascript">
-    navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true
-    }).then(function(stream) {
+    // navigator.mediaDevices.getUserMedia({
+    //     audio: true,
+    //     video: true
+    // }).then(function(stream) {
         name = '<?php echo $user->name; ?>';
         var room_name = '<?php echo $roomName ?>';
         var userName = name;
@@ -551,7 +551,7 @@
             },
         };
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
-            document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+            document.querySelector("#ketemu").contentWindow.location.reload();
         });
         api.executeCommand('displayName', userName);
         api.addEventListener('participantRoleChanged', function(event) {
@@ -562,7 +562,7 @@
         api.on('passwordRequired', function() {
             api.executeCommand('password', '123456');
         });
-    });
+    // });
 </script>
 
 // <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>

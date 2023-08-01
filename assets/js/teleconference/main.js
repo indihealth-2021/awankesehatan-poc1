@@ -253,7 +253,7 @@ btnStop.click(function (e) {
   // }
 
   if (diagnosis == 0 || assesment_pasien == false) {// || resep_dokter == '') {
-    alert('Isi form yang harus diisi! Jika pasien tidak ada, kontak admin untuk membatalkan konsultasi!');
+    alert('Form Harus diisi semua termasuk assesment yang kosong! Jika pasien tidak ada, kontak admin untuk membatalkan konsultasi!');
     return;
   }
 

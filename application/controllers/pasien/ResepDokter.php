@@ -815,26 +815,28 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
 
     public function batalkan_pembelian_obat()
     {
-        if (!$this->session->userdata('is_login')) {
-            redirect(base_url('Login'));
-        }
-        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
-        if ($valid->id_user_kategori != 0) {
-            if ($valid->id_user_kategori == 2) {
-                redirect(base_url('dokter/Dokter'));
-            } else {
-                redirect(base_url('admin/Admin'));
-            }
-        }
-        $data = $this->input->post();
-        for ($i = 0; $i < count($data['id_obat']); $i++) {
-            $list_resep = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'] . ' AND id_obat = ' . $data['id_obat'][$i])->result();  
-            foreach ($list_resep as $resep) {
-                $data_resep_update = array(
-                    'dibatalkan' => 1
-                );
-                $this->db->where('id', $resep->id);
-                $this->db->update('resep_dokter', $data_resep_update);
+        // if (!$this->session->userdata('is_login')) {
+        //     redirect(base_url('Login'));
+        // }
+        // $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        // if ($valid->id_user_kategori != 0) {
+        //     if ($valid->id_user_kategori == 2) {
+        //         redirect(base_url('dokter/Dokter'));
+        //     } else {
+        //         redirect(base_url('admin/Admin'));
+        //     }
+        // }
+        if (isset($_POST['id_obat']) && is_array($_POST['id_obat'])) {
+            $data = $this->input->post();
+            for ($i = 0; $i < count($data['id_obat']); $i++) {
+                $list_resep = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'] . ' AND id_obat = ' . $data['id_obat'][$i])->result();
+                foreach ($list_resep as $resep) {
+                    $data_resep_update = array(
+                        'dibatalkan' => 1
+                    );
+                    $this->db->where('id', $resep->id);
+                    $this->db->update('resep_dokter', $data_resep_update);
+                }
             }
         }
     }

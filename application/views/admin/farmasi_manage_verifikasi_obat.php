@@ -95,7 +95,11 @@
                         $list_total_harga = [];
                         $total_harga = 0;
                         for ($i = 0; $i < $jml_data; $i++) {
-                          $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                          if($list_harga_obat_per_n_unit[$i] != 0) {
+                            $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                          }else {
+                            $list_total_harga[$i] = $list_jumlah_obat[$i] * $list_harga_obat[$i];
+                          }
                         }
 
                         foreach ($list_total_harga as $tot_harga) {

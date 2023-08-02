@@ -34,6 +34,9 @@
                         <p>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?></p>
                         <p>Jumlah setelah pembayaran: Rp. <?php echo $plafon - (int)$total_biaya; ?></p>
                         <?php } ?>
+                        <?php if ($disetujui == 1){ ?>
+                        <button class="btn-success">Sudah disetujui</button>
+                        <?php } ?>
                         <div class="row">
                             <div class="table-responsive p-3">
                                 <table class="table table-border table-hover custom-table mb-0" id="table-obat">
@@ -55,7 +58,7 @@
                                                     <?php if ($list_obat[$i]['dibatalkan'] == 1) { ?>
                                                         <span class="badge badge-danger">Dibatalkan</span>
                                                     <?php } ?>
-                                                    <?php if ($list_obat[$i]['dibatalkan'] == 0) { ?>
+                                                    <?php if ($list_obat[$i]['dibatalkan'] == 0 && $disetujui == 0) { ?>
                                                     <input type="checkbox" name="id_obat[]" value="<?php echo $list_obat[$i]['id_obat'] ?>" class="obat-checkbox">
                                                     <?php } ?>
                                                 </td>
@@ -68,7 +71,7 @@
                             </div>
                         </div>
                         <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
-                        <button type="button" id="btn-verifikasi-obat" class="btn btn-primary">Verifikasi</button>
+                        <button type="button" id="btn-verifikasi-obat" class="btn btn-primary">Setuju</button>
                     </form>
                     <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>
@@ -127,7 +130,7 @@
             url: baseUrl + "pasien/ResepDokter/diverifikasi_user",
             data: { id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
-                alert('Berhasil verifikasi obat.');
+                alert('Berhasil menyetujui pembelian obat.');
                 location.reload()
                 console.log(data);
             },

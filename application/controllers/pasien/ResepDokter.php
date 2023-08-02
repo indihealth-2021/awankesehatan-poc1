@@ -702,11 +702,15 @@ class ResepDokter extends CI_Controller
         if (!empty($data['biaya_pengiriman'])) {
             $data['total_biaya'] += $data['biaya_pengiriman']->biaya_pengiriman;
         }
+        $data['disetujui'] = 0;
 
         for ($i = 0; $i < count($data['list_resep']); $i++) {
             $obat = $this->db->query('SELECT name FROM master_obat WHERE id = ' . $data['list_resep'][$i]->id_obat)->row();
             if ($data['list_resep'][$i]->dibatalkan == 0) {
                 $data['total_biaya'] += $data['list_resep'][$i]->harga;   
+            }
+            if ($data['list_resep'][$i]->diverifikasi_user == 1) {
+                $data['disetujui'] = 1;
             }
             if ($obat) {
                 array_push($data['list_obat'], [
@@ -828,7 +832,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
             }
         }
 
-        if (isset($_POST['id_jadwal_telekonsultasi'])) {
+        if (isset($_POST['id_jadwal_konsultasi'])) {
             $data = $this->input->post();
             $list_resep = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'])->result();
             foreach ($list_resep as $resep) {

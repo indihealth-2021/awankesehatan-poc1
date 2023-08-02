@@ -75,14 +75,22 @@
                        <?php echo $resep->diagnosis; ?>
                      <td class="text-top" width="15%">
                        <span class="font-tr-table">Resep</span><br>
-                       <?php echo $resep->detail_obat; ?>
+                       <?php
+                          $resep->obat = array_unique(explode("|", $resep->detail_obat));
+                          foreach($resep->obat as $obat) {
+                            if($obat != "") {
+                            echo "<li>".$obat."</li>";
+                            }
+                          }
+                       ?>
+
                      </td>
                      <td class="text-top">
                        <span class="font-tr-table">Total Harga</span><br>
                        <?php
-                        $list_harga_obat = explode(',', $resep->harga_obat);
-                        $list_harga_obat_per_n_unit = explode(',', $resep->harga_obat_per_n_unit);
-                        $list_jumlah_obat = explode(',', $resep->jumlah_obat);
+                        $list_harga_obat = array_unique(explode(',', $resep->harga_obat));
+                        $list_harga_obat_per_n_unit = array_unique(explode(',', $resep->harga_obat_per_n_unit));
+                        $list_jumlah_obat = array_unique(explode(',', $resep->jumlah_obat));
                         $jml_data = count($list_harga_obat);
                         $list_total_harga = [];
                         $total_harga = 0;

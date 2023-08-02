@@ -118,7 +118,8 @@
             error: function (data) {
                 console.log(data);
             }
-    });
+    })
+});
     btnVerifikasiObat.addEventListener('click', function (e) {
         e.preventDefault();
         $.ajax({

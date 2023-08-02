@@ -146,11 +146,23 @@
           <hr>
           <div class="form-group">
             <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
+<<<<<<< HEAD
             <!-- <input type="text" class="form-control alamat-input" id="alamat<?php echo $resep->id_jadwal_konsultasi; ?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>" value="<?php echo $alamat_inputan; ?>"> -->
             <input type="text" class="form-control" id="alamat-inputan" value="<?php echo $alamat_inputan;?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>">
             </input>
             <script>
             $("#alamat-inputan").val("<?php echo $alamat_inputan; ?>");
+=======
+            <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+<<<<<<< Updated upstream
+            <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
+            </textarea>
+=======
+            <textarea class="form-control" id="alamat-<?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $resep->alamat_jalan ?>"><?php echo $alamat_inputan ?></textarea>
+>>>>>>> Stashed changes
+            <script>
+            $("#alamat-<?php echo $resep->id; ?>").text("<?php echo $alamat_inputan; ?>");
+>>>>>>> c6536dfd66b3e542f5d6a8893f2c2f7fd18abd08
             </script>
             <!-- <span class="edit-form form-text text-muted">
             <div class="form-check form-check-inline">

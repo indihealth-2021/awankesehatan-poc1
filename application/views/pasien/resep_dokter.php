@@ -1,5 +1,5 @@
  <!-- Main content -->
-    <div class="page-wrapper">
+ <div class="page-wrapper">
       <div class="content">
           <div class="row mb-3">
               <div class="col-sm-12 col-12 ">
@@ -37,6 +37,7 @@
                                             <th>Total Harga</th>
                                             <th>Pemeriksa</th>
                                             <th class="text-center">Aksi</th>
+                                            <td>Status</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,26 +69,43 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    if($resep->status_bukti){
+                                                    if($resep->status_bukti && $resep->diverifikasi_user == 1){
                                                         if($resep->status_bukti == 1){
+                                                          if($user->vip == 1){
+                                                            if($resep->diterima_user == 1){
+                                                              $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Diterima';
+                                                              $warna = 'lunas';
+                                                            } else{
+                                                              $directLink = base_url('pasien/ResepDokter/terima/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Belum Diterima';
+                                                              $warna = 'simpan';
+                                                            }
+                                                          }else{
+                                                            $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                             $button = 'Lunas';
                                                             $warna = 'lunas';
+                                                          }
                                                         }
                                                         else if($resep->status_bukti == 0){
                                                             $button = 'Sedang Diproses';
                                                             $warna = 'simpan';
-                                                        }else{
+                                                        }
+                                                        else{
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                           $button = 'Bayar';
                                                           $warna = 'bayar';                                 
                                                         }
                                                     }
                                                     else{
-                                                        $button = 'Bayar';
+                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/'.$resep->id_jadwal_konsultasi);
+                                                        $button = 'Konfirmasi Obat';
                                                         $warna = 'bayar';
                                                     }
-                                                ?>  
+                                                ?>
                                                 <td class='text-center'>
-                                                <a href="<?php echo base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi) ?>" class='btn btn-<?php echo $warna ?>  font-12'> <?php echo $button ?></a> 
+                                                <a href="<?php echo $directLink ?>" class='btn btn-<?php echo $warna ?>  font-12'> <?php echo $button ?></a>
+                                                <?php } ?>
                                                 <?php if($resep->status_bukti == null){ ?>
                                                   <a href="#modalHapus" data-toggle="modal" data-href="<?php echo base_url('pasien/ResepDokter/batalkan/'.$resep->id_jadwal_konsultasi) ?>" data-tipe="resep" data-title="Pembatalan" data-nama="resep dokter ini" onclick="$('#modalHapus #form')" class="ml-2">
                                                     <i><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">

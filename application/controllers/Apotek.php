@@ -225,7 +225,7 @@ class Apotek extends CI_Controller {
 	}
 
 	public function getAll() {
-		$allApotek = $this->db->query("SELECT * FROM master_apotek")->result_array();
+		$allApotek = $this->db->query("SELECT * FROM master_apotek ORDER BY nama")->result_array();
 		echo json_encode($allApotek);
 	}
 }

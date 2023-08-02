@@ -12,7 +12,7 @@
                 </ol>
             </nav>
           </div>
-      </div> 
+      </div>
       <div class="row">
         <div class="col-lg-12">
           <?= form_open_multipart('admin/AdminApotek/addAdminApotek', 'id="form-add-admin" onsubmit="return ubah();" autocomplete="off"'); ?>
@@ -24,25 +24,25 @@
                     <label class="focus-label">Username</label>
                     <input type="text" class="form-control floating" value="" name="username" id="username" <?php //echo $error != 'username' && $error != 'usernameAndEmail' ? 'value="'.$old['username'].'"' : '' ?> required placeholder="Masukan Username">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Email</label>
                     <input type="email" class="form-control floating" name="email" id="email" <?php //echo $error != 'email' && $error != 'usernameAndEmail' ? 'value="'.$old['email'].'"' : '' ?> required placeholder="Masukan Email">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Password</label>
                     <input type="password" class="form-control floating" value="" name="password" id="password" required placeholder="Masukan Password">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Konfirmasi Password</label>
                     <input type="password" class="form-control floating" name="confirmasipassword" id="confirmasipassword" required placeholder="Masukan Password">
                 </div>
-              </div> 
+              </div>
             </div>
 
             <p class="title-form">Apotek</p>
@@ -51,10 +51,13 @@
                 <div class="form-group form-focus">
                     <label class="focus-label">Apotek</label>
                       <select class="form-control floating" name="id_apotek" id="apotek">
-                        <option>Pilih Apotek</option>
+                        <?php echo json_encode($list_apotek); ?>
+                        <?php foreach($list_apotek as $apotek) { ?>
+                          <option value="<?php echo $apotek->id; ?>"><?php echo $apotek->nama; ?></option>
+                        <?php } ?>
                       </select>
                 </div>
-              </div> 
+              </div>
               </div>
 
             <p class="title-form">Informasi Pribadi</p>
@@ -64,13 +67,13 @@
                     <label class="focus-label">Nama Lengkap</label>
                     <input type="text" class="form-control floating" name="name" id="name" <?php echo isset($old) ? 'value="'.$old['name'].'"' : ''; ?> required placeholder="Masukan Nama Lengkap Disini">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Tempat Lahir</label>
                     <input type="text" class="form-control floating" name="lahir_tempat" id="lahir_tempat" <?php echo isset($old) ? 'value="'.$old['lahir_tempat'].'"' : ''; ?> required placeholder="Masukan Tempat Lahir Disini">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Tanggal Lahir</label>
@@ -105,7 +108,7 @@
                         <option>Pilih Provinsi</option>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kabupaten/Kota</label>
@@ -113,7 +116,7 @@
                         <option>Pilih Kab/Kota</option>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kecamatan</label>
@@ -121,7 +124,7 @@
                         <option>Pilih Kecamatan</option>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kelurahan</label>
@@ -129,13 +132,13 @@
                         <option>Pilih Kelurahan</option>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kode Pos</label>
                     <input type="text" class="form-control floating" name="kode_pos" <?php echo isset($old) ? 'value="'.$old['kode_pos'].'"' : ''; ?> required placeholder="Masukan Kode Pos">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Alamat Jalan</label>
@@ -159,7 +162,7 @@
                     </div>
                   </div>
                 </div>
-              </div>  
+              </div>
             </div>
             <div class="row">
               <div class="col-sm-12 font-14">
@@ -188,7 +191,7 @@
             </div>
           <?= form_close(); ?>
         </div>
-      </div> 
+      </div>
 
 <script>
 function ubah(){

@@ -76,7 +76,7 @@ class AdminApotek extends CI_Controller {
       );
 
 		$data['list_poli'] = $this->db->query('SELECT id,poli FROM nominal WHERE aktif=1 ORDER BY nominal.poli')->result();
-        $data["list_apotek"] = $this->db->query("SELECT * FROM master_apotek")->result();
+        $data["list_apotek"] = $this->db->query("SELECT * FROM master_apotek ORDER BY nama")->result();
 		if ($this->session->flashdata('old_form')) {
 			$data['js_addons'] = '
       <script>
@@ -85,7 +85,6 @@ class AdminApotek extends CI_Controller {
           $("#kotkab").empty();
           $("#kecamatan").empty();
           $("#kelurahan").empty();
-          $("#apotek").empty();
 
           $.ajax({
             method : "POST",
@@ -300,7 +299,6 @@ class AdminApotek extends CI_Controller {
 					method : "POST",
 					url    : baseUrl+"Apotek/getApotek/",
 					success : function(data){
-						$("#apotek").empty();
 						data = JSON.parse(data);
 						$("#apotek").append("<option>PILIH APOTEK</option>");
                         console.log(data);

@@ -147,7 +147,7 @@
           <div class="form-group">
             <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
             <!-- <input type="text" class="form-control alamat-input" id="alamat<?php echo $resep->id_jadwal_konsultasi; ?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>" value="<?php echo $alamat_inputan; ?>"> -->
-            <input type="text" class="form-control" id="alamat-inputan" value="<?php echo $alamat_inputan;?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>" disabled="disabled" readonly>
+            <input type="text" class="form-control" id="alamat-inputan" value="<?php echo $alamat_inputan;?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>">
             </input>
             <script>
             $("#alamat-inputan").val("<?php echo $alamat_inputan; ?>");

@@ -63,7 +63,7 @@ class AdminApotek extends CI_Controller {
 
       $data['css_addons'] = $this->css_addons("index");
       $data['js_addons'] = $this->js_addons("index");
-      $data['list_admin_apotek'] = $this->adminapotek_model->get_all();
+      $data['list_admin_apotek'] = $this->adminApotek_model->get_all();
 
       $this->load->view('template', $data);
     }

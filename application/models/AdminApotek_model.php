@@ -18,14 +18,15 @@ class AdminApotek_model extends CI_Model{
             master_apotek.nama as nama_apotek,
             IF(master_user.foto IS NULL or master_user.foto = "", "'.base_url('assets/dashboard/img/user.jpg').'", CONCAT("'.base_url('assets/images/users/').'", master_user.foto)) as foto,
         ');
-        
+
         $this->db->from('master_user');
         $this->db->join('master_provinsi', 'master_user.alamat_provinsi = master_provinsi.id', 'left');
         $this->db->join('master_kota', 'master_user.alamat_kota = master_kota.id', 'left');
         $this->db->join('master_kelurahan', 'master_user.alamat_kelurahan = master_kelurahan.id', 'left');
         $this->db->join('master_kecamatan', 'master_user.alamat_kecamatan = master_kecamatan.id', 'left');
         $this->db->join('master_apotek', 'master_user.id_apotek = master_apotek.id', "left");
-        $this->db->where('id_user_kategori', 55);
+        $this->db->where('id_user_kategori', 5);
+        $this->db->where("id_user_level", 2);
 
         if($aktif != null){
             $this->db->where('master_user.aktif', $aktif);

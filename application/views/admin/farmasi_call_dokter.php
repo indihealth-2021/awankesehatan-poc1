@@ -138,7 +138,7 @@
     var uniqid = makeid(12);
     reg_id = '<?php echo $pasien->reg_id; ?>';
     name = '<?php echo $user->name; ?>';
-    var room_name = 'telemedicine_lintas_' + <?php echo $id_jadwal_konsultasi ?> + '_' + <?php echo $user->id ?> + '_' + uniqid;
+    var room_name = 'telemedicine_lintas_' + '_' + <?php echo $user->id ?> + '_' + uniqid;
     document.querySelector("#user-call").value = '<?php echo $pasien->id ?>';
     function start_consultation(){
       name = '<?php echo $user->name; ?>';

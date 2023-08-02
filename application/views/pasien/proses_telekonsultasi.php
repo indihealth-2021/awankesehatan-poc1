@@ -533,10 +533,6 @@
 
 
 <script type="text/javascript">
-    // navigator.mediaDevices.getUserMedia({
-    //     audio: true,
-    //     video: true
-    // }).then(function(stream) {
         name = '<?php echo $user->name; ?>';
         var room_name = '<?php echo $roomName ?>';
         var userName = name;
@@ -550,19 +546,23 @@
                 disableDeepLinking: true,
             },
         };
-        const api = new JitsiMeetExternalAPI(domain, options).then(() => {
-            document.querySelector("#ketemu").contentWindow.location.reload();
+        navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+        }).then(function(stream) {
+            const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+                document.querySelector("#ketemu").contentWindow.location.reload();
+            });
+            api.executeCommand('displayName', userName);
+            api.addEventListener('participantRoleChanged', function(event) {
+                if (event.role === 'moderator') {
+                    api.executeCommand('toggleLobby', true);
+                }
+            });
+            api.on('passwordRequired', function() {
+                api.executeCommand('password', '123456');
+            });
         });
-        api.executeCommand('displayName', userName);
-        api.addEventListener('participantRoleChanged', function(event) {
-            if (event.role === 'moderator') {
-                api.executeCommand('toggleLobby', true);
-            }
-        });
-        api.on('passwordRequired', function() {
-            api.executeCommand('password', '123456');
-        });
-    // });
 </script>
 
 // <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script>

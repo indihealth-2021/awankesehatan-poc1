@@ -88,17 +88,33 @@
                      <td class="text-top">
                        <span class="font-tr-table">Total Harga</span><br>
                        <?php
-                        $list_harga_obat = array_unique(explode(',', $resep->harga_obat));
-                        $list_harga_obat_per_n_unit = array_unique(explode(',', $resep->harga_obat_per_n_unit));
-                        $list_jumlah_obat = array_unique(explode(',', $resep->jumlah_obat));
+                        $list_harga_obat = explode(',', $resep->harga_obat);
+                        $list_harga_obat_per_n_unit = explode(',', $resep->harga_obat_per_n_unit);
+                        $list_jumlah_obat = explode(',', $resep->jumlah_obat);
                         $jml_data = count($list_harga_obat);
                         $list_total_harga = [];
                         $total_harga = 0;
-                        for ($i = 0; $i < $jml_data; $i++) {
-                          if($list_harga_obat_per_n_unit[$i] != 0) {
-                            $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+
+                        if(!$jml_data < 2) {
+                          $same = false;
+                          for($i = 1; $i < $jml_data; $i ++) {
+                            if(
+                              ($list_harga_obat[$i] != $list_harga_obat[$i-1])
+                              && ($list_harga_obat_per_n_unit[$i] != $list_harga_obat_per_n_unit[$i-1])
+                              && ($list_jumlah_obat[$i] != $list_jumlah_obat[$i-1])
+                            ) {
+                              if($list_harga_obat_per_n_unit[$i] != 0) {
+                                $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                              }else {
+                                $list_total_harga[$i] = $list_jumlah_obat[$i] * $list_harga_obat[$i];
+                              }
+                            }
+                          }
+                        }else {
+                          if($list_harga_obat_per_n_unit[0] != 0) {
+                            $list_total_harga[0] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[0]) * $list_harga_obat[0];
                           }else {
-                            $list_total_harga[$i] = $list_jumlah_obat[$i] * $list_harga_obat[$i];
+                            $list_total_harga[0] = $list_jumlah_obat[0] * $list_harga_obat[0];
                           }
                         }
 

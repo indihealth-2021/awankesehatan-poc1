@@ -96,8 +96,14 @@ class PengirimanObat extends CI_Controller {
                                                     $.ajax({
                                                         method : "POST",
                                                         url    : baseUrl+"admin/PengirimanObat/submit_biaya_pengiriman",
-                                                        data   : {biaya_pengiriman:modal.find("#biaya-pengiriman").val(), id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(), alamat_kustom:modal.find("input[name=alamat_kustom]:checked").val(), alamat:modal.find("#alamat").val(), _csrf:modal.find("input[name=_csrf]").val()},
+                                                        data   : {
+                                                            biaya_pengiriman:modal.find("#biaya-pengiriman").val(),
+                                                            id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(),
+                                                            alamat_kustom:modal.find("input[name=alamat_kustom]:checked").val(),
+                                                            alamat:modal.find("#alamat").val(),
+                                                            _csrf:modal.find("input[name=_csrf]").val()},
                                                         success : function(data){
+                                                            alert(data);
                                                             console.log(data);
                                                             data = JSON.parse(data);
                                                             if(data.status == "OK"){
@@ -136,6 +142,8 @@ class PengirimanObat extends CI_Controller {
                                                             }
                                                             else{
                                                                 alert("GAGAL: Pastikan data yang anda isi lengkap!");
+                                                                alert(data);
+                                                                console.log(data);
                                                             }
                                                         },
                                                         error : function(data){
@@ -248,12 +256,10 @@ class PengirimanObat extends CI_Controller {
     public function submit_biaya_pengiriman(){
         $this->all_controllers->check_user_farmasi();
 
-
         $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
         $id_registrasi = $this->input->post('id_registrasi');
         $diagnosis_dokter = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
 
-        echo json_encode($this->db->last_query()); exit();
         $id_registrasi = $id_registrasi ?
             $id_registrasi : $diagnosis_dokter->id_registrasi;
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');

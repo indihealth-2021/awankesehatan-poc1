@@ -13,6 +13,13 @@ class ResepDokter extends CI_Controller
         $this->load->library('session');
     }
 
+    private function debug() {
+        echo json_encode([
+            "last_query" => $this->db->last_query(),
+            "errors" => $this->db->error()
+        ]); exit();
+    }
+
     public function index()
     {
         if (!$this->session->userdata('is_login')) {
@@ -855,7 +862,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
         for ($i = 0; $i < count($data['list_resep']); $i++) {
             $obat = $this->db->query('SELECT name FROM master_obat WHERE id = ' . $data['list_resep'][$i]->id_obat)->row();
             if ($data['list_resep'][$i]->dibatalkan == 0) {
-                $data['total_biaya'] += $data['list_resep'][$i]->harga;   
+                $data['total_biaya'] += $data['list_resep'][$i]->harga;
             }
             if ($data['list_resep'][$i]->diverifikasi_user == 1) {
                 $data['disetujui'] = 1;
@@ -878,9 +885,9 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
           <script src="https://meet.jit.si/external_api.js"></script>
           ';
         $data['js_addons'] = "
-<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js'></script> 
+<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js'></script>
 <script>
-    
+
     <script src='" . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . "'></script>
                                 <script src='" . base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') . "'></script>
                                 <script src='" . base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') . "'></script>
@@ -953,16 +960,16 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
 										console.error('Error removing document: ', error);
 								});
                         }
-                    });      
+                    });
                 },
                 error : function(request, status, error){
                     console.log(request);
                     console.log(status);
                     console.log(error);
                 }
-            }); 
+            });
         }
-    }   
+    }
         ";
         $this->load->view('template', $data);
     }
@@ -1035,7 +1042,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
           $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
         $this->db->insert('data_notifikasi', $data_notif);
     }
-    
+
     public function batalkan_pembelian_obat()
     {
         if (!$this->session->userdata('is_login')) {

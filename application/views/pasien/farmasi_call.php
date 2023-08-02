@@ -125,7 +125,7 @@
             video: true
         }).then(function(stream) {
             const api = new JitsiMeetExternalAPI(domain, options).then(() => {
-                document.querySelector("#ketemu").contentWindow.location.reload();
+                document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
             });
             api.executeCommand('displayName', userName);
             api.addEventListener('participantRoleChanged', function(event) {

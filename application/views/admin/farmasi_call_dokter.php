@@ -125,57 +125,38 @@
     chat_id = '';
 </script>
 <script type="text/javascript">
-    function makeid(length) {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
-    
-    var uniqid = makeid(12);
-    reg_id = '<?php echo $pasien->reg_id; ?>';
-    name = '<?php echo $user->name; ?>';
-    var room_name = 'telemedicine_lintas_' + '_' + <?php echo $user->id ?> + '_' + uniqid;
-    document.querySelector("#user-call").value = '<?php echo $pasien->id ?>';
+    var room_name = '';
     function start_consultation(){
       name = '<?php echo $user->name; ?>';
       var userName = name;
       const domain = 'telekonsultasi2.telemedical.id';
       const options = {
-            roomName: room_name,
-            width: 535,
-            height: 400,
-            parentNode: document.querySelector('#meet'),
-            configOverwrite: {
+          roomName: room_name,
+          width: '100%',
+          height: '400px',
+          parentNode: document.querySelector('#meet'),
+          configOverwrite: {
                 disableDeepLinking: true,
             },
-        };
+      };
 
-      
       navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true
-    }).then(function(stream) {
-        const api = new JitsiMeetExternalAPI(domain, options).then(() => {
-            document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+            audio: true,
+            video: true
+        }).then(function(stream) {
+            const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+                document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+            });
+            api.executeCommand('displayName', userName);
+            api.addEventListener('participantRoleChanged', function(event) {
+                if (event.role === 'moderator') {
+                    api.executeCommand('toggleLobby', true);
+                }
+            });
+            api.on('passwordRequired', function() {
+                api.executeCommand('password', '123456');
+            });
         });
-        api.executeCommand('displayName', userName);
-        api.executeCommand('toggleTileView');
-        api.executeCommand('startRecording', {
-            mode: 'file' //recording mode, either `file` or `stream`.
-        });
-        api.addEventListener('participantRoleChanged', function(event) {
-        if (event.role === 'moderator') {
-            api.executeCommand('toggleLobby', true);
-        }
-        });
-        api.on('passwordRequired', function() {
-            api.executeCommand('password', '123456');
-        });
-    });
 
       function recordJitsi(e) {
           api.executeCommand('stopRecording', 'stream');

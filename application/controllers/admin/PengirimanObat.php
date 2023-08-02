@@ -13,6 +13,48 @@ class PengirimanObat extends CI_Controller {
         $this->load->library('my_pagination');
     }
 
+    public function submit_biaya_pengiriman_new($id_jadwal_resep) {
+        $this->all_controllers->check_user_farmasi();
+
+        $id_jadwal_konsultasi = $id_jadwal_konsultasi;
+
+        if ($this->input->post('id_registrasi')){
+            $id_registrasi = $this->input->post('id_registrasi');
+        } else {
+            $id_registrasi = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
+        }
+
+        // $id_registrasi = $id_registrasi ?
+        //     $id_registrasi : $diagnosis_dokter->id_registrasi;
+        $biaya_pengiriman = $this->input->post('biaya_pengiriman');
+        $alamat = $this->input->post('alamat');
+
+        if(!$id_jadwal_konsultasi || $biaya_pengiriman == null || !$alamat){
+            echo $alamat;
+            die;
+        }
+
+        $data_biaya_pengiriman = array(
+            'id_registrasi'=>$id_registrasi,
+            'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
+            'biaya_pengiriman'=>$biaya_pengiriman,
+            'alamat'=>$alamat
+        );
+
+        $biaya_pengiriman_isExists = $this->db->query("SELECT id, jumlah_edit,alamat FROM biaya_pengiriman_obat WHERE id_registrasi = '".$id_registrasi."'")->row();
+        if(!$biaya_pengiriman_isExists){
+            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
+            $jml_edit = 1;
+        }
+        else{
+            $jml_edit = $biaya_pengiriman_isExists->jumlah_edit+1;
+            $alamat_kustom = $alamat != $biaya_pengiriman_isExists->alamat ? 1:0;
+            $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi'=>$id_jadwal_konsultasi, 'biaya_pengiriman'=>$biaya_pengiriman, 'alamat'=>$alamat, 'alamat_kustom'=>$alamat_kustom, 'jumlah_edit'=>$biaya_pengiriman_isExists->jumlah_edit+1), array('id'=>$biaya_pengiriman_isExists->id));
+        }
+
+        echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
+    }
+
     public function index(){
 		$this->all_controllers->check_user_farmasi();
 		$data = $this->all_controllers->get_data_view(
@@ -25,136 +67,135 @@ class PengirimanObat extends CI_Controller {
 
         $data['css_addons'] = '<link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css').'"><link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css').'">';
         $data['js_addons'] = '
-                                <script src="'.base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js').'"></script>
-                                <script src="'.base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js').'"></script>
-                                <script src="'.base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js').'"></script>
-                                <script src="'.base_url('assets/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js').'"></script>
-                                <script>
-                                $(function () {
-                                    var table_pengiriman_obat = $("#table_obat").DataTable({
-                                        "paging": true,
-                                        "lengthChange": false,
-                                        "searching": true,
-                                        "ordering": true,
-                                        "info": true,
-                                        "autoWidth": true,
-                                        "responsive": true,
-                                    });
-                                    $("#table_obat_filter").remove();
-                                    $("#search").on("keyup", function(e){
-                                      table_pengiriman_obat.search($(this).val()).draw();
-                                    });
+        <script src="'.base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js').'"></script>
+        <script src="'.base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js').'"></script>
+        <script src="'.base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js').'"></script>
+        <script src="'.base_url('assets/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js').'"></script>
+        <script>
+        $(function () {
+            var table_pengiriman_obat = $("#table_obat").DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+            });
+            $("#table_obat_filter").remove();
+            $("#search").on("keyup", function(e){
+              table_pengiriman_obat.search($(this).val()).draw();
+            });
 
-                                    $("#modalBiayaPengiriman").on("show.bs.modal", function (e) {
-                                        var button = $(e.relatedTarget);
-                                        var modal = $(e.currentTarget);
+            $("#modalBiayaPengiriman").on("show.bs.modal", function (e) {
+                var button = $(e.relatedTarget);
+                var modal = $(e.currentTarget);
 
-                                        modal.find("#biaya-pengiriman").val("");
+                modal.find("#biaya-pengiriman").val("");
 
-                                        modal.find("#nama-pasien").val(button.data("nama-pasien"));
-                                        modal.find("#telp").val(button.data("telp-pasien"));
-                                        modal.find("#email-pasien").val(button.data("email-pasien"));
+                modal.find("#nama-pasien").val(button.data("nama-pasien"));
+                modal.find("#telp").val(button.data("telp-pasien"));
+                modal.find("#email-pasien").val(button.data("email-pasien"));
 
-                                        modal.find("#alamat").val(button.data("alamat"));
-                                        modal.find("#id_jadwal_konsultasi").val(button.data("id-jadwal-konsultasi"));
-                                        modal.find("#biaya-pengiriman").val(button.data("biaya-pengiriman"));
-                                        modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
-                                        var biaya_pengiriman_rp = button.data("biaya-pengiriman-rp");
-                                        biaya_pengiriman_rp = biaya_pengiriman_rp.replace(",00","");
-                                        modal.find("#biayaPengirimanHelp").html(biaya_pengiriman_rp);
-                                        if(button.data("tipe") == "edit"){
-                                            $(".submit-form").hide();
-                                            $(".edit-form").show();
-                                            modal.find("#saveBiayaPengiriman").attr("type", "button");
-                                            modal.find("#biaya-pengiriman").removeAttr("readonly");
+                modal.find("#alamat").val(button.data("alamat"));
+                modal.find("#id_jadwal_konsultasi").val(button.data("id-jadwal-konsultasi"));
+                modal.find("#biaya-pengiriman").val(button.data("biaya-pengiriman"));
+                modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
+                var biaya_pengiriman_rp = button.data("biaya-pengiriman-rp");
+                biaya_pengiriman_rp = biaya_pengiriman_rp.replace(",00","");
+                modal.find("#biayaPengirimanHelp").html(biaya_pengiriman_rp);
+                if(button.data("tipe") == "edit"){
+                    $(".submit-form").hide();
+                    $(".edit-form").show();
+                    modal.find("#saveBiayaPengiriman").attr("type", "button");
+                    modal.find("#biaya-pengiriman").removeAttr("readonly");
 
-                                            var is_alamat_kustom = button.data("is-alamat-kustom");
-                                            var alamat_kustom = button.data("alamat-kustom");
-                                            var alamat = button.data("alamat");
+                    var is_alamat_kustom = button.data("is-alamat-kustom");
+                    var alamat_kustom = button.data("alamat-kustom");
+                    var alamat = button.data("alamat");
 
-                                            $("#alamat").prop("required",true);
+                    $("#alamat").prop("required",true);
 
-                                            // if(is_alamat_kustom == 1){
-                                            //     modal.find("textarea[name=alamat]").prop("readonly",false);
-                                            //     modal.find("textarea[name=alamat]").val(button.data("alamat-kustom"));
-                                            //     modal.find("input[name=alamat_kustom][value=1]").prop("checked",true);
-                                            //     modal.find("#isAlamatLengkap").html("");
-                                            // }
-                                            // else{
-                                            //     modal.find("textarea[name=alamat]").val(button.data("alamat"));
-                                            //     modal.find("textarea[name=alamat]").prop("readonly",true);
+                    // if(is_alamat_kustom == 1){
+                    //     modal.find("textarea[name=alamat]").prop("readonly",false);
+                    //     modal.find("textarea[name=alamat]").val(button.data("alamat-kustom"));
+                    //     modal.find("input[name=alamat_kustom][value=1]").prop("checked",true);
+                    //     modal.find("#isAlamatLengkap").html("");
+                    // }
+                    // else{
+                    //     modal.find("textarea[name=alamat]").val(button.data("alamat"));
+                    //     modal.find("textarea[name=alamat]").prop("readonly",true);
 
-                                            //     modal.find("input[name=alamat_kustom][value=0]").prop("checked",true);
+                    //     modal.find("input[name=alamat_kustom][value=0]").prop("checked",true);
 
-                                            //     modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
-                                            // }
+                    //     modal.find("#isAlamatLengkap").html(button.data("is-alamat-lengkap"));
+                    // }
 
-                                            $("#saveBiayaPengiriman").html("Simpan");
-                                            $("#saveBiayaPengiriman").off("click");
-                                            $("#saveBiayaPengiriman").click(function(e){
-                                                if(modal.find("textarea[name=alamat]").val()){
-                                                    $.ajax({
-                                                        method : "POST",
-                                                        url    : baseUrl+"admin/PengirimanObat/submit_biaya_pengiriman",
-                                                        data   : {
-                                                            biaya_pengiriman:modal.find("#biaya-pengiriman").val(),
-                                                            id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(),
-                                                            alamat_kustom:modal.find("input[name=alamat_kustom]:checked").val(),
-                                                            alamat:modal.find("#alamat").val(),
-                                                            _csrf:modal.find("input[name=_csrf]").val()},
-                                                        success : function(data){
-                                                            alert(data);
-                                                            console.log(data);
-                                                            data = JSON.parse(data);
-                                                            if(data.status == "OK"){
-                                                                var biaya_pengiriman_rp = formatRupiah(modal.find("#biaya-pengiriman").val(), "Rp. ");
-                                                                biaya_pengiriman_rp = biaya_pengiriman_rp.replace(",00","");
-                                                                var total_harga = parseInt(modal.find("#biaya-pengiriman").val())+parseInt(button.parent().find(".btnSubmit").data("harga-obat"));
-                                                                var total_harga_rp = formatRupiah(total_harga.toString(), "Rp. ");
-                                                                total_harga_rp = total_harga_rp.replace(",00","");
-                                                                document.getElementById("biaya-pengiriman-"+modal.find("#id_jadwal_konsultasi").val()).innerHTML = modal.find("#biayaPengirimanHelp").html()+",00";
+                    $("#saveBiayaPengiriman").html("Simpan");
+$("#saveBiayaPengiriman").off("click");
+$("#saveBiayaPengiriman").click(function(e){
+if(modal.find("input[name=alamat]").val()){
+$.ajax({
+method : "POST",
+url    : baseUrl+"admin/PengirimanObat/submit_biaya_pengiriman",
+data   : {
+biaya_pengiriman:modal.find("#biaya-pengiriman").val(),
+id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(),
+alamat_kustom:modal.find("input[name=alamat_kustom]:checked").val(),
+alamat:$("#alamat-inputan").val(),
+_csrf:modal.find("input[name=_csrf]").val()},
+success : function(data){
+console.log(data);
+data = JSON.parse(data);
+if(data.status == "OK"){
+    var biaya_pengiriman_rp = formatRupiah(modal.find("#biaya-pengiriman").val(), "Rp. ");
+    biaya_pengiriman_rp = biaya_pengiriman_rp.replace(",00","");
+    var total_harga = parseInt(modal.find("#biaya-pengiriman").val())+parseInt(button.parent().find(".btnSubmit").data("harga-obat"));
+    var total_harga_rp = formatRupiah(total_harga.toString(), "Rp. ");
+    total_harga_rp = total_harga_rp.replace(",00","");
+    document.getElementById("biaya-pengiriman-"+modal.find("#id_jadwal_konsultasi").val()).innerHTML = modal.find("#biayaPengirimanHelp").html()+",00";
 
-                                                                button.parent().find(".btnSubmit").data("biaya-pengiriman", modal.find("#biaya-pengiriman").val());
-                                                                button.parent().find(".btnEdit").data("biaya-pengiriman", modal.find("#biaya-pengiriman").val());
+    button.parent().find(".btnSubmit").data("biaya-pengiriman", modal.find("#biaya-pengiriman").val());
+    button.parent().find(".btnEdit").data("biaya-pengiriman", modal.find("#biaya-pengiriman").val());
 
-                                                                button.parent().find(".btnSubmit").data("biaya-pengiriman-rp", biaya_pengiriman_rp);
-                                                                button.parent().find(".btnEdit").data("biaya-pengiriman-rp", biaya_pengiriman_rp);
+    button.parent().find(".btnSubmit").data("biaya-pengiriman-rp", biaya_pengiriman_rp);
+    button.parent().find(".btnEdit").data("biaya-pengiriman-rp", biaya_pengiriman_rp);
 
-                                                                button.parent().find(".btnSubmit").data("alamat", modal.find("#alamat").val());
+    button.parent().find(".btnSubmit").data("alamat", modal.find("#alamat").val());
 
-                                                                if(modal.find("input[name=alamat_kustom]:checked").val() == 1){
-                                                                    button.parent().find(".btnEdit").data("alamat-kustom", modal.find("#alamat").val());
-                                                                    button.parent().find(".btnEdit").data("is-alamat-kustom", 1);
-                                                                }
-                                                                else{
-                                                                    button.parent().find(".btnEdit").data("is-alamat-kustom", 0);
-                                                                }
+    if(modal.find("input[name=alamat_kustom]:checked").val() == 1){
+    button.parent().find(".btnEdit").data("alamat-kustom", modal.find("#alamat").val());
+    button.parent().find(".btnEdit").data("is-alamat-kustom", 1);
+    }
+    else{
+    button.parent().find(".btnEdit").data("is-alamat-kustom", 0);
+    }
 
-                                                                button.parent().find(".btnSubmit").data("total-harga", total_harga);
-                                                                button.parent().find(".btnSubmit").data("total-harga-rp", total_harga_rp);
-                                                                modal.modal("hide");
-                                                                if(data.jml_edit == 1){
-                                                                    alert("SUKSES: Data berhasil disimpan!");
-                                                                }
-                                                                else{
-                                                                    alert("SUKSES: Data telah disimpan "+data.jml_edit+"x!");
-                                                                }
-                                                            }
-                                                            else{
-                                                                alert("GAGAL: Pastikan data yang anda isi lengkap!");
-                                                                alert(data);
-                                                                console.log(data);
-                                                            }
-                                                        },
-                                                        error : function(data){
-                                                                alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
-                                                        }
-                                                    });
-                                                }
-                                                else{
-                                                    alert("GAGAL: Data Tidak Lengkap!");
-                                                }
-                                            });
+    button.parent().find(".btnSubmit").data("total-harga", total_harga);
+    button.parent().find(".btnSubmit").data("total-harga-rp", total_harga_rp);
+    modal.modal("hide");
+    if(data.jml_edit == 1){
+    alert("SUKSES: Data berhasil disimpan!");
+    }
+    else{
+    alert("SUKSES: Data telah disimpan "+data.jml_edit+"x!");
+    }
+}else{
+    alert("GAGAL: Pastikan data yang anda isi lengkap!");
+    console.log(data);
+}
+},
+error : function(data){
+alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
+}
+});
+}
+else{
+alert("GAGAL: Data Tidak Lengkap!");
+}
+});
+
+
 
                                             $("input[name=alamat_kustom]").change(function(e){
                                                 var val_alamat_kustom = $(this).val();
@@ -257,16 +298,22 @@ class PengirimanObat extends CI_Controller {
         $this->all_controllers->check_user_farmasi();
 
         $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
-        $id_registrasi = $this->input->post('id_registrasi');
-        $diagnosis_dokter = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
 
-        $id_registrasi = $id_registrasi ?
-            $id_registrasi : $diagnosis_dokter->id_registrasi;
+        if ($this->input->post('id_registrasi')){
+            $id_registrasi = $this->input->post('id_registrasi');
+        } else {
+            $id_registrasi = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
+        }
+
+        // $id_registrasi = $id_registrasi ?
+        //     $id_registrasi : $diagnosis_dokter->id_registrasi;
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');
         $alamat = $this->input->post('alamat');
 
         if(!$id_jadwal_konsultasi || $biaya_pengiriman == null || !$alamat){
-            echo "FAILED";
+            echo json_encode(
+                [$id_jadwal_konsultasi, $biaya_pengiriman, $alamat]
+            );
             die;
         }
 

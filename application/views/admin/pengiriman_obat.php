@@ -97,7 +97,9 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     echo $resep->alamat_kustom ? $resep->alamat_pengiriman : '';
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   } ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalBiayaPengiriman">Submit Biaya</button>
                           <?php if($resep->pasien_is_vip)  {?>
-                            <button class="btn btn-kirim-biaya btnSubmit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->alamat_pengiriman ?: ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-tipe="submit" data-harga-obat="<?php echo $total_harga; ?>" data-harga-obat-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga, 2, ',', '.')); ?>" data-total-harga="<?php echo $total_harga + $biaya_pengiriman ?>" data-total-harga-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga + $biaya_pengiriman, 2, ',', '.')); ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-toggle="modal" data-target="#modalBiayaPengiriman">Kirim</button>
+
+            <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+                            <button class="btn btn-kirim-biaya btnSubmit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->alamat_pengiriman ?: ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-tipe="submit" data-harga-obat="<?php echo $total_harga; ?>" data-harga-obat-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga, 2, ',', '.')); ?>" data-total-harga="<?php echo $total_harga + $biaya_pengiriman ?>" data-total-harga-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga + $biaya_pengiriman, 2, ',', '.')); ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-toggle="modal" data-alamat-inputan="<?php echo $alamat_inputan; ?>" data-target="#modalBiayaPengiriman">Kirim</button>
                             <?php } ?>
                         </td>
                       </tr>
@@ -144,11 +146,11 @@
           <hr>
           <div class="form-group">
             <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
-            <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
-            <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
-            </textarea>
+            <!-- <input type="text" class="form-control alamat-input" id="alamat<?php echo $resep->id_jadwal_konsultasi; ?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>" value="<?php echo $alamat_inputan; ?>"> -->
+            <input type="text" class="form-control" id="alamat-inputan" value="<?php echo $alamat_inputan;?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>" disabled="disabled" readonly>
+            </input>
             <script>
-            $("#alamat#<?php echo $resep->id; ?>").text("<?php echo $alamat_inputan; ?>");
+            $("#alamat-inputan").val("<?php echo $alamat_inputan; ?>");
             </script>
             <!-- <span class="edit-form form-text text-muted">
             <div class="form-check form-check-inline">
@@ -193,6 +195,7 @@
 <script type="text/javascript">
   var rupiah = document.getElementById('biaya-pengiriman');
   var show_to = document.getElementById('biayaPengirimanHelp');
+
   rupiah.addEventListener('change', function(e) {
     // tambahkan 'Rp.' pada saat form di ketik
     // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka

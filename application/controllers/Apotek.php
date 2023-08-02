@@ -74,6 +74,10 @@ class Apotek extends CI_Controller {
 	public function findNearest() {
 		if($this->input->post("get_all")) {
 			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text FROM master_apotek")->result_array();
+			for($i = 0; $i < count($temp); $i ++) {
+				$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"];
+			}
+
 			echo json_encode(array(
 				'incomplete_results' => false,
 				'items' => $temp,

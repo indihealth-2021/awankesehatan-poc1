@@ -231,8 +231,8 @@ class Teleconsultasi extends CI_Controller
                 "id_pasien" => $data['id_pasien'],
                 "id_dokter" => $this->session->userdata('id_user'),
                 "id_obat" => $data['id_obat'][$i],
-                "id_apotek" => $data["apotek"], //id_apotek
-
+                //"id_apotek" => $data["apotek"], //id_apotek
+                "id_apotek" => explode(" - ", $data["apotek"])[0],
                 "jumlah_obat" => $data['jumlah_obat'][$i],
                 // "keterangan" => $data['keterangan'][$i]
             );
@@ -368,7 +368,14 @@ class Teleconsultasi extends CI_Controller
         $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"]." AND resep_dokter.id_pasien=".$data["id_pasien"])->row();
 
         if(!$exist) {
-            $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0])->result()[0];
+            if(strpos($data["apotek"], "km dari lokasi pasien") !== false) {
+                $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0]);
+            }else {
+                $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.id=".explode(" - ", $data["apotek"])[0]);
+            }
+
+            $apotek = $apotek->result()[0];
+
             $jml_data_resep = count($data['keterangan']);
             for ($i = 0; $i < $jml_data_resep; $i++) {
                 $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = '.$data['id_obat'][$i])->row();

@@ -88,7 +88,7 @@ class Conference extends CI_Controller
     $now = $now->format('Y/m/d H:i:s');
     $jadwal_konsultasi = $this->db->query('SELECT bukti_pembayaran.id as id_bp FROM jadwal_konsultasi INNER JOIN bukti_pembayaran ON jadwal_konsultasi.id_registrasi = bukti_pembayaran.id_registrasi WHERE jadwal_konsultasi.id = '.$id_jadwal_konsultasi.' AND bukti_pembayaran.status = 1')->row();
     $this->all_model->update('bukti_pembayaran', array('tanggal_konsultasi'=>$now), array('id'=>$jadwal_konsultasi->id_bp));
-    
+
     $pasien = $this->db->query('SELECT id, name FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
     $notifikasi = 'Konsultasi Dijawab oleh ' . $pasien->name;
     $now = (new DateTime('now'))->format('Y-m-d H:i:s');
@@ -150,7 +150,7 @@ class Conference extends CI_Controller
     $id_jadwal_konsultasi = $this->input->get("id_jadwal_konsultasi");
     $id_pasien = $this->input->get("id_pasien");
   }
-  
+
 
   public function end_call()
   {

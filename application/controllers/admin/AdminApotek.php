@@ -5,7 +5,7 @@ class AdminApotek extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model("all_model");
-        $this->load->model("adminapotek_model");
+        $this->load->model("adminApotek_model");
         $this->load->model("apotek_model");
 
         $this->load->library('session');
@@ -96,7 +96,7 @@ class AdminApotek extends CI_Controller {
                     var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
                     $("#apotek").append(template_apotek);
                 });
-                
+
             },
             error : function(data){
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
@@ -112,13 +112,13 @@ class AdminApotek extends CI_Controller {
                     var template_provinsi = "<option value=\""+item.id+"\" "+item.selected+">"+item.name+"</option>";
                     $("#provinsi").append(template_provinsi);
                 });
-                
+
             },
             error : function(data){
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
             }
         });
-          
+
           $.ajax({
               method : "POST",
               url    : baseUrl+"Alamat/getKotKab",
@@ -129,13 +129,13 @@ class AdminApotek extends CI_Controller {
                       var template_kotkab = "<option value=\""+item.id+"\">"+item.name+"</option>";
                       $("#kotkab").append(template_kotkab);
                   });
-                  
+
               },
               error : function(data){
                   alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
               }
           });
-          
+
           $.ajax({
               method : "POST",
               url    : baseUrl+"Alamat/getKecamatan",
@@ -146,7 +146,7 @@ class AdminApotek extends CI_Controller {
                       var template_kecamatan = "<option value=\""+item.id+"\">"+item.name+"</option>";
                       $("#kecamatan").append(template_kecamatan);
                   });
-                  
+
               },
               error : function(data){
                   alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
@@ -164,12 +164,12 @@ class AdminApotek extends CI_Controller {
                       var template_kelurahan = "<option value=\""+item.id+"\">"+item.name+"</option>";
                       $("#kelurahan").append(template_kelurahan);
                   });
-                  
+
               },
               error : function(data){
                   alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
               }
-              
+
 
           });
       });
@@ -193,12 +193,12 @@ class AdminApotek extends CI_Controller {
                       var template_kotkab = "<option value=\""+item.id+"\">"+item.name+"</option>";
                       $("#kotkab").append(template_kotkab);
                   });
-                  
+
               },
               error : function(data){
                   alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
               }
-              
+
 
           });
       });
@@ -220,12 +220,12 @@ class AdminApotek extends CI_Controller {
                       var template_kecamatan = "<option value=\""+item.id+"\">"+item.name+"</option>";
                       $("#kecamatan").append(template_kecamatan);
                   });
-                  
+
               },
               error : function(data){
                   alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
               }
-              
+
 
           });
       });
@@ -246,12 +246,12 @@ class AdminApotek extends CI_Controller {
                       var template_kelurahan = "<option value=\""+item.id+"\">"+item.name+"</option>";
                       $("#kelurahan").append(template_kelurahan);
                   });
-                  
+
               },
               error : function(data){
                   alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
               }
-              
+
 
           });
       });
@@ -270,7 +270,7 @@ class AdminApotek extends CI_Controller {
                             var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
                             $("#apotek").append(template_apotek);
                         });
-                        
+
                     },
                     error : function(data){
                         alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
@@ -287,12 +287,12 @@ class AdminApotek extends CI_Controller {
 							var template_provinsi = "<option value=\""+item.id+"\" "+item.selected+">"+item.name+"</option>";
 							$("#provinsi").append(template_provinsi);
 						});
-						
+
 					},
 					error : function(data){
 						alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
 					}
-					
+
 
 				});
 
@@ -308,12 +308,12 @@ class AdminApotek extends CI_Controller {
 							var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
 							$("#apotek").append(template_apotek);
 						});
-						
+
 					},
 					error : function(data){
 						alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
 					}
-					
+
 
 				});
 			});
@@ -337,12 +337,12 @@ class AdminApotek extends CI_Controller {
 							var template_kotkab = "<option value=\""+item.id+"\">"+item.name+"</option>";
 							$("#kotkab").append(template_kotkab);
 						});
-						
+
 					},
 					error : function(data){
 						alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
 					}
-					
+
 
 				});
 			});
@@ -364,12 +364,12 @@ class AdminApotek extends CI_Controller {
 							var template_kecamatan = "<option value=\""+item.id+"\">"+item.name+"</option>";
 							$("#kecamatan").append(template_kecamatan);
 						});
-						
+
 					},
 					error : function(data){
 						alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
 					}
-					
+
 
 				});
 			});
@@ -390,12 +390,12 @@ class AdminApotek extends CI_Controller {
 							var template_kelurahan = "<option value=\""+item.id+"\">"+item.name+"</option>";
 							$("#kelurahan").append(template_kelurahan);
 						});
-						
+
 					},
 					error : function(data){
 						alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
 					}
-					
+
 
 				});
 			});
@@ -589,13 +589,13 @@ class AdminApotek extends CI_Controller {
                     var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
                     $("#apotek").append(template_apotek);
                 });
-                
+
             },
             error : function(data){
                 alert(data);
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
             }
-            
+
 
         });
     });

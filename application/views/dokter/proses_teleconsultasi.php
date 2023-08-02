@@ -217,7 +217,7 @@
             <p class="py-2 font-12">Apotek</p>
               <div class="col-md-12" id="apotek">
                   <div class="form-group row">
-                    <select id='apotek' name='apotek' style="width: 100%">
+                    <select id='apotek select' name='apotek' style="width: 100%">
                         <option value='0'>-- Pilih Apotek --</option>
                     </select>
                   </div>

@@ -27,6 +27,15 @@
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/dashboard/css/select2.min.css'); ?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/dashboard/css/dataTables.bootstrap4.min.css'); ?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/dashboard/css/bootstrap-datetimepicker.min.css'); ?>">
+
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js"></script>
+
+  <script src="<?php echo base_url('assets/dashboard/js/jquery-3.2.1.min.js'); ?>"></script>
+
+ 
   <!--[if lt IE 9]>
     <script src="assets/js/html5shiv.min.js"></script>
     <script src="assets/js/respond.min.js"></script>
@@ -38,7 +47,30 @@
   }
   ?>
   <script src="<?php echo base_url('assets/bower_components/lodash/dist/lodash.min.js') ?>"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+  const firebaseConfig = {
 
+  apiKey: "AIzaSyBQVFzlB_hnd8Td48GuQSUbhV60DXENiRw",
+
+  authDomain: "telemedicine-poc2.firebaseapp.com",
+
+  databaseURL: "https://telemedicine-poc2-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId: "telemedicine-poc2",
+
+  storageBucket: "telemedicine-poc2.appspot.com",
+
+  messagingSenderId: "170641677475",
+
+  appId: "1:170641677475:web:dbfdb8df11cb068ba27316",
+
+  measurementId: "G-LHGYJ33LGE"
+
+};
+  firebase.initializeApp(firebaseConfig);
+</script>
   <style>
     #notif {
       max-height: 500px;
@@ -217,26 +249,28 @@
 
     <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ?',[$user->id])->row(); ?>
     <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
-      <div class="modal fade" id="jawaban" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="jawaban" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content mx-auto" style="width: 400px">
             <div class="modal-header">
-              <p class="modal-title font-24" id="exampleModalLabel">Panggilan...</p>
+              <p class="modal-title font-24" id="name_panggilan"></p>
+
             </div>
             <div class="modal-body" align="center">
-              <i class="fas fa-phone fa-5x text-tele">....</i>
+              <i class="fas fa-phone fa-3x text-tele">....</i>
             </div>
             <div class="modal-footer">
               <div class="mt-5 mx-auto">
-                <button type="button" class="btn btn-simpan" data-dismiss="modal" id="jawab" data-id-jadwal-konsultasi="" data-room-name="" data-id-dokter="">Jawab</button>
-                <button type="button" class="btn btn-batal" data-dismiss="modal" id="tolak" data-id-dokter="">Tolak</button>
+                <a href="" class="btn btn-simpan" data-dismiss="modal" id="jawab" data-id-jadwal-konsultasi="" data-room-name="" data-id-dokter="">Jawab</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="tolak_pasien" data-id-dokter="">Tolak</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+    <?php } ?>
 
-      <?php if ($user_2 && ($user_2->id_user_kategori == 0 || $user_2->id_user_kategori == 2)) { ?>
+       <?php if ($user_2 && ($user_2->id_user_kategori == 0 || $user_2->id_user_kategori == 2)) { ?>
       <div class="modal fade" id="jawaban_farmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content mx-auto" style="width: 400px">
@@ -255,7 +289,7 @@
           </div>
         </div>
       </div>
-    <?php } ?>
+  
 
       <?php if ($user_2->accept_tac == 0) { ?>
         <div class="modal fade" id="tac_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -530,7 +564,8 @@
           </div>
         </div>
       <?php } ?>
-    <?php } ?>
+        <?php } ?>
+   
     <div class="modal fade" id="ModalNotif" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -573,9 +608,8 @@
   </div>
   </div>
   <div class="sidebar-overlay" data-reff=""></div>
-  <script src="<?php echo base_url('assets/dashboard/js/jquery-3.2.1.min.js'); ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/popper.min.js'); ?>"></script>
-  <script src="<?php echo base_url('assets/dashboard/js/bootstrap.min.js'); ?>"></script>
+   <script src="<?php echo base_url('assets/dashboard/js/bootstrap.min.js'); ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/jquery.slimscroll.js'); ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/Chart.bundle.js'); ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/chart.js'); ?>"></script>
@@ -588,11 +622,6 @@
   <script src="<?php echo base_url('assets/dashboard/js/moment.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/bootstrap-datetimepicker.min.js') ?>"></script>
 
-  <!--firebase-->
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js"></script>
 
   <script>
     $('input[type=number]').on('focus', function(e) {
@@ -642,26 +671,105 @@
   <script>
     baseUrl = '<?php echo base_url(); ?>';
 
-    const firebaseConfig = {
+    <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
+      baseUrl = '<?php echo base_url(); ?>';
 
-      apiKey: "AIzaSyBQVFzlB_hnd8Td48GuQSUbhV60DXENiRw",
+  
+     $('#jawaban').on('shown.bs.modal', function () {
+           firebase
+                    .database()
+                    .ref("poc2/panggilan/<?= md5($user->id) ?>")
+                    .update({
+                    
+                      connected: 1,
+                    });
+          })
+  
+    $(document).ready(function(){
+      firebase.database().ref("poc2/panggilan/<?= md5($user->id) ?>").on('value', function(snapshot) {
+             firebase
+              .database()
+              .ref("poc2/panggilan/<?= md5($user->id) ?>")
+              .once("value", function (snapshot) {
+              
+                if(snapshot.val().closeCall == 1 || snapshot.val().closeCallWeb == 1)
+                {
+                   $('#jawaban').modal('hide'); 
+                 } else{
+                   var audio = document.getElementById('bell-ring');
+                  // alert("A")
+                //   audio.play();
+                  if(snapshot.val().calling == 1)
+                  {
+                      $('#jawaban').modal('show'); 
+                    }
+                 }
 
-      authDomain: "telemedicine-poc2.firebaseapp.com",
+                $("#jawab").attr('data-id-jadwal-konsultasi',snapshot.val().id_jadwal_konsultasi);
+                $("#jawab").attr('data-room-name',snapshot.val().roomName);
+                $("#jawab").attr('data-id-dokter',snapshot.val().id_dokter);
+                $("#name_panggilan").html(snapshot.val().call_From);
+                $("#jawab").attr('href',snapshot.val().consult_room);
 
-      databaseURL: "https://telemedicine-poc2-default-rtdb.asia-southeast1.firebasedatabase.app",
+                // console.log(snapshot.val());
+                 // $('#jawaban').modal('hide'); 
+                 
+              });
+          })
 
-      projectId: "telemedicine-poc2",
+    })  
+        $("#jawab").click(function(){
+      jawabCall();
+    })
 
-      storageBucket: "telemedicine-poc2.appspot.com",
+    $("#tolak_pasien").click(function(){
+      closeCall();
+    })
+    function closeCall()
+      {
+         $('#jawaban').modal('hide'); 
+        firebase
+          .database()
+          .ref("poc2/panggilan/<?= md5($user->id) ?>")
+          .update({
+          
+            time: Date.now(),
+            // closeCall: 1,
+            reject: 1,
+            endCall: 0,
+            accepted: 0,
+          });
+      }
+    function jawabCall()
+      {
+         $('#jawaban').modal('hide'); 
+         firebase
+          .database()
+          .ref("poc2/panggilan/<?= md5($user->id) ?>")
+          .update({
+          
+            time: Date.now(),
+            // closeCall: 1,
+            reject: 0,
+            endCall: 0,
+            accepted: 1,
+          });
 
-      messagingSenderId: "170641677475",
+          firebase
+              .database()
+              .ref("poc2/panggilan/<?= md5($user->id) ?>")
+              .once("value", function (snapshot) {
+                  
+                $('#jawaban').modal('hide'); 
+                
 
-      appId: "1:170641677475:web:dbfdb8df11cb068ba27316",
-
-      measurementId: "G-LHGYJ33LGE"
-
-    };
-    firebase.initializeApp(firebaseConfig);
+                $("#jawab").attr('href',snapshot.val().consult_room);
+                window.location.replace(snapshot.val().consult_room);
+                // console.log(snapshot.val().call_idx);
+                
+              });
+      }
+     <?php } ?>
     const pesan = firebase.messaging();
     pesan.getToken().then((currentToken) => {
       if (currentToken) {

@@ -533,6 +533,17 @@
 
 
 <script type="text/javascript">
+    
+     $(document).ready(function() {
+    
+     firebase
+          .database()
+          .ref("poc2/panggilan/<?= md5($user->id); ?>")
+          .update({
+           enterRoom: 1,
+            time: Date.now(),         
+             });
+        });
         name = '<?php echo $user->name; ?>';
         var room_name = '<?php echo $roomName ?>';
         var userName = name;

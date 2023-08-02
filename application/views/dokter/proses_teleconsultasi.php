@@ -139,27 +139,27 @@
                         </div>
                         <div class="tab-pane active" id="bottom-tab2">
                           <div class="row my-2 px-3">
-                            <button type="button" data-toggle="modal" data-target="#exampleModal" class="mb-2 btn btn-konsul" id="panggil" data-id-pasien="<?php echo $pasien->id ?>" data-id-jadwal-konsultasi="<?php echo $id_jadwal_konsultasi ?>"><img src="<?php echo base_url('assets/dashboard/img/phone-call.png'); ?>" alt=""> Hubungi Pasien</button>
-                            <button type="button" class="btn btn-konsul mx-3 d-mobile-none_" id="btn-stop" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt=""> Akhiri Panggilan</button>
-                            <!-- <button type="button" class="btn btn-konsul mx-auto d-mobile-show" id="btn-stop" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt=""> Akhiri Panggilan</button> -->
-
-                                  <!-- Modal -->
+                              <div class="col-md-12">
+                                  <h4>Video Conference</h4>
+                                <button type="button" data-toggle="modal" data-target="#exampleModal" style="margin-top:10px;" class="mb-2 btn btn-konsul" id="call-btn" data-id-pasien="<?php echo $pasien->id ?>" data-id-jadwal-konsultasi="<?php echo $id_jadwal_konsultasi ?>"><img src="<?php echo base_url('assets/dashboard/img/phone-call.png'); ?>" alt=""> Call Patient</button>
+                                <button type="button" class="btn btn-konsul mx-3 d-mobile-none_" id="btn-stop-call" style="display: block; margin-top:10px;" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt="" id="endcall-icon"> <i style="display: none;" class="fas fa-spinner fa-spin" id="endcall-spinner"></i> End Call </button>
+                              </div>
                                   <div class="modal fade" id="memanggil" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog modal-dialog-centered" >
-                                          <div class="modal-content" style="width: 400px">
-                                              <div class="modal-header">
-                                                  <p class="modal-title font-24" id="exampleModalLabel">Memanggil...</p>
-                                              </div>
-                                              <div class="modal-body" align="center">
-                                                  <i class="fa fa-phone fa-5x text-tele">....</i>
-                                                  <div class="mt-5">
-                                                    <button type="button" class="btn btn-batal" data-dismiss="modal">Tutup</button>
+                                          <div class="modal-dialog modal-dialog-centered" >
+                                              <div class="modal-content" style="width: 400px">
+                                                  <div class="modal-header">
+                                                      <p class="modal-title font-24" id="ring_text">Memanggil...</p>
+                                                  </div>
+                                                  <div class="modal-body" align="center">
+                                                      <i class="fa fa-phone fa-5x text-tele"></i>
+                                                      <div class="mt-5">
+                                                        <button type="button" class="btn btn-batals" close-call  data-dismiss="modal">Close</button>
+                                                      </div>
                                                   </div>
                                               </div>
                                           </div>
                                       </div>
-                                  </div>
-                                  <!--modal-->
+                                      <!--modal-->
 
                                 </div>
                             <div class="">
@@ -477,8 +477,258 @@
     </div>
 </div>
 
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+   
+$('#jitsiConferenceFrame0').ready(function(e){
+    $(this).prop('allow','camera *;microphone *')
+})
+ $(document).ready(function() {
+    
+     firebase
+          .database()
+          .ref("poc2/panggilan/<?= md5($pasien->id); ?>")
+          .set({
+           calling: 0,
+           enterRoom:0,
+            time: Date.now(),         
+             });
+});
+
+  $('#btn-stop-call').click(function(){
+   
+   
+    Swal.fire({
+          title: 'End this consultation?',
+          // showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'End',
+          cancelButtonText: 'Cancel',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            // firebase
+            //           .database()
+            //           .ref("poc2/panggilan/<?= md5($pasien->id); ?>")
+            //           .update({
+            //             endCall: 1,
+            //           });
+
+             $.ajax({
+                    method : 'POST',
+                    url    : baseUrl+"Conference/end_call",
+                    data   : {reg: '<?php echo $id_registrasi ?>',diagnosis:$('#diagnosis').val(),anjuran:$('#anjuran').val(),id_pasien:<?php echo $pasien->id ?>, id_jadwal_konsultasi: <?= $id_jadwal_konsultasi ?> },
+                    success : function(data){
+
+                     // $('#formKonsultasi').append($('#formKonsultasi').children())
+                     $('#formKonsultasi').append($('#formKonsultasi_2').children())
+                             $.ajax({
+                            method : 'POST',
+                            url    : baseUrl+'dokter/Teleconsultasi/send_data_konsultasi',
+                            data   : $('#formKonsultasi').serializeArray(),
+                            success : function(data){
+                                firebase
+                              .database()
+                              .ref("poc2/panggilan/<?= md5($pasien->id); ?>")
+                              .update({
+                                endCall: 1,
+                              });
+                               location.href = '<?= base_url('dokter/Teleconsultasi')?>';    
+                            },
+                            error : function(request, status, error){
+                                 Swal.fire('Gagal mengirim data konsultasi.') 
+                            }
+                        });         
+                    },
+                    error : function(error){
+                        //  Toast.fire({
+                        //   icon: 'error',
+                        //   title: error.responseJSON.message
+                        // })
+                          Swal.fire(error.responseJSON.message)
+                          console.log(error.responseJSON.message) 
+                    }        
+                    });
+               
+          } 
+        })
+      })
+
+$(document).ready(function()
+  {
+     firebase
+              .database()
+              .ref("poc2/assesment/<?= md5('Telemedicine-Lintas-IDH'."_".$pasien->id."_".$id_jadwal_konsultasi) ?>")
+              .once("value", function (snapshot) {
+                firebase
+                          .database()
+                          .ref('poc2/assesment/<?= md5('Telemedicine-Lintas-IDH'."_".$pasien->id."_".$id_jadwal_konsultasi) ?>')
+                          .update({ 
+                           
+                            inputed: 0,
+            })
+        })
+  });
+   firebase.database().ref("poc2/assesment/<?= md5('Telemedicine-Lintas-IDH'."_".$pasien->id."_".$id_jadwal_konsultasi) ?>").on('value', function(snapshot) {
+             firebase
+              .database()
+              .ref("poc2/assesment/<?= md5('Telemedicine-Lintas-IDH'."_".$pasien->id."_".$id_jadwal_konsultasi) ?>")
+              .once("value", function (snapshot) {
+                
+                if(snapshot.val().enterRoom == 1)
+                {
+                    Swal.fire('Assesment updated by patient.') 
+                    $('#btn-stop-call').show();
+                    $('#waiting_assestment').hide();
+                    startTimer();
+                $('input[name=berat_badan]').val(snapshot.val().berat_badan);
+              $('input[name=tinggi_badan]').val(snapshot.val().tinggi_badan);
+              $('input[name=suhu]').val(snapshot.val().suhu);
+              $('input[name=tekanan_darah]').val(snapshot.val().tekanan_darah);
+              if (snapshot.val().merokok == 1) {
+                $('#merokok-1').prop('checked', true);
+              } else {
+                $('#merokok-0').prop('checked', true);
+              }
+
+              if (snapshot.val().alkohol == 1) {
+                $('#alkohol-1').prop('checked', true);
+              } else {
+                $('#alkohol-0').prop('checked', true);
+              }
+
+              if (snapshot.val().kecelakaan == 1) {
+                $('#kecelakaan-1').prop('checked', true);
+              } else {
+                $('#kecelakaan-0').prop('checked', true);
+              }
+
+              if (snapshot.val().dirawat == 1) {
+                $('#dirawat-1').prop('checked', true);
+              } else {
+                $('#dirawat-0').prop('checked', true);
+              }
+
+              if (snapshot.val().operasi == 1) {
+                $('#operasi-1').prop('checked', true);
+              } else {
+                $('#operasi-0').prop('checked', true);
+              }
+
+              $('textarea[name=keluhan]').val(snapshot.val().keluhan);
+                   
+                 } 
+                 
+    })
+    })
+  $('[close-call]').click(function(){
+      $('#memanggil').modal('hide');
+  })
+    firebase.database().ref("poc2/panggilan/<?=  md5($pasien->id) ?>").on('value', function(snapshot) {
+             firebase
+              .database()
+              .ref("poc2/panggilan/<?= md5($pasien->id) ?>")
+              .once("value", function (snapshot) {
+                console.log(snapshot.val());
+                if(snapshot.val().from_dianesha == 1)
+                {
+                    toastr.success('Pasien dari Dianesha Telah terhubung dengan telemedicine.') 
+                    $('#btn-stop-call').show();
+                    $('#waiting_assestment').hide();
+                    startTimer();
+                }
+                if(snapshot.val().connected == 1)
+                {
+                   $("#ring_text").html('Ringging...');
+                   
+                 } 
+                 if(snapshot.val().accepted == 1)
+                {
+                   $('#memanggil').modal('hide');
+                    $('#waiting_assestment').show();
+                    // cekPasien();
+                    $('#btn-stop').show()
+                   
+                 } 
+                if(snapshot.val().closeCallWeb == 1)
+                {
+                   $('#memanggil').modal('hide');
+                   
+                 } 
+               if(snapshot.val().reject == 1)
+                {
+                   $('#memanggil').modal('hide');
+                   Swal.fire('Rejected by Patient') 
+                   
+                 }
+                if(snapshot.val().enterRoom == 1)
+                {
+                    Swal.fire('Pasien telah bergabung dalam telekonsultasi.') 
+                    $('#btn-stop-call').show();
+                    // $('#waiting_assestment').hide();
+                    // startTimer();
+                }
+        // firebase
+        //           .database()
+        //           .ref("poc2/panggilan/<?= md5($pasien->id) ?>")
+        //           .update({
+                  
+        //             connected: 0,
+        //           }); 
+    })
+    }) 
+     var uniqid = makeid(12);
+    reg_id = '<?php echo $pasien->reg_id; ?>';
+    name = '<?php echo $user->name; ?>';
+    var room_name = '<?= sha1($this->config->item('room_key').'-telemedicine-indihealth-'.$id_jadwal_konsultasi)?>';
+ $('#call-btn').click(function(){
+        $('#memanggil').modal('show');
+        $("#ring_text").html('Calling...')
+        firebase
+          .database()
+          .ref("poc2/panggilan/<?= md5($pasien->id); ?>")
+          .set({
+            title: 'Panggilan dari<br> <?= $user->name ?> ke <?= $pasien->name  ?>',
+            call_From: 'Panggilan dari <?= $user->name ?>',
+            calling: 1,
+            time: Date.now(),
+            consult_room: baseUrl + 'pasien/Telekonsultasi/konsultasi/' + <?= $user->id ?> + '/' + <?php echo $id_jadwal_konsultasi ?>+ '/' +room_name ,
+            closeCallWeb: 0,
+            endCall: 0,
+            closePatient: 0,
+            accepted: 0,
+            reject: 0,
+            joined: 0,
+            connected: 0,
+            roomName: room_name,
+            id_jadwal_konsultasi: <?php echo $id_jadwal_konsultasi ?>,
+            id_dokter: <?php echo $user->id ?>
+          });
+      });
+
+    function closeCall()
+      {
+         $('#memanggil').modal('hide'); 
+        firebase
+          .database()
+          .ref("poc2/panggilan/<?= md5($pasien->id); ?>")
+          .update({
+            title: 'Panggilan dari <?= $user->name ?> ke <?= $pasien->name  ?>',
+            time: Date.now(),
+            consult_room: baseUrl + 'pasien/Telekonsultasi/konsultasi/' + <?= $user->id ?> + '/' + <?php echo $id_jadwal_konsultasi ?>+ '/' +room_name ,
+            closeCallWeb: 1,
+            endCall: 0,
+            accepted: 0,
+            // reject: 0,
+            // roomName: room_name,
+            id_jadwal_konsultasi: <?php echo $id_jadwal_konsultasi ?>,
+            id_dokter: <?php echo $user->id ?>
+          });
+      }
+
+      $('#memanggil').on('hidden.bs.modal', function () {
+            closeCall()
+        });
     function makeid(length) {
         var result = '';
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

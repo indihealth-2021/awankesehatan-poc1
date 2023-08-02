@@ -145,10 +145,14 @@
           <div class="form-group">
             <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
             <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+<<<<<<< Updated upstream
             <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
             </textarea>
+=======
+            <textarea class="form-control" id="alamat-<?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $resep->alamat_jalan ?>"><?php echo $alamat_inputan ?></textarea>
+>>>>>>> Stashed changes
             <script>
-            $("#alamat#<?php echo $resep->id; ?>").text("<?php echo $alamat_inputan; ?>");
+            $("#alamat-<?php echo $resep->id; ?>").text("<?php echo $alamat_inputan; ?>");
             </script>
             <!-- <span class="edit-form form-text text-muted">
             <div class="form-check form-check-inline">

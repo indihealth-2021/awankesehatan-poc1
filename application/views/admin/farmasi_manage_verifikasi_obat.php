@@ -8,7 +8,7 @@
              <li class="breadcrumb-item active"><a href="<?php echo base_url('farmasi/FarmasiVerifikasiObat/#'); ?>" class="text-black">Dashboard</a></li>
              <li class="breadcrumb-item active"><a href="" class="text-black font-bold-7">Dashboard</a></li>
          </nav>
-         
+
          <span class="btn btn-info p-1 m-3"><span class="p-2">📌 <?= "#".$apotek->id." - ".$apotek->nama." , ".$apotek->alamat_jalan ?></span></span>
        </div>
        <div class="col-sm-12 col-12">
@@ -46,7 +46,8 @@
 
                </thead>
                <tbody class="font-14">
-                 <?php foreach ($list_resep as $idx => $resep) {
+                <?php if(count($list_resep) > 0)  { ?>
+                  <?php foreach ($list_resep as $idx => $resep) {
                     $page++ ?>
                    <tr class="font-12" style="border-top: 3px solid #21AAC4;">
                      <td colspan="1"></td>
@@ -106,6 +107,12 @@
                      </td>
                    </tr>
                  <?php } ?>
+                  <?php }else { ?>
+                    <tr>
+                      <td class="d-flex justify-content-center align-items-center">Tidak ada data</td>
+                    </tr>
+                    <?php }?>
+
                </tbody>
              </table>
            </div>

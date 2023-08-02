@@ -523,9 +523,9 @@
                  <div style="float: right!important;">
                 <button type="button" style="width:100% !important;" class="btn btn-simpan-sm  mr-5" id="simpan_tac" disabled>Simpan</button>
                 </div>
-                  
+
               </div>
-            
+
             </div>
           </div>
         </div>
@@ -551,7 +551,7 @@
                           </div>
                           Copyright &copy; 2020. Indihealth & Lintasarta. All rights
                           reserved.
-                        </footer>  
+                        </footer>
                     </div>
  -->
 
@@ -732,7 +732,7 @@
       <?php if (isset($teleconsul_admin_js)) {
         echo $teleconsul_admin_js;
       } ?>
-      
+
       if (JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())) {
         if (JSON.parse(JSON.parse(payload.data.body).name == 'unshow')) {
           if (JSON.parse(JSON.parse(payload.data.body).sub_name == 'submit_assesment_pasien')) {
@@ -885,7 +885,7 @@
         var notif = document.getElementById('isi_notif');
         var notif_count = document.getElementById('notif-count');
         // var pesan = document.getElementById('pesan');
-        // var message_count = document.getElementById('message-count');      
+        // var message_count = document.getElementById('message-count');
         // var jml_message = message_count.innerHTML;
         var jml_notif = notif_count.innerHTML;
         var template_notif = `
@@ -899,7 +899,7 @@
                         </div>
                     </div>
                 </a>
-            </li>        
+            </li>
         `;
         // var template_notif = `
         //       <a href="${data.direct_link}" class="dropdown-item">
@@ -959,7 +959,7 @@
         let temp = $(this).attr("id");
         if(!(temp == undefined)) {
           list_id_obat.push(temp);
-        } 
+        }
       });
       $('td#keterangan').each(function() {
         let temp = $(this).text();
@@ -986,16 +986,16 @@
         $.ajax({
             method: 'POST',
             url: baseUrl + "dokter/Teleconsultasi/update_diagnosa",
-            data: { 
-              id_pasien: id_pasien, 
-              id_jadwal_konsultasi: id_jadwal_konsultasi, 
-              data_konsultasi: data_konsultasi_2, 
-              list_id_obat: list_id_obat, 
+            data: {
+              id_pasien: id_pasien,
+              id_jadwal_konsultasi: id_jadwal_konsultasi,
+              data_konsultasi: data_konsultasi_2,
+              list_id_obat: list_id_obat,
               list_keterangan_obat: list_keterangan_obat ,
               list_jumlah_obat: list_jumlah_obat,
               apotek: $('#apotek option:selected').text(),
               diagnosis: $('#diagnosis option:selected').text()
-              
+
             },success: function (data) {
               alert("Berhasil menyelesaikan telekonsultasi!");
               location.href = baseUrl+"dokter/HistoryMedisPasien/index/all";
@@ -1079,6 +1079,8 @@
           });
         });
       });
+
+
     </script>
   <?php } ?>
 

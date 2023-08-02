@@ -41,7 +41,7 @@ class FarmasiVerifikasiObat extends CI_Controller
         $config['per_page'] = 4;
 
         $this->pagination->initialize($config);
-        //$this->pagination->initialize($config);
+
         $data['page'] = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $data['uri_segment'] = $this->uri->segment(4);
         $limit = ' LIMIT ' . $config['per_page'] . ' OFFSET ' . $data['page'];

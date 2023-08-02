@@ -77,6 +77,154 @@ class ResepDokter extends CI_Controller
         $this->load->view('template', $data);
     }
 
+    public function terima(){
+        if (!$this->session->userdata('is_login')) {
+            redirect(base_url('Login'));
+        }
+        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        if ($valid->id_user_kategori != 0) {
+            if ($valid->id_user_kategori == 2) {
+                redirect(base_url('dokter/Dokter'));
+            } else {
+                redirect(base_url('admin/Admin'));
+            }
+        }
+        $id_pasien = $this->session->userdata('id_user');
+        $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
+        $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
+        $jadwal_konsultasi = $this->db->query('SELECT id,id_registrasi FROM jadwal_konsultasi WHERE id = ' . $id_jadwal_konsultasi)->row();
+        $data['id_registrasi'] = $jadwal_konsultasi->id_registrasi;
+        if (!$jadwal_konsultasi) {
+            show_404();
+        }
+        $data['view'] = 'pasien/terima_obat';
+        $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
+
+        $data['pasien'] = $this->db->query('SELECT * FROM master_user WHERE id = ' . $id_pasien)->row();
+        $data['list_resep'] = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
+        $data['list_obat'] = [];
+        $data['biaya_pengiriman'] = $this->db->query('SELECT biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
+        $data['total_biaya'] = 0;
+        if (!empty($data['biaya_pengiriman'])) {
+            $data['total_biaya'] += $data['biaya_pengiriman']->biaya_pengiriman;
+        }
+        $data['disetujui'] = 0;
+
+        for ($i = 0; $i < count($data['list_resep']); $i++) {
+            $obat = $this->db->query('SELECT name FROM master_obat WHERE id = ' . $data['list_resep'][$i]->id_obat)->row();
+            if ($data['list_resep'][$i]->dibatalkan == 0) {
+                $data['total_biaya'] += $data['list_resep'][$i]->harga;   
+            }
+            if ($data['list_resep'][$i]->diverifikasi_user == 1) {
+                $data['disetujui'] = 1;
+            }
+            if ($obat) {
+                array_push($data['list_obat'], [
+                    'id_obat' => $data['list_resep'][$i]->id_obat,
+                    'nama_obat' => $obat->name,
+                    'dibatalkan' => $data['list_resep'][$i]->dibatalkan,
+                    'jumlah' => $data['list_resep'][$i]->jumlah_obat,
+                    'harga' => $data['list_resep'][$i]->harga,
+                ]);
+            }
+        }
+
+        $data['user'] = $this->all_model->select('master_user', 'row', 'id = ' . $this->session->userdata('id_user'));
+        $data['title'] = 'Konfirmasi Pembelian Obat';
+        $data['css_addons'] = '
+          <link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">
+          <script src="https://meet.jit.si/external_api.js"></script>
+          ';
+        $data['js_addons'] = "
+<script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js'></script> 
+<script>
+    
+    <script src='" . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . "'></script>
+                                <script src='" . base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') . "'></script>
+                                <script src='" . base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') . "'></script>
+                                <script src='" . base_url('assets/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') . "'></script>
+                                <script>
+                                $(function () {
+                                  $('#table_resep').DataTable({
+                                    'paging': true,
+                                    'lengthChange': true,
+                                    'searching': true,
+                                    'ordering': true,
+                                    'info': false,
+                                    'autoWidth': true,
+                                    'responsive': true,
+                                  });
+                                });
+
+function checkRemove() {
+    if ($('div.resep-dokter').length == 1) {
+        $('#remove').hide();
+    } else {
+        $('#remove').show();
+    }
+};
+$(document).ready(function() {
+    $('.chat-wrap-inner').scrollTop($('.chat-wrap-inner')[0].scrollHeight);
+    checkRemove();
+    $('#add').click(function() {
+        $('div.resep-dokter:last').after($('div.resep-dokter:first').clone());
+        $('div.resep-dokter:last').find('input').val('');
+        checkRemove();
+
+    });
+    $('#remove').click(function() {
+        $('div.resep-dokter:last').remove();
+        checkRemove();
+    });
+});
+</script>
+<script src='" . base_url('assets/js/message.js') . "'></script>
+		";
+        $data['teleconsul_admin_js'] = "
+if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())){
+    if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_berakhir_dokter')){
+            console.log(JSON.parse(payload.data.body).chat_id);
+            $.ajax({
+                method : 'POST',
+                url    : baseUrl+'dokter/Teleconsultasi/send_data_konsultasi',
+                data   : JSON.parse(payload.data.body).data_konsultasi,
+                success : function(data){
+                    console.log('test');
+                    console.log(data);
+                    firebase.auth().signInAnonymously().catch(function(error) {
+                    // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                    // ...
+                    });
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                                firebase.database()
+                                .ref(JSON.parse(payload.data.body).chat_id)
+                                .remove().then(function() {
+										console.log('SUKSES Hapus Chat');
+										location.href = '" . base_url('dokter/Teleconsultasi') . "';
+										api.executeCommand('stopRecording', {
+											mode: 'file' //recording mode to stop, `stream` or `file`
+										});
+									}).catch(function(error) {
+										console.error('Error removing document: ', error);
+								});
+                        }
+                    });      
+                },
+                error : function(request, status, error){
+                    console.log(request);
+                    console.log(status);
+                    console.log(error);
+                }
+            }); 
+        }
+    }   
+        ";
+        $this->load->view('template', $data);
+    }
+
     public function pembayaran($id_jadwal_konsultasi)
     {
         if (!$this->session->userdata('is_login')) {
@@ -824,6 +972,32 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
     }
         ";
         $this->load->view('template', $data);
+    }
+
+    public function terima_obat(){
+        if (!$this->session->userdata('is_login')) {
+            redirect(base_url('Login'));
+        }
+        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        if ($valid->id_user_kategori != 0) {
+            if ($valid->id_user_kategori == 2) {
+                redirect(base_url('dokter/Dokter'));
+            } else {
+                redirect(base_url('admin/Admin'));
+            }
+        }
+
+        if (isset($_POST['id_jadwal_konsultasi'])) {
+            $data = $this->input->post();
+            $list_resep = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'])->result();
+            foreach ($list_resep as $resep) {
+                $data_resep_update = array(
+                    'diterima_user' => 1
+                );
+                $this->db->where('id', $resep->id);
+                $this->db->update('resep_dokter', $data_resep_update);
+            }
+        }
     }
 
     public function diverifikasi_user(){

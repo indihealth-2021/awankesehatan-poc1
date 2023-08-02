@@ -8,7 +8,7 @@ class Apotek extends CI_Controller
     {
         parent::__construct();
         $this->load->model("all_model");
-        $this->load->model("Apotek_model");
+        $this->load->model("apotek_model");
         $this->load->model("AdminApotek_model");
 
         $this->load->library('session');

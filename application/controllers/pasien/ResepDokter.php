@@ -711,7 +711,7 @@ class ResepDokter extends CI_Controller
         }
     }
 
-    public function konfirmasi()
+    public function konfirmasi($id_jadwal_konsultasi)
     {
         if (!$this->session->userdata('is_login')) {
             redirect(base_url('Login'));
@@ -725,9 +725,10 @@ class ResepDokter extends CI_Controller
             }
         }
         $id_pasien = $this->session->userdata('id_user');
-        $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
+        // $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
         $jadwal_konsultasi = $this->db->query('SELECT id,id_registrasi,id_pasien FROM jadwal_konsultasi WHERE id = ' . $id_jadwal_konsultasi)->row();
+
         if ($id_pasien != $jadwal_konsultasi->id_pasien) {
             show_404();
         }

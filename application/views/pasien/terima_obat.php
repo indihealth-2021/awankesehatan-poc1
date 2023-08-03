@@ -61,7 +61,7 @@
             data: { id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
                 alert('Berhasil mengkonfirmasi penerimaan obat.');
-                location.reload()
+                location.href = baseUrl + "pasien/ResepDokter";
                 console.log(data);
             },
             error: function (data) {

@@ -272,7 +272,8 @@ class FarmasiVerifikasiObat extends CI_Controller
                 "jumlah_obat" => $post_data['jumlah_obat'][$i],
                 "harga" => $resep->harga,
                 "harga_per_n_unit" => $resep->harga_per_n_unit,
-                "keterangan" => $post_data['keterangan'][$i]
+                "keterangan" => $post_data['keterangan'][$i],
+                "diverifikasi" => 0
             );
             $this->db->insert('resep_dokter', $data_resep);
         }

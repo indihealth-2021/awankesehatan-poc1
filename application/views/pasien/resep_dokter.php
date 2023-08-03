@@ -37,7 +37,6 @@
                                             <th>Total Harga</th>
                                             <th>Pemeriksa</th>
                                             <th class="text-center">Aksi</th>
-                                            <td>Status</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,7 +76,7 @@
                                                               $button = 'Diterima';
                                                               $warna = 'lunas';
                                                             } else{
-                                                              $directLink = base_url('pasien/ResepDokter/terima/'.$resep->id_jadwal_konsultasi);
+                                                              $directLink = base_url('pasien/ResepDokter/terima/?id_jadwal_konsultasi='.$resep->id_jadwal_konsultasi);
                                                               $button = 'Belum Diterima';
                                                               $warna = 'simpan';
                                                             }
@@ -98,7 +97,7 @@
                                                         }
                                                     }
                                                     else{
-                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/'.$resep->id_jadwal_konsultasi);
+                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/?id_jadwal_konsultasi='.$resep->id_jadwal_konsultasi);
                                                         $button = 'Konfirmasi Obat';
                                                         $warna = 'bayar';
                                                     }

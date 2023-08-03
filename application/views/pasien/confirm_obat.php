@@ -22,26 +22,31 @@
                 <div class="card card-5 p-2 px-4">
                     <form id="formKonsultasi_2">
                         <div class="row">
-                            <div class="col-md-9">
-                                <p class="font-12">Resep</p>
-                            </div>
                             <div class="col-md-3">
                             </div>
                         </div>
                         <?php $plafon = 1000000; ?>
-                        <p id="total">Total Biaya: Rp. <?php echo $total_biaya; ?></p>
-                        <?php if ($user->vip == 0){ ?>
-                        <p>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?></p>
-                        <p>Jumlah setelah pembayaran: Rp. <?php echo $plafon - (int)$total_biaya; ?></p>
-                        <?php } ?>
-                        <?php if ($disetujui == 1){ ?>
-                        <button class="btn-success">Sudah disetujui</button>
-                        <?php } ?>
+                        <table class="table table-border table-hover custom-table mb-0" id="table-obat">
+                            <thead class="text-tr"">
+                            <tr>
+                                <td id="total">
+                                    Total Biaya: Rp. <?php echo $total_biaya; ?>
+                                    <?php if ($user->vip == 0){ ?>
+                                        <br>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?><br>
+                                        Jumlah setelah pembayaran: Rp. <?php echo $plafon - (int)$total_biaya; ?>
+                                    <?php } ?>
+                                    <?php if ($disetujui == 1){ ?>
+                                        <br><button class="btn-success">Sudah disetujui</button>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        </thead>
+                        </table>
                         <div class="row">
                             <div class="table-responsive p-3">
                                 <table class="table table-border table-hover custom-table mb-0" id="table-obat">
-                                    <thead class="font-12">
-                                        <tr class="text-abu">
+                                    <thead class="text-tr"">
+                                        <tr>
                                             <td>Nama Obat</td>
                                             <td>Jumlah</td>
                                             <td>Harga</td>
@@ -66,12 +71,13 @@
                                             <?php } ?>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div id="resepDokter">
+                                <?php if ($disetujui == 0) { ?>
+                                    <p class="text-abu">* centang obat lalu tekan batalkan jika ingin membatalkan.</p>
+                                    <?php } ?>
                             </div>
                         </div>
-                        <button type="button" id="btn-batalkan-obat" class="btn btn-primary">Batalkan</button>
-                        <button type="button" id="btn-verifikasi-obat" class="btn btn-primary">Setuju</button>
+                        <button type="button" id="btn-verifikasi-obat" class="btn btn-simpan">Setuju</button>
+                        <button type="button" id="btn-batalkan-obat" class="btn btn-batal ml-3">Batalkan</button>
                     </form>
                     <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>
@@ -116,6 +122,7 @@
             data: { id_obat: id_obat, id_jadwal_konsultasi: id_jadwal_konsultasi},
             success: function (data) {
                 alert('Berhasil membatalkan obat.');
+                location.reload()
                 console.log(data);
             },
             error: function (data) {

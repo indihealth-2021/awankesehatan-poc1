@@ -278,6 +278,10 @@ class Teleconsultasi extends CI_Controller
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
 
+        if(!$data["apotek"]) {
+            echo "Apotek null";
+        }
+
         $data['tekanan_darah'] = isset($data['tekanan_darah']) ? $data['tekanan_darah'] : '-';
         $data['suhu'] = isset($data['suhu']) ? $data['suhu'] : '-';
         $data['merokok'] = isset($data['merokok']) ? $data['merokok'] : '0';
@@ -368,13 +372,11 @@ class Teleconsultasi extends CI_Controller
         $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"]." AND resep_dokter.id_pasien=".$data["id_pasien"])->row();
 
         if(!$exist) {
-            if(strpos($data["apotek"], "km dari lokasi pasien") !== false) {
-                $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0]);
-            }else {
-                $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.id=".explode(" - ", $data["apotek"])[0]);
-            }
-
-            $apotek = $apotek->result()[0];
+            // if(strpos($data["apotek"], "km dari lokasi pasien") !== false) {
+            //     $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0]);
+            // }else {
+            //     $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.id=".explode(" - ", $data["apotek"])[0]);
+            // }
 
             $jml_data_resep = count($data['keterangan']);
             for ($i = 0; $i < $jml_data_resep; $i++) {
@@ -386,7 +388,7 @@ class Teleconsultasi extends CI_Controller
                     "id_obat" => $data['id_obat'][$i],
                     "jumlah_obat" => $data['jumlah_obat'][$i],
                     "harga_per_n_unit" => $obat->harga_per_n_unit,
-                    "id_apotek" => $apotek->id,
+                    "id_apotek" => $data["apotek"],
                     "harga" => $obat->harga,
                     "keterangan" => $data['keterangan'][$i],
                 );
@@ -416,7 +418,7 @@ class Teleconsultasi extends CI_Controller
         echo "OK";
     }
 
-    public function update_diagnosa() {
+    private function update_diagnosa() {
         $data = $this->input->post();
         $resep_dokter = $this->db->query("SELECT * FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"])->row();
 

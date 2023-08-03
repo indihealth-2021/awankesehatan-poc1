@@ -31,12 +31,12 @@
                             <tr>
                                 <td id="total">
                                     <?php if ($biaya_pengiriman){ ?>
-                                        Biaya Pengiriman: Rp. <?php echo $biaya_pengiriman; ?><br>
+                                        Biaya Pengiriman: <?php echo 'Rp. '.number_format($biaya_pengiriman,2,',','.'); ?><br>
                                         <?php } ?>
-                                    Total Biaya: Rp. <?php echo $total_biaya; ?>
+                                    Total Biaya: <?php echo 'Rp. '.number_format($total_biaya,2,',','.'); ?>
                                     <?php if ($user->vip == 0){ ?>
-                                        <br>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?><br>
-                                        Jumlah setelah pembayaran: Rp. <?php echo $plafon - (int)$total_biaya; ?>
+                                        <br>Jumlah Plafon OWLEXA: <?php echo 'Rp. '.number_format($plafon,2,',','.'); ?><br>
+                                        Jumlah setelah pembayaran: <?php echo 'Rp. '.number_format($plafon - (int)$total_biaya,2,',','.'); ?>
                                     <?php } ?>
                                     <?php if ($disetujui == 1){ ?>
                                         <br><button class="btn-success">Sudah disetujui</button>
@@ -61,7 +61,7 @@
                                             <tr>
                                                 <td><?php echo $list_obat[$i]['nama_obat'] ?></td>
                                                 <td><?php echo $list_obat[$i]['jumlah'] ?></td>
-                                                <td>Rp. <?php echo $list_obat[$i]['harga'] ?></td>
+                                                <td><?php echo 'Rp. '.number_format($list_obat[$i]['harga'],2,',','.'); ?></td>
                                                 <td>
                                                     <?php if ($list_obat[$i]['dibatalkan'] == 1) { ?>
                                                         <span class="badge badge-danger">Dibatalkan</span>

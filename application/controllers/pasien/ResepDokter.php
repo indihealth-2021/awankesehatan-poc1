@@ -748,6 +748,7 @@ class ResepDokter extends CI_Controller
         if (!empty($data['biaya_pengiriman'])) {
             $data['total_biaya'] += $data['biaya_pengiriman']->biaya_pengiriman;
         }
+        $data['biaya_pengiriman'] = $data['biaya_pengiriman']->biaya_pengiriman;
         $data['disetujui'] = 0;
 
         for ($i = 0; $i < count($data['list_resep']); $i++) {

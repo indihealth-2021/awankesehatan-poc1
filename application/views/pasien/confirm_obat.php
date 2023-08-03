@@ -30,6 +30,9 @@
                             <thead class="text-tr"">
                             <tr>
                                 <td id="total">
+                                    <?php if ($biaya_pengiriman){ ?>
+                                        Biaya Pengiriman: Rp. <?php echo $biaya_pengiriman; ?><br>
+                                        <?php } ?>
                                     Total Biaya: Rp. <?php echo $total_biaya; ?>
                                     <?php if ($user->vip == 0){ ?>
                                         <br>Jumlah Plafon OWLEXA: Rp. <?php echo $plafon; ?><br>

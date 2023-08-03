@@ -71,13 +71,15 @@
                                             <?php } ?>
                                     </tbody>
                                 </table>
-                                <?php if ($disetujui == 0) { ?>
+                                <?php if ($disetujui != 1) { ?>
                                     <p class="text-abu">* centang obat lalu tekan batalkan jika ingin membatalkan.</p>
                                     <?php } ?>
                             </div>
                         </div>
                         <button type="button" id="btn-verifikasi-obat" class="btn btn-simpan">Setuju</button>
-                        <button type="button" id="btn-batalkan-obat" class="btn btn-batal ml-3">Batalkan</button>
+                        <?php if ($disetujui != 1) { ?>
+                            <button type="button" id="btn-batalkan-obat" class="btn btn-batal ml-3">Batalkan</button>
+                            <?php } ?>
                     </form>
                     <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
                 </div>

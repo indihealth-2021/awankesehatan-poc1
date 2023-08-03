@@ -275,8 +275,15 @@ class Teleconsultasi extends CI_Controller
                 redirect(base_url('admin/Admin'));
             }
         }
+
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
+
+        if(!$data) {
+            // This will read the raw POST data from the request body and parse it into an associative array.
+            // The resulting array will contain key-value pairs for each form field in the serialized data.
+            parse_str($this->input->raw_input_stream, $data);
+        }
 
         if(!$data["apotek"]) {
             echo "Apotek null";

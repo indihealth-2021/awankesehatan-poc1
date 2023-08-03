@@ -68,7 +68,7 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    if($resep->status_bukti && $resep->diverifikasi_user == 1){
+                                                    if($resep->diverifikasi_user == 1){
                                                         if($resep->status_bukti == 1){
                                                           if($user->vip == 1){
                                                             if($resep->diterima_user == 1){
@@ -76,7 +76,7 @@
                                                               $button = 'Diterima';
                                                               $warna = 'lunas';
                                                             } else{
-                                                              $directLink = base_url('pasien/ResepDokter/terima/?id_jadwal_konsultasi='.$resep->id_jadwal_konsultasi);
+                                                              $directLink = base_url('pasien/ResepDokter/terima/'.$resep->id_jadwal_konsultasi);
                                                               $button = 'Belum Diterima';
                                                               $warna = 'simpan';
                                                             }
@@ -97,7 +97,7 @@
                                                         }
                                                     }
                                                     else{
-                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/?id_jadwal_konsultasi='.$resep->id_jadwal_konsultasi);
+                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/'.$resep->id_jadwal_konsultasi);
                                                         $button = 'Konfirmasi Obat';
                                                         $warna = 'bayar';
                                                     }

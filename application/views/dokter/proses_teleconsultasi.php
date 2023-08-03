@@ -504,6 +504,9 @@
             configOverwrite: {
                 disableDeepLinking: true,
             },
+            userInfo: {
+                displayName: userName
+            },
         };
 
     navigator.mediaDevices.getUserMedia({

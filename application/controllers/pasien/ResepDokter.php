@@ -57,13 +57,16 @@ class ResepDokter extends CI_Controller
         if (!$this->session->userdata('is_login')) {
             redirect(base_url('Login'));
         }
-        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        $valid = $this->db->query('SELECT id_user_kategori,vip FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
         if ($valid->id_user_kategori != 0) {
             if ($valid->id_user_kategori == 2) {
                 redirect(base_url('dokter/Dokter'));
             } else {
                 redirect(base_url('admin/Admin'));
             }
+        }
+        if ($valid->vip != 1) {
+            redirect(base_url('pasien/ResepDokter'));
         }
         $id_pasien = $this->session->userdata('id_user');
         // $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');

@@ -257,7 +257,7 @@
       </div>
     <?php } ?>
 
-      <!-- <?php if ($user_2->accept_tac == 0) { ?>
+      <?php if ($user_2->accept_tac == 0) { ?>
         <div class="modal fade" id="tac_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable" role="document" style="">
             <div class="modal-content" style="height: 600px;">
@@ -529,7 +529,7 @@
             </div>
           </div>
         </div>
-      <?php } ?> -->
+      <?php } ?>
     <?php } ?>
     <div class="modal fade" id="ModalNotif" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -850,7 +850,7 @@
           var audio = document.getElementById('bell-ring');
           const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;
           audio.play();
-          location.href = "<?php echo base_url('pasien/ResepDokter/konfirmasi/'.$id_jadwal_konsultasi) ?>";
+          location.href = "<?php echo base_url('pasien/ResepDokter/konfirmasi/'.@$id_jadwal_konsultasi) ?>";
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'vp') || JSON.parse(JSON.parse(payload.data.body).name == 'universal')) {
           $("#isinotifmodal").text(JSON.parse(payload.data.body).keterangan);
@@ -1046,7 +1046,7 @@
   }
   ?>
 
-  <!-- <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
+  <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
     <script>
       $(document).ready(function() {
         $('#tac_modal').modal('show');
@@ -1082,7 +1082,7 @@
 
 
     </script>
-  <?php } ?> -->
+  <?php } ?>
 
  <!--  <script>
     $.widget.bridge('uibutton', $.ui.button)

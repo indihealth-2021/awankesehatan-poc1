@@ -150,10 +150,10 @@
                     <div class="modal-dialog modal-dialog-scrollable" role="document" style="">
                         <div class="modal-content" style="height: 600px;">
                             <div class="modal-header text-modal-header">
-                                <h5 class="modal-title font-16" id="exampleModalScrollableTitle">SYARAT DAN KETENTUAN PENGGUNAAN</h5>
+                                <h5 class="modal-title font-16" id="exampleModalScrollableTitles">SYARAT DAN KETENTUAN PENGGUNAAN</h5>
                             </div>
                             <div class="modal-body">
-                                <div class="font-16 text-justify" style="overflow-y: scroll; max-height: 400px; padding: 5px;" id="tac_body">
+                                <div class="font-16 text-justify" style="overflow-y: scroll; max-height: 400px; padding: 5px;" id="toc_body">
                                     <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;vertical-align:baseline;'><strong><span style='font-size:15px;font-family:"Calibri",sans-serif;'>SYARAT DAN KETENTUAN PENGGUNAAN</span></strong></p>
                                     <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;vertical-align:baseline;'><strong><span style='font-size:15px;font-family:"Calibri",sans-serif;'>SI TUNTAS</span></strong></p>
                                     <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;vertical-align:baseline;'><span style='font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</span></p>

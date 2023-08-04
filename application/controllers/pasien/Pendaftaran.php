@@ -23,7 +23,7 @@ class Pendaftaran extends CI_Controller {
                 redirect(base_url('admin/Admin'));
             }
         }
-				$this->session->set_userdata('_token',hash('sha256', random_string('alnum', 64)));
+				// $this->session->set_userdata('_token',hash('sha256', random_string('alnum', 64)));
         $poli = $this->input->get('poli');
         if(!$poli){
             $where = ' WHERE d.aktif = 1';
@@ -109,12 +109,12 @@ class Pendaftaran extends CI_Controller {
             }
         }
 
-		if($this->session->userdata("_token") !==$this->input->get('token'))
-		{
-			$this->session->set_flashdata('msg', 'Token Tidak Sesuai!');
-			redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
-		}
-				$this->session->unset_userdata('_token');
+		// if($this->session->userdata("_token") !==$this->input->get('token'))
+		// {
+		// 	$this->session->set_flashdata('msg', 'Token Tidak Sesuai!');
+		// 	redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+		// }
+		// 		$this->session->unset_userdata('_token');
         $id_pasien = $this->session->userdata('id_user');
         $id_jadwal = $this->input->get('id_jadwal');
 

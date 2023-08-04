@@ -137,7 +137,7 @@ $("#saveBiayaPengiriman").click(function(e){
 if(modal.find("input[name=alamat]").val()){
 $.ajax({
 method : "POST",
-url    : baseUrl+"admin/PengirimanObat/submit_biaya_pengiriman",
+url    : '.base_url().'+"admin/PengirimanObat/submit_biaya_pengiriman",
 data   : {
 biaya_pengiriman:modal.find("#biaya-pengiriman").val(),
 id_jadwal_konsultasi:modal.find("#id_jadwal_konsultasi").val(),
@@ -164,35 +164,33 @@ if(data.status == "OK"){
     button.parent().find(".btnSubmit").data("alamat", modal.find("#alamat").val());
 
     if(modal.find("input[name=alamat_kustom]:checked").val() == 1){
-    button.parent().find(".btnEdit").data("alamat-kustom", modal.find("#alamat").val());
-    button.parent().find(".btnEdit").data("is-alamat-kustom", 1);
+        button.parent().find(".btnEdit").data("alamat-kustom", modal.find("#alamat").val());
+        button.parent().find(".btnEdit").data("is-alamat-kustom", 1);
     }
     else{
-    button.parent().find(".btnEdit").data("is-alamat-kustom", 0);
+        button.parent().find(".btnEdit").data("is-alamat-kustom", 0);
     }
-
     button.parent().find(".btnSubmit").data("total-harga", total_harga);
     button.parent().find(".btnSubmit").data("total-harga-rp", total_harga_rp);
     modal.modal("hide");
+
     if(data.jml_edit == 1){
-    alert("SUKSES: Data berhasil disimpan!");
+        alert("SUKSES: Data berhasil disimpan!");
+    }else{
+        alert("SUKSES: Data telah disimpan "+data.jml_edit+"x!");
     }
-    else{
-    alert("SUKSES: Data telah disimpan "+data.jml_edit+"x!");
+    }else{
+        alert("GAGAL: Pastikan data yang anda isi lengkap!");
+        console.log(data);
     }
+        },error : function(data){
+            alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
+        }
+    });
 }else{
-    alert("GAGAL: Pastikan data yang anda isi lengkap!");
-    console.log(data);
-}
-},
-error : function(data){
-alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
-}
-});
-}
-else{
-alert("GAGAL: Data Tidak Lengkap!");
-}
+    alert(data.status);
+    console.log(data.status);
+    }
 });
 
 
@@ -338,11 +336,10 @@ alert("GAGAL: Data Tidak Lengkap!");
         echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
     }
 
-    public function rilis_obat(){
+    public function rilis_obat($id_jadwal_konsultasi){
 		$this->all_controllers->check_user_farmasi();
 
-        // $biaya_pengiriman = $this->input->post('biaya_pengiriman');
-        $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
+        // $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');
         $alamat = $this->input->post('alamat');
         $alamat_kustom = $this->input->post('alamat_kustom');

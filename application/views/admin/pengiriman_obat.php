@@ -128,7 +128,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <?= form_open('admin/PengirimanObat/rilis_obat'); ?>
+      <?= form_open('admin/PengirimanObat/rilis_obat/'.$resep->id_jadwal_konsultasi); ?>
 
         <div class="modal-body font-12">
           <div class="form-group">
@@ -170,7 +170,7 @@
           </div>
           <div class="form-group submit-form">
             <label for="harga-obat">Harga Obat</label>
-            <input type="number" name="harga_obat" class="form-control" id="harga-obat" aria-describedby="biayaPengirimanHelp" placeholder="Harga Obat" disabled="disabled" readonly>
+            <input type="number" name="harga_obat" class="form-control" id="harga-obat" aria-describedby="biayaPengirimanHelp" placeholder="Harga Obat">
             <small id="hargaObatHelp" class="form-text text-muted">Rp. 0,0</small>
           </div>
           <div class="form-group">
@@ -178,11 +178,11 @@
             <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required>
             <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small>
           </div>
-          <div class="form-group submit-form">
+          <!-- <div class="form-group submit-form">
             <label for="total-harga">Total Harga</label>
             <input type="number" name="total_harga" class="form-control" id="total-harga" aria-describedby="biayaPengirimanHelp" placeholder="Total Harga" disabled="disabled" readonly>
             <small id="totalHargaHelp" class="form-text text-muted">Rp. 0,0</small>
-          </div>
+          </div> -->
           <input type="hidden" name="id_jadwal_konsultasi" id="id_jadwal_konsultasi">
           <input type="hidden" name="id_registrasi">
         </div>
@@ -198,8 +198,19 @@
 </div>
 
 <script type="text/javascript">
+  var harga_obat = document.getElementById("harga-obat");
+  var harga_obat_help = document.getElementById("hargaObatHelp");
+
   var rupiah = document.getElementById('biaya-pengiriman');
   var show_to = document.getElementById('biayaPengirimanHelp');
+
+  harga_obat.addEventListener("change", function(e) {
+    harga_obat_help.innerHTML = formatRupiah(this.value, "Rp. ");
+  });
+
+  // harga_obat.addEventListener("keyup", (e) => {
+  //   harga_obat_help.innerHTML = formatRupiah(this.value, "Rp. ");
+  // });
 
   rupiah.addEventListener('change', function(e) {
     // tambahkan 'Rp.' pada saat form di ketik
@@ -207,11 +218,11 @@
     show_to.innerHTML = formatRupiah(this.value, 'Rp. ');
   });
 
-  rupiah.addEventListener('keyup', function(e) {
-    // tambahkan 'Rp.' pada saat form di ketik
-    // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-    show_to.innerHTML = formatRupiah(this.value, 'Rp. ');
-  });
+  // rupiah.addEventListener('keyup', function(e) {
+  //   // tambahkan 'Rp.' pada saat form di ketik
+  //   // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+  //   show_to.innerHTML = formatRupiah(this.value, 'Rp. ');
+  // });
 
   /* Fungsi formatRupiah */
   function formatRupiah(angka, prefix) {

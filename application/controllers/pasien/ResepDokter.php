@@ -48,34 +48,7 @@ class ResepDokter extends CI_Controller
                                 <script src="' . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . '"></script>
                                 <script src="' . base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') . '"></script>
                                 <script src="' . base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') . '"></script>
-                                <script src="' . base_url('assets/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') . '"></script>
-                                <script>
-                                $(document).ready(function () {
-                                    var table_resep = $("#table_resep").DataTable({
-                                                    "responsive": true,
-                                                    "autoWidth": true,
-                                                    "lengthChange": false,
-                                                    "searching": true,
-                                                    "pageLength": 5,
-                                                });
-                                    $("#table_resep_filter").remove();
-                                    $("#search").on("keyup", function(e){
-                                        table_resep.search($(this).val()).draw();
-                                    });
-
-                                    $("#modalHapus").on("show.bs.modal", function(e) {
-                                        var nama = $(e.relatedTarget).data("nama");
-                                        $(e.currentTarget).find("#nama").html(nama);
-
-                                        var href_input = $(e.relatedTarget).data("href");
-                                        $(e.currentTarget).find("#buttonHapus").attr("href", href_input);
-
-										var title = $(e.relatedTarget).data("title");
-										$(e.currentTarget).find(".title").text(title);
-                                        $(e.currentTarget).find(".tipe").text(title);
-                                    });
-                                });
-                              </script>';
+                                <script src="' . base_url('assets/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') . '"></script>';
 
         $this->load->view('template', $data);
     }
@@ -95,13 +68,10 @@ class ResepDokter extends CI_Controller
         $id_pasien = $this->session->userdata('id_user');
         // $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
-        $jadwal_konsultasi = $this->db->query('SELECT id,id_registrasi,id_pasien FROM jadwal_konsultasi WHERE id = ' . $id_jadwal_konsultasi)->row();
-        if ($id_pasien != $jadwal_konsultasi->id_pasien) {
-            show_404();
-        }
-        $data['id_registrasi'] = $jadwal_konsultasi->id_registrasi;
-        if (!$jadwal_konsultasi) {
-            show_404();
+        $list_resep = $this->db->query("SELECT * FROM resep_dokter WHERE id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND id_pasien = " . $id_pasien)->result();
+
+        if (empty($list_resep)) {
+            redirect(base_url('pasien/ResepDokter'));
         }
         $data['view'] = 'pasien/terima_obat';
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
@@ -728,27 +698,21 @@ class ResepDokter extends CI_Controller
         $id_pasien = $this->session->userdata('id_user');
         // $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
-        $jadwal_konsultasi = $this->db->query('SELECT id,id_registrasi,id_pasien FROM jadwal_konsultasi WHERE id = ' . $id_jadwal_konsultasi)->row();
-
-        if ($id_pasien != $jadwal_konsultasi->id_pasien) {
-            show_404();
-        }
-        $data['id_registrasi'] = $jadwal_konsultasi->id_registrasi;
-        if (!$jadwal_konsultasi) {
-            show_404();
-        }
         $data['view'] = 'pasien/confirm_obat';
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
 
         $data['pasien'] = $this->db->query('SELECT * FROM master_user WHERE id = ' . $id_pasien)->row();
-        $data['list_resep'] = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
+        $data['list_resep'] = $this->db->query('SELECT * from resep_dokter WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $id_pasien)->result();
+        if (empty($data['list_resep'])) {
+            redirect(base_url('pasien/ResepDokter'));
+        }
         $data['list_obat'] = [];
         $data['biaya_pengiriman'] = $this->db->query('SELECT biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
         $data['total_biaya'] = 0;
         if (!empty($data['biaya_pengiriman'])) {
-            $data['total_biaya'] += $data['biaya_pengiriman']->biaya_pengiriman;
+            $data['biaya_pengiriman'] = $data['biaya_pengiriman']->biaya_pengiriman;
+            $data['total_biaya'] += $data['biaya_pengiriman'];
         }
-        $data['biaya_pengiriman'] = $data['biaya_pengiriman']->biaya_pengiriman;
         $data['disetujui'] = 0;
 
         for ($i = 0; $i < count($data['list_resep']); $i++) {

@@ -73,7 +73,7 @@ class Pembayaran extends CI_Controller
         }
         $data['view'] = 'pasien/pembayaran';
         $data['title'] = 'Pembayaran';
-		$data['user'] = $this->db->query('SELECT master_user.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan FROM master_user LEFT JOIN master_provinsi ON master_user.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_user.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_user.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_user.alamat_kelurahan = master_kelurahan.id WHERE master_user.id = '.$this->session->userdata('id_user'))->row();
+		$data['user'] = $this->db->query('SELECT master_user.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan, master_user.vip FROM master_user LEFT JOIN master_provinsi ON master_user.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_user.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_user.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_user.alamat_kelurahan = master_kelurahan.id WHERE master_user.id = '.$this->session->userdata('id_user'))->row();
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $data['js_addons'] = "
     <script>
@@ -640,7 +640,7 @@ class Pembayaran extends CI_Controller
         if(!$data['payment'] || !$data["registrasi"]){
             show_404();
         }
-        
+
         $data['web'] = $this->db->query("SELECT * FROM master_web")->row();
         $data['view'] = 'pasien/transfer_virtual_account';
         $data['title'] = 'Transfer Virtual Account';
@@ -674,7 +674,7 @@ class Pembayaran extends CI_Controller
         $kode_pos = $post_data['kode_pos'];
         $alamat_detail = $post_data['alamat_detail'];
 
-        
+
         if (!$bank_id || !$alamat_provinsi || !$alamat_kota || !$alamat_kecamatan || !$alamat_kelurahan || !$kode_pos || !$alamat_detail) {
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi));
@@ -702,7 +702,7 @@ class Pembayaran extends CI_Controller
 
         $data['view'] = 'pasien/transfer_upload_manual';
         $data['title'] = 'Transfer Manual';
-        $data['user'] = $this->db->query('SELECT p.id, p.name, p.foto, p.lahir_tanggal, master_provinsi.name as nama_provinsi, master_kota.name as nama_kota, master_kecamatan.name as nama_kecamatan, master_kelurahan.name as nama_kelurahan, p.alamat_jalan, p.kode_pos FROM master_user as p LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi WHERE p.id = ' . $this->session->userdata('id_user'))->row();
+        $data['user'] = $this->db->query('SELECT p.id, p.name, p.foto, p.lahir_tanggal, master_provinsi.name as nama_provinsi, master_kota.name as nama_kota, master_kecamatan.name as nama_kecamatan, master_kelurahan.name as nama_kelurahan, p.alamat_jalan, p.kode_pos, p.vip FROM master_user as p LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi WHERE p.id = ' . $this->session->userdata('id_user'))->row();
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $data['js_addons'] = "
         <script>
@@ -772,7 +772,7 @@ class Pembayaran extends CI_Controller
         );
 
         $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1 AND payment_id = '.$bank_id)->row();
-        
+
         if(!$data['manual_payment']){
             show_404();
         }

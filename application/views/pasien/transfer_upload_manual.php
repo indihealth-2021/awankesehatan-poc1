@@ -74,7 +74,7 @@
               <div class="mt-5">
                 <?= form_open_multipart('pasien/Pembayaran/bayar', 'id="form_transfer"'); ?>
 
-                  <div class="form-group row">
+                  <div class="form-group row" style="display: <?= $user->vip ? "block": "none" ?>;" >
                     <label for="alamat" class="col-md-4 col-4 mt-2 text-abu">
                        Alamat Pengiriman Obat
                     </label>
@@ -88,7 +88,7 @@
                           <input class="form-check-input" type="radio" name="alamat_kustom" id="inlineRadio1" value="0" checked required>
                           <label class="form-check-label font-14" for="inlineRadio1">Alamat Anda</label>
                         </div>
-                        <div class="form-check form-check-inline">
+                          <div class="form-check form-check-inline">
                           <input class="form-check-input" type="radio" name="alamat_kustom" id="inlineRadio2" value="1" required>
                           <label class="form-check-label font-14" for="inlineRadio2">Alamat Lain</label>
                         </div>
@@ -153,14 +153,14 @@
               <p>3 Demi Keamanan dan Kenyamanan, jangan meyebarkan bukti pembayaran kepada siapapun</p>
 
               <div class="mt-5">
-                 //form_open_multipart('pasien/Pembayaran/bayar'); 
+                 //form_open_multipart('pasien/Pembayaran/bayar');
                   <div class="form-group row">
                     <label for="alamat" class="col-md-4 col-12 mt-2 text-abu">
                        Alamat Pengiriman Obat :
                     </label>
                     <div class="col-md-12 ml-3">
                       <div class="row" id="form_pembayaran">
-                        <p class="text-abu mt-2">:&nbsp </p> 
+                        <p class="text-abu mt-2">:&nbsp </p>
                             <textarea class="form-control col-11" id="alamat" name="alamat" readonly required></textarea>
                             <span class="edit-form form-text text-muted">
                               <div class="form-check form-check-inline">
@@ -182,7 +182,7 @@
                     </label>
                     <div class="col-md-12 ml-3">
                       <div class="row" id="form_pembayaran">
-                        <p class="text-abu mt-2">:&nbsp </p> 
+                        <p class="text-abu mt-2">:&nbsp </p>
                             <input type="hidden" name="id_dokter" value="' . $registrasi->id_dokter . '">
                             <input type="hidden" name="regid" value="' . $registrasi->registrasi_id . '">
                             <div class="custom-file col-11">

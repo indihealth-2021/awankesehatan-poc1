@@ -310,7 +310,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                             <label class="form-check-label font-bank" for="bank_<?php echo $bank_va->payment_id ?>" style="margin-top: -20px">
                               <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata"> <?php echo $bank_va->payment ?>
                             </label>
-                          </div>  
+                          </div>
                           <?php }?>
                         <?php } ?>
                         </div>
@@ -457,7 +457,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                 </div>
               </form>
             </div>
-            <div class="col-md-11" id="cc_debit">
+            <div class="col-md-11" id="cc_debit" style="display: none;">
               <form action="<?php echo base_url('pasien/Pembayaran/bayar_va') ?>" id="form-cc-debit" method="POST">
                 <input type="hidden" name="alamat_provinsi">
                 <input type="hidden" name="alamat_kota">
@@ -469,12 +469,12 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
               </form>
             </div>
             <div class="col-md-11" id="alamat-pengiriman-obat">
-              <div class="form-group row">
+              <div class="form-group row" style="<?= $user->vip ? "" : "display: none;" ?>">
                 <label for="alamat" class="col-md-3 col-4 text-abu">
                   Alamat Pengiriman Obat
                 </label>
                 <div class="col-md-7 col-8">
-                  <div class="row">
+                  <div class="row" style="<?= $user->vip ? "" : "display: none;" ?>">
                     <span class="text-abu">:&nbsp </span>
                     <div class="col-10" style="margin-left: -10px;">
                       <div class="form-group form-focus">

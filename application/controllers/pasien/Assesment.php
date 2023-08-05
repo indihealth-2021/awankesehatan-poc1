@@ -41,6 +41,7 @@ class Assesment extends CI_Controller {
             // $data['assesment_old'] = 'ok';
             redirect(base_url('pasien/Pasien'));
         }
+        $data['file_asesmen'] = $this->db->query('SELECT * FROM file_asesmen WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
         $jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id_pasien = '.$this->session->userdata('id_user'))->row();
         $data['assesment'] = $assesment;
 	    $data['user'] = $this->db->query('SELECT id, name, foto FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
@@ -49,14 +50,33 @@ class Assesment extends CI_Controller {
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("'.$this->session->userdata('id_user').'", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
 
-        $data['js_addons'] = "
-        <script>
-    $('#file_upload').change(function() {
-      var file = $('#file_upload')[0].files[0].name;
-      var file_substr = file.length > 40 ? file.substr(0, 39)+'...':file;
-      $('#asesmenfilename').html('<span title=\"' + file + '\">' + file_substr + '</span>');
+        $data['js_addons'] = '
+<script>
+$(document).ready(function() {
+    $("#file_upload").on("change", function() {
+        var files = $(this)[0].files;
+        var container = $("#file_cards_container");
+
+        container.empty();
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var fileName = file.name;
+            var fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+            var fileCard = $("<h5>" + fileName + " (" + fileSize + "), " + "</h5>");
+
+            container.append(fileCard);
+        }
     });
-</script>";
+
+    $(document).on("click", ".cancel-btn", function() {
+        var fileCard = $(this).closest(".file-card");
+        fileCard.remove();
+    });
+});
+</script>';
+
 
         if(!$jadwal_konsultasi){
             $data['view'] = 'pasien/assesment_error';
@@ -87,6 +107,26 @@ class Assesment extends CI_Controller {
         $data['list_jadwal_konsultasi'] = $this->db->query('SELECT jadwal_konsultasi.id, jadwal_konsultasi.tanggal, jadwal_konsultasi.jam, d.name as nama_dokter, d.foto as foto_dokter, d.str as str_dokter, nominal.poli FROM jadwal_konsultasi INNER JOIN master_user d ON jadwal_konsultasi.id_dokter = d.id LEFT JOIN detail_dokter ON detail_dokter.id_dokter = d.id LEFT JOIN nominal ON detail_dokter.id_poli = nominal.id WHERE jadwal_konsultasi.id_pasien = '.$this->session->userdata('id_user'))->result();
 
         $this->load->view('template', $data);
+    }
+
+    public function remove(){
+
+        $data = $this->input->post();
+
+        // $path = $this->db->query('SELECT path_file FROM file_asesmen WHERE id= '.$data['id_file'])->row();
+
+        // $file_path = './assets/files/file_pemeriksaan_luar/' . $path;
+        // if (file_exists($file_path)) {
+        //     if (unlink($file_path)) {
+        //         $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
+        //     }
+        // }else{
+        //     $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
+        // }
+
+        $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
+
+
     }
 
     public function update(){

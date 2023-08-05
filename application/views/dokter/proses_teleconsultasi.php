@@ -390,6 +390,18 @@
                       </div>
                   </div>
                 </div>
+                <div class="col-md-12">
+                <div class="mb-5 pb-5">
+                    <?php if (!empty($file_asesmen)) { ?>
+                        <?php foreach ($file_asesmen as $file) { ?>
+                      <div class="card">
+                        <div class="card-body">
+                            <a href="<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>" target="_blank"><?php echo $file->nama_file ?></a>
+                      </div>
+                      <?php } ?>
+                      <?php } ?>
+                  </div>
+                </div>
               </div>
             </div>
           </form>

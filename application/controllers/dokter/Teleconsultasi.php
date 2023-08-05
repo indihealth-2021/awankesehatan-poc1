@@ -493,6 +493,8 @@ class Teleconsultasi extends CI_Controller
         $data['list_obat'] = $this->db->query('SELECT id, name, unit FROM master_obat WHERE active = 1 ORDER BY name')->result();
         $data['diagnosis'] = $this->db->query('SELECT master_diagnosa.id as id_diagnosa, master_diagnosa.nama as nama_diagnosa FROM diagnosis_dokter INNER JOIN master_diagnosa ON diagnosis_dokter.diagnosis = master_diagnosa.id WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $id_pasien)->row();
 
+        $data['file_asesmen'] = $this->db->query('SELECT * FROM file_asesmen WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
+
         $birthDate = new DateTime($data['pasien']->lahir_tanggal);
         $now = new DateTime('today');
         $data['pasien']->age = $birthDate->diff($now)->y;

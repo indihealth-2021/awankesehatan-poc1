@@ -154,10 +154,10 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                    alert('GAGAL: Alamat Tidak Lengkap!');
-                    return false;
-                }else{
+                // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                //     alert('GAGAL: Alamat tidak lengkap!');
+                //     return false;
+                // }else{
                     $('#form-va').find('input[name=alamat_provinsi]').val(alamat_provinsi);
                     $('#form-va').find('input[name=alamat_kota]').val(alamat_kota);
                     $('#form-va').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
@@ -165,7 +165,7 @@ class Pembayaran extends CI_Controller
                     $('#form-va').find('input[name=kode_pos]').val(kode_pos);
                     $('#form-va').find('input[name=alamat_detail]').val(alamat_detail);
                     $('#form-va').submit();
-                }
+                //}
             });
         }else if(this.value == '2'){
             $('#form-owlexa').hide();
@@ -193,7 +193,7 @@ class Pembayaran extends CI_Controller
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
                 // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                //     alert('GAGAL: Alamat Tidak Lengkap!');
+                //     alert('GAGAL: Alamat tidak lengkap!');
                 //     return false;
                 // }else{
                     $('#form-transfer-manual').find('input[name=alamat_provinsi]').val(alamat_provinsi);
@@ -238,10 +238,10 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                    alert('GAGAL: Alamat Tidak Lengkap!');
-                    return false;
-                }else{
+                // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                //     alert('GAGAL: Alamat tidak lengkap!');
+                //     return false;
+                // }else{
                     $('#form-dompet-digital').find('input[name=alamat_provinsi]').val(alamat_provinsi);
                     $('#form-dompet-digital').find('input[name=alamat_kota]').val(alamat_kota);
                     $('#form-dompet-digital').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
@@ -249,7 +249,7 @@ class Pembayaran extends CI_Controller
                     $('#form-dompet-digital').find('input[name=kode_pos]').val(kode_pos);
                     $('#form-dompet-digital').find('input[name=alamat_detail]').val(alamat_detail);
                     $('#form-dompet-digital').submit();
-                }
+                //}
                 // let href_btn =  $('#btnBayar').attr('href').split('/');
                 // if(href_btn.length <= 8){
                 //     alert('GAGAL: Pilih Bank Terlebih Dahulu!');
@@ -329,10 +329,10 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                    alert('GAGAL: Alamat Tidak Lengkap!');
-                    return false;
-                }else{
+                // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                //     alert('GAGAL: Alamat tidak lengkap!');
+                //     return false;
+                // }else{
                     $('#form-owlexa').find('input[name=alamat_provinsi]').val(alamat_provinsi);
                     $('#form-owlexa').find('input[name=alamat_kota]').val(alamat_kota);
                     $('#form-owlexa').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
@@ -340,7 +340,7 @@ class Pembayaran extends CI_Controller
                     $('#form-owlexa').find('input[name=kode_pos]').val(kode_pos);
                     $('#form-owlexa').find('input[name=alamat_detail]').val(alamat_detail);
                     $('#form-owlexa').submit();
-                }
+                //}
             });
         }else if(this.value == '5'){
             $('#form-owlexa').hide();
@@ -360,10 +360,10 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                    alert('GAGAL: Alamat Tidak Lengkap!');
-                    return false;
-                }else{
+                // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                //     alert('GAGAL: Alamat tidak lengkap!');
+                //     return false;
+                // }else{
                     $('#form-cc-debit').find('input[name=alamat_provinsi]').val(alamat_provinsi);
                     $('#form-cc-debit').find('input[name=alamat_kota]').val(alamat_kota);
                     $('#form-cc-debit').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
@@ -371,7 +371,7 @@ class Pembayaran extends CI_Controller
                     $('#form-cc-debit').find('input[name=kode_pos]').val(kode_pos);
                     $('#form-cc-debit').find('input[name=alamat_detail]').val(alamat_detail);
                     $('#form-cc-debit').submit();
-                }
+                //}
                 // let href_btn =  $('#btnBayar').attr('href').split('/');
                 // if(href_btn.length <= 8){
                 //     alert('GAGAL: Pilih Bank Terlebih Dahulu!');
@@ -668,9 +668,9 @@ class Pembayaran extends CI_Controller
         }
         $post_data = $this->input->post();
         $alamat_provinsi = is_numeric($post_data['alamat_provinsi']) ? $post_data["alamat_provinsi"] : 11;
-        $alamat_kota = is_numeric($post_data['alamat_kota']) ? $post_data["alamat_provinsi"] : 1101;
-        $alamat_kecamatan = is_numeric($post_data['alamat_kecamatan']) ? $post_data["alamat_provinsi"] : 1101010;
-        $alamat_kelurahan = is_numeric($post_data['alamat_kelurahan']) ? $post_data["alamat_provinsi"] : 1101010001;
+        $alamat_kota = is_numeric($post_data['alamat_kota']) ? $post_data["alamat_kota"] : 1101;
+        $alamat_kecamatan = is_numeric($post_data['alamat_kecamatan']) ? $post_data["alamat_kecamatan"] : 1101010;
+        $alamat_kelurahan = is_numeric($post_data['alamat_kelurahan']) ? $post_data["alamat_kelurahan"] : 1101010001;
         $kode_pos = $post_data['kode_pos'];
         $alamat_detail = $post_data['alamat_detail'];
 
@@ -732,8 +732,8 @@ class Pembayaran extends CI_Controller
 
         $('#form_transfer').submit(function(e){
             alamat = $('textarea[name=alamat]').val();
-            // if(alamat.search('Alamat Tidak Lengkap') > 0 || alamat.match(/^ *$/) !== null){
-            //     alert('GAGAL: Alamat Tidak Lengkap!');
+            // if(alamat.search('Alamat tidak lengkap') > 0 || alamat.match(/^ *$/) !== null){
+            //     alert('GAGAL: Alamat tidak lengkap!');
             //     return false;
             // }
         });
@@ -809,7 +809,7 @@ class Pembayaran extends CI_Controller
         $alamat_kustom = 1;
         $alamat_pengiriman_obat = $this->input->post('alamat');
         if (!$alamat_pengiriman_obat) {
-            $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Alamat Tidak Lengkap!');
+            $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Alamat tidak lengkap!');
             redirect(base_url('pasien/Pembayaran/transfer_manual/' . $id_registrasi . '/' . $bank_id));
         }
 
@@ -1151,7 +1151,7 @@ class Pembayaran extends CI_Controller
 
         $alamat_kustom = $this->input->post('alamat_kustom');
         $alamat_pengiriman_obat = $this->input->post('alamat');
-        if (!isset($data['cardNumber']) || !isset($data['otp']) || $alamat_kustom == null || !$alamat_pengiriman_obat || preg_match("/alamat tidak lengkap/i", $alamat_pengiriman_obat)) {
+        if (!isset($data['cardNumber']) || !isset($data['otp']) || $alamat_kustom == null || !$alamat_pengiriman_obat || preg_match("/Alamat tidak lengkap/i", $alamat_pengiriman_obat)) {
             $response['msg'] = 'Data yang anda masukan tidak lengkap!';
             $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
             //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));

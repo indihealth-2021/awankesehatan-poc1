@@ -72,6 +72,13 @@ class Apotek extends CI_Controller {
 	}
 
 	public function findNearest() {
+		$searchTerm	= $this->input->post('searchTerm');
+		$pglm 		= $this->input->post("page_limit");
+		$page_lim	= (empty($pglm) ? 10 : $pglm);
+		$pg 		= $this->input->post("page");
+		$page 		= (empty($pg) ? 0 : $pg);
+		$limit 		= $page * $page_lim;
+
 		if($this->input->post("get_all")) {
 			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text FROM master_apotek")->result_array();
 			for($i = 0; $i < count($temp); $i ++) {
@@ -89,13 +96,6 @@ class Apotek extends CI_Controller {
 		$id_kecamatan 	=	$this->input->post("id_kecamatan");
 		$lat			=	$this->input->post("lat");
 		$long			=	$this->input->post("long");
-
-		$searchTerm	= $this->input->post('searchTerm');
-		$pglm 		= $this->input->post("page_limit");
-		$page_lim	= (empty($pglm) ? 10 : $pglm);
-		$pg 		= $this->input->post("page");
-		$page 		= (empty($pg) ? 0 : $pg);
-		$limit 		= $page * $page_lim;
 
 		$query = "SELECT master_apotek.id, master_apotek.nama as text, master_apotek.latitude, master_apotek.longitude FROM master_apotek WHERE master_apotek.alamat_kota=".$id_kota;
 

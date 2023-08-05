@@ -602,11 +602,7 @@ $(document).ready(function() {
                   searchTerm: params.term, // search term
                   page_limit: 50,
                   page: params.page || 0,
-                  id_kota: ".$data["pasien"]->alamat_kota.",
-                  id_kecamatan: ".$data["pasien"]->alamat_kecamatan.",
-                  lat: ".($data["pasien"]->latitude ? $data["pasien"]->latitude : 'null').",
-                  long: ".($data["pasien"]->longitude ? $data["pasien"]->longitude : 'null').",
-                  get_all: true
+                  get_all: true, //id_kota, id_kecamatan, lat, long removed
               };
           },
           processResults: function (data, params) {

@@ -113,16 +113,16 @@ $(document).ready(function() {
 
         $data = $this->input->post();
 
-        // $path = $this->db->query('SELECT path_file FROM file_asesmen WHERE id= '.$data['id_file'])->row();
+        $path = $this->db->query('SELECT path_file FROM file_asesmen WHERE id= '.$data['id_file'])->row();
 
-        // $file_path = './assets/files/file_pemeriksaan_luar/' . $path;
-        // if (file_exists($file_path)) {
-        //     if (unlink($file_path)) {
-        //         $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
-        //     }
-        // }else{
-        //     $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
-        // }
+        $file_path = './assets/files/file_pemeriksaan_luar/' . $path->path_file;
+        if (file_exists($file_path)) {
+            if (unlink($file_path)) {
+                $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
+            }
+        }else{
+            $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
+        }
 
         $this->db->query('DELETE FROM file_asesmen WHERE id= '.$data['id_file']);
 

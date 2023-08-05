@@ -133,9 +133,7 @@
                         </div>
                         <div class="col-md-12 pt-4 mt-4">
                         <div class="form-group row">
-                            <label for="form_file_asessment" class="col-md-4 col-4 mt-2 text-abu">
-                            Upload File
-                            </label>
+                            <label for="form_file_asessment" class="col-md-4 col-4 mt-2 text-abu">Upload File</label>
                             <div class="col-md-6 col-6">
                                     <div class="row" id="form_file_asessment">
                                         <p class="text-abu mt-2">:&nbsp;</p>

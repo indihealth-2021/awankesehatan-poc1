@@ -211,7 +211,7 @@
 
   <script>
     var alamat_anda = "<?php echo $user->nama_provinsi && $user->nama_kota && $user->nama_kelurahan && $user->nama_kecamatan && $user->alamat_jalan && $user->kode_pos ? 'Jalan '.ucwords(strtolower($user->alamat_jalan)).', Kel '.ucwords(strtolower($user->nama_kelurahan)).', Kec '.ucwords(strtolower($user->nama_kecamatan)).', Kab/Kota '.ucwords(strtolower($user->nama_kota)).', Kode Pos '.$user->kode_pos.', Provinsi '.ucwords(strtolower($user->nama_provinsi)) : 'Jalan '.ucwords(strtolower($user->alamat_jalan)).', Kel '.ucwords(strtolower($user->nama_kelurahan)).', Kec '.ucwords(strtolower($user->nama_kecamatan)).', Kab/Kota '.ucwords(strtolower($user->nama_kota)).', Kode Pos '.$user->kode_pos.', Provinsi '.ucwords(strtolower($user->nama_provinsi)).' (Alamat Tidak Lengkap)'; ?>";
-    var alamat_lain = "";
+    var alamat_lain = "<?php echo $alamat; ?>";
     function myFunction() {
     /* Get the text field */
     var copyText = document.getElementById("salin");

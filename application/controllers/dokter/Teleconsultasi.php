@@ -566,12 +566,13 @@ $(document).ready(function() {
 
     $('select[name=diagnosis]').select2({
           ajax: {
-            url: 'https://api-poc1.awankesehatan.com/dokter/diagnosis',
+            url: '" . base_url('dokter/Teleconsultasi/get_active_diagnoses') . "',
             dataType: 'json',
             delay: 250,
             data: function (params) {
                 return {
-                    q: params.term,
+                    searchTerm: params.term, // search term
+                    page_limit: 50,
                     page: params.page || 0
                 };
             },

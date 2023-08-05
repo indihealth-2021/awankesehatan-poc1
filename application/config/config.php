@@ -27,9 +27,15 @@ date_default_timezone_set('Asia/Jakarta');
 // $config['path_to_env'] = 'https://poc1.telemedical.id/';
 // $config['path_to_api'] = 'https://api-poc1.telemedical.id/';
 
+<<<<<<< Updated upstream
 $config["base_url"] = "http://localhost/IDH/awankesehatan-poc1/";
 $config["path_to_env"] = "http://localhost/IDH/awankesehatan-poc1/";
 $config["recaptcha_site"] = "http://localhost/IDH/awankesehatan-poc1/";
+=======
+$config["base_url"] = "http://localhost/poc-1";
+$config["path_to_env"] = "http://localhost/poc-1";
+$config["recaptcha_site"] = "http://localhost/poc-1";
+>>>>>>> Stashed changes
 
 ///recaptcha
 //$config['recaptcha_site'] = 'idok.telemedical.id';

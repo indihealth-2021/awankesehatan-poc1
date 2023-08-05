@@ -49,6 +49,15 @@ class Assesment extends CI_Controller {
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("'.$this->session->userdata('id_user').'", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
 
+        $data['js_addons'] = "
+        <script>
+    $('#file_upload').change(function() {
+      var file = $('#file_upload')[0].files[0].name;
+      var file_substr = file.length > 40 ? file.substr(0, 39)+'...':file;
+      $('#asesmenfilename').html('<span title=\"' + file + '\">' + file_substr + '</span>');
+    });
+</script>";
+
         if(!$jadwal_konsultasi){
             $data['view'] = 'pasien/assesment_error';
             $this->load->view('template', $data);
@@ -144,11 +153,43 @@ class Assesment extends CI_Controller {
                 if(!$jk || !$dokter){
                     show_404();
                 }
+                
+                $config['upload_path'] = './assets/files/file_pemeriksaan_luar';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif|pdf|docx|doc|xlsx|xls|rar|zip';
+                $config['max_size'] = 10024;
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+
+                $files = $_FILES['file_upload'];
+
+                $cpt = count($files['name']);
+
+                if ($cpt > 0) {
+                    for ($i = 0; $i < $cpt; $i++) {
+                        $_FILES['userfile']['name'] = $files['name'][$i];
+                        $_FILES['userfile']['type'] = $files['type'][$i];
+                        $_FILES['userfile']['tmp_name'] = $files['tmp_name'][$i];
+                        $_FILES['userfile']['error'] = $files['error'][$i];
+                        $_FILES['userfile']['size'] = $files['size'][$i];
+                    
+                        $ext = pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION);
+                        $_FILES['userfile']['name'] = uniqid().'.'.$ext;
+                    
+                        if (!$this->upload->do_upload('userfile')) {
+                            $upload_error = $this->upload->display_errors();
+                            $this->session->set_flashdata('msg_assesment', 'Gagal mengupload gambar.');
+                        }else{
+                            $this->db->query('INSERT INTO file_asesmen (id_jadwal_konsultasi, nama_file, type_file, ukuran_file) VALUES ("'.$id_jadwal_konsultasi.'", "'.$this->upload->data('file_name').' ", "'.$this->upload->data('file_type').' ", "'.$this->upload->data('file_size').'" )');
+                        }
+                    }
+                }
+
 				$data['name'] = 'unshow';
 				$data['sub_name'] = 'submit_assesment_pasien';
 				$data['id_user'] = json_encode(array($jk->id_dokter));
 				$msg_notif = json_encode($data);
 				$this->key->_send_fcm($dokter->reg_id, $msg_notif);
+
 
 				unset($data['name']);
 				unset($data['sub_name']);
@@ -176,6 +217,35 @@ class Assesment extends CI_Controller {
 			$data['id_user'] = json_encode(array($jk->id_dokter));
 			$msg_notif = json_encode($data);
 			$this->key->_send_fcm($dokter->reg_id, $msg_notif);
+            $config['upload_path'] = './assets/files/file_pemeriksaan_luar';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif|pdf|docx|doc|xlsx|xls|rar|zip';
+                $config['max_size'] = 10024;
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+
+                $files = $_FILES['file_upload'];
+
+                $cpt = count($files['name']);
+
+                if ($cpt > 0) {
+                    for ($i = 0; $i < $cpt; $i++) {
+                        $_FILES['userfile']['name'] = $files['name'][$i];
+                        $_FILES['userfile']['type'] = $files['type'][$i];
+                        $_FILES['userfile']['tmp_name'] = $files['tmp_name'][$i];
+                        $_FILES['userfile']['error'] = $files['error'][$i];
+                        $_FILES['userfile']['size'] = $files['size'][$i];
+                    
+                        $ext = pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION);
+                        $_FILES['userfile']['name'] = uniqid().'.'.$ext;
+                    
+                        if (!$this->upload->do_upload('userfile')) {
+                            $upload_error = $this->upload->display_errors();
+                            $this->session->set_flashdata('msg_assesment', 'Gagal mengupload gambar.');
+                        }else{
+                            $this->db->query('INSERT INTO file_asesmen (id_jadwal_konsultasi, nama_file, type_file, ukuran_file) VALUES ("'.$id_jadwal_konsultasi.'", "'.$this->upload->data('file_name').' ", "'.$this->upload->data('file_type').' ", "'.$this->upload->data('file_size').'" )');
+                        }
+                    }
+                }
 
 			unset($data['name']);
 			unset($data['sub_name']);
@@ -218,4 +288,6 @@ class Assesment extends CI_Controller {
         }
         redirect('pasien/Telekonsultasi/jadwal');
     }
+
+    
 }

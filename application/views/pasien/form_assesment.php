@@ -18,7 +18,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <form action="<?php echo base_url('pasien/Assesment/update') ?>" method="POST"> 
+                <form action="<?php echo base_url('pasien/Assesment/update') ?>" method="POST" enctype="multipart/form-data"> 
                     <?php $assesmentFor = isset($_GET['id_jadwal_konsultasi']) ? ucwords($jadwal_konsultasi->nama_dokter).' - '.strtoupper($jadwal_konsultasi->poli_dokter).' [ '.(new DateTime($jadwal_konsultasi->tanggal))->format('d-m-Y').' '.$jadwal_konsultasi->jam.' ]' : 'Semua Konsultasi' ?>
                     <p class="font-16 font-bold-4">Data Assesment Pasien</p>
                     <div class="row">
@@ -130,6 +130,24 @@
                                     <textarea rows="4" class="form-control floating" name="keluhan" required><?php if($assesment && !isset($assesment_old)){ echo $assesment->keluhan; } ?></textarea>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-12 pt-4 mt-4">
+                        <div class="form-group row">
+                            <label for="form_file_asessment" class="col-md-4 col-4 mt-2 text-abu">
+                            Upload File
+                            </label>
+                            <div class="col-md-6 col-6">
+                                <div class="row" id="form_file_asessment">
+                                    <p class="text-abu mt-2">:&nbsp </p>
+                                    <div class="custom-file col-10">
+                                        <input type="file" name="file_upload[]" class="custom-file-input"  id="file_upload" size="10024" accept=".gif, .jpg, .jpeg, .png, .jfif, .pdf, .docx, .doc, .xlsx, .xls, .rar, .zip" multiple>
+                                        <label class="custom-file-label" for="customFile" id="asesmenfilename">
+                                        </label>
+                                    </div>
+                                    <span class="text-abu font-12 ml-2">File berupa JPG, PNG atau PDF dengan ukuran maksimal 10mb</span>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                         <?php 
                             if(isset($id_jadwal_konsultasi)){

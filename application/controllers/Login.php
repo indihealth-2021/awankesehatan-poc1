@@ -41,7 +41,8 @@ class Login extends CI_Controller {
 			{
 				$this->_category_check($this->data);
 			} else {
-				redirect('login');
+				// var_dump($this->data);exit();
+				redirect('logout');
 			}
 		}
 	}

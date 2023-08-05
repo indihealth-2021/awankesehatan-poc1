@@ -151,9 +151,7 @@
             audio: true,
             video: true
         }).then(function(stream) {
-            const api = new JitsiMeetExternalAPI(domain, options).then(() => {
-                document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
-            });
+            const api = new JitsiMeetExternalAPI(domain, options);
             api.executeCommand('displayName', userName);
             api.addEventListener('participantRoleChanged', function(event) {
                 if (event.role === 'moderator') {

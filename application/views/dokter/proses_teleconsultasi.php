@@ -391,15 +391,26 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                <div class="mb-5 pb-5">
-                    <?php if (!empty($file_asesmen)) { ?>
-                        <?php foreach ($file_asesmen as $file) { ?>
-                      <div class="card">
+                <div>
+                <?php if (!empty($file_asesmen)) { ?>
+                    <p class="py-2 font-12">File Asesmen Pasien</p>
+                    <?php foreach ($file_asesmen as $file) { ?>
+                      <div class="card" onclick="window.open('<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>', '_blank')">
                         <div class="card-body">
-                            <a href="<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>" target="_blank"><?php echo $file->nama_file ?></a>
+                          <h5><?php echo $file->nama_file ?></h5>
+                          <p><?php echo $file->type_file ?></p>
+                        </div>
                       </div>
-                      <?php } ?>
-                      <?php } ?>
+                    <?php } ?>
+                    <?php foreach ($file_asesmen as $file) { ?>
+                      <div class="card" onclick="window.open('<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>', '_blank')">
+                        <div class="card-body">
+                          <h4><?php echo $file->nama_file ?></h4>
+                          <p><?php echo $file->type_file ?></p>
+                        </div>
+                      </div>
+                    <?php } ?>
+                <?php } ?>
                   </div>
                 </div>
               </div>

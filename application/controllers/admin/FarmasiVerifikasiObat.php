@@ -254,29 +254,41 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->all_controllers->check_user_farmasi();
 
         $post_data = $this->input->post();
+        $list_resep = $this->db->query('SELECT * FROM resep_dokter WHERE id_jadwal_konsultasi = ' . $post_data['id_jadwal_konsultasi'])->result();
 
-        $list_resep = $this->db->query('SELECT id FROM resep_dokter WHERE id_jadwal_konsultasi = ' . $post_data['id_jadwal_konsultasi'])->result();
+        if(isset($post_data["id_obat"])) {
+            for ($i = 0; $i < count($post_data["id_obat"]); $i++) {
+                $resepExists = $this->db->query("SELECT * FROM resep_dokter WHERE id_obat=".$post_data["id_obat"][$i])->row();
+                if(!$resepExists) {
+                    $resep = $this->db->query('SELECT harga, harga_per_n_unit FROM master_obat WHERE id = ' . $post_data['id_obat'][$i])->row();
+                    $data_resep = array(
+                        "id_jadwal_konsultasi" => $post_data['id_jadwal_konsultasi'],
+                        "id_pasien" => $post_data['id_pasien'],
+                        "id_dokter" => $post_data["id_dokter"],
+                        "id_obat" => $post_data["id_obat"][$i],
+                        "id_apotek" => $list_resep[0]->id_apotek,
+                        "jumlah_obat" => $post_data['jumlah_obat'][$i],
+                        "keterangan" => $post_data['keterangan'][$i],
+                        "harga" => $resep->harga,
+                        "harga_per_n_unit" => $resep->harga_per_n_unit,
+                        "diverifikasi" => 0
+                    );
+                    $this->db->insert('resep_dokter', $data_resep);
+                }
+            }
 
-        foreach ($list_resep as $resep) {
-            $this->db->delete('resep_dokter', array('id' => $resep->id));
+            foreach($list_resep as $resep) {
+                if( !in_array($resep->id_obat, $post_data["id_obat"])  ) {
+                    $this->db->delete("resep_dokter", ["id" => $resep->id]);
+                }
+            }
+        }else {
+            foreach ($list_resep as $resep) {
+                $this->db->delete('resep_dokter', array('id' => $resep->id));
+            }
         }
 
-        $jmlData = count($post_data['keterangan']);
-        for ($i = 0; $i < $jmlData; $i++) {
-            $resep = $this->db->query('SELECT harga, harga_per_n_unit FROM master_obat WHERE id = ' . $post_data['id_obat'][$i])->row();
-            $data_resep = array(
-                "id_jadwal_konsultasi" => $post_data['id_jadwal_konsultasi'],
-                "id_pasien" => $post_data['id_pasien'],
-                "id_dokter" => $post_data['id_dokter'],
-                "id_obat" => $post_data['id_obat'][$i],
-                "jumlah_obat" => $post_data['jumlah_obat'][$i],
-                "harga" => $resep->harga,
-                "harga_per_n_unit" => $resep->harga_per_n_unit,
-                "keterangan" => $post_data['keterangan'][$i],
-                "diverifikasi" => 0
-            );
-            $this->db->insert('resep_dokter', $data_resep);
-        }
+
         $this->session->set_flashdata('msg_simpan_resep', "Resep Obat telah disimpan!");
         redirect(base_url('admin/FarmasiVerifikasiObat'));
     }

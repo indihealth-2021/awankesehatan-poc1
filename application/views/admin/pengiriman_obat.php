@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="form-group">
                                   <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman ( Rp. ) </label>
-                                  <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required>
+                                  <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" value="<?= $biaya_pengiriman ?>" required>
                                   <!-- <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small> -->
                                 </div>
                                 <!-- <div class="form-group submit-form">

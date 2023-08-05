@@ -192,10 +192,10 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                    alert('GAGAL: Alamat Tidak Lengkap!');
-                    return false;
-                }else{
+                // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                //     alert('GAGAL: Alamat Tidak Lengkap!');
+                //     return false;
+                // }else{
                     $('#form-transfer-manual').find('input[name=alamat_provinsi]').val(alamat_provinsi);
                     $('#form-transfer-manual').find('input[name=alamat_kota]').val(alamat_kota);
                     $('#form-transfer-manual').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
@@ -203,7 +203,7 @@ class Pembayaran extends CI_Controller
                     $('#form-transfer-manual').find('input[name=kode_pos]').val(kode_pos);
                     $('#form-transfer-manual').find('input[name=alamat_detail]').val(alamat_detail);
                     $('#form-transfer-manual').submit();
-                }
+                //}
             });
         }else if(this.value == '3'){
             $('#form-owlexa').hide();
@@ -667,15 +667,14 @@ class Pembayaran extends CI_Controller
             }
         }
         $post_data = $this->input->post();
-        $alamat_provinsi = $post_data['alamat_provinsi'];
-        $alamat_kota = $post_data['alamat_kota'];
-        $alamat_kecamatan = $post_data['alamat_kecamatan'];
-        $alamat_kelurahan = $post_data['alamat_kelurahan'];
+        $alamat_provinsi = is_numeric($post_data['alamat_provinsi']) ? $post_data["alamat_provinsi"] : 11;
+        $alamat_kota = is_numeric($post_data['alamat_kota']) ? $post_data["alamat_provinsi"] : 1101;
+        $alamat_kecamatan = is_numeric($post_data['alamat_kecamatan']) ? $post_data["alamat_provinsi"] : 1101010;
+        $alamat_kelurahan = is_numeric($post_data['alamat_kelurahan']) ? $post_data["alamat_provinsi"] : 1101010001;
         $kode_pos = $post_data['kode_pos'];
         $alamat_detail = $post_data['alamat_detail'];
 
-
-        if (!$bank_id || !$alamat_provinsi || !$alamat_kota || !$alamat_kecamatan || !$alamat_kelurahan || !$kode_pos || !$alamat_detail) {
+        if( !($bank_id || $alamat_provinsi || $alamat_kota || $alamat_kecamatan || $alamat_kelurahan || $kode_pos || $alamat_detail) ) {
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi));
         }
@@ -684,6 +683,7 @@ class Pembayaran extends CI_Controller
         $alamat_kota = $this->db->query('SELECT name FROM master_kota WHERE id = '.$alamat_kota)->row()->name;
         $alamat_kecamatan = $this->db->query('SELECT name FROM master_kecamatan WHERE id = '.$alamat_kecamatan)->row()->name;
         $alamat_kelurahan = $this->db->query('SELECT name FROM master_kelurahan WHERE id = '.$alamat_kelurahan)->row()->name;
+
         if(!$alamat_provinsi || !$alamat_kota || !$alamat_kecamatan || !$alamat_kelurahan){
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi));
@@ -732,10 +732,10 @@ class Pembayaran extends CI_Controller
 
         $('#form_transfer').submit(function(e){
             alamat = $('textarea[name=alamat]').val();
-            if(alamat.search('Alamat Tidak Lengkap') > 0 || alamat.match(/^ *$/) !== null){
-                alert('GAGAL: Alamat Tidak Lengkap!');
-                return false;
-            }
+            // if(alamat.search('Alamat Tidak Lengkap') > 0 || alamat.match(/^ *$/) !== null){
+            //     alert('GAGAL: Alamat Tidak Lengkap!');
+            //     return false;
+            // }
         });
         </script>
         ";

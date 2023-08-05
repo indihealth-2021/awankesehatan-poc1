@@ -94,8 +94,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } else {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       echo '0';
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } ?>" data-alamat-kustom="<?php if (!empty($resep->alamat_kustom)) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    echo $resep->alamat_kustom ? $resep->alamat_pengiriman : '';
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  } ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">Submit Biaya</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    echo $resep->alamat_kustom ? $resep->alamat_pengiriman : '';                                                                                                                                             } ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalEditBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">Submit Biaya</button>
                           <?php if($resep->pasien_is_vip)  {?>
 
             <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
@@ -103,6 +102,90 @@
                             <?php } ?>
                         </td>
                       </tr>
+
+                      <div class="modal fade" id="modalEditBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>" tabindex="-1" role="dialog" aria-labelledby="modalBiayaPengirimanLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                          <div class="modal-content" style="height: auto;">
+                            <div class="modal-header">
+                              <p class="modal-title font-14" id="modalBiayaPengirimanLabel"><b>Biaya Pengiriman</b></p>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <?= form_open('admin/PengirimanObat/submit_biaya_pengiriman/'.$resep->id_jadwal_konsultasi); ?>
+
+                              <div class="modal-body font-12">
+                                <div class="form-group">
+                                  <label for="nama-pasien">Nama Pasien</label>
+                                  <input type="text" class="form-control" id="nama-pasien" aria-describedby="namaPasienHelp" placeholder="Nama Pasien" disabled="disabled" readonly value="<?php echo $resep->nama_pasien; ?>">
+                                </div>
+                                <div class="form-group">
+                                  <label for="telp">No HP </label>
+                                  <input type="text" class="form-control" id="telp" aria-describedby="telpHelp" placeholder="No HP" disabled="disabled" readonly value="<?php echo $resep->telp_pasien; ?>">
+                                </div>
+                                <div class="form-group">
+                                  <label for="email">Email </label>
+                                  <input type="text" class="form-control" id="email-pasien" placeholder="Email Pasien" disabled="disabled" readonly value="<?php echo $resep->email_pasien; ?>">
+                                </div>
+                                <hr>
+                                <?php if($resep->pasien_is_vip)  { ?>
+                                  <div class="form-group">
+                                  <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
+                                  <!-- <input type="text" class="form-control alamat-input" id="alamat<?php echo $resep->id_jadwal_konsultasi; ?>" name="alamat" placeholder="<?php echo $alamat_inputan; ?>" value="<?php echo $alamat_inputan; ?>"> -->
+                                  <input type="text" class="form-control" id="alamat-inputan"
+                                  value="<?php echo $alamat_inputan; ?>"
+                                  name="alamat"
+                                  placeholder="<?php echo $alamat_inputan; ?>"
+                                  readonly>
+                                  </input>
+                                  <script>
+                                  $("#alamat-inputan").val("<?php echo $alamat_inputan; ?>"); </script>
+                                  <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+                                  <!-- <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
+                                  </textarea> -->
+                                  <script>
+                                  $("#alamat-<?php echo $resep->id; ?>").text("<?php echo $alamat_inputan; ?>");
+                                  </script>
+                                  <!-- <span class="edit-form form-text text-muted">
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="alamat_kustom" id="inlineRadio1" value="0">
+                                    <label class="form-check-label" for="inlineRadio1">Alamat Inputan Pasien</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="alamat_kustom" id="inlineRadio2" value="1">
+                                    <label class="form-check-label" for="inlineRadio2">Alamat Lain</label>
+                                  </div>
+                                </span> -->
+                                </div>
+                                <?php } ?>
+                                <div class="form-group submit-form">
+                                  <label for="harga-obat">Harga Obat ( Rp. )</label>
+                                  <input type="number" name="harga_obat" class="form-control" id="harga-obat" aria-describedby="biayaPengirimanHelp" placeholder="Harga Obat" value="<?php echo $total_harga; ?>">
+                                  <!-- <small id="hargaObatHelp" class="form-text text-muted">Rp. 0,0</small> -->
+                                </div>
+                                <div class="form-group">
+                                  <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman ( Rp. <?php echo $resep->biaya_pengiriman; ?>) </label>
+                                  <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required value="<?php echo $resep->biaya_pengiriman ?>">
+                                  <!-- <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small> -->
+                                </div>
+                                <!-- <div class="form-group submit-form">
+                                  <label for="total-harga">Total Harga</label>
+                                  <input type="number" name="total_harga" class="form-control" id="total-harga" aria-describedby="biayaPengirimanHelp" placeholder="Total Harga" disabled="disabled" readonly>
+                                  <small id="totalHargaHelp" class="form-text text-muted">Rp. 0,0</small>
+                                </div> -->
+                                <input type="hidden" name="id_jadwal_konsultasi" id="id_jadwal_konsultasi">
+                                <input type="hidden" name="id_registrasi">
+                              </div>
+                              <div class="modal-footer">
+                                <div class="px-3">
+                                  <button type="button" class="btn btn-batal-2" data-dismiss="modal">Batal</button>
+                                  <button type="submit" class="btn btn-simpan-2 buttonSave" id="saveBiayaPengiriman">Simpan</button>
+                                </div>
+                              </div>
+                              </div>
+                            <?= form_close(); ?>
+                        </div>
+                      </div>
 
                       <div class="modal fade" id="modalBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>" tabindex="-1" role="dialog" aria-labelledby="modalBiayaPengirimanLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -115,18 +198,18 @@
                             </div>
                             <?= form_open('admin/PengirimanObat/rilis_obat/'.$resep->id_jadwal_konsultasi); ?>
 
-                              <div class="modal-body font-12">
+                            <div class="modal-body font-12">
                                 <div class="form-group">
                                   <label for="nama-pasien">Nama Pasien</label>
-                                  <input type="text" class="form-control" id="nama-pasien" aria-describedby="namaPasienHelp" placeholder="Nama Pasien" disabled="disabled" readonly>
+                                  <input type="text" class="form-control" id="nama-pasien" aria-describedby="namaPasienHelp" placeholder="Nama Pasien" disabled="disabled" readonly value="<?php echo $resep->nama_pasien; ?>">
                                 </div>
                                 <div class="form-group">
                                   <label for="telp">No HP </label>
-                                  <input type="text" class="form-control" id="telp" aria-describedby="telpHelp" placeholder="No HP" disabled="disabled" readonly>
+                                  <input type="text" class="form-control" id="telp" aria-describedby="telpHelp" placeholder="No HP" disabled="disabled" readonly value="<?php echo $resep->telp_pasien; ?>">
                                 </div>
                                 <div class="form-group">
                                   <label for="email">Email </label>
-                                  <input type="text" class="form-control" id="email-pasien" placeholder="Email Pasien" disabled="disabled" readonly>
+                                  <input type="text" class="form-control" id="email-pasien" placeholder="Email Pasien" disabled="disabled" readonly value="<?php echo $resep->email_pasien; ?>">
                                 </div>
                                 <hr>
                                 <?php if($resep->pasien_is_vip)  { ?>
@@ -136,11 +219,16 @@
                                   <input type="text" class="form-control" id="alamat-inputan"
                                   value="<?php echo $alamat_inputan; ?>"
                                   name="alamat"
-                                  placeholder="<?php echo $alamat_inputan; ?>">
+                                  placeholder="<?php echo $alamat_inputan; ?>"
+                                  readonly disabled="disabled">
                                   </input>
                                   <script>
                                   $("#alamat-inputan").val("<?php echo $alamat_inputan; ?>"); </script>
-                                  <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+                                  <?php
+                                  // $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;
+
+                                  $alamat_inputan = (!empty($resep->alamat_kustom))? $resep->alamat_kustom : $resep->alamat_pengiriman;
+                                  ?>
                                   <!-- <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
                                   </textarea> -->
                                   <script>

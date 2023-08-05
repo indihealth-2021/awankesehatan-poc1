@@ -13,46 +13,42 @@ class PengirimanObat extends CI_Controller {
         $this->load->library('my_pagination');
     }
 
-    public function submit_biaya_pengiriman_new($id_jadwal_resep) {
-        $this->all_controllers->check_user_farmasi();
+    public function submit_biaya_pengiriman2($id_jadwal_konsultasi){
+		$this->all_controllers->check_user_farmasi();
 
-        $id_jadwal_konsultasi = $id_jadwal_konsultasi;
-
-        if ($this->input->post('id_registrasi')){
-            $id_registrasi = $this->input->post('id_registrasi');
-        } else {
-            $id_registrasi = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
-        }
-
-        // $id_registrasi = $id_registrasi ?
-        //     $id_registrasi : $diagnosis_dokter->id_registrasi;
+        // $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');
         $alamat = $this->input->post('alamat');
+        $alamat_kustom = $this->input->post('alamat_kustom');
 
-        if(!$id_jadwal_konsultasi || $biaya_pengiriman == null || !$alamat){
-            echo $alamat;
-            die;
+        if(!$id_jadwal_konsultasi || !$biaya_pengiriman || !$alamat){
+            $this->session->set_flashdata('msg_biaya_pengiriman', $id_jadwal_konsultasi.",".$biaya_pengiriman.",".$alamat);
+            redirect(base_url('admin/PengirimanObat'));
         }
 
         $data_biaya_pengiriman = array(
-            'id_registrasi'=>$id_registrasi,
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
+            'alamat_kustom'=>$alamat_kustom,
             'alamat'=>$alamat
         );
 
-        $biaya_pengiriman_isExists = $this->db->query("SELECT id, jumlah_edit,alamat FROM biaya_pengiriman_obat WHERE id_registrasi = '".$id_registrasi."'")->row();
+        $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ".$id_jadwal_konsultasi)->row();
         if(!$biaya_pengiriman_isExists){
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-            $jml_edit = 1;
         }
         else{
-            $jml_edit = $biaya_pengiriman_isExists->jumlah_edit+1;
-            $alamat_kustom = $alamat != $biaya_pengiriman_isExists->alamat ? 1:0;
-            $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi'=>$id_jadwal_konsultasi, 'biaya_pengiriman'=>$biaya_pengiriman, 'alamat'=>$alamat, 'alamat_kustom'=>$alamat_kustom, 'jumlah_edit'=>$biaya_pengiriman_isExists->jumlah_edit+1), array('id'=>$biaya_pengiriman_isExists->id));
+            $this->all_model->update('biaya_pengiriman_obat', array('biaya_pengiriman'=>$biaya_pengiriman, 'alamat_kustom'=>$alamat_kustom, 'alamat'=>$alamat), array('id'=>$biaya_pengiriman_isExists->id));
         }
 
-        echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
+        $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
+
+        // if(!$biaya_pengiriman){
+        //     $this->db->insert('biaya_pengiriman_obat', array('biaya_pengiriman'=>0, 'id_jadwal_konsultasi'=>$id_jadwal_konsultasi));
+        // }
+
+        $this->session->set_flashdata('msg_biaya_pengiriman', 'SUKSES: Resep Obat telah disimpan');
+        redirect(base_url('admin/PengirimanObat'));
     }
 
     public function index(){
@@ -63,7 +59,8 @@ class PengirimanObat extends CI_Controller {
         );
 
         $user = $this->db->query("SELECT * FROM master_user WHERE master_user.id=".$this->session->userdata("id_user"))->result_array()[0];
-        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat_kustom, biaya_pengiriman_obat.alamat as alamat_pengiriman, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, p.vip as pasien_is_vip, p.telp as telp_pasien, p.email as email_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 1 AND resep_dokter.id_apotek=".$user["id_apotek"]." GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
+        $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat_kustom, biaya_pengiriman_obat.alamat as alamat_pengiriman, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, p.vip as pasien_is_vip, p.telp as telp_pasien, p.email as email_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 1 AND resep_dokter.diverifikasi_user=1 AND resep_dokter.id_apotek=".$user["id_apotek"]." GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
+        // 2023/8/5 - Changed from id_reg to jadwal_konsultasi
 
         $data['css_addons'] = '<link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css').'"><link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css').'">';
         $data['js_addons'] = '
@@ -292,10 +289,8 @@ if(data.status == "OK"){
         $this->load->view('template', $data);
     }
 
-    public function submit_biaya_pengiriman(){
+    public function submit_biaya_pengiriman($id_jadwal_konsultasi){
         $this->all_controllers->check_user_farmasi();
-
-        $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
 
         if ($this->input->post('id_registrasi')){
             $id_registrasi = $this->input->post('id_registrasi');
@@ -333,7 +328,9 @@ if(data.status == "OK"){
             $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi'=>$id_jadwal_konsultasi, 'biaya_pengiriman'=>$biaya_pengiriman, 'alamat'=>$alamat, 'alamat_kustom'=>$alamat_kustom, 'jumlah_edit'=>$biaya_pengiriman_isExists->jumlah_edit+1), array('id'=>$biaya_pengiriman_isExists->id));
         }
 
-        echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
+        // echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
+        $this->session->set_flashdata('msg_biaya_pengiriman', 'SUKSES: Resep Obat telah disimpan');
+        redirect(base_url('admin/PengirimanObat'));
     }
 
     public function rilis_obat($id_jadwal_konsultasi){

@@ -504,14 +504,18 @@
             configOverwrite: {
                 disableDeepLinking: true,
             },
+            userInfo: {
+                displayName: userName
+            },
         };
 
     navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true
     }).then(function(stream) {
-        const api = new JitsiMeetExternalAPI(domain, options);
-
+        const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+                document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+            });
         api.executeCommand('displayName', userName);
         api.executeCommand('toggleTileView');
         api.executeCommand('startRecording', {

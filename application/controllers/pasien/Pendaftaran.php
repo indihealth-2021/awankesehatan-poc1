@@ -23,7 +23,7 @@ class Pendaftaran extends CI_Controller {
                 redirect(base_url('admin/Admin'));
             }
         }
-				$this->session->set_userdata('_token',hash('sha256', random_string('alnum', 64)));
+				// $this->session->set_userdata('_token',hash('sha256', random_string('alnum', 64)));
         $poli = $this->input->get('poli');
         if(!$poli){
             $where = ' WHERE d.aktif = 1';
@@ -109,12 +109,12 @@ class Pendaftaran extends CI_Controller {
             }
         }
 
-		if($this->session->userdata("_token") !==$this->input->get('token'))
-		{
-			$this->session->set_flashdata('msg', 'Token Tidak Sesuai!');
-			redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
-		}
-				$this->session->unset_userdata('_token');
+		// if($this->session->userdata("_token") !==$this->input->get('token'))
+		// {
+		// 	$this->session->set_flashdata('msg', 'Token Tidak Sesuai!');
+		// 	redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+		// }
+		// 		$this->session->unset_userdata('_token');
         $id_pasien = $this->session->userdata('id_user');
         $id_jadwal = $this->input->get('id_jadwal');
 
@@ -258,11 +258,13 @@ class Pendaftaran extends CI_Controller {
                     'keterangan' => $notifikasi,
                     'tanggal' => $now,
                     'id_user' => json_encode(array($id_pasien)),
-                    'direct_link' => base_url('pasien/Pasien/#'),
+                    'direct_link' => base_url('dokter/Dokter/#'),
                   );
                   $msg_notif = json_encode($msg_notif);
                   $this->key->_send_fcm($dokter->reg_id, $msg_notif);
                   $this->session->set_flashdata('msg_2', $msg);
+                  $data_notif = array("id_user" => $id_dokter, "notifikasi" => $notifikasi, "tanggal" => $now, "direct_link" => $direct_link);
+                  $this->db->insert('data_notifikasi', $data_notif);
                   redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
             }
 

@@ -275,8 +275,15 @@ class Teleconsultasi extends CI_Controller
                 redirect(base_url('admin/Admin'));
             }
         }
+
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
+
+        // if(!$data) {
+        //     // This will read the raw POST data from the request body and parse it into an associative array.
+        //     // The resulting array will contain key-value pairs for each form field in the serialized data.
+        //     parse_str($this->input->raw_input_stream, $data);
+        // }
 
         if(!$data["apotek"]) {
             echo "Apotek null";
@@ -290,12 +297,6 @@ class Teleconsultasi extends CI_Controller
         $data['operasi'] = isset($data['operasi']) ? $data['operasi'] : '0';
         $data['dirawat'] = isset($data['dirawat']) ? $data['dirawat'] : '0';
         $data['keluhan'] = isset($data['keluhan']) ? $data['keluhan'] : '0';
-
-        // from new button
-        $keys = ["berat_badan", "tinggi_badan", "tekanan_darah", "suhu", "merokok", "alkohol". "kecelakaan", "operasi", "dirawat", "keluhan"];
-        foreach($keys as $key) {
-            $data[$key] = isset($data[$key]) ? $data[$key] : "-";
-        }
 
         $data_assesment = array(
             "id_pasien" => $data['id_pasien'],
@@ -369,31 +370,23 @@ class Teleconsultasi extends CI_Controller
         $data_history = array("activity" => "Diagnosis", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
         $this->db->insert('data_history_log_dokter', $data_history);
 
-        $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"]." AND resep_dokter.id_pasien=".$data["id_pasien"])->row();
+        // $exist = $this->db->query("SELECT COUNT(id) FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"]." AND resep_dokter.id_pasien=".$data["id_pasien"])->row();
 
-        if(!$exist) {
-            // if(strpos($data["apotek"], "km dari lokasi pasien") !== false) {
-            //     $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.nama=".explode(" - ", $data["apotek"])[0]);
-            // }else {
-            //     $apotek = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.id=".explode(" - ", $data["apotek"])[0]);
-            // }
-
-            $jml_data_resep = count($data['keterangan']);
-            for ($i = 0; $i < $jml_data_resep; $i++) {
-                $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = '.$data['id_obat'][$i])->row();
-                $data_resep = array(
-                    "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
-                    "id_pasien" => $data['id_pasien'],
-                    "id_dokter" => $id_dokter,
-                    "id_obat" => $data['id_obat'][$i],
-                    "jumlah_obat" => $data['jumlah_obat'][$i],
-                    "harga_per_n_unit" => $obat->harga_per_n_unit,
-                    "id_apotek" => $data["apotek"],
-                    "harga" => $obat->harga,
-                    "keterangan" => $data['keterangan'][$i],
-                );
-                $this->db->insert('resep_dokter', $data_resep);
-            }
+        $jml_data_resep = count($data['keterangan']);
+        for ($i = 0; $i < $jml_data_resep; $i++) {
+            $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = '.$data['id_obat'][$i])->row();
+            $data_resep = array(
+                "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
+                "id_pasien" => $data['id_pasien'],
+                "id_dokter" => $id_dokter,
+                "id_obat" => $data['id_obat'][$i],
+                "jumlah_obat" => $data['jumlah_obat'][$i],
+                "harga_per_n_unit" => $obat->harga_per_n_unit,
+                "id_apotek" => $data["apotek"],
+                "harga" => $obat->harga,
+                "keterangan" => $data['keterangan'][$i],
+            );
+            $this->db->insert('resep_dokter', $data_resep);
         }
         $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();

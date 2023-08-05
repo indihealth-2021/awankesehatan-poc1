@@ -835,14 +835,17 @@
           location.href = baseUrl+'dokter/Dashboard';
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'pendaftaran_konsultasi')) {
+          alert('Terdapat jadwal konsultasi baru yang didaftarkan!');
           var audio = document.getElementById('bell-ring');
           audio.play();
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_dari_dokter')) {
+          alert('Terdapat resep baru dari dokter!');
           var audio = document.getElementById('bell-ring');
           audio.play();
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_diverifikasi_pasien')) {
+          alert('Terdapat resep yang telah diverifikasi oleh pasien!');
           var audio = document.getElementById('bell-ring');
           audio.play();
         }
@@ -850,7 +853,7 @@
           var audio = document.getElementById('bell-ring');
           const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;
           audio.play();
-          location.href = "<?php echo base_url('pasien/ResepDokter/konfirmasi?id_jadwal_konsultasi=' .@$id_jadwal_konsultasi) ?>";
+          location.href = "<?php echo base_url('pasien/ResepDokter/konfirmasi/'.@$id_jadwal_konsultasi) ?>";
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'vp') || JSON.parse(JSON.parse(payload.data.body).name == 'universal')) {
           $("#isinotifmodal").text(JSON.parse(payload.data.body).keterangan);

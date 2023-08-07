@@ -68,7 +68,7 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    if($resep->diverifikasi_user == 1){
+                                                    // if($resep->diverifikasi_user == 1){
                                                         if($resep->status_bukti == 1){
                                                           if($user->vip == 1){
                                                             if($resep->diterima_user == 1){
@@ -87,7 +87,7 @@
                                                           }
                                                         }
                                                         else if($resep->status_bukti == 0){
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/#');
                                                             $button = 'Sedang Diproses';
                                                             $warna = 'simpan';
                                                         }
@@ -96,12 +96,12 @@
                                                           $button = 'Bayar';
                                                           $warna = 'bayar';                                 
                                                         }
-                                                    }
-                                                    else{
-                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/'.$resep->id_jadwal_konsultasi);
-                                                        $button = 'Konfirmasi Obat';
-                                                        $warna = 'simpan';
-                                                    }
+                                                    // }
+                                                    // else{
+                                                    //     $directLink = base_url('pasien/ResepDokter/konfirmasi/'.$resep->id_jadwal_konsultasi);
+                                                    //     $button = 'Konfirmasi Obat';
+                                                    //     $warna = 'simpan';
+                                                    // }
                                                 ?>
                                                 <td class='text-center'>
                                                 <a href="<?php echo $directLink ?>" class='btn btn-<?php echo $warna ?>  font-12'> <?php echo $button ?></a>

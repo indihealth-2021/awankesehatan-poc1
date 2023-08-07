@@ -168,6 +168,7 @@ class Telekonsultasi extends CI_Controller {
             $data['old_assesment'] = true;
             $data['assesment'] = $this->db->query('SELECT a.id, a.berat_badan, a.tinggi_badan, a.tekanan_darah, a.suhu, a.merokok, a.alkohol, a.kecelakaan, a.operasi, a.dirawat, a.keluhan FROM assesment a WHERE id_pasien = '.$this->session->userdata('id_user')." ORDER BY a.created_at DESC")->row();
         }
+        $data['file_asesmen'] = $this->db->query('SELECT * FROM file_asesmen WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
     $data['css_addons'] = "<script src='https://meet.jit.si/external_api.js'></script>";
       if(!$data['old_assesment']){
         $data['js_addons'] = "

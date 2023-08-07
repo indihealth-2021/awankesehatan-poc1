@@ -221,6 +221,7 @@ class Telekonsultasi extends CI_Controller {
                     method : 'POST',
                     url    : baseUrl+'pasien/Telekonsultasi/submitAssesment',
                     data   : $('#formModalAssesment').serialize(),
+                    contentType: 'multipart/form-data',
                     success : function(data){                                           
                         $('#formAssesment input[name=berat_badan]').val($('#formModalAssesment input[name=berat_badan]').val());
                         $('#formAssesment input[name=tinggi_badan]').val($('#formModalAssesment input[name=tinggi_badan]').val());

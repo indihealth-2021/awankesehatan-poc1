@@ -518,6 +518,22 @@
                         <input type="hidden" name="id_dokter" value="<?php echo $dokter->id ?>">
                         <input type="hidden" name="id_jadwal_konsultasi" value="<?php echo $id_jadwal_konsultasi ?>">
                     </div>
+                    <div class="col-md-12">
+                    <div class="form-group row">
+                            <label for="form_file_asessment" class="col-md-4 col-4 mt-2 text-abu">Upload File</label>
+                            <div class="col-md-6 col-6">
+                                    <div class="row" id="form_file_asessment">
+                                        <p class="text-abu mt-2">:&nbsp;</p>
+                                        <div class="custom-file col-10">
+                                            <input type="file" name="file_upload[]" class="custom-file-input"  id="file_upload" size="10024" accept=".gif, .jpg, .jpeg, .png, .jfif, .pdf, .docx, .doc, .xlsx, .xls, .rar, .zip" multiple>
+                                            <label class="custom-file-label" for="customFile" id="asesmenfilename"></label>
+                                        </div>
+                                        <span class="text-abu font-12 ml-2">File dengan ukuran maksimal 10mb</span>
+                                        <span id="file_cards_container" class="col-md-12 col-12"></span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                       <div class="mx-auto">

@@ -419,7 +419,7 @@
                 <p class="modal-title font-24 ml-4" id="exampleModalLabel">Assesment Pasien</p>
               </div>
             <div class="modal-body">
-                <form id="formModalAssesment">
+                <form id="formModalAssesment" enctype="multipart/form-data"> 
                     <div class="col-sm-12 row mx-auto">
                       <div class="col-md-6">
                         <div class="mb-3">

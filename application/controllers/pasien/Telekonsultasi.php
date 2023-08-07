@@ -81,7 +81,8 @@ class Telekonsultasi extends CI_Controller {
         $config['upload_path'] = './assets/files/file_pemeriksaan_luar';
         $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif|pdf|docx|doc|xlsx|xls|rar|zip';
         $config['max_size'] = 10024;
-        $this->load->library('upload', $config);$this->upload->initialize($config);
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
         $files = $_FILES['file_upload'];
         $cpt = count($files['name']);
         if ($cpt > 0) {
@@ -99,7 +100,14 @@ class Telekonsultasi extends CI_Controller {
                     $upload_error = $this->upload->display_errors();
                     $this->session->set_flashdata('msg_assesment', 'Gagal mengupload gambar.');
                 }else{
-                    $this->db->query('INSERT INTO file_asesmen (id_jadwal_konsultasi, path_file, nama_file, type_file, ukuran_file) VALUES ("'.$id_jadwal_konsultasi.'", "'.$this->upload->data('file_name'). '", "'.$files['name'][$i].' ", "'.$this->upload->data('file_type').' ", "'.$this->upload->data('file_size').'" )');   
+                    $fileData = [
+                        'id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'],
+                        'path_file' => $this->upload->data('file_name'),
+                        'nama_file' => $files['name'][$i],
+                        'type_file' => $this->upload->data('file_type'),
+                        'ukuran_file' => $this->upload->data('file_size')
+                    ];
+                    $this->db->insert('file_asesmen', $fileData);
                 }
             }
         }

@@ -89,7 +89,9 @@ class Pembayaran extends CI_Controller
     $('input[name=cardNumber]').on('blur', function (e) {
         $(this).off('wheel.disableScroll');
     });
-
+    if ($('input[name=obat-dikirim]').val() == '1') {
+        $('#alamat-pengiriman-obat').show();
+    }
     $('input[name=otp]').on('focus', function (e) {
         $(this).on('wheel.disableScroll', function (e) {
             e.preventDefault();
@@ -231,6 +233,7 @@ class Pembayaran extends CI_Controller
                         return false;
                     }
                 }
+              
 
                 alamat_provinsi = $('#alamat-pengiriman-obat').find('select[name=alamat_provinsi]').val();
                 alamat_kota = $('#alamat-pengiriman-obat').find('select[name=alamat_kota]').val();

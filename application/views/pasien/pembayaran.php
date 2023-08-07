@@ -201,6 +201,12 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     </div>
                   </div>
                 </div>
+                <div class="col-md-11 ml-3">
+                  <div class="form-group row">
+                    <label for=obat-dikirim">Obat Dikirim?</label>
+                    <input type="checkbox" class="" name="obat_dikirim" id="obat-dikirim" value='1'>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row pl-5">
@@ -468,13 +474,13 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                 <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
               </form>
             </div>
-            <div class="col-md-11" id="alamat-pengiriman-obat">
-              <div class="form-group row" style="<?= $user->vip ? "" : "display: none;" ?>">
+            <div class="col-md-11" id="alamat-pengiriman-obat" style="display: hidden;">
+              <div class="form-group row">
                 <label for="alamat" class="col-md-3 col-4 text-abu">
                   Alamat Pengiriman Obat
                 </label>
                 <div class="col-md-7 col-8">
-                  <div class="row" style="<?= $user->vip ? "" : "display: none;" ?>">
+                  <div class="row">
                     <span class="text-abu">:&nbsp </span>
                     <div class="col-10" style="margin-left: -10px;">
                       <div class="form-group form-focus">
@@ -589,6 +595,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
     </div>
   </div>
 </div>
+
 
 
 <script>

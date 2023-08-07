@@ -68,7 +68,7 @@ class Telekonsultasi extends CI_Controller {
             else{
                 redirect(base_url('admin/Admin'));
             }
-        // } 
+        } 
         $data = $this->input->post();
         $data['name'] = 'unshow';
         $data['sub_name'] = 'submit_assesment_pasien';
@@ -77,48 +77,22 @@ class Telekonsultasi extends CI_Controller {
         $msg_notif = json_encode($data);
         $this->key->_send_fcm($dokter->reg_id, $msg_notif);
 
-	    unset($data['name']);
-	    unset($data['sub_name']);
-	    unset($data['id_user']);
+	unset($data['name']);
+	unset($data['sub_name']);
+	unset($data['id_user']);
 
-        $config['upload_path'] = './assets/files/file_pemeriksaan_luar';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif|pdf|docx|doc|xlsx|xls|rar|zip';
-        $config['max_size'] = 10024;
-        $this->load->library('upload', $config);$this->upload->initialize($config);
-        $files = $_FILES['file_upload'];
-        $cpt = count($files['name']);
-        if ($cpt > 0) {
-            for ($i = 0; $i < $cpt; $i++) {
-                $_FILES['userfile']['name'] = $files['name'][$i];
-                $_FILES['userfile']['type'] = $files['type'][$i];
-                $_FILES['userfile']['tmp_name'] = $files['tmp_name'][$i];
-                $_FILES['userfile']['error'] = $files['error'][$i];
-                $_FILES['userfile']['size'] = $files['size'][$i];
-                
-                $ext = pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION);
-                $_FILES['userfile']['name'] = uniqid().'.'.$ext;
-                        
-                if (!$this->upload->do_upload('userfile')) {
-                    $upload_error = $this->upload->display_errors();
-                    $this->session->set_flashdata('msg_assesment', 'Gagal mengupload gambar.');
-                }else{
-                    $this->db->query('INSERT INTO file_asesmen (id_jadwal_konsultasi, path_file, nama_file, type_file, ukuran_file) VALUES ("'.$id_jadwal_konsultasi.'", "'.$this->upload->data('file_name'). '", "'.$files['name'][$i].' ", "'.$this->upload->data('file_type').' ", "'.$this->upload->data('file_size').'" )');   
-                }
-            }
-        }
+	$data['id_pasien'] = $this->session->userdata('id_user');
 
-	    $data['id_pasien'] = $this->session->userdata('id_user');
+	$assesment = $this->db->query('SELECT id FROM assesment WHERE id_jadwal_konsultasi = '.$data['id_jadwal_konsultasi'].' AND id_pasien = '.$this->session->userdata('id_user'))->row();
+	if(!$assesment){
+		$this->db->insert('assesment', $data);
+	}
+	else{
+		$this->all_model->update('assesment', $data, array('id_jadwal_konsultasi'=>$data['id_jadwal_konsultasi']));
+	}
 
-	    $assesment = $this->db->query('SELECT id FROM assesment WHERE id_jadwal_konsultasi = '.$data['id_jadwal_konsultasi'].' AND id_pasien = '.$this->session->userdata('id_user'))->row();
-	    if(!$assesment){
-	    	$this->db->insert('assesment', $data);
-	    }
-	    else{
-	    	$this->all_model->update('assesment', $data, array('id_jadwal_konsultasi'=>$data['id_jadwal_konsultasi']));
-	    }
-
-            echo "OK";
-        }
+        echo "OK";
+    }
 
     public function konsultasi($id_dokter, $id_jadwal_konsultasi){
         if(!$id_dokter || !$id_jadwal_konsultasi){

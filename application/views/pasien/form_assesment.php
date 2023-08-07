@@ -147,15 +147,15 @@
                                 </div>
                         </div>
                         <div class="mb-0 pb-0">
-                            <form method="post" action="<?php echo base_url('pasien/Assesment/update') ?>">
                             <?php if (!empty($file_asesmen)) { ?>
                                 <?php foreach ($file_asesmen as $file) { ?>
-                              <div class="card">
-                                <div class="card-body">
-                                    <h5><?php echo $file->nama_file ?></h5>
-                                    <button type="button" class="btn btn-danger" onclick="removeFile(<?php echo $file->id ?>)">Hapus</button>
+                                    <div class="card">
+                                    <div class="card-body">
+                                        <h5><?php echo $file->nama_file ?></h5>
+                                        <p><?php echo $file->type_file ?></p>
+                                        <button type="button" class="btn btn-danger" onclick="removeFile(<?php echo $file->id ?>)">Hapus</button>
+                                    </div>
                                 </div>
-                              </div>
                               <?php } ?>
                               <?php } ?>
                         </div>

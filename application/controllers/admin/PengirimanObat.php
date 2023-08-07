@@ -340,11 +340,17 @@ if(data.status == "OK"){
 
         // $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
         $biaya_pengiriman = $this->input->post('biaya_pengiriman');
-        $alamat = $this->input->post('alamat');
-        $alamat_kustom = $this->input->post('alamat_kustom');
+        $biaya_pengiriman = $biaya_pengiriman ? $biaya_pengiriman : 0;
 
-        if(!$id_jadwal_konsultasi || !$biaya_pengiriman || !$alamat){
-            $this->session->set_flashdata('msg_biaya_pengiriman', 'GAGAL: Data Tidak Lengkap!');
+        $alamat = $this->input->post('alamat');
+        $alamat = $alamat ? $alamat : "";
+
+        $alamat_kustom = $this->input->post('alamat_kustom');
+        $alamat_kustom = $alamat_kustom ? $alamat_kustom : "";
+
+        if(!$id_jadwal_konsultasi){
+            $message = 'GAGAL: Data Tidak Lengkap!';
+            $this->session->set_flashdata('msg_biaya_pengiriman', $message);
             redirect(base_url('admin/PengirimanObat'));
         }
 

@@ -402,14 +402,6 @@
                         </div>
                       </div>
                     <?php } ?>
-                    <?php foreach ($file_asesmen as $file) { ?>
-                      <div class="card" onclick="window.open('<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>', '_blank')">
-                        <div class="card-body">
-                          <h4><?php echo $file->nama_file ?></h4>
-                          <p><?php echo $file->type_file ?></p>
-                        </div>
-                      </div>
-                    <?php } ?>
                 <?php } ?>
                   </div>
                 </div>

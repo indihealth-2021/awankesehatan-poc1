@@ -146,7 +146,7 @@ class Pembayaran extends CI_Controller
                 let href_btn =  $('#btnBayar').attr('href').split('/');
                 bank_id = href_btn[href_btn.length - 2];
                 if(bank_id === ''){
-                    alert('GAGAL: Pilih Bank Terlebih Dahulu!');
+                    alert('GAGAL: Pilih Metode Terlebih Dahulu!');
                     return false;
                 }
 
@@ -184,7 +184,7 @@ class Pembayaran extends CI_Controller
                 let href_btn =  $('#form-transfer-manual').attr('action').split('/');
                 bank_id = href_btn[href_btn.length - 2];
                 if(bank_id === ''){
-                    alert('GAGAL: Pilih Bank Terlebih Dahulu!');
+                    alert('GAGAL: Pilih Metode Terlebih Dahulu!');
                     return false;
                 }
 
@@ -194,18 +194,25 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                // if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                //     alert('GAGAL: Alamat tidak lengkap!');
-                //     return false;
-                // }else{
-                    $('#form-transfer-manual').find('input[name=alamat_provinsi]').val(alamat_provinsi);
-                    $('#form-transfer-manual').find('input[name=alamat_kota]').val(alamat_kota);
-                    $('#form-transfer-manual').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
-                    $('#form-transfer-manual').find('input[name=alamat_kelurahan]').val(alamat_kelurahan);
-                    $('#form-transfer-manual').find('input[name=kode_pos]').val(kode_pos);
-                    $('#form-transfer-manual').find('input[name=alamat_detail]').val(alamat_detail);
+                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                     alert('GAGAL: Alamat tidak lengkap!');
+                     return false;
+                }else{
+                    // $('#form-transfer-manual').find('input[name=alamat_provinsi]').val(alamat_provinsi);
+                    // $('#form-transfer-manual').find('input[name=alamat_kota]').val(alamat_kota);
+                    // $('#form-transfer-manual').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
+                    // $('#form-transfer-manual').find('input[name=alamat_kelurahan]').val(alamat_kelurahan);
+                    // $('#form-transfer-manual').find('input[name=kode_pos]').val(kode_pos);
+                    // $('#form-transfer-manual').find('input[name=alamat_detail]').val(alamat_detail);
+
+                    $('input[name=alamat_provinsi]').val(alamat_provinsi);
+                    $('input[name=alamat_kota]').val(alamat_kota);
+                    $('input[name=alamat_kecamatan]').val(alamat_kecamatan);
+                    $('input[name=alamat_kelurahan]').val(alamat_kelurahan);
+                    $('input[name=alamat_detail]').val(alamat_detail);
+
                     $('#form-transfer-manual').submit();
-                //}
+                }
             });
         }else if(this.value == '3'){
             $('#form-owlexa').hide();
@@ -233,7 +240,7 @@ class Pembayaran extends CI_Controller
                         return false;
                     }
                 }
-              
+
 
                 alamat_provinsi = $('#alamat-pengiriman-obat').find('select[name=alamat_provinsi]').val();
                 alamat_kota = $('#alamat-pengiriman-obat').find('select[name=alamat_kota]').val();
@@ -255,7 +262,7 @@ class Pembayaran extends CI_Controller
                 //}
                 // let href_btn =  $('#btnBayar').attr('href').split('/');
                 // if(href_btn.length <= 8){
-                //     alert('GAGAL: Pilih Bank Terlebih Dahulu!');
+                //     alert('GAGAL: Pilih Metode Terlebih Dahulu!');
                 //     return false;
                 // }
             });
@@ -377,7 +384,7 @@ class Pembayaran extends CI_Controller
                 //}
                 // let href_btn =  $('#btnBayar').attr('href').split('/');
                 // if(href_btn.length <= 8){
-                //     alert('GAGAL: Pilih Bank Terlebih Dahulu!');
+                //     alert('GAGAL: Pilih Metode Terlebih Dahulu!');
                 //     return false;
                 // }
             });
@@ -697,6 +704,9 @@ class Pembayaran extends CI_Controller
         if ($id_registrasi == null) {
             show_404();
         }
+
+        $data["dikirim"] = (int) $post_data["dikirim"];
+
         $data['registrasi'] = $this->db->query('SELECT reg.id as registrasi_id, reg.keterangan, reg.id_status_pembayaran, reg.id_pasien, d.name as nama_dokter, p.poli, d.id as id_dokter, p.id as jadwal_id, nominal.biaya_adm as biaya_adm_poli, bukti_pembayaran.biaya_adm as biaya_adm_bukti, nominal.harga as biaya_konsultasi_poli,bukti_pembayaran.biaya_konsultasi as biaya_konsultasi_bukti, jk.tanggal as tanggal_konsultasi, jk.jam as waktu_konsultasi FROM data_registrasi reg INNER JOIN jadwal_dokter p ON reg.id_jadwal=p.id INNER JOIN master_user d ON p.id_dokter = d.id INNER JOIN detail_dokter ON d.id = detail_dokter.id_dokter INNER JOIN nominal ON nominal.id = detail_dokter.id_poli LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = reg.id LEFT JOIN jadwal_konsultasi jk ON reg.id = jk.id_registrasi WHERE reg.id = "' . $id_registrasi . '" AND reg.id_status_pembayaran = 0 AND reg.id_pasien = ' . $this->session->userdata('id_user'))->row();
         if (!$data['registrasi']) {
             show_404();
@@ -811,6 +821,8 @@ class Pembayaran extends CI_Controller
 
         $alamat_kustom = 1;
         $alamat_pengiriman_obat = $this->input->post('alamat');
+        $dikirim = $this->input->post("dikirim");
+
         if (!$alamat_pengiriman_obat) {
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Alamat tidak lengkap!');
             redirect(base_url('pasien/Pembayaran/transfer_manual/' . $id_registrasi . '/' . $bank_id));
@@ -1048,7 +1060,7 @@ class Pembayaran extends CI_Controller
             $this->db->update('data_registrasi');
 
             $data_biaya_pengiriman_obat = array(
-                'alamat' => $alamat_pengiriman_obat,
+                'alamat' => $dikirim ? $alamat_pengiriman_obat : "",
                 'alamat_kustom' => $alamat_kustom,
                 'id_registrasi' => $id_registrasi,
                 'lat' => $koordinat->lat,

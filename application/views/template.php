@@ -1083,7 +1083,17 @@
         });
       });
 
-
+      $("#select-alamat").hide();
+      $("#label-select-alamat").hide();
+      $('select#dikirim').on('change', function() {
+        if(this.value == "1") {
+          $("#select-alamat").show();
+          $("#label-select-alamat").show();
+        }else {
+          $("#select-alamat").hide();
+          $("#label-select-alamat").hide();
+        }
+      });
     </script>
   <?php } ?>
 

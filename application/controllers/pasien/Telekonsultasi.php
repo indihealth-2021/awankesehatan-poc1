@@ -217,11 +217,13 @@ class Telekonsultasi extends CI_Controller {
 
             $('#formModalAssesment').on('submit', function(e){
 				e.preventDefault();
+                var formData = new FormData(this);
                 $.ajax({
                     method : 'POST',
                     url    : baseUrl+'pasien/Telekonsultasi/submitAssesment',
-                    data   : $('#formModalAssesment').serialize(),
-                    contentType: 'multipart/form-data',
+                    data   : formData,
+                    contentType: false,
+                    processData: false,
                     success : function(data){                                           
                         $('#formAssesment input[name=berat_badan]').val($('#formModalAssesment input[name=berat_badan]').val());
                         $('#formAssesment input[name=tinggi_badan]').val($('#formModalAssesment input[name=tinggi_badan]').val());

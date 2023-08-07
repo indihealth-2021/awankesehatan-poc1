@@ -99,7 +99,7 @@ class Telekonsultasi extends CI_Controller {
                     $upload_error = $this->upload->display_errors();
                     $this->session->set_flashdata('msg_assesment', 'Gagal mengupload gambar.');
                 }else{
-                    $this->db->query('INSERT INTO file_asesmen (id_jadwal_konsultasi, path_file, nama_file, type_file, ukuran_file) VALUES ("'.$id_jadwal_konsultasi.'", "'.$this->upload->data('file_name'). '", "'.$files['name'][$i].' ", "'.$this->upload->data('file_type').' ", "'.$this->upload->data('file_size').'" )');   
+                    $this->db->query('INSERT INTO file_asesmen (id_jadwal_konsultasi, path_file, nama_file, type_file, ukuran_file) VALUES ("'.$data['id_jadwal_konsultasi'].'", "'.$this->upload->data('file_name'). '", "'.$files['name'][$i].' ", "'.$this->upload->data('file_type').' ", "'.$this->upload->data('file_size').'" )');   
                 }
             }
         }

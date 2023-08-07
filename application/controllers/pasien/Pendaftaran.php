@@ -263,7 +263,7 @@ class Pendaftaran extends CI_Controller {
                   $msg_notif = json_encode($msg_notif);
                   $this->key->_send_fcm($dokter->reg_id, $msg_notif);
                   $this->session->set_flashdata('msg_2', $msg);
-                  $data_notif = array("id_user" => $id_dokter, "notifikasi" => $notifikasi, "tanggal" => $now, "direct_link" => $direct_link);
+                  $data_notif = array("id_user" => $id_dokter, "notifikasi" => $notifikasi, "tanggal" => $now, "direct_link" => base_url('dokter/Dokter/#'));
                   $this->db->insert('data_notifikasi', $data_notif);
                   redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
             }

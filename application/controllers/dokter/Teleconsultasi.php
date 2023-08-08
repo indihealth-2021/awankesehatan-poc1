@@ -533,6 +533,28 @@ function checkRemove() {
     }
 };
 $(document).ready(function() {
+
+    $('#diagnosis-detail-laboratorium').hide();
+    $('#diagnosis-detail-radiologi').hide();
+
+    $('#tipe-pemeriksaan-1').click( function () {
+        if($('#tipe-pemeriksaan-1').is(':checked'))
+        {
+            $('#diagnosis-detail-laboratorium').show();
+        }else {
+            $('#diagnosis-detail-laboratorium').hide();
+        }
+    });
+
+    $('#tipe-pemeriksaan-2').click( function () {
+        if($('#tipe-pemeriksaan-2').is(':checked'))
+        {
+            $('#diagnosis-detail-radiologi').show();
+        }else {
+            $('#diagnosis-detail-radiologi').hide();
+        }
+    });
+
     $('.chat-wrap-inner').scrollTop($('.chat-wrap-inner')[0].scrollHeight);
     checkRemove();
     $('#add').click(function() {

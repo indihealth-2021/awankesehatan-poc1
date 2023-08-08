@@ -205,9 +205,37 @@
                         <input name="radiologi" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2" value="1">
                         <label class="form-check-label" for="tipe-pemeriksaan-2">Radiologi</label>
                     </div>
-                    <textarea name="pemeriksaan" class="form-control mt-2" id="pemeriksaan"></textarea>
+                    <!-- <textarea name="pemeriksaan" class="form-control mt-2" id="pemeriksaan"></textarea> -->
+                    <div class="col-md-12 mt-3" id="diagnosis-detail-laboratorium">
+                        <h4 class="mb-3">Pemeriksaan Penunjang - Laboratorium</h4>
+
+                        <?php $lab = explode(",", "Darah Lengkap,Urine Rutin,Kolesterol Total,Trigliserida,HDL Kolesterol,LDL Kolesterol,Ureum (BUN),Kreatinin,Asam Urat,Glukosa Puasa,Glukosa 2 Jam PP,HBA 1c,Natrium,Kalium,Klorida"); ?>
+
+                        <?php for($i = 0; $i < count($lab); $i ++) { ?>
+                            <div class="form-check form-check-inline">
+                            <input name="tipe-pemeriksaan-1-<?= $i ?>" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-1-<?= $i ?>" value="1">
+                            <label class="form-check-label" for="tipe-pemeriksaan-1-<?= $i ?>"><?= $lab[$i] ?></label>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+
+                    <div class="col-md-12 mt-3" id="diagnosis-detail-radiologi">
+                        <h4 class="mb-3 opacity-75">Pemeriksaan Penunjang - Radiologi</h4>
+
+                        <?php $lab = explode(",", "Darah Lengkap,Urine Rutin,Kolesterol Total,Trigliserida,HDL Kolesterol,LDL Kolesterol,Ureum (BUN),Kreatinin,Asam Urat,Glukosa Puasa,Glukosa 2 Jam PP,HBA 1c,Natrium,Kalium,Klorida"); ?>
+
+                        <?php for($i = 0; $i < count($lab); $i ++) { ?>
+                            <div class="form-check form-check-inline">
+                            <input name="tipe-pemeriksaan-2-<?= $i ?>" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2-<?= $i ?>" value="1">
+                            <label class="form-check-label" for="tipe-pemeriksaan-2-<?= $i ?>"><?= $lab[$i] ?></label>
+                            </div>
+                        <?php } ?>
+
+                    </div>
                   </div>
               </div>
+
               <p class="py-2 font-12">Kesimpulan</p>
               <div class="col-md-12" id="diagnosis">
                   <div class="form-group row">

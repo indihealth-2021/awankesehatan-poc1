@@ -51,11 +51,15 @@
                     $page++ ?>
                    <tr class="font-12" style="border-top: 3px solid #21AAC4;">
                      <td colspan="1"></td>
-                     <td colspan="7">
+                     <td colspan="5">
 
                        <span>Tanggal Konsultasi</span><br>
                        <?php $tanggal = new DateTime($resep->tanggal_konsultasi);
                         echo $tanggal->format('d-m-Y H:i:s'); ?>
+                     </td>
+                     <td>
+                      <span>Card Number</span><br>
+                      <?= $resep->card_number; ?>
                      </td>
                    </tr>
 

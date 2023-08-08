@@ -128,6 +128,10 @@
                                   <label for="email">Email </label>
                                   <input type="text" class="form-control" id="email-pasien" placeholder="Email Pasien" disabled="disabled" readonly value="<?php echo $resep->email_pasien; ?>">
                                 </div>
+                                <div class="form-group">
+                                  <label for="card-number">Nomor Kartu (Card Number) </label>
+                                  <input type="text" class="form-control" id="card-number" placeholder="Card Number" disabled="disabled" readonly value="<?php echo $resep->card_number; ?>">
+                                </div>
                                 <hr>
                                   <div class="form-group">
                                   <label for="alamat">Alamat Inputan Pasien <span class="edit-form" id="isAlamatLengkap"></span></label>
@@ -209,6 +213,10 @@
                                 <div class="form-group">
                                   <label for="email">Email </label>
                                   <input type="text" class="form-control" id="email-pasien" placeholder="Email Pasien" disabled="disabled" readonly value="<?php echo $resep->email_pasien; ?>">
+                                </div>
+                                <div class="form-group">
+                                  <label for="card-number">Nomor Kartu (Card Number) </label>
+                                  <input type="text" class="form-control" id="card-number" placeholder="Card Number" disabled="disabled" readonly value="<?php echo $resep->card_number; ?>">
                                 </div>
                                 <hr>
                                   <div class="form-group">

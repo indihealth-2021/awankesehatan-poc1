@@ -25,7 +25,22 @@
                 </div>
               </div> 
             </div>
-
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="text-label-form">Durasi Konsultasi </label>
+                  <div class="col-md-14">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i  class="fas fa-clock"></i></span>
+                      </div>
+                      <input type="number" required class="form-control" name="durasi"  min="1" placeholder="Masukan Durasi (Menit)">
+                    </div>
+                    <!-- <div class="alert mt-2" id="rupiah_2" role="alert"> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">

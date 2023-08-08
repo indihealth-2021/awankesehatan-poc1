@@ -123,12 +123,14 @@ class Config extends CI_Controller
         $this->all_controllers->check_user_admin();
 
         $data = $this->input->post();
+        $calc_duration = $data['durasi']*60;
         $data['biaya_adm'] = $data['biaya_adm'] == '' ? null:$data['biaya_adm'];
         // $data['name'] = strtoupper($data['name']);
         $data_nominal = array(
             'poli' => $data['name'], 
             'harga' => $data['harga'], 
             'aktif'=>$data['aktif'], 
+            'durasi'=>$calc_duration,
             'biaya_adm'=>$data['biaya_adm']
         );
         $new_poli = $this->db->insert('nominal', $data_nominal);

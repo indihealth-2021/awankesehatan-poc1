@@ -11,6 +11,8 @@ class Pasien_model extends CI_Model{
             master_user.telp,
             master_user.aktif,
             master_user.alamat_jalan,
+            master_user.vip,
+            master_user.card_number,
             master_provinsi.name as alamat_provinsi,
             master_kota.name as alamat_kota,
             master_kelurahan.name as alamat_kelurahan,

@@ -38,7 +38,7 @@ class Pasien extends CI_Controller
                                 "searching": true,
                                 "pageLength": 5,
                                 });
-                                
+
                                 $("#table_pasien_filter").remove();
                                 $("#search").on("keyup", function(e){
                                   table_pasien.search($(this).val()).draw();
@@ -319,12 +319,12 @@ class Pasien extends CI_Controller
                     var template_provinsi = "<option value=\""+item.id+"\" "+item.selected+">"+item.name+"</option>";
                     $("#provinsi").append(template_provinsi);
                 });
-                
+
             },
             error : function(data){
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
             }
-            
+
 
         });
     });
@@ -348,12 +348,12 @@ class Pasien extends CI_Controller
                     var template_kotkab = "<option value=\""+item.id+"\">"+item.name+"</option>";
                     $("#kotkab").append(template_kotkab);
                 });
-                
+
             },
             error : function(data){
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
             }
-            
+
 
         });
     });
@@ -375,12 +375,12 @@ class Pasien extends CI_Controller
                     var template_kecamatan = "<option value=\""+item.id+"\">"+item.name+"</option>";
                     $("#kecamatan").append(template_kecamatan);
                 });
-                
+
             },
             error : function(data){
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
             }
-            
+
 
         });
     });
@@ -401,12 +401,12 @@ class Pasien extends CI_Controller
                     var template_kelurahan = "<option value=\""+item.id+"\">"+item.name+"</option>";
                     $("#kelurahan").append(template_kelurahan);
                 });
-                
+
             },
             error : function(data){
                 alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
             }
-            
+
 
         });
     });
@@ -456,6 +456,7 @@ class Pasien extends CI_Controller
         $this->all_controllers->check_user_admin();
 
         $data = $this->input->post();
+        $data["vip"] = isset($data["vip"]) ? $data["vip"] : 0;
         $result = $this->_get_json_data();
         $isUsernameExists = $this->db->query('SELECT id FROM master_user WHERE username="' . $data['username'] . '"')->row();
         $isEmailExists = $this->db->query('SELECT id FROM master_user WHERE email="' . $data['email'] . '"')->row();
@@ -536,7 +537,7 @@ class Pasien extends CI_Controller
         if ($this->all_model->delete('master_user', $where) == 1) {
             $detail_pasien = $this->db->query('SELECT id FROM detail_pasien WHERE id_pasien = '.$id)->row();
             if($detail_pasien){
-                $this->db->delete('detail_pasien', array('id_pasien'=>$id)); 
+                $this->db->delete('detail_pasien', array('id_pasien'=>$id));
             }
             $result->message = "Data user pasien berhasil dihapus!";
         } else {

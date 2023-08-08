@@ -12,22 +12,29 @@
                 </ol>
             </nav>
           </div>
-      </div> 
+      </div>
       <div class="row">
-        <div class="col-lg-12">         
+        <div class="col-lg-12">
           <form method="post" id="form-edit-pasien" onsubmit="return ubah();" action="<?php echo base_url('admin/Pasien/updatePasien/'.$data->id) ?>" enctype="multipart/form-data">
             <p class="title-form">Akun</p>
+
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Username</label>
                     <input type="text" class="form-control floating" id="username" name="username" value="<?php echo $data->username;?>" required placeholder="Masukan Username">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Email</label>
                     <input type="email" class="form-control floating" id="email" name="email" value="<?php echo $data->email;?>" required placeholder="Masukan Email">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group form-focus">
+                    <label class="focus-label">Card Number</label>
+                    <input type="number" class="form-control floating" id="card_number" name="card_number" required placeholder="Masukan Card Number" value="<?php echo $data->card_number; ?>">
                 </div>
               </div>
             </div>
@@ -39,7 +46,7 @@
                     <label class="focus-label">Rekam Medis</label>
                     <input type="text" class="form-control floating" id="no_medrec" name="no_medrec" value="<?php echo $detail_pasien ? $detail_pasien->no_medrec : '';?>" readonly disabled>
                 </div>
-              </div> 
+              </div>
               <!-- <div class="col-md-4">
                     <p class="text-ass-title">Assigment Pasien</p>
                     <a href="<?php echo base_url('admin/Pasien/assesment/'.$data->id);?>"><span class="link-ass">Assigment Pasien</span></a>
@@ -53,13 +60,13 @@
                     <label class="focus-label">Nama Lengkap</label>
                     <input type="text" class="form-control floating" name="name" id="name" value="<?php echo $data->name;?>" required placeholder="Masukan Nama Lengkap Disini">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Tempat Lahir</label>
                     <input type="text" class="form-control floating" name="lahir_tempat" id="lahir_tempat" value="<?php echo $data->lahir_tempat;?>" required placeholder="Masukan Tempat Lahir Disini">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Tanggal Lahir</label>
@@ -98,7 +105,7 @@
                         <?php } ?>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kabupaten/Kota</label>
@@ -110,7 +117,7 @@
                         <?php } ?>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kecamatan</label>
@@ -122,7 +129,7 @@
                         <?php } ?>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kelurahan</label>
@@ -134,13 +141,13 @@
                         <?php } ?>
                       </select>
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Kode Pos</label>
                     <input type="text" class="form-control floating" name="kode_pos" id="kode_pos" value="<?php echo $data->kode_pos;?>" placeholder="Masukan Kode Pos">
                 </div>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <div class="form-group form-focus">
                     <label class="focus-label">Alamat Jalan</label>
@@ -164,7 +171,7 @@
                     </div>
                   </div>
                 </div>
-              </div>  
+              </div>
             </div>
 
             <div class="row">
@@ -185,6 +192,16 @@
               </div>
             </div>
 
+            👑
+            <div class="row btn btn-warning m-3">
+              <div class="form-check container ">
+                <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault" name="vip" <?= $data->vip ? "checked" : "" ?>>
+                <label class="form-check-label" for="flexCheckDefault" style="color: black;">
+                  VIP?
+                </label>
+              </div>
+            </div>
+
             <div class="row mt-5">
               <div class="mx-auto">
                 <input name="id" id="id" value="<?php echo $data->id;?>" hidden>
@@ -194,9 +211,9 @@
             </div>
           </form>
         </div>
-      </div> 
+      </div>
 
-            
+
 <script>
 function ubah(){
   var password = document.getElementById('password').value;

@@ -142,6 +142,8 @@
                             <button type="button" data-toggle="modal" data-target="#exampleModal" class="mb-2 btn btn-konsul" id="panggil" data-id-pasien="<?php echo $pasien->id ?>" data-id-jadwal-konsultasi="<?php echo $id_jadwal_konsultasi ?>"><img src="<?php echo base_url('assets/dashboard/img/phone-call.png'); ?>" alt=""> Hubungi Pasien</button>
                             <button type="button" class="btn btn-konsul mx-3 d-mobile-none_" id="btn-stop" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt=""> Akhiri Panggilan</button>
                             <!-- <button type="button" class="btn btn-konsul mx-auto d-mobile-show" id="btn-stop" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt=""> Akhiri Panggilan</button> -->
+                            <div id="countdown-timer"></div>
+                            <div style="display: none;" id="timer"><?= empty($detail_dokter->durasi) ? 60 : $detail_dokter->durasi ?></div>
 
                                   <!-- Modal -->
                                   <div class="modal fade" id="memanggil" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -528,6 +530,7 @@
         audio: true,
         video: true
     }).then(function(stream) {
+        startTimer();
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
                 document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
             });
@@ -559,6 +562,36 @@
             e.innerHTML = '<i class="fas fa-stop"></i> Stop Rekam';
             e.setAttribute('data-is-recording', "1");
             e.style = 'background-color:red;';
+        }
+    }
+
+    let timePassed = 0;
+    const TIME_LIMIT = parseInt(document.querySelector("#timer").textContent);
+    let timeLeft = TIME_LIMIT;
+    let timerInterval = null;
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timePassed += 1;
+            timeLeft = TIME_LIMIT - timePassed;
+            displayTimeLeft();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+            }
+        }, 1000);
+    }
+
+    function displayTimeLeft() {
+        const timerElement = document.querySelector("#countdown-timer");
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerElement.textContent = formattedTime;
+
+        if (timeLeft <= 0) {
+            timerElement.innerHTML = "<span class='text-danger'>Waktu habis!</span>";
+            alert("Kami ingin mengingatkan bahwa waktu konsultasi telah habis sesuai jadwal. Namun, jika Anda merasa perlu untuk melanjutkan konsultasi dengan pasien yang sedang Anda layani saat ini, silakan lanjutkan sesuai kebijakan Anda.");
         }
     }
 </script>

@@ -258,7 +258,6 @@
                                     <h4>List Obat</h4>
                                     <?= $resep->detail_obat ?>
                                     </span>
-                                  <!-- <small id="hargaObatHelp" class="form-text text-muted">Rp. 0,0</small> -->
                                 </div>
                                 <div class="form-group submit-form">
                                   <label for="harga-obat">Harga Obat ( Rp. )</label>

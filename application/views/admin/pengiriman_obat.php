@@ -169,6 +169,7 @@
                                 <div class="form-group">
                                   <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman ( Rp. <?php echo $resep->biaya_pengiriman; ?>) </label>
                                   <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required value="<?php echo $resep->biaya_pengiriman ?>">
+                                  <button id="getOngkir" class="btn btn-primary mt-3" type="button">Get Ongkir</button>
                                   <!-- <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small> -->
                                 </div>
                                 <!-- <div class="form-group submit-form">
@@ -267,6 +268,8 @@
                                   <div class="form-group">
                                   <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman ( Rp. ) </label>
                                   <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" value="<?= ($biaya_pengiriman == 0 || $biaya_pengiriman == null) ? 0 : $biaya_pengiriman ?>">
+
+                                  <button id="getOngkir" class="btn btn-primary mt-3" type="button">Get Ongkir</button>
                                   <!-- <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small>  -->
                                 </div>
                                 <!-- <div class="form-group submit-form">

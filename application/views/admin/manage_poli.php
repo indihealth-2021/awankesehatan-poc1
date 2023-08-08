@@ -44,6 +44,7 @@
                         <tr class="text-center">
                           <th class="text-left">No</th>
                           <th>Poli</th>
+                          <th>Durasi Konsultasi</th>
                           <th>Tarif</th>
                           <th>Administrasi</th>
                           <th>Status</th>
@@ -57,6 +58,7 @@
                             <tr class="odd gradeX">
                               <td><?php echo $no; ?></td>
                               <td><?php echo $data->name_poli; ?></td>
+                              <td><?= $data->durasi/60 ?> menit</td>
                               <td><?php echo 'Rp. '.number_format($data->harga,2,',','.'); ?></td>
                               <td><?php echo $data->biaya_adm ? 'Rp. '.number_format($data->biaya_adm,2,',','.'):''; ?></td>
                               <td class="text-center"><?php echo $data->aktif == 1 ? '<span class="status-aktif">Aktif</span>' : '<span class="status-nonaktif">Tidak Aktif</span>' ?></td>

@@ -20,7 +20,7 @@ class Config extends CI_Controller
             $view="admin/manage_poli"
         );
 
-        $data['poli'] = $this->db->query('SELECT nominal.poli as name_poli, nominal.id, nominal.harga, nominal.biaya_adm, nominal.aktif FROM nominal ORDER BY nominal.poli')->result();
+        $data['poli'] = $this->db->query('SELECT nominal.poli as name_poli, nominal.id, nominal.harga, nominal.biaya_adm, nominal.aktif, nominal.durasi as durasi FROM nominal ORDER BY nominal.poli')->result();
         $data['css_addons'] = '<link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">';
         $data['js_addons'] = '
                             <script src="' . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . '"></script>

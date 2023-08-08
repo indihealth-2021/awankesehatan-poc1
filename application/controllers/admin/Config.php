@@ -112,7 +112,7 @@ class Config extends CI_Controller
 
         $kategori['id_user_kategori'] = 2;
         $data['dokter'] = $this->all_model->select('master_user', 'tabel', $kategori);
-        $data['data'] = $this->db->query('SELECT n.id, n.poli as name_poli, n.harga, n.biaya_adm, n.aktif FROM nominal n WHERE n.id = ' . $id)->row();
+        $data['data'] = $this->db->query('SELECT n.id, n.poli as name_poli, n.durasi as durasi, n.harga, n.biaya_adm, n.aktif FROM nominal n WHERE n.id = ' . $id)->row();
 
         $this->load->view('template', $data);
     }
@@ -154,7 +154,8 @@ class Config extends CI_Controller
         // var_dump($data['biaya_adm']);
         // die;
         // $data['name'] = strtoupper($data['name']);
-        $data_nominal = array('harga' => $data['harga'], 'poli' => $data['name'], 'aktif'=>$data['aktif'], 'biaya_adm'=>$data['biaya_adm']);
+        $calc_duration = $data['durasi']*60;
+        $data_nominal = array('harga' => $data['harga'],'durasi' => $calc_duration, 'poli' => $data['name'], 'aktif'=>$data['aktif'], 'biaya_adm'=>$data['biaya_adm']);
         $poli = $this->db->query('SELECT poli as name FROM nominal WHERE id = ' . $id)->row();
         $poli_2 = $this->db->query('SELECT poli as name FROM nominal WHERE poli = "' . $data['name'] .'"')->row();
          if($poli->name != $data['name'] && $poli_2){

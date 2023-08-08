@@ -1,6 +1,6 @@
 /*
 Author       : Indihealth
-Template Name: Telemedicine 
+Template Name: Telemedicine
 Version      : 1.0
 */
 
@@ -1592,7 +1592,7 @@ textarea.form-control {
 /*manu baru*/
 .dash-widget {
 	/*background: linear-gradient(#000046, #1cb5e0);  */
-	background: linear-gradient(to right, #1e90ff, #00bfff); 
+	background: linear-gradient(to right, #1e90ff, #00bfff);
 	/*background: linear-gradient(to right, #01a9ac, #01dbdf);*/
 	border-radius: 4px;
 	margin-bottom: 30px;
@@ -3466,7 +3466,7 @@ a.fc-event:not([href]) {
 
 .card-box.profile-header {
 	margin: 0;
-	box-shadow: 
+	box-shadow:
 }
 .profile-details {
 	text-align: center;
@@ -3593,7 +3593,7 @@ a.fc-event:not([href]) {
 }
 .profile-info-left {
 	border-right: 5px solid #FFFFFF;
-	height: auto; 
+	height: auto;
 }
 .profile-tabs .nav-tabs {
 	background-color: #fff;
@@ -5348,7 +5348,7 @@ text-align: center;
 	.mini-sidebar .sidebar .sidebar-menu li a {
 		padding: 10px 10px;
 	}
-	
+
 	.mini-sidebar .sidebar .sidebar-footer .sidebar-menu li a {
 		padding: 10px 10px;
 	}
@@ -5849,6 +5849,12 @@ text-align: center;
 	}
 	.notifications {
 		right: -48px;
+	}
+	.header {
+	    left:0px;
+		-webkit-transition: all 0.4s ease;
+		-moz-transition: all 0.4s ease;
+		transition: all 0.4s ease;
 	}
 	.notifications:before,
 	.notifications:after {
@@ -6371,7 +6377,7 @@ text-align: center;
 		background: #00B8A2;
 		border-radius: 100%;
 		margin-left: 10px;
-		color: #fff; 
+		color: #fff;
 		width: auto;
 		height: auto;
 	}
@@ -6379,7 +6385,7 @@ text-align: center;
 		background: #00B8A2;
 		border-radius: 100%;
 		margin-left: 10px;
-		color: #fff; 
+		color: #fff;
 		width: auto;
 		height: auto;
 	}
@@ -6598,7 +6604,7 @@ text-align: center;
 		font-size: 20px;
 		font-family: 'Poppins';
 		line-height: 30px;
-		font-weight: 600; 
+		font-weight: 600;
 		color: rgba(89, 167, 153, 1);
 	}
 	.font-modal-body {
@@ -6808,7 +6814,7 @@ text-align: center;
 		font-weight: 300;
 		font-size: 14px;
 		line-height: 16px;
-		color: #000000;	    
+		color: #000000;
 		text-align: center;
 	    white-space: nowrap;
 	    background: #B5B5B5;
@@ -6941,17 +6947,17 @@ text-align: center;
 		.container-1 input#search::-webkit-input-placeholder {
 		   color: #C4C4C4;
 		}
-		 
+
 		.container-1 input#search:-moz-placeholder { /* Firefox 18- */
-		   color: #C4C4C4;  
+		   color: #C4C4C4;
 		}
-		 
+
 		.container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
-		   color: #C4C4C4;  
+		   color: #C4C4C4;
 		}
-		 
-		.container-1 input#search:-ms-input-placeholder {  
-		   color: #C4C4C4;  
+
+		.container-1 input#search:-ms-input-placeholder {
+		   color: #C4C4C4;
 		   padding: 10px 10px 20px 20px;
 		}
 		.container-1 .icon{
@@ -6961,7 +6967,7 @@ text-align: center;
 		  color: #C4C4C4;
 		  padding: 5px 20px 30px 20px;
 		  left: -5px;
-		  
+
 		}
 		.container-2{
 		  width: 300px;
@@ -6994,17 +7000,17 @@ text-align: center;
 		.container-2 input#search::-webkit-input-placeholder {
 		   color: #C4C4C4;
 		}
-		 
+
 		.container-2 input#search:-moz-placeholder { /* Firefox 18- */
-		   color: #C4C4C4;  
+		   color: #C4C4C4;
 		}
-		 
+
 		.container-2 input#search::-moz-placeholder {  /* Firefox 19+ */
-		   color: #C4C4C4;  
+		   color: #C4C4C4;
 		}
-		 
-		.container-2 input#search:-ms-input-placeholder {  
-		   color: #C4C4C4;  
+
+		.container-2 input#search:-ms-input-placeholder {
+		   color: #C4C4C4;
 		   padding: 10px 10px 20px 20px;
 		}
 		.container-2 .icon{
@@ -7160,7 +7166,7 @@ text-align: center;
 			line-height: 14px;
 			color: #FFFFFF;
 			padding: 6px;
-		}	
+		}
 		.card-dash-pasien {
 			/*width: 734px;*/
 			height: 112px;background: #FFFFFF;
@@ -7198,7 +7204,7 @@ text-align: center;
 		.text-dash {
 			color: rgba(89, 167, 153, 1);
 		}
-		
+
 		.readonly {
 			background: #e9ecef;
 		}
@@ -7429,7 +7435,7 @@ text-align: center;
 			margin-top: 20px;
 		}
 		.profile-info-asses {
-			height: 110px; 
+			height: 110px;
 			width: 400px;
 			font-family: Ubuntu;
 			font-style: normal;
@@ -7470,7 +7476,7 @@ text-align: center;
 		.profile-basic {
 			margin-left: 140px;
 		}
-		
+
 		.profile-img-bayar img {
 			width: 120px;
 			height: 120px;
@@ -7535,7 +7541,7 @@ text-align: center;
 		}
 		.btn-batal-sm {
 			width: 106px;
-			height: 35px;	
+			height: 35px;
 			left: 546px;
 			top: 677px;
 			font-family: Ubuntu;
@@ -7547,7 +7553,7 @@ text-align: center;
 			box-sizing: border-box;
 			border-radius: 5px;
 		}
-		
+
 		.btn-simpan-sm:hover {
 			width: 106px;
 			height: 35px;
@@ -7661,7 +7667,7 @@ text-align: center;
 		    border-color: #68C4B3;
 		    color: #fff!important
 		}
-		
+
 		.d-mobile-none {
   			display: block !important;
 		}
@@ -7704,7 +7710,7 @@ text-align: center;
 			}
 			.card-dash-pasien {
 			  	width: auto;
-	    		height: auto;	
+	    		height: auto;
 			}
 			.card-shadow {
 			    width: auto;
@@ -7909,6 +7915,6 @@ text-align: center;
 			    border-top: none;
 			    box-sizing: border-box;
 			    padding: 5px;
-			    margin-top: -60px; 
+			    margin-top: -60px;
 			}
 		}

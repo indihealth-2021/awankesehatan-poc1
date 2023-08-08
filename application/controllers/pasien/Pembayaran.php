@@ -194,10 +194,10 @@ class Pembayaran extends CI_Controller
                 alamat_kelurahan = $('#alamat-pengiriman-obat').find('select[name=alamat_kelurahan]').val();
                 kode_pos = $('#alamat-pengiriman-obat').find('input[name=kode_pos]').val();
                 alamat_detail = $('#alamat-pengiriman-obat').find('input[name=alamat_detail]').val();
-                if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
-                     alert('GAGAL: Alamat tidak lengkap!');
-                     return false;
-                }else{
+                //if(!alamat_provinsi || !alamat_kota || !alamat_kecamatan || !alamat_kelurahan || !kode_pos || !alamat_detail){
+                //     alert('GAGAL: Alamat tidak lengkap!');
+                //     return false;
+                //}else{
                     // $('#form-transfer-manual').find('input[name=alamat_provinsi]').val(alamat_provinsi);
                     // $('#form-transfer-manual').find('input[name=alamat_kota]').val(alamat_kota);
                     // $('#form-transfer-manual').find('input[name=alamat_kecamatan]').val(alamat_kecamatan);
@@ -212,7 +212,7 @@ class Pembayaran extends CI_Controller
                     $('input[name=alamat_detail]').val(alamat_detail);
 
                     $('#form-transfer-manual').submit();
-                }
+                //}
             });
         }else if(this.value == '3'){
             $('#form-owlexa').hide();

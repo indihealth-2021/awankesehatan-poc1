@@ -227,7 +227,7 @@
                     <div class="col-md-12 mt-3" id="diagnosis-detail-radiologi">
                         <h4 class="mb-3 opacity-75">Pemeriksaan Penunjang - Radiologi</h4>
 
-                        <?php $rad = explode(",", "Darah Lengkap,Urine Rutin,Kolesterol Total,Trigliserida,HDL Kolesterol,LDL Kolesterol,Ureum (BUN),Kreatinin,Asam Urat,Glukosa Puasa,Glukosa 2 Jam PP,HBA 1c,Natrium,Kalium,Klorida"); ?>
+                        <?php $rad = explode(",", "Thorax,Waters"); ?>
 
                         <?php for($i = 0; $i < count($rad); $i ++) { ?>
                             <div class="form-check form-check-inline">

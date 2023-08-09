@@ -262,7 +262,7 @@ class Teleconsultasi extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    private function send_data_penunjang($data) {
+    public function send_data_penunjang($data) {
         $arr = [
             "id_jadwal_konsultasi"  =>  $data["id_jadwal_konsultasi"],
             "planning"      =>  $data["planning"],
@@ -273,18 +273,22 @@ class Teleconsultasi extends CI_Controller
             $arr["pemeriksaan_penunjang_laboratorium"] = [];
             for($i = 0; $i < $data["count-lab"]; $i ++) {
                 if($data["tipe-pemeriksaan-1-".$i]) {
-                    array_push($arr["pemeriksaan_penunjang_laboratorium"], json_encode($data["tipe-pemeriksaan-1-".$i]));
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-1-".$i]);
                 }
             }
+
+            $arr["pemeriksaan_penunjang_laboratorium"] = json_encode($arr["pemeriksaan_penunjang_laboratorium"]);
         }
 
         if( $data["radiologi"] ) {
             $arr["pemeriksaan_penunjang_radiologi"] = [];
-            for($i = 0; $i < $data["count-lab"]; $i ++) {
+            for($i = 0; $i < $data["count-rad"]; $i ++) {
                 if($data["tipe-pemeriksaan-2-".$i]) {
-                    array_push($arr["pemeriksaan_penunjang_laboratorium"], json_encode($data["tipe-pemeriksaan-2-".$i]));
+                    array_push($arr["pemeriksaan_penunjang_radiologi"], $data["tipe-pemeriksaan-2-".$i]);
                 }
             }
+
+            $arr["pemeriksaan_penunjang_radiologi"] = json_encode($arr["pemeriksaan_penunjang_radiologi"]);
         }
 
         $this->db->insert("data_penunjang", $arr);
@@ -306,6 +310,8 @@ class Teleconsultasi extends CI_Controller
 
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
+
+        $this->send_data_penunjang($data); exit();
 
         // if(!$data) {
         //     // This will read the raw POST data from the request body and parse it into an associative array.

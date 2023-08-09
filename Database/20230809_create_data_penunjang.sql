@@ -12,3 +12,5 @@ ADD PRIMARY KEY (id);
 
 ALTER TABLE data_penunjang
 ADD FOREIGN KEY (id_jadwal_konsultasi) REFERENCES jadwal_konsultasi(id);
+
+ALTER TABLE `data_penunjang` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;

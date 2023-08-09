@@ -31,6 +31,7 @@ class FarmasiCall extends CI_Controller
                     $('select[name=pasien]').change(function(){
                         $('#panggil-pasien').prop('disabled', false);
                     });
+                    $('#konten-panggilan').hide();
 
                     $('#panggil-pasien').click(function(){
                         $('#messages').empty();
@@ -38,7 +39,7 @@ class FarmasiCall extends CI_Controller
                         for (var i = 0; i < iframes.length; i++) {
                             iframes[i].parentNode.removeChild(iframes[i]);
                         }
-                        $('#konten-panggilan').prop('hide', true);
+                        $('#konten-panggilan').show();
                         function makeid(length) {
                             var result = '';
                             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

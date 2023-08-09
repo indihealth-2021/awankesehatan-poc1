@@ -1,5 +1,5 @@
 <!-- Main content -->
-  <div class="page-wrapper">
+<div class="page-wrapper">
     <div class="content">
       <div class="row mb-3">
         <div class="col-sm-12 col-12 ">
@@ -17,7 +17,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <p class="text-center font-24 mb-5 pt-4"><u><b>REKAM MEDIS</b></u></p> 
+          <p class="text-center font-24 mb-5 pt-4"><u><b>REKAM MEDIS</b></u></p>
           <div class="row font-14 font-bold-7">
             <div class="col-md-6">
               <div class="form-group row">
@@ -35,7 +35,7 @@
               <div class="form-group row">
                   <label class="col-md-4 col-4">Tanggal Konsultasi</label>
                   <div class="col-md-8 col-8">
-                      <p>: <?php $tanggal_konsul = $rekam_medis->tanggal_konsultasi ? (new DateTime($rekam_medis->tanggal_konsultasi))->format('d-m-Y H:i:s'):'-'; 
+                      <p>: <?php $tanggal_konsul = $rekam_medis->tanggal_konsultasi ? (new DateTime($rekam_medis->tanggal_konsultasi))->format('d-m-Y H:i:s'):'-';
                                                 echo $tanggal_konsul;?></p>
                   </div>
                   <label class="col-md-4 col-4">Poli</label>
@@ -59,7 +59,7 @@
                   <div class="col-md-8 col-8">
                       <p>: <?php echo ucwords($rekam_medis->nama_pasien) ?></p>
                   </div>
-                  <?php 
+                  <?php
                     $tanggal_lahir = new DateTime($rekam_medis->tanggal_lahir_pasien);
                     $tanggal_lahir = $tanggal_lahir->format('d-m-Y');
                   ?>
@@ -72,6 +72,39 @@
                       <p>: <?php echo $rekam_medis->jk_pasien ?></p>
                   </div>
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <p class="font-24 fond-bold-7">Data Penunjang</p>
+            </div>
+            <div class="col-md-12 font-14 font-bold-4">
+              <div class="form-group row">
+                  <label class="col-md-2 col-4">Planning</label>
+                  <div class="col-md-10 col-10">
+                      <p>: <?php echo $rekam_medis->planning ?></p>
+                  </div>
+                  <label class="col-md-2 col-4">Pemeriksaan Penunjang Laboratorium</label>
+                  <div class="col-md-10 col-10">
+                      <p>: <?php if($rekam_medis->pemeriksaan_penunjang_laboratorium) { foreach(json_decode($rekam_medis->pemeriksaan_penunjang_laboratorium) as $ppl) { echo $ppl.", "; } } ?></p>
+                  </div>
+                  <label class="col-md-2 col-4">Pemeriksaan Penunjang Radiologi</label>
+                  <div class="col-md-10 col-10">
+                      <p>: <?php if($rekam_medis->pemeriksaan_penunjang_radiologi) { foreach(json_decode($rekam_medis->pemeriksaan_penunjang_radiologi) as $ppr) { echo $ppr.", "; } } ?></p>
+                  </div>
+                  <label class="col-md-2 col-4">Kesimpulan</label>
+                  <div class="col-md-10 col-10">
+                      <p>: <?= $rekam_medis->kesimpulan ?></p>
+                  </div>
+                  <?php if($rekam_medis->order_status != null){ ?>
+                      <label class="col-md-2 col-4">Order Status</label>
+                      <div class="col-md-8 col-8">
+                          <p>: <?php echo $rekam_medis->order_status == 2 ? 'On Progress':($rekam_medis->order_status == 3 ? 'REJECTED':($rekam_medis->order_status == 1 ? 'DELIVERED':'PENDING')); ?></p>
+                      </div>
+                  <?php } ?>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
           <div class="row">
@@ -90,11 +123,11 @@
                   <div class="col-md-10 col-10">
                       <p>: <?php echo '('.$rekam_medis->diagnosis_code.') '.$rekam_medis->diagnosis ?></p>
                   </div>
-                  <?php 
+                  <?php
                     $tanggal_lahir = new DateTime($rekam_medis->tanggal_lahir_pasien);
                     $tanggal_lahir = $tanggal_lahir->format('d-m-Y');
                   ?>
-                  <?php 
+                  <?php
                       if(!$rekam_medis->resep_verif){
                           $status = '<font style="background-color:red;color:white;">BELUM DIVERIFIKASI</font>';
                       }
@@ -105,8 +138,8 @@
                           $status = '<font style="background-color:green;color:white;">SUDAH DIVERIFIKASI & SUDAH DIRILIS</font>';
                       }
                   ?>
-                  
-                  
+
+
                   <label class="col-md-2 col-4">Resep Obat</label>
                   <div class="col-md-10 col-10">
                       <?php echo $rekam_medis->list_obat ? '<ol>'.$rekam_medis->list_obat.'</ol>( '.$status.' )':'<p>: -</p>'; ?>

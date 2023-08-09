@@ -296,22 +296,22 @@ class Teleconsultasi extends CI_Controller
 
     public function send_data_konsultasi()
     {
-        if (!$this->session->userdata('is_login')) {
-            redirect(base_url('Login'));
-        }
-        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
-        if ($valid->id_user_kategori != 2) {
-            if ($valid->id_user_kategori == 0) {
-                redirect(base_url('pasien/Pasien'));
-            } else {
-                redirect(base_url('admin/Admin'));
-            }
-        }
+        // if (!$this->session->userdata('is_login')) {
+        //     redirect(base_url('Login'));
+        // }
+        // $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        // if ($valid->id_user_kategori != 2) {
+        //     if ($valid->id_user_kategori == 0) {
+        //         redirect(base_url('pasien/Pasien'));
+        //     } else {
+        //         redirect(base_url('admin/Admin'));
+        //     }
+        // }
 
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
 
-        $this->send_data_penunjang($data);
+        $this->send_data_penunjang($data); exit();
 
         // if(!$data) {
         //     // This will read the raw POST data from the request body and parse it into an associative array.

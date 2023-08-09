@@ -114,9 +114,9 @@ function checkform(form) {
 // }
 
 btnAnswerFarmasi.click(function(e){
-  const p_o_d = $(this).data('pd') == 'p' ? 'pasien':'dokter';
-  const id_farmasi = $(this).data('id-farmasi');
-  const room_name = $(this).data('room-name');
+  var p_o_d = $(this).data('pd') == 'p' ? 'pasien':'dokter';
+  var id_farmasi = $(this).data('id-farmasi');
+  var room_name = $(this).data('room-name');
   $.ajax({
     url: baseUrl+p_o_d+'/FarmasiCall/jawab',
     method: 'POST',

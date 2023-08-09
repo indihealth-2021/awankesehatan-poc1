@@ -782,9 +782,9 @@
           location.href = "<?php echo base_url('pasien/Pasien') ?>";
         }
         if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_pasien')){
-          $("#jawab_farmasi").attr('data-room-name', JSON.parse(payload.data.body).room_name);
-          $('#jawab_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
-          $('#tolak_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $("#jawab_farmasi").data('room-name', JSON.parse(payload.data.body).room_name);
+          $('#jawab_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#tolak_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
           $('#jawaban_farmasi').modal({
             backdrop: 'static',
             keyboard: false
@@ -805,9 +805,9 @@
         }
 
         if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_dokter')){
-          $("#jawab_farmasi").attr('data-room-name', JSON.parse(payload.data.body).room_name);
-          $('#jawab_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
-          $('#tolak_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $("#jawab_farmasi").data('room-name', JSON.parse(payload.data.body).room_name);
+          $('#jawab_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#tolak_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
           $('#jawaban_farmasi').modal({
             backdrop: 'static',
             keyboard: false

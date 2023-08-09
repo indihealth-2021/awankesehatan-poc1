@@ -262,6 +262,34 @@ class Teleconsultasi extends CI_Controller
         $this->load->view('template', $data);
     }
 
+    private function send_data_penunjang($data) {
+        $arr = [
+            "id_jadwal_konsultasi"  =>  $data["id_jadwal_konsultasi"],
+            "planning"      =>  $data["planning"],
+            "kesimpulan"    =>  $data["kesimpulan"]
+        ];
+
+        if( $data["laboratorium"] ) {
+            $arr["pemeriksaan_penunjang_laboratorium"] = [];
+            for($i = 0; $i < $data["count-lab"]; $i ++) {
+                if($data["tipe-pemeriksaan-1-".$i]) {
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-1-".$i]);
+                }
+            }
+        }
+
+        if( $data["radiologi"] ) {
+            $arr["pemeriksaan_penunjang_radiologi"] = [];
+            for($i = 0; $i < $data["count-lab"]; $i ++) {
+                if($data["tipe-pemeriksaan-2-".$i]) {
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-2-".$i]);
+                }
+            }
+        }
+
+        $this->db->insert("data_penunjang", $arr);
+    }
+
     public function send_data_konsultasi()
     {
         if (!$this->session->userdata('is_login')) {
@@ -388,6 +416,9 @@ class Teleconsultasi extends CI_Controller
             );
             $this->db->insert('resep_dokter', $data_resep);
         }
+
+        $this->send_data_penunjang($data);
+
         $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
@@ -403,6 +434,7 @@ class Teleconsultasi extends CI_Controller
           $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
 
           $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
+
         $this->db->insert('data_notifikasi', $data_notif);
 
         $data_history = array("activity" => "Resep Dokter", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);

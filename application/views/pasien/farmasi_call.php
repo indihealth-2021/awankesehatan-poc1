@@ -68,7 +68,7 @@
 
                           </div>
                       <div class="">
-                          <div id="meet" width="800" height="700" style="background: #000;"></div>
+                          <div id="ketemu" width="800" height="700" style="background: #000;"></div>
                           <!-- <video autoplay id="video-other" style="background-color: #000;" width="100%" height="100%"></video>                  
                                     <video autoplay id="video-ku" style="background-color: #000; position: absolute; bottom: 75px; right: 8px; width: 40%; height: 40%;"></video> -->
                       </div>
@@ -106,35 +106,42 @@
     chat_id = `${id_farmasi}_${id_dokter}`;
 </script>
 <script type="text/javascript">
-        name = '<?php echo $user->name; ?>';
-        var room_name = '<?php echo $roomName ?>';
-        var userName = name;
-        const domain = 'telekonsultasi2.telemedical.id';
-        const options = {
-            roomName: room_name,
-            width: 535,
-            height: 400,
-            parentNode: document.querySelector('#meet'),
-            configOverwrite: {
+    name = '<?php echo $user->name; ?>';
+    var room_name = '<?php echo $room_name ?>';
+    var userName = name;
+    const domain = 'telekonsultasi2.telemedical.id';
+    const options = {
+        roomName: room_name,
+        width: '100%',
+        height: '400px',
+        parentNode: document.querySelector('#ketemu'),
+        configOverwrite: {
                 disableDeepLinking: true,
             },
-        };
-        
-        navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true
-        }).then(function(stream) {
-            const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+            userInfo: {
+                displayName: userName
+            },
+    };
+
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    }).then(function(stream) {
+        const api = new JitsiMeetExternalAPI(domain, options).then(() => {
                 document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
             });
-            api.executeCommand('displayName', userName);
-            api.addEventListener('participantRoleChanged', function(event) {
-                if (event.role === 'moderator') {
-                    api.executeCommand('toggleLobby', true);
-                }
-            });
-            api.on('passwordRequired', function() {
-                api.executeCommand('password', '123456');
-            });
+        api.executeCommand('displayName', userName);
+        api.executeCommand('toggleTileView');
+        api.executeCommand('startRecording', {
+            mode: 'file' //recording mode, either `file` or `stream`.
         });
+        api.addEventListener('participantRoleChanged', function(event) {
+        if (event.role === 'moderator') {
+            api.executeCommand('toggleLobby', true);
+        }
+        });
+        api.on('passwordRequired', function() {
+            api.executeCommand('password', '123456');
+        });
+    });
 </script>

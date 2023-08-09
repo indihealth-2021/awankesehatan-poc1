@@ -311,7 +311,7 @@ class Teleconsultasi extends CI_Controller
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
 
-        $this->send_data_penunjang($data); exit();
+        $this->send_data_penunjang($data);
 
         // if(!$data) {
         //     // This will read the raw POST data from the request body and parse it into an associative array.

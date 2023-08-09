@@ -562,7 +562,7 @@
         audio: true,
         video: true
     }).then(function(stream) {
-        startTimer();
+        // startTimer();
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
                 document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
             });

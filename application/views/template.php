@@ -868,6 +868,7 @@
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_dokter')) {
           $('#memanggil').modal('hide');
+          startTimer();
         }
 
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_pasien')) {

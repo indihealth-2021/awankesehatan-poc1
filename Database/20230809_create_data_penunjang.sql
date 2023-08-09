@@ -14,3 +14,6 @@ ALTER TABLE data_penunjang
 ADD FOREIGN KEY (id_jadwal_konsultasi) REFERENCES jadwal_konsultasi(id);
 
 ALTER TABLE `data_penunjang` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE biaya_pengiriman_obat
+ADD harga_obat int(11);

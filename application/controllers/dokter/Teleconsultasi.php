@@ -273,7 +273,7 @@ class Teleconsultasi extends CI_Controller
             $arr["pemeriksaan_penunjang_laboratorium"] = [];
             for($i = 0; $i < $data["count-lab"]; $i ++) {
                 if($data["tipe-pemeriksaan-1-".$i]) {
-                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-1-".$i]);
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], json_encode($data["tipe-pemeriksaan-1-".$i]));
                 }
             }
         }
@@ -282,7 +282,7 @@ class Teleconsultasi extends CI_Controller
             $arr["pemeriksaan_penunjang_radiologi"] = [];
             for($i = 0; $i < $data["count-lab"]; $i ++) {
                 if($data["tipe-pemeriksaan-2-".$i]) {
-                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-2-".$i]);
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], json_encode($data["tipe-pemeriksaan-2-".$i]));
                 }
             }
         }

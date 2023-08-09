@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="row" id="konten-panggilan" hidden>
+      <div class="row" id="konten-panggilan">
         <div class="col-md-12">
           <div class="card card-5 p-1 px-4 pt-3 pb-5">
             <ul class="nav nav-tabs-konsul nav-tabs-bottom">
@@ -120,6 +120,8 @@
 <script>
     chat_locate = 'farmasi';
     user_kategori = 'farmasi';
+    id_pasien = '';
+    id_dokter = <?php echo $user->id ?>;
     foto_pasien = '';
     foto_dokter = '';
     chat_id = '';
@@ -128,6 +130,7 @@
     var room_name = '';
     function start_consultation(){
       name = '<?php echo $user->name; ?>';
+      document.getElementById("user-call").value = '<?php echo $dokter->id ?>';
       var userName = name;
       const domain = 'telekonsultasi2.telemedical.id';
       const options = {
@@ -137,6 +140,9 @@
           parentNode: document.querySelector('#meet'),
           configOverwrite: {
                 disableDeepLinking: true,
+            },
+            userInfo: {
+                displayName: userName
             },
       };
 

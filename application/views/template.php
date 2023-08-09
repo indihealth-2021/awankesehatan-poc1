@@ -782,15 +782,14 @@
           location.href = "<?php echo base_url('pasien/Pasien') ?>";
         }
         if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_pasien')){
-          // $("#jawab_farmasi").attr('data-room-name', JSON.parse(payload.data.body).room_name);
-          // $('#jawab_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
-          // $('#tolak_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
-          // $('#jawaban_farmasi').modal({
-          //   backdrop: 'static',
-          //   keyboard: false
-          // });
-          // $("#jawaban_farmasi").modal('show');
-          alert(JSON.parse(payload.data.body).room_name);
+          $("#jawab_farmasi").attr('data-room-name', JSON.parse(payload.data.body).room_name);
+          $('#jawab_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#tolak_farmasi').attr('data-id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#jawaban_farmasi').modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+          $("#jawaban_farmasi").modal('show');
         }
 
         if(JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_pasien')){

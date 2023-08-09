@@ -744,6 +744,26 @@
               $('input[name=tinggi_badan]').val(JSON.parse(payload.data.body).tinggi_badan);
               $('input[name=suhu]').val(JSON.parse(payload.data.body).suhu);
               $('input[name=tekanan_darah]').val(JSON.parse(payload.data.body).tekanan_darah);
+              // if (JSON.parse(payload.data.body).user_file)) {
+              //   var userFiles = JSON.parse(payload.data.body).user_file;
+              //   userFiles.forEach(function(file) {
+              //     var card = document.createElement('div');
+              //     card.className = 'card';
+              //     card.onclick = function() {
+              //       window.open('<?php echo base_url("assets/files/file_pemeriksaan_luar/") ?>' + file.path_file, '_blank');
+              //     };
+              //     var cardBody = document.createElement('div');
+              //     cardBody.className = 'card-body';
+              //     var cardTitle = document.createElement('h5');
+              //     cardTitle.textContent = file.nama_file;
+              //     var cardDescription = document.createElement('p');
+              //     cardDescription.textContent = file.type_file;
+              //     cardBody.appendChild(cardTitle);
+              //     cardBody.appendChild(cardDescription);
+              //     card.appendChild(cardBody);
+              //     document.getElementById('file_asesmen').appendChild(card);
+              //   });
+              // }
               if (JSON.parse(payload.data.body).merokok == 1) {
                 $('#merokok-1').prop('checked', true);
               } else {

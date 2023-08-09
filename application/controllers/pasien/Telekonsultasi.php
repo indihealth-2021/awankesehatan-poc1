@@ -75,8 +75,7 @@ class Telekonsultasi extends CI_Controller {
         $data['sub_name'] = 'submit_assesment_pasien';
         $data['id_user'] = json_encode(array($data['id_dokter']));
         $dokter = $this->db->query('SELECT reg_id FROM master_user WHERE id_user_kategori = 2 AND id = '.$data['id_dokter'])->row();
-        $msg_notif = json_encode($data);
-        $this->key->_send_fcm($dokter->reg_id, $msg_notif);
+        $data['user_file'] = [];
 
         $config['upload_path'] = './assets/files/file_pemeriksaan_luar';
         $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif|pdf|docx|doc|xlsx|xls|rar|zip';
@@ -107,10 +106,14 @@ class Telekonsultasi extends CI_Controller {
                         'type_file' => $this->upload->data('file_type'),
                         'ukuran_file' => $this->upload->data('file_size')
                     ];
+                    array_push($data['user_file'], $fileData);
                     $this->db->insert('file_asesmen', $fileData);
                 }
             }
         }
+
+        $msg_notif = json_encode($data);
+        $this->key->_send_fcm($dokter->reg_id, $msg_notif);
 
 	    unset($data['name']);
 	    unset($data['sub_name']);

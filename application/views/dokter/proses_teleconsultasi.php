@@ -425,7 +425,7 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                <div>
+                <div id="file_asesmen">
                 <?php if (!empty($file_asesmen)) { ?>
                     <p class="py-2 font-12">File Asesmen Pasien</p>
                     <?php foreach ($file_asesmen as $file) { ?>

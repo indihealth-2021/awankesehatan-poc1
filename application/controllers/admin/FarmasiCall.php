@@ -116,6 +116,7 @@ class FarmasiCall extends CI_Controller
                     $('select[name=dokter]').change(function(){
                         $('#panggil-dokter').prop('disabled', false);
                     });
+                    $('#konten-panggilan').hide();
 
                     $('#panggil-dokter').click(function(){
                         $('#messages').empty();
@@ -123,7 +124,7 @@ class FarmasiCall extends CI_Controller
                         for (var i = 0; i < iframes.length; i++) {
                             iframes[i].parentNode.removeChild(iframes[i]);
                         }
-                        $('#konten-panggilan').prop('hide', true);
+                        $('#konten-panggilan').show();
                         function makeid(length) {
                             var result = '';
                             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -211,6 +212,7 @@ class FarmasiCall extends CI_Controller
             'id_farmasi' => $id_farmasi,
             'id_user' => json_encode(array($id_user)),
             'room_name' => $room_name,
+            'p_or_d' => $p_or_d,
             'direct_link' => '#'
         );
         $msg_notif = json_encode($msg_notif);

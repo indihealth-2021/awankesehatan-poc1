@@ -214,8 +214,29 @@
 
  -->
 
+      <div class="modal fade" id="jawaban_farmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content mx-auto" style="width: 400px">
+            <div class="modal-header">
+              <p class="modal-title font-24" id="exampleModalLabel">Panggilan...</p>
+            </div>
+            <div class="modal-body" align="center">
+              <i class="fas fa-phone fa-5x text-tele">....</i>
+            </div>
+            <div class="modal-footer">
+              <div class="mt-5 mx-auto">
+                <button type="button" class="btn btn-simpan" data-dismiss="modal" id="jawab_farmasi" data-room-name="" data-id-farmasi="" data-pd=''>Jawab</button>
+                <button type="button" class="btn btn-batal" data-dismiss="modal" id="tolak_farmasi" data-id-farmasi="" data-pd=''>Tolak</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ?',[$user->id])->row(); ?>
+    
+
+
     <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
       <div class="modal fade" id="jawaban" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -235,27 +256,6 @@
           </div>
         </div>
       </div>
-
-      <?php if ($user_2 && ($user_2->id_user_kategori == 0 || $user_2->id_user_kategori == 2)) { ?>
-      <div class="modal fade" id="jawaban_farmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content mx-auto" style="width: 400px">
-            <div class="modal-header">
-              <p class="modal-title font-24" id="exampleModalLabel">Panggilan...</p>
-            </div>
-            <div class="modal-body" align="center">
-              <i class="fas fa-phone fa-5x text-tele">....</i>
-            </div>
-            <div class="modal-footer">
-              <div class="mt-5 mx-auto">
-                <button type="button" class="btn btn-simpan" data-dismiss="modal" id="jawab_farmasi" data-room-name="" data-id-farmasi="" data-pd='<?= $user_2->id_user_kategori == 2 ? 'd':'p'; ?>'>Jawab</button>
-                <button type="button" class="btn btn-batal" data-dismiss="modal" id="tolak_farmasi" data-id-farmasi="" data-pd='<?= $user_2->id_user_kategori == 2 ? 'd':'p'; ?>'>Tolak</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <?php } ?>
 
       <?php if ($user_2->accept_tac == 0) { ?>
         <div class="modal fade" id="tac_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -784,6 +784,8 @@
         if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_pasien')){
           $("#jawab_farmasi").data('room-name', JSON.parse(payload.data.body).room_name);
           $('#jawab_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#jawab_farmasi').data('pd', JSON.parse(payload.data.body).p_or_d);
+          $('#tolak_farmasi').data('pd', JSON.parse(payload.data.body).p_or_d);
           $('#tolak_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
           $('#jawaban_farmasi').modal({
             backdrop: 'static',
@@ -807,6 +809,8 @@
         if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_dokter')){
           $("#jawab_farmasi").data('room-name', JSON.parse(payload.data.body).room_name);
           $('#jawab_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
+          $('#jawab_farmasi').data('pd', JSON.parse(payload.data.body).p_or_d);
+          $('#tolak_farmasi').data('pd', JSON.parse(payload.data.body).p_or_d);
           $('#tolak_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
           $('#jawaban_farmasi').modal({
             backdrop: 'static',

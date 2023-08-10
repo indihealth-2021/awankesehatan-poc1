@@ -206,37 +206,37 @@ class RumahSakit extends CI_Controller
         curl_close($curl);
         $koordinat = $result->results[0]->geometry->location;
 
-        if(!$koordinat){
-            $this->session->set_flashdata('msg', 'error');
-            redirect(base_url('admin/RumahSakit/manage_rs'));
-        }
+        // if(!$koordinat){
+        //     $this->session->set_flashdata('msg', 'error');
+        //     redirect(base_url('admin/RumahSakit/manage_rs'));
+        // }
 
         $this->all_model->update('master_rs', [
             "lat" => $koordinat->lat,
             "lng" => $koordinat->lng,
         ], ["id"=>$id_rs]);
 
-        if($_FILES['logo']['size'] > 0){
-            $config['upload_path']          = './assets/images/logo';
-            $config['allowed_types']        = 'gif|jpg|png|jpeg|jfif';
-            $config['max_size']             = 10024;
+        if (!empty($_FILES['logo']['name'])) {
+            $config['upload_path'] = './assets/images/logo';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif';
+            $config['max_size'] = 10024;
             $config['file_name'] = 'logo';
-          
+        
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
             $this->upload->overwrite = true;
-          
-            if ( ! $this->upload->do_upload('logo')){
-                $error = array('error' => $this->upload->display_errors());
-                $this->session->set_flashdata('msg', 'Upload Foto Gagal!');
+        
+            if (!$this->upload->do_upload('logo')) {
+                $error = $this->upload->display_errors();
+                $this->session->set_flashdata('msg', 'Upload Foto Gagal: ' . $error);
                 redirect(base_url('admin/RumahSakit/manage_rs'));
-            }else{
-                $data_foto = array('upload_data' => $this->upload->data());
-                $logo = $data_foto['upload_data']['file_name'];	
-                $this->all_model->update('master_rs', ['logo'=>$logo], ['id'=>$id_rs]);
+            } else {
+                $data_foto = $this->upload->data();
+                $logo = $data_foto['file_name'];
+                $this->all_model->update('master_rs', ['logo' => $logo], ['id' => $id_rs]);
             }
         }
-
+      
         $this->session->set_flashdata('msg', 'Data RS telah diupdate!');
         redirect(base_url('admin/RumahSakit/manage_rs'));
     }

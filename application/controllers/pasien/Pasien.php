@@ -10,6 +10,7 @@ class Pasien extends CI_Controller {
         $this->load->model('all_model');
         $this->load->model('jadwal_telekonsultasi_model');
         $this->load->model('JadwalTerdaftar_model');
+        $this->load->library(array('Key'));
     }
 
     public function index(){
@@ -27,7 +28,22 @@ class Pasien extends CI_Controller {
         }
         $data['view'] = 'pasien/index';
         $data['title'] = 'Dashboard';
-        $data['user'] = $this->db->query('SELECT id,name, foto, vip FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
+        // $data['user'] = $this->db->query('SELECT id,name, foto, id_user_kategori, vip FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
+        $query = $this->db->query('SELECT id, name, foto, vip, id_user_kategori, reg_id, alamat_jalan, alamat_kelurahan, alamat_kecamatan, alamat_kota, alamat_provinsi,kode_pos FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        $data['user'] = $query;
+
+        $alamatColumns = ['alamat_jalan', 'alamat_kelurahan', 'alamat_kecamatan', 'alamat_kota', 'alamat_provinsi', 'kode_pos'];
+
+        $dataNotComplete = false;
+
+        foreach ($alamatColumns as $column) {
+            if (empty($query->$column)) {
+                $dataNotComplete = true;
+            }
+        }
+
+        $data['data_not_complete'] = $dataNotComplete;
+
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("'.$this->session->userdata('id_user').'", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $news = $this->db->query('SELECT * FROM data_news ORDER BY created_at DESC limit 0,2')->result();
         foreach ($news as $key => $value) {

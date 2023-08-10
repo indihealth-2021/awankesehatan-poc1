@@ -68,7 +68,14 @@ class Apotek extends CI_Controller {
 	private function approximateLocation($query) {
 		# docs: https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query#url-template
 		$base = "http://dev.virtualearth.net/REST/v1/Locations/".urlencode($query)."?o=json&key=".$this->bingMapsAPIKey;
-		return json_decode(file_get_contents($base), $associative=true)["resourceSets"][0]["resources"][0];
+
+        $data = json_decode(file_get_contents($base), $associative=true)["resourceSets"][0];
+
+        if($data["estimatedTotal"] == 0) {
+            return 0;
+        }
+
+        return $data["resources"][0];
 	}
 
 	public function findNearest() {

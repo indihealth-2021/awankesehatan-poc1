@@ -142,7 +142,14 @@ class RumahSakit extends CI_Controller
     private function approximateLocation($query) {
 		# docs: https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query#url-template
 		$base = "http://dev.virtualearth.net/REST/v1/Locations/".urlencode($query)."?o=json&key=".$this->bingMapsAPIKey;
-		return json_decode(file_get_contents($base), $associative=true)["resourceSets"][0]["resources"][0];
+
+        $data = json_decode(file_get_contents($base), $associative=true)["resourceSets"][0];
+
+        if($data["estimatedTotal"] == 0) {
+            return 0;
+        }
+
+        return $data["resources"][0];
 	}
 
     public function save_rs(){
@@ -214,12 +221,12 @@ class RumahSakit extends CI_Controller
         // curl_close($curl);
         // $koordinat = $result->results[0]->geometry->location;
 
-        // if(!$koordinat){
-        //     $this->session->set_flashdata('msg', 'error');
-        //     redirect(base_url('admin/RumahSakit/manage_rs'));
-        // }
-
         [$lat, $long] = $this->approximateLocation($alamat_rs)["point"]["coordinates"];
+
+        if([$lat, $long] == [null, null]) {
+            $this->session->set_flashdata('msg', 'Error: Pastikan alamat yang diisi adalah benar');
+            redirect(base_url('admin/RumahSakit/manage_rs'));
+        }
 
         $this->all_model->update('master_rs', [
             "lat" => $lat,

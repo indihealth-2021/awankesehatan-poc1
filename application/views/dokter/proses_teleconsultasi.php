@@ -155,7 +155,7 @@
                                               <div class="modal-body" align="center">
                                                   <i class="fa fa-phone fa-5x text-tele">....</i>
                                                   <div class="mt-5">
-                                                    <button type="button" class="btn btn-batal" data-dismiss="modal">Tutup</button>
+                                                    <button type="button" class="btn btn-batal" data-dismiss="modal" onclick="resetContainer()">Tutup</button>
                                                   </div>
                                               </div>
                                           </div>
@@ -528,6 +528,7 @@
                                         </select>
                                         <div class="input-group-append">
                                             <button type="button" class="px-2 btn btn-primary btn-sm" id="addObatButton">+</button>
+                                            <button type="button" class="px-2 btn btn-danger btn-sm" id="resetRacikanButton">Clear</button>
                                         </div>
                                     </div>
                                 </div>
@@ -553,6 +554,7 @@
             </div>
             <div class="modal-footer">
               <div class="float-left">
+                <input type="hidden" name="selectedObats" id="selectedObats">
                 <button id="buttonTambahResep" class="btn btn-simpan-sm">Simpan</button>
                 <button type="button" class="btn btn-batal-sm mr-3" data-dismiss="modal">Batal</button>
               </div>
@@ -765,6 +767,10 @@
 <script>
     var selectedObats = [];
 
+    document.getElementById("resetRacikanButton").addEventListener("click", () => {
+        document.getElementById("selectedObatsContainer").innerHTML = "";
+    });
+
     document.getElementById("addObatButton").addEventListener("click", function() {
         var selectedObatId = document.querySelector("#obat-racikan").value;
         var selectedObatName = document.querySelector("#obat-racikan option[value='" + selectedObatId + "']").text;
@@ -775,11 +781,40 @@
                 name: selectedObatName,
             };
             selectedObats.push(selectedObat);
+            $("#selectedObats").val(selectedObats.map((element) => {
+                return element.id;
+            }));
+
             var selectedObatsContainer = document.getElementById("selectedObatsContainer");
             var selectedObatDiv = document.createElement("div");
+            var removeObat = document.createElement("button");
+
+            removeObat.id = "remove-"+selectedObatId;
+            selectedObatDiv.id = selectedObatId;
+
+            removeObat.className = "btn btn-danger m-2 p-2";
+
+            removeObat.textContent = "Hapus";
             selectedObatDiv.textContent = selectedObatName;
+
             selectedObatsContainer.appendChild(selectedObatDiv);
+            selectedObatDiv.appendChild(removeObat);
+
             document.getElementById("obat-racikan").value = "";
+
+            $("#remove-"+selectedObatId).click(() => {
+                $("#"+selectedObatId).remove();
+                $("#remove-"+selectedObatId).remove();
+
+                selectedObats.forEach((element, index) => {
+                    if (element.id === selectedObatId) {
+                        selectedObats.splice(index, 1);
+                        $("#selectedObats").val(selectedObats.map((element) => {
+                            return element.id;
+                        }));
+                    }
+                });
+            });
         }
     });
 </script>

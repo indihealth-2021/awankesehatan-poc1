@@ -80,22 +80,26 @@
             </div>
             <div class="col-md-12 font-14 font-bold-4">
               <div class="form-group row">
-                  <label class="col-md-2 col-4">Planning</label>
+                  <?php if($data_penunjang) { ?>
+                    <label class="col-md-2 col-4">Planning</label>
                   <div class="col-md-10 col-10">
-                      <p>: <?php echo $rekam_medis->planning ?></p>
+                      <p>: <?php echo $data_penunjang->planning ?></p>
                   </div>
                   <label class="col-md-2 col-4">Pemeriksaan Penunjang Laboratorium</label>
                   <div class="col-md-10 col-10">
-                      <p>: <?php if($rekam_medis->pemeriksaan_penunjang_laboratorium) { foreach(json_decode($rekam_medis->pemeriksaan_penunjang_laboratorium) as $ppl) { echo $ppl.", "; } } ?></p>
+                      <p>: <?php if($data_penunjang->pemeriksaan_penunjang_laboratorium) { foreach(json_decode($data_penunjang->pemeriksaan_penunjang_laboratorium) as $ppl) { echo $ppl.", "; } } ?></p>
                   </div>
                   <label class="col-md-2 col-4">Pemeriksaan Penunjang Radiologi</label>
                   <div class="col-md-10 col-10">
-                      <p>: <?php if($rekam_medis->pemeriksaan_penunjang_radiologi) { foreach(json_decode($rekam_medis->pemeriksaan_penunjang_radiologi) as $ppr) { echo $ppr.", "; } } ?></p>
+                      <p>: <?php if($data_penunjang->pemeriksaan_penunjang_radiologi) { foreach(json_decode($data_penunjang->pemeriksaan_penunjang_radiologi) as $ppr) { echo $ppr.", "; } } ?></p>
                   </div>
                   <label class="col-md-2 col-4">Kesimpulan</label>
                   <div class="col-md-10 col-10">
-                      <p>: <?= $rekam_medis->kesimpulan ?></p>
+                      <p>: <?= $data_penunjang->kesimpulan ?></p>
                   </div>
+                    <?php }else { ?>
+                      <p style="text-align: center;" class="ml-4">Data penunjang tidak ditemukan</p>
+                    <?php } ?>
                   <?php if($rekam_medis->order_status != null){ ?>
                       <label class="col-md-2 col-4">Order Status</label>
                       <div class="col-md-8 col-8">

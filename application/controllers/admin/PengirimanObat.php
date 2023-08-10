@@ -319,7 +319,7 @@ if(data.status == "OK"){
         }
 
         $data_biaya_pengiriman = array(
-            'id_registrasi'=>$id_registrasi,
+            'id_registrasi'=>$id_registrasi->id_registrasi,
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
             'alamat'=>$alamat

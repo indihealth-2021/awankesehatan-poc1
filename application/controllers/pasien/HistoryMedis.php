@@ -94,6 +94,8 @@ class HistoryMedis extends CI_Controller {
 		$data['rekam_medis']->no_medrec = str_split($data['rekam_medis']->no_medrec, "2");
 		$data['rekam_medis']->no_medrec = implode('.',$data['rekam_medis']->no_medrec);
 
+        $data['data_penunjang'] = $this->db->query("SELECT * FROM data_penunjang WHERE id_jadwal_konsultasi=".$id_jadwal_konsultasi)->row();
+
         $this->load->view('template', $data);
     }
 }

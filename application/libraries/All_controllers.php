@@ -214,8 +214,11 @@ class ALL_Controllers{
     public function getTotalHargaObatFrom($list_id_jadwal_konsultasi) {
         $data = [];
         $data["harga_obat"] = [];
+
         for($i = 0; $i < count($list_id_jadwal_konsultasi); $i ++) {
-            $data["harga_obat"][$list_id_jadwal_konsultasi[$i]] = $this->CI->db->query("SELECT * FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi=".$list_id_jadwal_konsultasi[$i])->row()->harga_obat;
+            $res = $this->CI->db->query("SELECT * FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi=".$list_id_jadwal_konsultasi[$i])->row();
+
+            $data["harga_obat"][$list_id_jadwal_konsultasi[$i]] = $res == null ? 0 : $res->harga_obat;
         }
 
         return $data["harga_obat"];

@@ -159,12 +159,11 @@
                                     <label class="form-check-label" for="inlineRadio2">Alamat Lain</label>
                                   </div>
                                 </span> -->
-                                </div>
+                                <!-- </div>
                                 <div class="form-group submit-form">
                                   <label for="harga-obat">Harga Obat ( Rp. )</label>
                                   <input type="number" name="harga_obat" class="form-control" id="harga-obat" aria-describedby="biayaPengirimanHelp" placeholder="Harga Obat" value="<?php echo $total_harga; ?>">
-                                  <!-- <small id="hargaObatHelp" class="form-text text-muted">Rp. 0,0</small> -->
-                                </div>
+                                </div> -->
                                 <input type="hidden" name="biaya_pengiriman" class="form-control" id="biaya-pengambilan" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required value="0">
                                 <input type="hidden" name="id_jadwal_konsultasi" id="id_jadwal_konsultasi">
                                 <input type="hidden" name="id_registrasi">

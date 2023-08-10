@@ -291,27 +291,30 @@ class Teleconsultasi extends CI_Controller
             $arr["pemeriksaan_penunjang_radiologi"] = json_encode($arr["pemeriksaan_penunjang_radiologi"]);
         }
 
+        $arr["id"] = $this->db->query("SELECT id FROM data_penunjang ORDER BY id DESC")->row()->id + 1;
+
         $this->db->insert("data_penunjang", $arr);
+
     }
 
     public function send_data_konsultasi()
     {
-        // if (!$this->session->userdata('is_login')) {
-        //     redirect(base_url('Login'));
-        // }
-        // $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
-        // if ($valid->id_user_kategori != 2) {
-        //     if ($valid->id_user_kategori == 0) {
-        //         redirect(base_url('pasien/Pasien'));
-        //     } else {
-        //         redirect(base_url('admin/Admin'));
-        //     }
-        // }
+        if (!$this->session->userdata('is_login')) {
+            redirect(base_url('Login'));
+        }
+        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        if ($valid->id_user_kategori != 2) {
+            if ($valid->id_user_kategori == 0) {
+                redirect(base_url('pasien/Pasien'));
+            } else {
+                redirect(base_url('admin/Admin'));
+            }
+        }
 
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
 
-        $this->send_data_penunjang($data); exit();
+        $this->send_data_penunjang($data);
 
         // if(!$data) {
         //     // This will read the raw POST data from the request body and parse it into an associative array.
@@ -424,7 +427,6 @@ class Teleconsultasi extends CI_Controller
         }
 
         $this->send_data_penunjang($data);
-        $this->all_controllers->setHargaObatFrom([$data["id_jadwal_konsultasi"]]);
 
         $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();

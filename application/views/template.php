@@ -256,6 +256,7 @@
           </div>
         </div>
       </div>
+      <?php } ?>
 
       <?php if ($user_2->accept_tac == 0) { ?>
         <div class="modal fade" id="tac_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -530,7 +531,7 @@
           </div>
         </div>
       <?php } ?>
-    <?php } ?>
+      
     <div class="modal fade" id="ModalNotif" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

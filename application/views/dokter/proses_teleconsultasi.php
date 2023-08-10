@@ -231,7 +231,7 @@
 
                         <?php for($i = 0; $i < count($rad); $i ++) { ?>
                             <div class="form-check form-check-inline">
-                            <input name="tipe-pemeriksaan-2-<?= $i ?>" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2-<?= $i ?>" value="<?= $lab[$i] ?>">
+                            <input name="tipe-pemeriksaan-2-<?= $i ?>" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2-<?= $i ?>" value="<?= $rad[$i] ?>">
                             <label class="form-check-label" for="tipe-pemeriksaan-2-<?= $i ?>"><?= $rad[$i] ?></label>
                             </div>
                         <?php } ?>

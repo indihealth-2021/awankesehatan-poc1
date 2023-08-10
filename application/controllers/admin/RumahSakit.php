@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class RumahSakit extends CI_Controller
 {
 
+    private $bingMapsAPIKey = "AuPkBhRU1tlp5gG2Vki8-LpP7ooPssnBv_MQ_u1BNoPXIWZiY7AF_3BVvpLQz7XC";
+
     public function __construct(){
         parent::__construct();
         $this->load->model('RumahSakit_model');
@@ -137,6 +139,12 @@ class RumahSakit extends CI_Controller
         $this->load->view('template', $data);
     }
 
+    private function approximateLocation($query) {
+		# docs: https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query#url-template
+		$base = "http://dev.virtualearth.net/REST/v1/Locations/".urlencode($query)."?o=json&key=".$this->bingMapsAPIKey;
+		return json_decode(file_get_contents($base), $associative=true)["resourceSets"][0]["resources"][0];
+	}
+
     public function save_rs(){
         $this->all_controllers->check_user_admin();
         $post_data = $this->input->post();
@@ -185,35 +193,37 @@ class RumahSakit extends CI_Controller
         }
         $alamat_rs = $alamat_detail.', KELURAHAN '.$alamat_kelurahan.', KECAMATAN '.$alamat_kecamatan.', '.$alamat_kota.', '.$alamat_provinsi.' '.$kode_pos;
 
-        $curl = curl_init();
+        // $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7IdKoPYrF-6bqtHHOt3Rwa3xvsnSO2TQ&address='.urlencode($alamat_rs),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7IdKoPYrF-6bqtHHOt3Rwa3xvsnSO2TQ&address='.urlencode($alamat_rs),
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => '',
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => 'GET',
+        // ));
 
-        $result = json_decode(curl_exec($curl));
-        if (curl_errno($curl)) {
-            $error_msg = curl_error($curl);
-        }
+        // $result = json_decode(curl_exec($curl));
+        // if (curl_errno($curl)) {
+        //     $error_msg = curl_error($curl);
+        // }
 
-        curl_close($curl);
-        $koordinat = $result->results[0]->geometry->location;
+        // curl_close($curl);
+        // $koordinat = $result->results[0]->geometry->location;
 
         // if(!$koordinat){
         //     $this->session->set_flashdata('msg', 'error');
         //     redirect(base_url('admin/RumahSakit/manage_rs'));
         // }
 
+        [$lat, $long] = $this->approximateLocation($alamat_rs)["point"]["coordinates"];
+
         $this->all_model->update('master_rs', [
-            "lat" => $koordinat->lat,
-            "lng" => $koordinat->lng,
+            "lat" => $lat,
+            "lng" => $long,
         ], ["id"=>$id_rs]);
 
         if (!empty($_FILES['logo']['name'])) {

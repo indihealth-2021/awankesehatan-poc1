@@ -257,11 +257,14 @@
                   </div>
               </div>
               <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-6">
                   <p class="font-12">Resep</p>
                 </div>
                 <div class="col-md-3">
-                  <button class="btn btn-resep float-right" type="button" data-toggle="modal" data-target="#ModalResep" id="add">+ Tambah Resep Pasien </button>
+                  <button class="btn btn-resep float-right" type="button" data-toggle="modal" data-target="#ModalResep" id="add">+ Tambah Obat </button>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-resep float-right" type="button" data-toggle="modal" data-target="#ModalRacikan" id="add">+ Tambah Racikan  </button>
                 </div>
               </div>
               <div class="row">
@@ -495,7 +498,69 @@
   </div>
 
 
-
+  <div class="modal fade" id="ModalRacikan" tabindex="0" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="height: auto;">
+            <div class="modal-header">
+                <p class="modal-title font-14 font-bold-7" id="exampleModalLabel">Tambah Racikan</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formRacikanDokter">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="font-12 col-form-label">Nama Racikan</label>
+                                    <input type="number" min=1 max=100 name="nama_racikan" class="form-control form-control-sm" id="nama-racikan" placeholder="Racikan A" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="font-12 col-form-label">Pilih Obat </label>
+                                    <div class="input-group">
+                                        <select name="id_obat_racikan" id="obat-racikan" class="form-control form-control-sm" onchange="" required>
+                                            <option disabled selected value="">Pilih Obat</option>
+                                            <?php foreach ($list_obat as $obat) { ?>
+                                                <option value="<?php echo $obat->id ?>"><?php echo $obat->name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="px-2 btn btn-primary btn-sm" id="addObatButton">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <h4>List Obat</h4>
+                                <div id="selectedObatsContainer"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="font-12 col-form-label">Jumlah Obat</label>
+                                    <input type="number" min=1 max=100 name="jumlah_obat" class="form-control form-control-sm" id="unit-racikan" placeholder="Jumlah" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="font-12 col-form-label">Aturan Pakai</label>
+                                    <input type="text" name="keterangan" class="form-control form-control-sm" placeholder="Aturan Pakai" required>
+                                </div>
+                            </div>
+                            <input type="hidden" name="satuan_obat" id="satuan_obat" value="">
+                        </div>
+            </div>
+            <div class="modal-footer">
+              <div class="float-left">
+                <button id="buttonTambahResep" class="btn btn-simpan-sm">Simpan</button>
+                <button type="button" class="btn btn-batal-sm mr-3" data-dismiss="modal">Batal</button>
+              </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="ModalResep" tabindex="0" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="height: auto;">
@@ -695,6 +760,28 @@
     $('input[type="number"]')
         .keyup(resizeInput)
         .each(resizeInput);
+</script>
+
+<script>
+    var selectedObats = [];
+
+    document.getElementById("addObatButton").addEventListener("click", function() {
+        var selectedObatId = document.querySelector("#obat-racikan").value;
+        var selectedObatName = document.querySelector("#obat-racikan option[value='" + selectedObatId + "']").text;
+
+        if (selectedObatId && selectedObatName) {
+            var selectedObat = {
+                id: selectedObatId,
+                name: selectedObatName,
+            };
+            selectedObats.push(selectedObat);
+            var selectedObatsContainer = document.getElementById("selectedObatsContainer");
+            var selectedObatDiv = document.createElement("div");
+            selectedObatDiv.textContent = selectedObatName;
+            selectedObatsContainer.appendChild(selectedObatDiv);
+            document.getElementById("obat-racikan").value = "";
+        }
+    });
 </script>
 
 <script>

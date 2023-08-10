@@ -37,7 +37,7 @@ class ALL_Controllers{
             else{
                 redirect(base_url('admin/FarmasiVerifikasiObat'));
             }
-        }        
+        }
     }
 
     public function check_user_admin(){
@@ -187,5 +187,45 @@ class ALL_Controllers{
                 redirect(base_url('diampu/Diampu/list_pengampu'));
             }
         }
+    }
+
+    public function setHargaObatFrom($list_id_jadwal_konsultasi) {
+        for($i = 0; $i < count($list_id_jadwal_konsultasi); $i ++) {
+            $allObat = $this->CI->db->query("SELECT * FROM resep_dokter WHERE id_jadwal_konsultasi=".$list_id_jadwal_konsultasi[$i])->result();
+
+            $total = 0;
+            foreach($allObat as $obat) {
+                if($obat->harga != 0) {
+                    $total += $obat->harga * $obat->jumlah_obat;
+                }else {
+                    $hargaObat = $this->CI->db->query("SELECT harga FROM master_obat WHERE id=".$obat->id_obat)->row()->harga;
+                    $total += $hargaObat * $obat->jumlah_obat;
+                }
+            }
+
+            $this->CI->db->update(
+                $table="biaya_pengiriman_obat",
+                $set=["harga_obat" => $total],
+                $where=["id_jadwal_konsultasi" => $list_id_jadwal_konsultasi[$i]]
+            );
+        }
+    }
+
+    public function getTotalHargaObatFrom($list_id_jadwal_konsultasi) {
+        $data = [];
+        $data["harga_obat"] = [];
+        for($i = 0; $i < count($list_id_jadwal_konsultasi); $i ++) {
+            $data["harga_obat"][$list_id_jadwal_konsultasi[$i]] = $this->CI->db->query("SELECT * FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi=".$list_id_jadwal_konsultasi[$i])->row()->harga_obat;
+        }
+
+        return $data["harga_obat"];
+    }
+
+    public function debug($output) {
+        echo json_encode([
+            "output" => $output,
+            "last_query" => $this->CI->db->last_query(),
+            "error" => $this->CI->db->error()
+        ]); exit();
     }
 }

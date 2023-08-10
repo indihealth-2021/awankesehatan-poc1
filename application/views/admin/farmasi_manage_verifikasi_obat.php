@@ -91,51 +91,17 @@
                      </td>
                      <td class="text-top">
                        <span class="font-tr-table">Total Harga</span><br>
-                       <?php
-                        $list_harga_obat = explode(',', $resep->harga_obat);
-                        $list_harga_obat_per_n_unit = explode(',', $resep->harga_obat_per_n_unit);
-                        $list_jumlah_obat = explode(',', $resep->jumlah_obat);
-                        $jml_data = count($list_harga_obat);
-                        $list_total_harga = [];
-                        $total_harga = 0;
-
-                        if(!$jml_data < 2) {
-                          $same = false;
-                          for($i = 1; $i < $jml_data; $i ++) {
-                            if(
-                              ($list_harga_obat[$i] != $list_harga_obat[$i-1])
-                              && ($list_harga_obat_per_n_unit[$i] != $list_harga_obat_per_n_unit[$i-1])
-                              && ($list_jumlah_obat[$i] != $list_jumlah_obat[$i-1])
-                            ) {
-                              if($list_harga_obat_per_n_unit[$i] != 0) {
-                                $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
-                              }else {
-                                $list_total_harga[$i] = $list_jumlah_obat[$i] * $list_harga_obat[$i];
-                              }
-                            }
-                          }
-                        }else {
-                          if($list_harga_obat_per_n_unit[0] != 0) {
-                            $list_total_harga[0] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[0]) * $list_harga_obat[0];
-                          }else {
-                            $list_total_harga[0] = $list_jumlah_obat[0] * $list_harga_obat[0];
-                          }
-                        }
-
-                        foreach ($list_total_harga as $tot_harga) {
-                          $total_harga += $tot_harga;
-                        }
-                        ?>
-                       <?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?>
+                        <?= 'Rp. ' . number_format($harga_obat[$resep->id_jadwal_konsultasi], 2, ',', '.'); ?>
                      </td>
                      <td width="10%" class="text-top">
                        <span class="font-tr-table">Pemeriksa</span><br>
                        <?php echo $resep->nama_dokter; ?>
                      </td>
-                     <td class="text-center" width="10%">
+                     <td class="text-center" width="20%">
                        <span class="font-tr-table">Aksi</span><br>
                        <a href="<?php echo base_url('admin/FarmasiVerifikasiObat/verifikasi/' . $resep->id_jadwal_konsultasi); ?>" onclick="return confirm('Apakah anda yakin untuk verifikasi resep ini?');" class="mb-3 btn btn-tele-verif mt-2">Verifikasi</a>
-                       <a class="btn btn-tele-one" href="<?php echo base_url('admin/FarmasiVerifikasiObat/form_edit_resep/' . $resep->id_jadwal_konsultasi); ?>">Edit</a>
+                       <a class="btn btn-tele-one" href="<?php echo base_url('admin/FarmasiVerifikasiObat/form_edit_resep/' . $resep->id_jadwal_konsultasi); ?>"><i class="fa fa-pencil"></i> Obat</a>
+                       <a class="btn btn-tele-one" href="<?php echo base_url('admin/FarmasiVerifikasiObat/edit_harga/' . $resep->id_jadwal_konsultasi); ?>"><i class="fa fa-pencil"></i> Harga</a>
                      </td>
                    </tr>
                  <?php } ?>

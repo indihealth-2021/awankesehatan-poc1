@@ -11,8 +11,9 @@
                 </ol>
             </nav>
           </div>
-          <div class="col-sm-12 col-12">
-              <h3 class="page-title">Edit Obat</h3>
+          <div class="col-sm-12 col-12 mb-3">
+              <h3 class="page-title">Edit Obat</h3><br>
+              <span class="alert alert-info" style="font-size: 10px;"><i class="fa fa-warning"></i> Menambah/menghapus obat akan mengubah total harga obat sesuai kalkulasi dari sistem, harap <a href="<?= base_url('admin/FarmasiVerifikasiObat/edit_harga/'.$id_jadwal_konsultasi) ?>" style="text-decoration: underline; font-weight: bolder;"> <i class="fa fa-pencil"></i> ubah total harga</a> apabila harga tidak sesuai dengan harga di apotek.</span>
           </div>
       </div>
 
@@ -34,6 +35,7 @@
                                   <th>Nama Obat</th>
                                   <th>Jumlah</th>
                                   <th>Aturan Pakai</th>
+                                  <th></th>
                                   <th></th>
                                 </tr>
                               </thead>
@@ -117,6 +119,7 @@
 			        </div>
 	          	</div>
                 <input type="hidden" name="satuan_obat" id="satuan_obat" value="">
+                <input type="hidden" name="id_jadwal_konsultasi" value="<?= $id_jadwal_konsultasi ?>">
           	</div>
           </div>
       </div>

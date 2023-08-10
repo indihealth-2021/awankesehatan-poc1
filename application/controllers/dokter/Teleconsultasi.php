@@ -424,6 +424,7 @@ class Teleconsultasi extends CI_Controller
         }
 
         $this->send_data_penunjang($data);
+        $this->all_controllers->setHargaObatFrom([$data["id_jadwal_konsultasi"]]);
 
         $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();

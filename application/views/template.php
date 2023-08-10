@@ -234,7 +234,7 @@
       </div>
 
     <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ?',[$user->id])->row(); ?>
-    
+
 
 
     <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
@@ -1071,12 +1071,32 @@
   <?php
   if (isset($js_addons)) {
     echo $js_addons;
+
   }
   ?>
+
+  <script>
+    $("#formResepDokter").submit((e) => {
+        e.preventDefault();
+
+        var dataResep = $(this).serializeArray();
+        var namaObat = $("select[name=id_obat] option:selected").text();
+        var listResep = $("#listResep");
+
+        alert(nameObat);
+
+        var templateResep = "<tr><td>"+namaObat+"</td><input type=\'hidden\' name=\'id_obat[]\' value=\'"+dataResep[0].value+"\'><td>"+dataResep[1].value+" "+dataResep[3].value+"</td><input type=\'hidden\' name=\'jumlah_obat[]\' value=\'"+dataResep[1].value+"\'><td>"+dataResep[2].value+"</td><input type=\'hidden\' name=\'keterangan[]\' value=\'"+dataResep[2].value+"\'><td><button class=\'btn btn-secondary\' onclick=\'return (this.parentNode).parentNode.remove();\'><i class=\'fas fa-trash-alt\'></i></button></td></tr>";
+
+        listResep.append(templateResep);
+        alert("Resep telah ditambahkan!");
+        $("#ModalResep").modal("hide");
+    });
+  </script>
 
   <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
     <script>
       $(document).ready(function() {
+
         $('#tac_modal').modal('show');
         $('#tac_body').scroll(function(e) {
           if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {

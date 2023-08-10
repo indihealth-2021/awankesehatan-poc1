@@ -206,20 +206,20 @@ class RumahSakit extends CI_Controller
         curl_close($curl);
         $koordinat = $result->results[0]->geometry->location;
 
-        if(!$koordinat){
-            $this->session->set_flashdata('msg', 'error');
-            redirect(base_url('admin/RumahSakit/manage_rs'));
-        }
+        // if(!$koordinat){
+        //     $this->session->set_flashdata('msg', 'error');
+        //     redirect(base_url('admin/RumahSakit/manage_rs'));
+        // }
 
         $this->all_model->update('master_rs', [
             "lat" => $koordinat->lat,
             "lng" => $koordinat->lng,
         ], ["id"=>$id_rs]);
 
-        if($_FILES['logo']['size'] > 0){
-            $config['upload_path']          = './assets/images/logo';
-            $config['allowed_types']        = 'gif|jpg|png|jpeg|jfif';
-            $config['max_size']             = 10024;
+        if (!empty($_FILES['logo']['name'])) {
+            $config['upload_path'] = './assets/images/logo';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif';
+            $config['max_size'] = 10024;
             $config['file_name'] = 'logo';
 
             $this->load->library('upload', $config);

@@ -118,6 +118,7 @@ class Telekonsultasi extends CI_Controller {
 	    unset($data['name']);
 	    unset($data['sub_name']);
 	    unset($data['id_user']);
+        unset($data['user_file']);
 
 	    $data['id_pasien'] = $this->session->userdata('id_user');
 

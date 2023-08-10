@@ -294,6 +294,48 @@
         <div class="col-md-5">
           <div class="card card-5 p-2 px-4">
               <p style="border-bottom: 1px solid #DEDEDE;" class="py-2 font-12">Data Pasien</p>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">History</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">01 Januari 1970</th>
+                                <td>RS Santo Borromeus</td>
+                                <td>Alergi</td>
+                                <td>Panadol</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">01 Januari 1970</th>
+                                <td>RS Santo Borromeus</td>
+                                <td>Alergi</td>
+                                <td>Panadol</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">01 Januari 1970</th>
+                                <td>RS Santo Borromeus</td>
+                                <td>Alergi</td>
+                                <td>Panadol</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
             <div class="row">
                <?php
                 if ($pasien->foto) {
@@ -305,7 +347,11 @@
               <div class="col-md-2"><img src="<?php echo $foto; ?>" width="41" height="41" class="border-radius-50"></div>
               <div class="col-md-9">
                 <span class="font-14"><?php echo ucwords($pasien->name) ?></span><br>
-                <span class="font-11"><?php echo $pasien->age == '2020' ? '-' : $pasien->age . ' Tahun' ?></span>
+                <span class="font-11"><?php echo $pasien->age == '2020' ? '-' : $pasien->age . ' Tahun' ?></span> <br>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                <i class="fa fa-clock mr-3"></i> History
+                </button>
               </div>
             </div>
           </div>

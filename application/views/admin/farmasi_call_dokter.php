@@ -140,6 +140,8 @@
           parentNode: document.querySelector('#meet'),
           configOverwrite: {
                 disableDeepLinking: true,
+                startVideoMuted: true,
+                startWithVideoMuted: true
             },
             userInfo: {
                 displayName: userName

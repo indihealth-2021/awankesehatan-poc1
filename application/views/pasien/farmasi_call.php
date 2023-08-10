@@ -117,6 +117,8 @@
         parentNode: document.querySelector('#ketemu'),
         configOverwrite: {
                 disableDeepLinking: true,
+                startVideoMuted: true,
+                startWithVideoMuted: true
             },
             userInfo: {
                 displayName: userName

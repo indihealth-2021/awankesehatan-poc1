@@ -105,7 +105,6 @@
     id_dokter = '<?= $user->id ?>';
     chat_id = `${id_farmasi}_${id_dokter}`;
 </script>
-<script type="text/javascript">
 <script>
     chat_locate = 'pasien';
     user_kategori = 'pasien';
@@ -127,6 +126,8 @@
         parentNode: document.querySelector('#meet'),
         configOverwrite: {
                 disableDeepLinking: true,
+                startVideoMuted: true,
+                startWithVideoMuted: true
             },
             userInfo: {
                 displayName: userName

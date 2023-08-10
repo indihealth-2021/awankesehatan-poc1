@@ -621,7 +621,7 @@ $(document).ready(function() {
         var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td>'+dataResep[3].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
         listResep.append(templateListResep);
         $(this)[0].reset();
-        $('#ModalResep').modal('hide');
+        // $('#ModalResep').modal('hide');
         alert('Resep telah ditambahkan!');
         e.preventDefault();
     });

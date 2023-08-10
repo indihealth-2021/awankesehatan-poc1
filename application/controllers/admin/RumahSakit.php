@@ -246,7 +246,6 @@ class RumahSakit extends CI_Controller
                 $this->all_model->update('master_rs', ['logo'=>$logo], ['id'=>$id_rs]);
             }
         }
-
         $this->session->set_flashdata('msg', 'Data RS telah diupdate!');
         redirect(base_url('admin/RumahSakit/manage_rs'));
     }

@@ -663,6 +663,10 @@
             height: 400,
             parentNode: document.querySelector('#meet'),
             configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                    'camera'
+                ],
                 disableDeepLinking: true,
             },
             userInfo: {

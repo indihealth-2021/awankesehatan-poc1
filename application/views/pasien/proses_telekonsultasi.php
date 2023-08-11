@@ -574,6 +574,10 @@
             height: 400,
             parentNode: document.querySelector('#ketemu'),
             configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                    'camera'
+                ],
                 disableDeepLinking: true,
             },
             userInfo: {

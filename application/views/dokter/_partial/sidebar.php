@@ -3,7 +3,18 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <div class="logo">
                         <a href="#" class="">
-                          <div class="bg-logo-sidebar p-4"><img class="pl-2" src="<?php echo base_url('assets/telemedicine/img/logo.png'); ?>" width="124" height="auto" alt=""><span></span></div>
+                          <div class="bg-logo-sidebar p-4">
+                          <?php
+                            $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+                            foreach ($imageFormats as $format) {
+                                $imagePath = './assets/images/logo/logo.' . $format;
+                                if (file_exists($imagePath)) {
+                                    echo '<img class="pl-2" src="' . base_url($imagePath) . '" alt=""><span></span>';
+                                    break;
+                                }
+                            }
+                            ?>
+                        </div>
                         </a>
                     </div>
                     <ul>

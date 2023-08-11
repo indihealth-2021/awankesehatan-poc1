@@ -57,7 +57,17 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light font-ubuntu" id="ftco-navbar" style="border-bottom:1px; box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);">
     <div class="container">
-      <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><img src="<?php echo base_url('assets/telemedicine/img/logo.png') ?>" class="img-brand"></a>
+      <a class="navbar-brand" href="<?php echo base_url('Home'); ?>">
+                          <?php
+                            $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+                            foreach ($imageFormats as $format) {
+                                $imagePath = './assets/images/logo/logo.' . $format;
+                                if (file_exists($imagePath)) {
+                                    echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
+                                    break;
+                                }
+                            }
+                            ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>

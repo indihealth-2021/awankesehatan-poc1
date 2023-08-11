@@ -116,6 +116,9 @@
         height: '400px',
         parentNode: document.querySelector('#ketemu'),
         configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                ],
                 disableDeepLinking: true,
                 startVideoMuted: true,
                 startWithVideoMuted: true

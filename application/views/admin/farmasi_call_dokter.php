@@ -139,6 +139,9 @@
           height: '400px',
           parentNode: document.querySelector('#meet'),
           configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                ],
                 disableDeepLinking: true,
                 startVideoMuted: true,
                 startWithVideoMuted: true

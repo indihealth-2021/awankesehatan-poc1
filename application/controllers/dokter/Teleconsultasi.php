@@ -504,23 +504,34 @@ class Teleconsultasi extends CI_Controller
             echo json_encode(["error" => "Tidak ada obat yang dipilih"]); exit();
         }
 
-        $nameIsExist = $this->db->query("SELECT name FROM master_obat WHERE name='".$data["nama_racikan"]."'");
+        $total = 0;
+        $name = [];
 
-        if($nameIsExist->num_rows() != 0) {
-            echo json_encode(["error" => "Nama racikan sudah ada, harap ganti nama racikan"]); exit();
+        foreach(explode(",", $data["selectedObats"]) as $idObat) {
+            $obat = $this->db->query("SELECT name, harga FROM master_obat WHERE id=".$idObat)->row();
+            $total += $obat->harga;
+
+            array_push($name, $obat->name);
         }
 
-        $total = 0;
-        foreach(explode(",", $data["selectedObats"]) as $idObat) {
-            $total += $this->db->query("SELECT harga FROM master_obat WHERE id=".$idObat)->row()->harga;
+        $name = implode("; ", $name);
+        $name = $data["nama_racikan"]." (".$name.")";
+
+        $nameIsExist = $this->db->query("SELECT name FROM master_obat WHERE name LIKE '%".$name."%'");
+
+        if($nameIsExist->num_rows() != 0) {
+            echo json_encode(["error" => "Racikan dengan nama yang sama sudah ada, harap masukkan nama yang lain"]);
+            exit();
         }
 
         $id = $this->db->query("SELECT id FROM master_obat ORDER BY id DESC")->row()->id + 1;
 
+        // json_encode(["racikan" => $data["selectedObats"]])
+
         $insertVal = [
             "id" => $id,
-            "name" => $data["nama_racikan"],
-            "unit" => json_encode(["racikan" => $data["selectedObats"]]),
+            "name" => $name,
+            "unit" => "racikan",
             "harga_per_n_unit" => $total,
             "harga" => $total,
             "created_at" => (new DateTime("now"))->format("Y-m-d H:i:s"),
@@ -531,7 +542,7 @@ class Teleconsultasi extends CI_Controller
 
         echo json_encode(["success" => json_encode([
             "id" => $id,
-            "name" => $data["nama_racikan"],
+            "name" => $name,
             "jumlah_obat" => $data["jumlah_obat"],
             "keterangan" => $data["keterangan"],
         ])]);

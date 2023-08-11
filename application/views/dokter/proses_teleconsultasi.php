@@ -536,7 +536,7 @@
                                 <h4>List Obat</h4>
                                 <div id="selectedObatsContainer"></div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-5">
                                 <div class="form-group">
                                     <label for="message-text" class="font-12 col-form-label">Jumlah Obat</label>
                                     <input type="number" min=1 max=100 name="jumlah_obat" class="form-control form-control-sm" id="unit-racikan" placeholder="Jumlah" required>
@@ -790,10 +790,17 @@
 
             var selectedObatsContainer = document.getElementById("selectedObatsContainer");
             var selectedObatDiv = document.createElement("div");
+            var jumlahObat = document.createElement("input");
             var removeObat = document.createElement("button");
 
+            jumlahObat.id = "jumlah-"+selectedObatId;
             removeObat.id = "remove-"+selectedObatId;
             selectedObatDiv.id = selectedObatId;
+
+            jumlahObat.type = "number";
+            jumlahObat.name = "jumlahObat-"+selectedObatId;
+            jumlahObat.className = "form-control m-2";
+            jumlahObat.placeholder = "Jumlah";
 
             removeObat.className = "btn btn-danger m-2 p-2";
 
@@ -802,6 +809,7 @@
 
             selectedObatsContainer.appendChild(selectedObatDiv);
             selectedObatDiv.appendChild(removeObat);
+            selectedObatDiv.appendChild(jumlahObat);
 
             document.getElementById("obat-racikan").value = "";
 

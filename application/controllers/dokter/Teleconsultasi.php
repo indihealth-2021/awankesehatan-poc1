@@ -508,10 +508,11 @@ class Teleconsultasi extends CI_Controller
         $name = [];
 
         foreach(explode(",", $data["selectedObats"]) as $idObat) {
+            $jumlah = $data["jumlahObat-".$idObat];
             $obat = $this->db->query("SELECT name, harga FROM master_obat WHERE id=".$idObat)->row();
             $total += $obat->harga;
 
-            array_push($name, $obat->name);
+            array_push($name, $obat->name." [".$jumlah." dosis] ");
         }
 
         $name = implode("; ", $name);

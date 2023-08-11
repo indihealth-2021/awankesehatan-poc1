@@ -6,12 +6,13 @@
         <nav aria-label="">
           <ol class="breadcrumb" style="background-color: transparent;">
             <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/admin'); ?>" class="text-black">Dashboard</a></li>
-            <li class="breadcrumb-item" aria-current="page"><a href="<?php echo base_url('admin/PengirimanObat') ?>" class="text-black font-bold-7">Pengambilan Obat</a></li>
+            <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/PengambilanObat'); ?>" class="text-black">Pengambilan Obat</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="<?php echo base_url('admin/PengambilanObat/history') ?>" class="text-black font-bold-7">History</a></li>
           </ol>
         </nav>
       </div>
       <div class="col-sm-12 col-12">
-        <h3 class="page-title">Pengambilan Obat</h3>
+        <h3 class="page-title">Pengambilan Obat History</h3>
       </div>
     </div>
     <div class="row">
@@ -25,10 +26,6 @@
             </ul> -->
         <div class="bg-tab p-3">
           <div class="tab-pane show pt-3">
-            <a href="<?= base_url("admin/PengambilanObat/history") ?>" class="btn btn-info m-3">
-              <i class="fa fa-clock mr-3"></i>
-              History Pengambilan Obat
-            </a>
             <div class="col-md-12">
               <div class="box">
                 <div class="container-1">
@@ -96,7 +93,6 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } ?>" data-alamat-kustom="<?php if (!empty($resep->alamat_kustom)) {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     echo $resep->alamat_kustom ? $resep->alamat_pengiriman : '';                                                                                                                                             } ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalEditBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <i class="fa fa-eye"></i></button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-success" id="selesaikanPengambilan"><i class="fa fa-check mr-2"></i> selesai</button>
                             <?php } ?>
                         </td>
                       </tr>
@@ -173,40 +169,16 @@
                                 <input type="hidden" name="id_jadwal_konsultasi" id="id_jadwal_konsultasi">
                                 <input type="hidden" name="id_registrasi">
                               </div>
-                              <div class="modal-footer">
+                              <!-- <div class="modal-footer">
                                 <div class="px-3">
                                   <button type="button" class="btn btn-batal-2" data-dismiss="modal">Batal</button>
                                   <button type="submit" class="btn btn-simpan-2 buttonSave" id="saveBiayaPengiriman">Simpan</button>
                                 </div>
-                              </div>
+                              </div> -->
                               </div>
                             <?= form_close(); ?>
                         </div>
                       </div>
-
-                      <script>
-                        // Get the button element by its id
-                        var button = document.getElementById("selesaikanPengambilan");
-
-                        // Assign the showAlert function to the onclick event of the button
-                        button.addEventListener("click", (e) => {
-                          e.preventDefault();
-
-                          var result = confirm("Apakah anda yakin menyelesaikan pengambilan obat ini?");
-                          if (result) {
-                            $.ajax({
-                              url: "<?= base_url("admin/PengambilanObat/selesaikan/".$resep->id_jadwal_konsultasi) ?>",
-                              success: function(response) {
-                                location.reload();
-                              },
-                              error: function(jqXHR, textStatus, errorThrown) {
-                                //
-                              }
-                            });
-                          }
-                        });
-                      </script>
-
                     <?php } ?>
                   </tbody>
                 </table>

@@ -1064,8 +1064,8 @@ class Pembayaran extends CI_Controller
                 'alamat_kustom' => $alamat_kustom,
                 'id_registrasi' => $id_registrasi,
                 "id_jadwal_konsultasi" => "",
-                'lat' => $koordinat->lat,
-                'lng' => $koordinat->lng
+                //'lat' => $koordinat->lat,
+                //'lng' => $koordinat->lng
             );
             $biaya_pengiriman_obat = $this->db->query('SELECT id FROM biaya_pengiriman_obat WHERE id_registrasi = "'.$this->input->post('regid').'"');
             if($biaya_pengiriman_obat->num_rows() != 0){

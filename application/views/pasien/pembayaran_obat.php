@@ -107,11 +107,13 @@ foreach ($list_total_harga as $tot_harga) {
             </div>
             <?php } ?>
             <div class="text-center" style=" border-top: 3px solid #01A9AC;border-bottom: 0.5px solid #01A9AC;">
+            <?php if($resep->dikirim)  { ?>
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Biaya Pengiriman</div>
                 <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?></div>
               </div>
             </div>
+            <?php } ?>
             <div class="text-center" style=" border-bottom: 0.5px solid #01A9AC;">
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Biaya Obat</div>
@@ -121,7 +123,11 @@ foreach ($list_total_harga as $tot_harga) {
             <div class="text-center">
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Total Harga</div>
+                <?php if($resep->dikirim)  { ?>
                 <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga += $resep->biaya_pengiriman, 2, ',', '.'); ?></div>
+                <?php }else { ?>
+                <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
+                <?php } ?>
               </div>
             </div>
           </div>
@@ -141,11 +147,8 @@ foreach ($list_total_harga as $tot_harga) {
                         <?php if (!$bukti_pembayaran_obat || $bukti_pembayaran_obat->status == 2) { ?>
                           <select class="form-control form-select-bayar  col-10" name="metode_pembayaran" id="metode-pembayaran">
                             <option value="0" selected>Pilih Metode</option>
-                            <option value="1">Transfer Bank (Virtual Account)</option>
-                            <option value="2">Transfer Bank (Upload Manual)</option>
-                            <option value="3">Dompet Digital</option>
+                            <option value="2">Upload Manual</option>
                             <option value="4">Owlexa</option>
-                            <option value="5">Credit Card / Debit Card</option>
                           </select>
                         <?php } else { ?>
                           <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran_obat->metode_pembayaran == 3 ? "Virtual Account" : ($bukti_pembayaran_obat->metode_pembayaran == 4 ? "Dompet Digital" : "Credit Card / Debit Card"))); ?></p>
@@ -322,7 +325,7 @@ foreach ($list_total_harga as $tot_harga) {
                       <div class="form-check mb-4">
                         <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
                         <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
-                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata">Bank <?php echo $manual_payment->payment ?>
+                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"><?php echo $manual_payment->payment ?>
                         </label>
                       </div>
                     <?php } ?>

@@ -513,14 +513,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="message-text" class="font-12 col-form-label">Nama Racikan</label>
-                                    <input type="number" min=1 max=100 name="nama_racikan" class="form-control form-control-sm" id="nama-racikan" placeholder="Racikan A" required>
+                                    <input type="text" name="nama_racikan" class="form-control form-control-sm" id="nama-racikan" placeholder="Racikan A" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="recipient-name" class="font-12 col-form-label">Pilih Obat </label>
                                     <div class="input-group">
-                                        <select name="id_obat_racikan" id="obat-racikan" class="form-control form-control-sm" onchange="" required>
+                                        <select name="id_obat_racikan" id="obat-racikan" class="form-control form-control-sm" onchange="">
                                             <option disabled selected value="">Pilih Obat</option>
                                             <?php foreach ($list_obat as $obat) { ?>
                                                 <option value="<?php echo $obat->id ?>"><?php echo $obat->name ?></option>

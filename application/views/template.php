@@ -31,14 +31,41 @@
     <script src="assets/js/html5shiv.min.js"></script>
     <script src="assets/js/respond.min.js"></script>
   <![endif]-->
-
+  <script src="<?php echo base_url('assets/dashboard/js/jquery-3.2.1.min.js'); ?>"></script>
+  <!--firebase-->
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js"></script>
   <?php
   if (isset($css_addons)) {
     echo $css_addons;
   }
   ?>
   <script src="<?php echo base_url('assets/bower_components/lodash/dist/lodash.min.js') ?>"></script>
+  <script type="text/javascript">
+    
+    const firebaseConfig = {
 
+      apiKey: "AIzaSyBQVFzlB_hnd8Td48GuQSUbhV60DXENiRw",
+
+      authDomain: "telemedicine-poc2.firebaseapp.com",
+
+      databaseURL: "https://telemedicine-poc2-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+      projectId: "telemedicine-poc2",
+
+      storageBucket: "telemedicine-poc2.appspot.com",
+
+      messagingSenderId: "170641677475",
+
+      appId: "1:170641677475:web:dbfdb8df11cb068ba27316",
+
+      measurementId: "G-LHGYJ33LGE"
+
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <style>
     #notif {
       max-height: 500px;
@@ -573,7 +600,7 @@
   </div>
   </div>
   <div class="sidebar-overlay" data-reff=""></div>
-  <script src="<?php echo base_url('assets/dashboard/js/jquery-3.2.1.min.js'); ?>"></script>
+
   <script src="<?php echo base_url('assets/dashboard/js/popper.min.js'); ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/bootstrap.min.js'); ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/jquery.slimscroll.js'); ?>"></script>
@@ -588,11 +615,7 @@
   <script src="<?php echo base_url('assets/dashboard/js/moment.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/dashboard/js/bootstrap-datetimepicker.min.js') ?>"></script>
 
-  <!--firebase-->
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js"></script>
+
 
   <script>
     $('input[type=number]').on('focus', function(e) {
@@ -642,26 +665,6 @@
   <script>
     baseUrl = '<?php echo base_url(); ?>';
 
-    const firebaseConfig = {
-
-      apiKey: "AIzaSyBQVFzlB_hnd8Td48GuQSUbhV60DXENiRw",
-
-      authDomain: "telemedicine-poc2.firebaseapp.com",
-
-      databaseURL: "https://telemedicine-poc2-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-      projectId: "telemedicine-poc2",
-
-      storageBucket: "telemedicine-poc2.appspot.com",
-
-      messagingSenderId: "170641677475",
-
-      appId: "1:170641677475:web:dbfdb8df11cb068ba27316",
-
-      measurementId: "G-LHGYJ33LGE"
-
-    };
-    firebase.initializeApp(firebaseConfig);
     const pesan = firebase.messaging();
     pesan.getToken().then((currentToken) => {
       if (currentToken) {

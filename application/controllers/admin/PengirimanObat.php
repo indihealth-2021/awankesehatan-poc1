@@ -43,9 +43,9 @@ class PengirimanObat extends CI_Controller {
 
         $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
 
-        // if(!$biaya_pengiriman){
-        //     $this->db->insert('biaya_pengiriman_obat', array('biaya_pengiriman'=>0, 'id_jadwal_konsultasi'=>$id_jadwal_konsultasi));
-        // }
+        if(!$biaya_pengiriman){
+            $this->db->insert('biaya_pengiriman_obat', array('biaya_pengiriman'=>0, 'id_jadwal_konsultasi'=>$id_jadwal_konsultasi));
+        }
 
         $this->session->set_flashdata('msg_biaya_pengiriman', 'SUKSES: Resep Obat telah disimpan');
         redirect(base_url('admin/PengirimanObat'));

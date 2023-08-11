@@ -68,23 +68,27 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    // if($resep->diverifikasi_user == 1){
+                                                    if($resep->dirilis == 1){
                                                       if($resep->status_bukti != null){
                                                         if($resep->status_bukti){
                                                             $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                             $button = 'Lunas';
-                                                            $warna = 'lunas';
+                                                            $warna = 'simpan';
                                                         }
                                                         else{
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);$button = 'Sedang Diroses';
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran');$button = 'Sedang Diproses';
                                                           $warna = 'simpan';
                                                         }
                                                     }
                                                     else{
                                                       $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                         $button = 'Bayar';
-                                                        $warna = 'bayar';
+                                                        $warna = 'simpan';
                                                     }
+                                                  }else {
+                                                    $directLink = base_url('pasien/ResepDokter/#');$button = 'Sedang Diproses';
+                                                        $warna = 'simpan';
+                                                  }
                                                 ?>
                                                 <td class='text-center'>
                                                 <a href="<?php echo $directLink ?>" class='btn btn-<?php echo $warna ?>  font-12'> <?php echo $button ?></a>

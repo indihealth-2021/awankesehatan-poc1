@@ -15,14 +15,6 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->load->library('pagination');
     }
 
-    private function debug()
-    {
-        echo json_encode([
-            "query" => $this->db->last_query(),
-            "error" => $this->db->error()
-        ]);
-        exit();
-    }
     public function index()
     {
         $this->all_controllers->check_user_farmasi();
@@ -35,6 +27,7 @@ class FarmasiVerifikasiObat extends CI_Controller
         $where = $where ? ' AND p.name LIKE "%' . $where . '%"' : '';
 
         $count_rows = count($this->db->query("SELECT resep_dokter.id_pasien,bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', '<span class=\"badge badge-danger\">Nonaktif</span>') ,'</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, master_diagnosa.nama as diagnosis FROM (resep_dokter, diagnosis_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_jadwal_konsultasi = diagnosis_dokter.id_jadwal_konsultasi" . $where . " GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bukti_pembayaran.tanggal_konsultasi ASC")->result());
+
         //$config = $this->pagination->paginate(5, 4, $count_rows, base_url('admin/FarmasiVerifikasiObat/index'));
         $config['base_url'] = 'admin/FarmasiVerifikasiObat/index';
         $config['total_rows'] = 5;
@@ -46,7 +39,14 @@ class FarmasiVerifikasiObat extends CI_Controller
         $limit = ' LIMIT ' . $config['per_page'] . ' OFFSET ' . $data['page'];
 
         $apotekId = $this->db->query("SELECT id_apotek FROM master_user WHERE master_user.id=" . $this->session->userdata("id_user"))->result_array()[0]["id_apotek"];
-        $data['list_resep'] = $this->db->query("SELECT resep_dokter.id_pasien,bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', '<span class=\"badge badge-danger\">Nonaktif</span>') ,'|'  SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, master_diagnosa.nama as diagnosis FROM (resep_dokter, diagnosis_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_apotek=" . $apotekId . " " . $where . " GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bukti_pembayaran.tanggal_konsultasi ASC" . $limit)->result();
+        $data['list_resep'] = $this->db->query("SELECT resep_dokter.id_pasien,bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, p.card_number as card_number, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', '<span class=\"badge badge-danger\">Nonaktif</span>') ,'|'  SEPARATOR '') as detail_obat, master_obat.harga, master_obat.harga_per_n_unit, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, master_diagnosa.nama as diagnosis FROM (resep_dokter, diagnosis_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_apotek=" . $apotekId . " " . $where . " GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bukti_pembayaran.tanggal_konsultasi ASC" . $limit)->result();
+
+        $list_id_konsultasi = [];
+        foreach($data["list_resep"] as $list) {
+            array_push($list_id_konsultasi, $list->id_jadwal_konsultasi);
+        }
+
+        $data["harga_obat"] = $this->all_controllers->getTotalHargaObatFrom($list_id_konsultasi);
 
 //         SELECT resep_dokter.id_pasien,bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('
 // ',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', 'Nonaktif<\/span>') ,'<\/li>' SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, master_diagnosa.nama as diagnosis FROM (resep_dokter, diagnosis_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_apotek=3 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bukti_pembayaran.tanggal_konsultasi ASC LIMIT 4 OFFSET 0;
@@ -97,12 +97,14 @@ class FarmasiVerifikasiObat extends CI_Controller
             $view = "admin/farmasi_form_edit_resep"
         );
 
-        $data['list_obat'] = $this->db->query("SELECT master_obat.name as nama_obat, master_obat.unit as nama_unit, master_obat.active, resep_dokter.keterangan as aturan_pakai, resep_dokter.jumlah_obat, resep_dokter.id, resep_dokter.id_obat, resep_dokter.id_pasien, resep_dokter.id_dokter FROM resep_dokter INNER JOIN master_obat ON master_obat.id = resep_dokter.id_obat WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi)->result();
+        $data['list_obat'] = $this->db->query("SELECT master_obat.harga, master_obat.harga_per_n_unit, master_obat.name as nama_obat, master_obat.unit as nama_unit, master_obat.active, resep_dokter.keterangan as aturan_pakai, resep_dokter.jumlah_obat, resep_dokter.id, resep_dokter.id_obat, resep_dokter.id_pasien, resep_dokter.id_dokter FROM resep_dokter INNER JOIN master_obat ON master_obat.id = resep_dokter.id_obat WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi)->result();
         $data['pasien'] = $this->db->query('SELECT p.id, p.name, dp.no_medrec FROM master_user p INNER JOIN detail_pasien dp ON dp.id_pasien = p.id WHERE p.id = ? AND p.id_user_kategori = 0', $data['list_obat'][0]->id_pasien)->row();
         $data['pasien']->no_medrec = str_split($data['pasien']->no_medrec, "2");
         $data['pasien']->no_medrec = implode('.', $data['pasien']->no_medrec);
         $data['list_master_obat'] = $this->db->query("SELECT * FROM master_obat WHERE active=1")->result();
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
+
+        $data["harga_obat"] = $this->all_controllers->getTotalHargaObatFrom([$id_jadwal_konsultasi])[$id_jadwal_konsultasi];
 
         $data['css_addons'] = '
         <link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">
@@ -134,7 +136,7 @@ class FarmasiVerifikasiObat extends CI_Controller
                                                         });
 
                                     $(".hapusObat").click(function(e){
-                                        $(e.target).parents("tr").remove();
+                                        // $(e.target).parents("tr").remove();
                                     });
 
                                     $("#ModalResep").on("shown.bs.modal", function (e) {
@@ -142,8 +144,10 @@ class FarmasiVerifikasiObat extends CI_Controller
                                         $("#formResepDokter").find("#unit").attr("placeholder","Jml");
                                     });
 
-                                    $("#formResepDokter").submit(function(e){
+                                    $("#formResepDokter").submit((e) => {
                                         e.preventDefault();
+                                        alert(1);
+
                                         var dataResep = $(this).serializeArray();
                                         var namaObat = $("select[name=id_obat] option:selected").text();
                                         var listResep = $("#listResep");
@@ -223,8 +227,134 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function hapus_obat($id)
-    {
+    public function update_harga_obat($id_jadwal_konsultasi) {
+        $this->db->update(
+            $table="biaya_pengiriman_obat",
+            $set=["harga_obat" => $this->input->post("harga_obat")],
+            $where=["id_jadwal_konsultasi" => $id_jadwal_konsultasi]
+        );
+
+        redirect(base_url('admin/FarmasiVerifikasiObat'));
+    }
+
+    public function edit_harga($id_jadwal_konsultasi) {
+        $this->all_controllers->check_user_farmasi();
+        $data = $this->all_controllers->get_data_view(
+            $title = "Edit Resep Obat",
+            $view = "admin/farmasi_form_edit_harga_resep"
+        );
+
+        $data['list_obat'] = $this->db->query("SELECT master_obat.harga, master_obat.harga_per_n_unit, master_obat.name as nama_obat, master_obat.unit as nama_unit, master_obat.active, resep_dokter.keterangan as aturan_pakai, resep_dokter.jumlah_obat, resep_dokter.id, resep_dokter.id_obat, resep_dokter.id_pasien, resep_dokter.id_dokter FROM resep_dokter INNER JOIN master_obat ON master_obat.id = resep_dokter.id_obat WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi)->result();
+        $data['pasien'] = $this->db->query('SELECT p.id, p.name, dp.no_medrec FROM master_user p INNER JOIN detail_pasien dp ON dp.id_pasien = p.id WHERE p.id = ? AND p.id_user_kategori = 0', $data['list_obat'][0]->id_pasien)->row();
+        $data['pasien']->no_medrec = str_split($data['pasien']->no_medrec, "2");
+        $data['pasien']->no_medrec = implode('.', $data['pasien']->no_medrec);
+        $data['list_master_obat'] = $this->db->query("SELECT * FROM master_obat WHERE active=1")->result();
+        $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
+
+        $data["harga_obat"] = $this->all_controllers->getTotalHargaObatFrom([$id_jadwal_konsultasi])[$id_jadwal_konsultasi];
+
+        $data['css_addons'] = '
+        <link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">
+        <script src="https://meet.jit.si/external_api.js"></script>
+        <style>
+            .input-like-text{
+                background-color:transparent;
+                border: 0;
+                font-size: 1em;
+                width: 100%;
+            }
+        </style>
+        ';
+        $data['js_addons'] = '
+                                <script src="' . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . '"></script>
+                                <script src="' . base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') . '"></script>
+                                <script src="' . base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') . '"></script>
+                                <script src="' . base_url('assets/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') . '"></script>
+                                <script>
+                                $(document).ready(function() {
+                                    var table_farmasi = $("#table_farmasi").DataTable({
+                                                            "paging": true,
+                                                            "lengthChange": false,
+                                                            "searching": false,
+                                                            "ordering": true,
+                                                            "info": true,
+                                                            "autoWidth": true,
+                                                            "responsive": false,
+                                                        });
+
+                                    $("#ModalResep").on("shown.bs.modal", function (e) {
+                                        $("#formResepDokter").trigger("reset");
+                                        $("#formResepDokter").find("#unit").attr("placeholder","Jml");
+                                    });
+
+                                    // ========================= panggil pasien ================== //
+                                    $(".chat-wrap-inner").scrollTop($(".chat-wrap-inner")[0].scrollHeight);
+
+                                    $("#panggil-pasien").click(function(){
+                                        $("#messages").empty();
+                                        var iframes = document.getElementsByTagName("iframe");
+                                        for (var i = 0; i < iframes.length; i++) {
+                                            iframes[i].parentNode.removeChild(iframes[i]);
+                                        }
+                                        $("#konten-panggilan").prop("hide", true);
+                                        function makeid(length) {
+                                            var result = "";
+                                            var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                                            var charactersLength = characters.length;
+                                            for (var i = 0; i < length; i++) {
+                                                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                                            }
+                                            return result;
+                                        }
+                                        let uniqid = makeid(12);
+                                        const id_farmasi = ' . $this->session->userdata("id_user") . ';
+                                        const id_user = $("select[name=pasien]").val();
+                                        $("#btn-stop-farmasi").attr("data-id-user", id_user);
+
+                                        id_pasien = id_user;
+                                        chat_id = id_farmasi+"_"+id_user;
+                                        get_chat(chat_id);
+
+                                        foto_pasien = baseUrl+"/assets/telemedicine/img/default.png";
+                                        room_name = "telemedicine_lintas_" + id_farmasi + "_" + id_user + "_" + uniqid;
+                                        const p_or_d = "p";
+                                        const postData = "id_user="+id_user+"&p_or_d="+p_or_d+"&room_name="+room_name;
+                                        $.ajax({
+                                            url: baseUrl+"admin/FarmasiCall/call",
+                                            method: "POST",
+                                            data: postData,
+                                            success: function(data){
+                                                $("#memanggil").modal("show");
+                                                start_consultation();
+                                            },
+                                            error: function(err){
+                                                console.log("GAGAL: Laporkan ke admin terkait hal ini!");
+                                            }
+                                        });
+                                    });
+
+                                    function get_chat(endpoint){
+                                        firebase.auth().onAuthStateChanged(function(user) {
+                                            if (user) {
+                                                firebase.database()
+                                                .ref("/chats/"+endpoint)
+                                                .on("child_added", function(snapshot){
+                                                    console.log(snapshot.val());
+                                                    $("#messages").append(template_message(snapshot.val()));
+                                                    $(".chat-wrap-inner").scrollTop($(".chat-wrap-inner")[0].scrollHeight);
+                                                });
+                                            }
+                                        });
+                                    }
+                                    // =========================================================== //
+                                });
+                            </script>
+                            <script src="' . base_url('assets/js/message.js') . '"></script>
+                            ';
+        $this->load->view('template', $data);
+    }
+
+    public function hapus_obat($id) {
         $this->all_controllers->check_user_farmasi();
 
         $obat = $this->db->query('SELECT id_jadwal_konsultasi FROM resep_dokter WHERE id = ' . $id)->row();
@@ -236,8 +366,7 @@ class FarmasiVerifikasiObat extends CI_Controller
         redirect(base_url('admin/FarmasiVerifikasiObat/form_edit_resep/' . $obat->id_jadwal_konsultasi));
     }
 
-    public function tambah_obat()
-    {
+    public function tambah_obat() {
         $this->all_controllers->check_user_farmasi();
 
         $data_obat = array(
@@ -249,8 +378,7 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->db->insert('resep_dokter', $data_obat);
     }
 
-    public function submit_resep()
-    {
+    public function submit_resep() {
         $this->all_controllers->check_user_farmasi();
 
         $post_data = $this->input->post();
@@ -288,13 +416,11 @@ class FarmasiVerifikasiObat extends CI_Controller
             }
         }
 
-
         $this->session->set_flashdata('msg_simpan_resep', "Resep Obat telah disimpan!");
         redirect(base_url('admin/FarmasiVerifikasiObat'));
     }
 
-    public function verifikasi($id_jadwal_konsultasi)
-    {
+    public function verifikasi($id_jadwal_konsultasi) {
         $this->all_controllers->check_user_farmasi();
 
         $list_resep = $this->db->query('SELECT id, id_pasien FROM resep_dokter WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();

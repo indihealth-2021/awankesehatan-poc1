@@ -367,6 +367,21 @@
                     </div>
                 </div>
               </div>
+              <div class="col-md-12">
+                <div id="file_asesmen">
+                <?php if (!empty($file_asesmen)) { ?>
+                    <p class="py-2 font-12">File Asesmen Pasien</p>
+                    <?php foreach ($file_asesmen as $file) { ?>
+                      <div class="card" onclick="window.open('<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>', '_blank')">
+                        <div class="card-body">
+                          <h5><?php echo $file->nama_file ?></h5>
+                          <p><?php echo $file->type_file ?></p>
+                        </div>
+                      </div>
+                    <?php } ?>
+                <?php } ?>
+                  </div>
+                </div>
             </div>
           </div>
           <!-- <button type="button" class="btn-selesai-tele">Selesai</button> -->
@@ -404,7 +419,7 @@
                 <p class="modal-title font-24 ml-4" id="exampleModalLabel">Assesment Pasien</p>
               </div>
             <div class="modal-body">
-                <form id="formModalAssesment">
+                <form id="formModalAssesment" enctype="multipart/form-data"> 
                     <div class="col-sm-12 row mx-auto">
                       <div class="col-md-6">
                         <div class="mb-3">
@@ -518,6 +533,22 @@
                         <input type="hidden" name="id_dokter" value="<?php echo $dokter->id ?>">
                         <input type="hidden" name="id_jadwal_konsultasi" value="<?php echo $id_jadwal_konsultasi ?>">
                     </div>
+                    <div class="col-md-12">
+                    <div class="form-group row">
+                            <label for="form_file_asessment" class="col-md-4 col-4 mt-2 text-abu">Upload File</label>
+                            <div class="col-md-6 col-6">
+                                    <div class="row" id="form_file_asessment">
+                                        <p class="text-abu mt-2">:&nbsp;</p>
+                                        <div class="custom-file col-10">
+                                            <input type="file" name="file_upload[]" class="custom-file-input"  id="file_upload" size="10024" accept=".gif, .jpg, .jpeg, .png, .jfif, .pdf, .docx, .doc, .xlsx, .xls, .rar, .zip" multiple>
+                                            <label class="custom-file-label" for="customFile" id="asesmenfilename"></label>
+                                        </div>
+                                        <span class="text-abu font-12 ml-2">File dengan ukuran maksimal 10mb</span>
+                                        <span id="file_cards_container" class="col-md-12 col-12"></span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                       <div class="mx-auto">
@@ -543,6 +574,10 @@
             height: 400,
             parentNode: document.querySelector('#ketemu'),
             configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                    'camera'
+                ],
                 disableDeepLinking: true,
             },
             userInfo: {

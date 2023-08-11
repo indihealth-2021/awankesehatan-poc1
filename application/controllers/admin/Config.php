@@ -20,7 +20,7 @@ class Config extends CI_Controller
             $view="admin/manage_poli"
         );
 
-        $data['poli'] = $this->db->query('SELECT nominal.poli as name_poli, nominal.id, nominal.harga, nominal.biaya_adm, nominal.aktif FROM nominal ORDER BY nominal.poli')->result();
+        $data['poli'] = $this->db->query('SELECT nominal.poli as name_poli, nominal.id, nominal.harga, nominal.biaya_adm, nominal.aktif, nominal.durasi as durasi FROM nominal ORDER BY nominal.poli')->result();
         $data['css_addons'] = '<link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">';
         $data['js_addons'] = '
                             <script src="' . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . '"></script>
@@ -112,7 +112,7 @@ class Config extends CI_Controller
 
         $kategori['id_user_kategori'] = 2;
         $data['dokter'] = $this->all_model->select('master_user', 'tabel', $kategori);
-        $data['data'] = $this->db->query('SELECT n.id, n.poli as name_poli, n.harga, n.biaya_adm, n.aktif FROM nominal n WHERE n.id = ' . $id)->row();
+        $data['data'] = $this->db->query('SELECT n.id, n.poli as name_poli, n.durasi as durasi, n.harga, n.biaya_adm, n.aktif FROM nominal n WHERE n.id = ' . $id)->row();
 
         $this->load->view('template', $data);
     }
@@ -123,12 +123,14 @@ class Config extends CI_Controller
         $this->all_controllers->check_user_admin();
 
         $data = $this->input->post();
+        $calc_duration = $data['durasi']*60;
         $data['biaya_adm'] = $data['biaya_adm'] == '' ? null:$data['biaya_adm'];
         // $data['name'] = strtoupper($data['name']);
         $data_nominal = array(
             'poli' => $data['name'], 
             'harga' => $data['harga'], 
             'aktif'=>$data['aktif'], 
+            'durasi'=>$calc_duration,
             'biaya_adm'=>$data['biaya_adm']
         );
         $new_poli = $this->db->insert('nominal', $data_nominal);
@@ -152,7 +154,8 @@ class Config extends CI_Controller
         // var_dump($data['biaya_adm']);
         // die;
         // $data['name'] = strtoupper($data['name']);
-        $data_nominal = array('harga' => $data['harga'], 'poli' => $data['name'], 'aktif'=>$data['aktif'], 'biaya_adm'=>$data['biaya_adm']);
+        $calc_duration = $data['durasi']*60;
+        $data_nominal = array('harga' => $data['harga'],'durasi' => $calc_duration, 'poli' => $data['name'], 'aktif'=>$data['aktif'], 'biaya_adm'=>$data['biaya_adm']);
         $poli = $this->db->query('SELECT poli as name FROM nominal WHERE id = ' . $id)->row();
         $poli_2 = $this->db->query('SELECT poli as name FROM nominal WHERE poli = "' . $data['name'] .'"')->row();
          if($poli->name != $data['name'] && $poli_2){

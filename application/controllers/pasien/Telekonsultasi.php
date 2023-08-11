@@ -68,31 +68,70 @@ class Telekonsultasi extends CI_Controller {
             else{
                 redirect(base_url('admin/Admin'));
             }
-        } 
+        }
+
         $data = $this->input->post();
         $data['name'] = 'unshow';
         $data['sub_name'] = 'submit_assesment_pasien';
         $data['id_user'] = json_encode(array($data['id_dokter']));
         $dokter = $this->db->query('SELECT reg_id FROM master_user WHERE id_user_kategori = 2 AND id = '.$data['id_dokter'])->row();
+        $data['user_file'] = [];
+
+        $config['upload_path'] = './assets/files/file_pemeriksaan_luar';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif|pdf|docx|doc|xlsx|xls|rar|zip';
+        $config['max_size'] = 10024;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+        $files = $_FILES['file_upload'];
+        $cpt = count($files['name']);
+        if ($cpt > 0) {
+            for ($i = 0; $i < $cpt; $i++) {
+                $_FILES['userfile']['name'] = $files['name'][$i];
+                $_FILES['userfile']['type'] = $files['type'][$i];
+                $_FILES['userfile']['tmp_name'] = $files['tmp_name'][$i];
+                $_FILES['userfile']['error'] = $files['error'][$i];
+                $_FILES['userfile']['size'] = $files['size'][$i];
+                
+                $ext = pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION);
+                $_FILES['userfile']['name'] = uniqid().'.'.$ext;
+                        
+                if (!$this->upload->do_upload('userfile')) {
+                    $upload_error = $this->upload->display_errors();
+                    $this->session->set_flashdata('msg_assesment', 'Gagal mengupload gambar.');
+                }else{
+                    $fileData = [
+                        'id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'],
+                        'path_file' => $this->upload->data('file_name'),
+                        'nama_file' => $files['name'][$i],
+                        'type_file' => $this->upload->data('file_type'),
+                        'ukuran_file' => $this->upload->data('file_size')
+                    ];
+                    array_push($data['user_file'], $fileData);
+                    $this->db->insert('file_asesmen', $fileData);
+                }
+            }
+        }
+
         $msg_notif = json_encode($data);
         $this->key->_send_fcm($dokter->reg_id, $msg_notif);
 
-	unset($data['name']);
-	unset($data['sub_name']);
-	unset($data['id_user']);
+	    unset($data['name']);
+	    unset($data['sub_name']);
+	    unset($data['id_user']);
+        unset($data['user_file']);
 
-	$data['id_pasien'] = $this->session->userdata('id_user');
+	    $data['id_pasien'] = $this->session->userdata('id_user');
 
-	$assesment = $this->db->query('SELECT id FROM assesment WHERE id_jadwal_konsultasi = '.$data['id_jadwal_konsultasi'].' AND id_pasien = '.$this->session->userdata('id_user'))->row();
-	if(!$assesment){
-		$this->db->insert('assesment', $data);
-	}
-	else{
-		$this->all_model->update('assesment', $data, array('id_jadwal_konsultasi'=>$data['id_jadwal_konsultasi']));
-	}
+	    $assesment = $this->db->query('SELECT id FROM assesment WHERE id_jadwal_konsultasi = '.$data['id_jadwal_konsultasi'].' AND id_pasien = '.$this->session->userdata('id_user'))->row();
+	    if(!$assesment){
+	    	$this->db->insert('assesment', $data);
+	    }
+	    else{
+	    	$this->all_model->update('assesment', $data, array('id_jadwal_konsultasi'=>$data['id_jadwal_konsultasi']));
+	    }
 
-        echo "OK";
-    }
+            echo "OK";
+        }
 
     public function konsultasi($id_dokter, $id_jadwal_konsultasi){
         if(!$id_dokter || !$id_jadwal_konsultasi){
@@ -141,6 +180,7 @@ class Telekonsultasi extends CI_Controller {
             $data['old_assesment'] = true;
             $data['assesment'] = $this->db->query('SELECT a.id, a.berat_badan, a.tinggi_badan, a.tekanan_darah, a.suhu, a.merokok, a.alkohol, a.kecelakaan, a.operasi, a.dirawat, a.keluhan FROM assesment a WHERE id_pasien = '.$this->session->userdata('id_user')." ORDER BY a.created_at DESC")->row();
         }
+        $data['file_asesmen'] = $this->db->query('SELECT * FROM file_asesmen WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
     $data['css_addons'] = "<script src='https://meet.jit.si/external_api.js'></script>";
       if(!$data['old_assesment']){
         $data['js_addons'] = "
@@ -161,13 +201,33 @@ class Telekonsultasi extends CI_Controller {
             alert('Isi assesment terlebih dahulu!');
             $('#ModalAssesment').modal({backdrop: 'static', keyboard: false});
             $('#ModalAssesment').modal('show');
+             
+            $('#formModalAssesment #file_upload').on('change', function() {
+                var files = $(this)[0].files;
+                var container = $('#formModalAssesment #file_cards_container');
+
+                container.empty();
+
+                for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var fileName = file.name;
+                var fileSize = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+                    
+                var fileCard = $('<h5>' + fileName + ' (' + fileSize + '), ' + '</h5>');
+
+                container.append(fileCard);
+            }
+            });
 
             $('#formModalAssesment').on('submit', function(e){
 				e.preventDefault();
+                var formData = new FormData(this);
                 $.ajax({
                     method : 'POST',
                     url    : baseUrl+'pasien/Telekonsultasi/submitAssesment',
-                    data   : $('#formModalAssesment').serialize(),
+                    data   : formData,
+                    contentType: false,
+                    processData: false,
                     success : function(data){                                           
                         $('#formAssesment input[name=berat_badan]').val($('#formModalAssesment input[name=berat_badan]').val());
                         $('#formAssesment input[name=tinggi_badan]').val($('#formModalAssesment input[name=tinggi_badan]').val());

@@ -86,7 +86,8 @@ foreach ($list_total_harga as $tot_harga) {
         <div style="background: #FFF;border: 1px solid #DEDEDE" class="shadow-sm rounded">
 
           <div class="d-mobile-none_">
-            <div class="row p-4">
+            <?php if($resep->dikirim)  { ?>
+              <div class="row p-4">
               <div class="col-md-8">
               <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-map-marker pr-2" style="color: #01A9AC"></span>Alamat Tujuan Pengiriman</h4>
               <p class="font-15 ml-3 border p-3">
@@ -97,6 +98,14 @@ foreach ($list_total_harga as $tot_harga) {
               <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
               </div>
             </div>
+            <?php }else { ?>
+              <div class="row p-4">
+              <div class="col-md-8">
+              <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-shopping-bag pr-2" style="color: #01A9AC"></span>Silahkan ambil obat di apotek setelah pembayaran</h4>
+              <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
+              </div>
+            </div>
+            <?php } ?>
             <div class="text-center" style=" border-top: 3px solid #01A9AC;border-bottom: 0.5px solid #01A9AC;">
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Biaya Pengiriman</div>
@@ -278,7 +287,7 @@ foreach ($list_total_harga as $tot_harga) {
           <?php
           if (!$bukti_pembayaran_obat || $bukti_pembayaran_obat->status == 2) {
           ?>
-            <!-- <form id="form-va" method="POST" action="<?php echo base_url('pasien/ResepDokter/bayar_va/' . $id_jadwal_konsultasi) ?>"> -->
+            <form id="form-va" method="POST" action="<?php echo base_url('pasien/ResepDokter/bayar_va/' . $id_jadwal_konsultasi) ?>">
               <div class="row pl-5">
                 <div class="col-md-11" id="transfer_va">
                   <div class="form-group row">
@@ -291,7 +300,7 @@ foreach ($list_total_harga as $tot_harga) {
                           <div class="form-check mb-4">
                             <input class="form-check-input" type="radio" name="bank_id" id="bank_<?php echo $bank_va->payment_id ?>" value="<?php echo $bank_va->payment_id ?>">
                             <label class="form-check-label font-bank" for="bank_<?php echo $bank_va->payment_id ?>" style="margin-top: -20px">
-                              <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata">Bank <?php echo $bank_va->payment ?>
+                              <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata"><?php echo $bank_va->payment ?>
                             </label>
                           </div>
                         <?php } ?>
@@ -301,7 +310,7 @@ foreach ($list_total_harga as $tot_harga) {
                   </div>
 
                 </div>
-            <!-- </form> -->
+            </form>
             <div class="col-md-11" id="transfer_manual">
               <div class="form-group row">
                 <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Bank</label>
@@ -377,7 +386,7 @@ foreach ($list_total_harga as $tot_harga) {
                       <div class="col-md-7 col-8">
                         <div class="row">
                           <p class="text-abu mt-2">:&nbsp </p>
-                          <input type="number" class="form-control col-10" name="cardNumber" placeholder="Masukkan Nomor Kartu" value="<?php //echo $old['cardNumber'] ? $cardNumber:''; 
+                          <input type="number" class="form-control col-10" name="cardNumber" placeholder="Masukkan Nomor Kartu" value="<?php //echo $old['cardNumber'] ? $cardNumber:'';
                                                                                                                                         ?>" required>
                         </div>
                       </div>

@@ -189,7 +189,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                           <select class="form-control form-select-bayar col-10" name="metode_pembayaran" id="metode-pembayaran">
                             <option value="0" selected>Pilih Metode</option>
                             <!-- <option value="1">Transfer Bank (Virtual Account)</option> -->
-                            <option value="2">Transfer Bank (Upload Manual)</option>
+                            <option value="2">Upload Manual</option>
                             <!-- <option value="3">Dompet Digital</option> -->
                             <option value="4">Owlexa</option>
                             <!-- <option value="5">Credit Card / Debit Card</option> -->
@@ -203,6 +203,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                 </div>
               </div>
             </div>
+
             <div class="row pl-5">
               <?php if ($registrasi->id_status_pembayaran != 0 || ($registrasi->id_status_pembayaran == 0 && $bukti_pembayaran)) { ?>
                 <div class="col-md-11">
@@ -298,7 +299,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
               <div class="row pl-5">
                 <div class="col-md-11" id="transfer_va">
                   <div class="form-group row">
-                    <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Bank</label>
+                    <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu"></label>
                     <div class="col-md-7 col-6">
                       <div class="row">
                         <p class="text-abu mt-2">:&nbsp</p>
@@ -328,11 +329,24 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
             </form>
             <div class="col-md-11" id="transfer_manual">
               <form action="" method="POST" id="form-transfer-manual">
-              <div class="form-group row">
-                <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Bank</label>
+
+                <div class="form-group row">
+                  <div class="col-3">
+                    <p>Pengambilan Obat</p>
+                  </div>
+                  <div class="col-6">
+                  <select name="dikirim" id="dikirim" class="form-control text-abu">
+                    <option value="0">Diambil sendiri</option>
+                    <option value="1">Dikirim</option>
+                  </select>
+                  </div>
+                  <div class="col-3"></div>
+                </div>
+                <div class="row">
+                <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu"></label>
                 <div class="col-md-7 col-6">
                   <div class="row">
-                    <p class="text-abu mt-2">:&nbsp</p>
+                    <p class="text-abu mt-2">&nbsp</p>
                     <div class="pl-3 mt-2">
                     <?php foreach($list_manual_payment as $manual_payment){ ?>
                       <div class="form-check mb-4">
@@ -344,6 +358,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     <?php } ?>
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
                 <input type="hidden" name="alamat_provinsi">
@@ -469,12 +484,12 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
               </form>
             </div>
             <div class="col-md-11" id="alamat-pengiriman-obat">
-              <div class="form-group row" style="<?= $user->vip ? "" : "display: none;" ?>">
-                <label for="alamat" class="col-md-3 col-4 text-abu">
+              <div class="form-group row">
+                <label for="alamat" class="col-md-3 col-4 text-abu" id="label-select-alamat">
                   Alamat Pengiriman Obat
                 </label>
                 <div class="col-md-7 col-8">
-                  <div class="row" style="<?= $user->vip ? "" : "display: none;" ?>">
+                  <div class="row" id="select-alamat">
                     <span class="text-abu">:&nbsp </span>
                     <div class="col-10" style="margin-left: -10px;">
                       <div class="form-group form-focus">
@@ -589,6 +604,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
     </div>
   </div>
 </div>
+
 
 
 <script>

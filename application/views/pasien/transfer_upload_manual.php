@@ -74,7 +74,8 @@
               <div class="mt-5">
                 <?= form_open_multipart('pasien/Pembayaran/bayar', 'id="form_transfer"'); ?>
 
-                  <div class="form-group row" style="display: <?= $user->vip ? "block": "none" ?>;" >
+                  <div class="form-group row" style="display: <?= $dikirim ? "block": "none" ?>;" >
+                  <input type="hidden" value="<?= $dikirim ?>" name="dikirim">
                     <label for="alamat" class="col-md-4 col-4 mt-2 text-abu">
                        Alamat Pengiriman Obat
                     </label>
@@ -211,7 +212,7 @@
 
   <script>
     var alamat_anda = "<?php echo $user->nama_provinsi && $user->nama_kota && $user->nama_kelurahan && $user->nama_kecamatan && $user->alamat_jalan && $user->kode_pos ? 'Jalan '.ucwords(strtolower($user->alamat_jalan)).', Kel '.ucwords(strtolower($user->nama_kelurahan)).', Kec '.ucwords(strtolower($user->nama_kecamatan)).', Kab/Kota '.ucwords(strtolower($user->nama_kota)).', Kode Pos '.$user->kode_pos.', Provinsi '.ucwords(strtolower($user->nama_provinsi)) : 'Jalan '.ucwords(strtolower($user->alamat_jalan)).', Kel '.ucwords(strtolower($user->nama_kelurahan)).', Kec '.ucwords(strtolower($user->nama_kecamatan)).', Kab/Kota '.ucwords(strtolower($user->nama_kota)).', Kode Pos '.$user->kode_pos.', Provinsi '.ucwords(strtolower($user->nama_provinsi)).' (Alamat Tidak Lengkap)'; ?>";
-    var alamat_lain = "";
+    var alamat_lain = "<?= $dikirim ? $alamat : "" ?>";
     function myFunction() {
     /* Get the text field */
     var copyText = document.getElementById("salin");

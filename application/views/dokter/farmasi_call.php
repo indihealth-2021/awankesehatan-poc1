@@ -105,32 +105,54 @@
     id_dokter = '<?= $user->id ?>';
     chat_id = `${id_farmasi}_${id_dokter}`;
 </script>
+<script>
+    chat_locate = 'pasien';
+    user_kategori = 'pasien';
+    foto_pasien = '';
+    foto_dokter = '';
+    id_farmasi = '<?= $id_farmasi ?>';
+    id_dokter = '<?= $user->id ?>';
+    chat_id = `${id_farmasi}_${id_dokter}`;
+</script>
 <script type="text/javascript">
     name = '<?php echo $user->name; ?>';
     var room_name = '<?php echo $room_name ?>';
     var userName = name;
-    const domain = 'telekonsultasi.lintasarta.net';
+    const domain = 'telekonsultasi2.telemedical.id';
     const options = {
         roomName: room_name,
         width: '100%',
         height: '400px',
-        parent: undefined,
         parentNode: document.querySelector('#meet'),
         configOverwrite: {
-            disableDeepLinking: true
-        }
+                toolbarButtons: [
+                    'microphone',
+                ],
+                disableDeepLinking: true,
+                startVideoMuted: true,
+                startWithVideoMuted: true
+            },
+            userInfo: {
+                displayName: userName
+            },
     };
-    
+
     navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true
     }).then(function(stream) {
-        const api = new JitsiMeetExternalAPI(domain, options);
+        const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+                document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+            });
         api.executeCommand('displayName', userName);
+        api.executeCommand('toggleTileView');
+        api.executeCommand('startRecording', {
+            mode: 'file' //recording mode, either `file` or `stream`.
+        });
         api.addEventListener('participantRoleChanged', function(event) {
-            if (event.role === 'moderator') {
-                api.executeCommand('toggleLobby', true);
-            }
+        if (event.role === 'moderator') {
+            api.executeCommand('toggleLobby', true);
+        }
         });
         api.on('passwordRequired', function() {
             api.executeCommand('password', '123456');

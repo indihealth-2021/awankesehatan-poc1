@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class RumahSakit extends CI_Controller
 {
 
+    private $bingMapsAPIKey = "AuPkBhRU1tlp5gG2Vki8-LpP7ooPssnBv_MQ_u1BNoPXIWZiY7AF_3BVvpLQz7XC";
+
     public function __construct(){
         parent::__construct();
         $this->load->model('RumahSakit_model');
@@ -34,12 +36,12 @@ class RumahSakit extends CI_Controller
 						var template_provinsi = "<option value=\""+item.id+"\" "+item.selected+">"+item.name+"</option>";
 						$("#provinsi").append(template_provinsi);
 					});
-					
+
 				},
 				error : function(data){
 					alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
 				}
-				
+
 
 			});
 		});
@@ -63,12 +65,12 @@ class RumahSakit extends CI_Controller
 						var template_kotkab = "<option value=\""+item.id+"\">"+item.name+"</option>";
 						$("#kotkab").append(template_kotkab);
 					});
-					
+
 				},
 				error : function(data){
 					alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
 				}
-				
+
 
 			});
 		});
@@ -90,12 +92,12 @@ class RumahSakit extends CI_Controller
 						var template_kecamatan = "<option value=\""+item.id+"\">"+item.name+"</option>";
 						$("#kecamatan").append(template_kecamatan);
 					});
-					
+
 				},
 				error : function(data){
 					alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
 				}
-				
+
 
 			});
 		});
@@ -116,12 +118,12 @@ class RumahSakit extends CI_Controller
 						var template_kelurahan = "<option value=\""+item.id+"\">"+item.name+"</option>";
 						$("#kelurahan").append(template_kelurahan);
 					});
-					
+
 				},
 				error : function(data){
 					alert("Terjadi kesalahan sistem, silahkan hubungi administrator."+JSON.stringify(data));
 				}
-				
+
 
 			});
 		});
@@ -130,12 +132,25 @@ class RumahSakit extends CI_Controller
             var file = $("#logo-rs")[0].files[0].name;
             var file_substr = file.length > 40 ? file.substr(0, 39)+"...":file;
             $("#filename").html("<span title=\"" + file + "\">" + file_substr + "</span>");
-          });    
-		</script>        
+          });
+		</script>
         ';
 
         $this->load->view('template', $data);
     }
+
+    private function approximateLocation($query) {
+		# docs: https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query#url-template
+		$base = "http://dev.virtualearth.net/REST/v1/Locations/".urlencode($query)."?o=json&key=".$this->bingMapsAPIKey;
+
+        $data = json_decode(file_get_contents($base), $associative=true)["resourceSets"][0];
+
+        if($data["estimatedTotal"] == 0) {
+            return 0;
+        }
+
+        return $data["resources"][0];
+	}
 
     public function save_rs(){
         $this->all_controllers->check_user_admin();
@@ -184,59 +199,60 @@ class RumahSakit extends CI_Controller
             redirect(base_url('admin/RumahSakit/manage_rs'));
         }
         $alamat_rs = $alamat_detail.', KELURAHAN '.$alamat_kelurahan.', KECAMATAN '.$alamat_kecamatan.', '.$alamat_kota.', '.$alamat_provinsi.' '.$kode_pos;
-        
-        $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7IdKoPYrF-6bqtHHOt3Rwa3xvsnSO2TQ&address='.urlencode($alamat_rs),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
+        // $curl = curl_init();
 
-        $result = json_decode(curl_exec($curl));
-        if (curl_errno($curl)) {
-            $error_msg = curl_error($curl);
-        }
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7IdKoPYrF-6bqtHHOt3Rwa3xvsnSO2TQ&address='.urlencode($alamat_rs),
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => '',
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => 'GET',
+        // ));
 
-        curl_close($curl);
-        $koordinat = $result->results[0]->geometry->location;
+        // $result = json_decode(curl_exec($curl));
+        // if (curl_errno($curl)) {
+        //     $error_msg = curl_error($curl);
+        // }
 
-        if(!$koordinat){
-            $this->session->set_flashdata('msg', 'error');
+        // curl_close($curl);
+        // $koordinat = $result->results[0]->geometry->location;
+
+        [$lat, $long] = $this->approximateLocation($alamat_rs)["point"]["coordinates"];
+
+        if([$lat, $long] == [null, null]) {
+            $this->session->set_flashdata('msg', 'Error: Pastikan alamat yang diisi adalah benar');
             redirect(base_url('admin/RumahSakit/manage_rs'));
         }
 
         $this->all_model->update('master_rs', [
-            "lat" => $koordinat->lat,
-            "lng" => $koordinat->lng,
+            "lat" => $lat,
+            "lng" => $long,
         ], ["id"=>$id_rs]);
 
-        if($_FILES['logo']['size'] > 0){
-            $config['upload_path']          = './assets/images/logo';
-            $config['allowed_types']        = 'gif|jpg|png|jpeg|jfif';
-            $config['max_size']             = 10024;
+        if (!empty($_FILES['logo']['name'])) {
+            $config['upload_path'] = './assets/images/logo';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|jfif';
+            $config['max_size'] = 10024;
             $config['file_name'] = 'logo';
-          
+
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
             $this->upload->overwrite = true;
-          
+
             if ( ! $this->upload->do_upload('logo')){
                 $error = array('error' => $this->upload->display_errors());
                 $this->session->set_flashdata('msg', 'Upload Foto Gagal!');
                 redirect(base_url('admin/RumahSakit/manage_rs'));
             }else{
                 $data_foto = array('upload_data' => $this->upload->data());
-                $logo = $data_foto['upload_data']['file_name'];	
+                $logo = $data_foto['upload_data']['file_name'];
                 $this->all_model->update('master_rs', ['logo'=>$logo], ['id'=>$id_rs]);
             }
         }
-
         $this->session->set_flashdata('msg', 'Data RS telah diupdate!');
         redirect(base_url('admin/RumahSakit/manage_rs'));
     }

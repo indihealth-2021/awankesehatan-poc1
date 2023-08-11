@@ -142,6 +142,8 @@
                             <button type="button" data-toggle="modal" data-target="#exampleModal" class="mb-2 btn btn-konsul" id="panggil" data-id-pasien="<?php echo $pasien->id ?>" data-id-jadwal-konsultasi="<?php echo $id_jadwal_konsultasi ?>"><img src="<?php echo base_url('assets/dashboard/img/phone-call.png'); ?>" alt=""> Hubungi Pasien</button>
                             <button type="button" class="btn btn-konsul mx-3 d-mobile-none_" id="btn-stop" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt=""> Akhiri Panggilan</button>
                             <!-- <button type="button" class="btn btn-konsul mx-auto d-mobile-show" id="btn-stop" data-id-jadwal-konsultasi='<?php echo $id_jadwal_konsultasi ?>' data-id-pasien="<?php echo $pasien->id ?>"><img src="<?php echo base_url('assets/dashboard/img/end-call.png'); ?>" alt=""> Akhiri Panggilan</button> -->
+                            <div id="countdown-timer"></div>
+                            <div style="display: none;" id="timer"><?= empty($detail_dokter->durasi) ? 60 : $detail_dokter->durasi ?></div>
 
                                   <!-- Modal -->
                                   <div class="modal fade" id="memanggil" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -153,7 +155,7 @@
                                               <div class="modal-body" align="center">
                                                   <i class="fa fa-phone fa-5x text-tele">....</i>
                                                   <div class="mt-5">
-                                                    <button type="button" class="btn btn-batal" data-dismiss="modal">Tutup</button>
+                                                    <button type="button" class="btn btn-batal" data-dismiss="modal" onclick="resetContainer()">Tutup</button>
                                                   </div>
                                               </div>
                                           </div>
@@ -199,15 +201,47 @@
                   <div class="form-group row">
                     <div class="form-check form-check-inline">
                         <input name="laboratorium" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-1" value="1">
-                        <label  class="form-check-label" for="tipe-pemeriksaan-1">Laboratorium</label>
+                        <label class="form-check-label" for="tipe-pemeriksaan-1">Laboratorium</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input name="radiologi" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2" value="1">
                         <label class="form-check-label" for="tipe-pemeriksaan-2">Radiologi</label>
                     </div>
-                    <textarea name="pemeriksaan" class="form-control mt-2" id="pemeriksaan"></textarea>
+                    <!-- <textarea name="pemeriksaan" class="form-control mt-2" id="pemeriksaan"></textarea> -->
+                    <div class="col-md-12 mt-3" id="diagnosis-detail-laboratorium">
+                        <h4 class="mb-3">Pemeriksaan Penunjang - Laboratorium</h4>
+
+                        <?php $lab = explode(",", "Darah Lengkap,Urine Rutin,Kolesterol Total,Trigliserida,HDL Kolesterol,LDL Kolesterol,Ureum (BUN),Kreatinin,Asam Urat,Glukosa Puasa,Glukosa 2 Jam PP,HBA 1c,Natrium,Kalium,Klorida"); ?>
+
+                        <?php for($i = 0; $i < count($lab); $i ++) { ?>
+                            <div class="form-check form-check-inline">
+                            <input name="tipe-pemeriksaan-1-<?= $i ?>" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-1-<?= $i ?>" value="<?= $lab[$i] ?>">
+                            <label class="form-check-label" for="tipe-pemeriksaan-1-<?= $i ?>"><?= $lab[$i] ?></label>
+                            </div>
+                        <?php } ?>
+
+                        <input type="hidden" name="count-lab" value="<?= count($lab); ?>">
+
+                    </div>
+
+                    <div class="col-md-12 mt-3" id="diagnosis-detail-radiologi">
+                        <h4 class="mb-3 opacity-75">Pemeriksaan Penunjang - Radiologi</h4>
+
+                        <?php $rad = explode(",", "Thorax,Waters"); ?>
+
+                        <?php for($i = 0; $i < count($rad); $i ++) { ?>
+                            <div class="form-check form-check-inline">
+                            <input name="tipe-pemeriksaan-2-<?= $i ?>" class="form-check-input" type="checkbox" id="tipe-pemeriksaan-2-<?= $i ?>" value="<?= $rad[$i] ?>">
+                            <label class="form-check-label" for="tipe-pemeriksaan-2-<?= $i ?>"><?= $rad[$i] ?></label>
+                            </div>
+                        <?php } ?>
+
+                        <input type="hidden" name="count-rad" value="<?= count($rad); ?>">
+
+                    </div>
                   </div>
               </div>
+
               <p class="py-2 font-12">Kesimpulan</p>
               <div class="col-md-12" id="diagnosis">
                   <div class="form-group row">
@@ -223,11 +257,14 @@
                   </div>
               </div>
               <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-6">
                   <p class="font-12">Resep</p>
                 </div>
                 <div class="col-md-3">
-                  <button class="btn btn-resep float-right" type="button" data-toggle="modal" data-target="#ModalResep" id="add">+ Tambah Resep Pasien </button>
+                  <button class="btn btn-resep float-right" type="button" data-toggle="modal" data-target="#ModalResep" id="add">+ Tambah Obat </button>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-resep float-right" type="button" data-toggle="modal" data-target="#ModalRacikan" id="add">+ Tambah Racikan  </button>
                 </div>
               </div>
               <div class="row">
@@ -237,7 +274,6 @@
                             <tr class="text-abu">
                                 <td>Nama Obat</td>
                                 <td>Jumlah</td>
-                                <td>Aturan Pakai</td>
                                 <td>Keterangan</td>
                                 <td>Aksi</td>
                             </tr>
@@ -260,6 +296,48 @@
         <div class="col-md-5">
           <div class="card card-5 p-2 px-4">
               <p style="border-bottom: 1px solid #DEDEDE;" class="py-2 font-12">Data Pasien</p>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">History</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">01 Januari 1970</th>
+                                <td>RS Santo Borromeus</td>
+                                <td>Alergi</td>
+                                <td>Panadol</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">01 Januari 1970</th>
+                                <td>RS Santo Borromeus</td>
+                                <td>Alergi</td>
+                                <td>Panadol</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">01 Januari 1970</th>
+                                <td>RS Santo Borromeus</td>
+                                <td>Alergi</td>
+                                <td>Panadol</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
             <div class="row">
                <?php
                 if ($pasien->foto) {
@@ -271,7 +349,11 @@
               <div class="col-md-2"><img src="<?php echo $foto; ?>" width="41" height="41" class="border-radius-50"></div>
               <div class="col-md-9">
                 <span class="font-14"><?php echo ucwords($pasien->name) ?></span><br>
-                <span class="font-11"><?php echo $pasien->age == '2020' ? '-' : $pasien->age . ' Tahun' ?></span>
+                <span class="font-11"><?php echo $pasien->age == '2020' ? '-' : $pasien->age . ' Tahun' ?></span> <br>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                <i class="fa fa-clock mr-3"></i> History
+                </button>
               </div>
             </div>
           </div>
@@ -390,6 +472,21 @@
                       </div>
                   </div>
                 </div>
+                <div class="col-md-12">
+                <div id="file_asesmen">
+                <?php if (!empty($file_asesmen)) { ?>
+                    <p class="py-2 font-12">File Asesmen Pasien</p>
+                    <?php foreach ($file_asesmen as $file) { ?>
+                      <div class="card" onclick="window.open('<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>', '_blank')">
+                        <div class="card-body">
+                          <h5><?php echo $file->nama_file ?></h5>
+                          <p><?php echo $file->type_file ?></p>
+                        </div>
+                      </div>
+                    <?php } ?>
+                <?php } ?>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
@@ -400,7 +497,71 @@
   </div>
 
 
-
+  <div class="modal fade" id="ModalRacikan" tabindex="0" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="height: auto;">
+            <div class="modal-header">
+                <p class="modal-title font-14 font-bold-7" id="exampleModalLabel">Tambah Racikan</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formRacikanDokter">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="font-12 col-form-label">Nama Racikan</label>
+                                    <input type="text" name="nama_racikan" class="form-control form-control-sm" id="nama-racikan" placeholder="Racikan A" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="font-12 col-form-label">Pilih Obat </label>
+                                    <div class="input-group">
+                                        <select name="id_obat_racikan" id="obat-racikan" class="form-control form-control-sm" onchange="">
+                                            <option disabled selected value="">Pilih Obat</option>
+                                            <?php foreach ($list_obat as $obat) { ?>
+                                                <option value="<?php echo $obat->id ?>"><?php echo $obat->name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="px-2 btn btn-primary btn-sm" id="addObatButton">+</button>
+                                            <button type="button" class="px-2 btn btn-danger btn-sm" id="resetRacikanButton">Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <h4>List Obat</h4>
+                                <div id="selectedObatsContainer"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="font-12 col-form-label">Jumlah Obat</label>
+                                    <input type="number" min=1 max=100 name="jumlah_obat" class="form-control form-control-sm" id="unit-racikan" placeholder="Jumlah" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="font-12 col-form-label">Aturan Pakai</label>
+                                    <input type="text" name="keterangan" class="form-control form-control-sm" placeholder="Aturan Pakai" required>
+                                </div>
+                            </div>
+                            <input type="hidden" name="satuan_obat" id="satuan_obat" value="">
+                        </div>
+            </div>
+            <div class="modal-footer">
+              <div class="float-left">
+                <input type="hidden" name="selectedObats" id="selectedObats">
+                <button id="buttonTambahResep" class="btn btn-simpan-sm">Simpan</button>
+                <button type="button" class="btn btn-batal-sm mr-3" data-dismiss="modal">Batal</button>
+              </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="ModalResep" tabindex="0" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="height: auto;">
@@ -502,6 +663,10 @@
             height: 400,
             parentNode: document.querySelector('#meet'),
             configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                    'camera'
+                ],
                 disableDeepLinking: true,
             },
             userInfo: {
@@ -513,6 +678,7 @@
         audio: true,
         video: true
     }).then(function(stream) {
+        // startTimer();
         const api = new JitsiMeetExternalAPI(domain, options).then(() => {
                 document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
             });
@@ -546,6 +712,36 @@
             e.style = 'background-color:red;';
         }
     }
+
+    let timePassed = 0;
+    const TIME_LIMIT = parseInt(document.querySelector("#timer").textContent);
+    let timeLeft = TIME_LIMIT;
+    let timerInterval = null;
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timePassed += 1;
+            timeLeft = TIME_LIMIT - timePassed;
+            displayTimeLeft();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+            }
+        }, 1000);
+    }
+
+    function displayTimeLeft() {
+        const timerElement = document.querySelector("#countdown-timer");
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerElement.textContent = formattedTime;
+
+        if (timeLeft <= 0) {
+            timerElement.innerHTML = "<span class='text-danger'>Waktu habis!</span>";
+            alert("Kami ingin mengingatkan bahwa waktu konsultasi telah habis sesuai jadwal. Namun, jika Anda merasa perlu untuk melanjutkan konsultasi dengan pasien yang sedang Anda layani saat ini, silakan lanjutkan sesuai kebijakan Anda.");
+        }
+    }
 </script>
 <!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script> -->
 <?php $foto_pasien = $pasien->foto ? base_url('assets/images/users/' . $pasien->foto) : base_url('assets/telemedicine/img/default.png'); ?>
@@ -569,6 +765,61 @@
     $('input[type="number"]')
         .keyup(resizeInput)
         .each(resizeInput);
+</script>
+
+<script>
+    var selectedObats = [];
+
+    document.getElementById("resetRacikanButton").addEventListener("click", () => {
+        document.getElementById("selectedObatsContainer").innerHTML = "";
+    });
+
+    document.getElementById("addObatButton").addEventListener("click", function() {
+        var selectedObatId = document.querySelector("#obat-racikan").value;
+        var selectedObatName = document.querySelector("#obat-racikan option[value='" + selectedObatId + "']").text;
+
+        if (selectedObatId && selectedObatName) {
+            var selectedObat = {
+                id: selectedObatId,
+                name: selectedObatName,
+            };
+            selectedObats.push(selectedObat);
+            $("#selectedObats").val(selectedObats.map((element) => {
+                return element.id;
+            }));
+
+            var selectedObatsContainer = document.getElementById("selectedObatsContainer");
+            var selectedObatDiv = document.createElement("div");
+            var removeObat = document.createElement("button");
+
+            removeObat.id = "remove-"+selectedObatId;
+            selectedObatDiv.id = selectedObatId;
+
+            removeObat.className = "btn btn-danger m-2 p-2";
+
+            removeObat.textContent = "Hapus";
+            selectedObatDiv.textContent = selectedObatName;
+
+            selectedObatsContainer.appendChild(selectedObatDiv);
+            selectedObatDiv.appendChild(removeObat);
+
+            document.getElementById("obat-racikan").value = "";
+
+            $("#remove-"+selectedObatId).click(() => {
+                $("#"+selectedObatId).remove();
+                $("#remove-"+selectedObatId).remove();
+
+                selectedObats.forEach((element, index) => {
+                    if (element.id === selectedObatId) {
+                        selectedObats.splice(index, 1);
+                        $("#selectedObats").val(selectedObats.map((element) => {
+                            return element.id;
+                        }));
+                    }
+                });
+            });
+        }
+    });
 </script>
 
 <script>

@@ -17,16 +17,16 @@
           <div class="col-sm-12 col-12">
               <h7 class="page-subtitle">Pasien</h7>
           </div>
-      </div>  
-      
-            
+      </div>
+
+
         <div class="row">
           <div class="col-md-12">
             <!-- <ul class="nav nav-tabs nav-tabs-bottom">
                 <li class="nav-item"><a class="nav-link active" href="" data-toggle="tab">Pasien</a></li>
             </ul> -->
             <div class="bg-tab p-3">
-              <div class="tab-pane show pt-3" id="admin">   
+              <div class="tab-pane show pt-3" id="admin">
                 <div class="col-md-12">
                   <div class="box">
                       <div class="container-1">
@@ -40,9 +40,11 @@
                         <tr class="text-center">
                           <th class="text-left">No</th>
                           <th>Nama</th>
+                          <th>Card Number</th>
                           <th>Username</th>
                           <th>Email</th>
                           <th>No. Telepon</th>
+                          <th>VIP?</th>
                           <!-- <th>Assesment Pasien</th> -->
                           <th>Status</th>
                           <th></th>
@@ -52,13 +54,15 @@
                         <?php foreach($list_pasien as $idx=>$pasien){ ?>
                         <tr>
                           <td><?php echo $idx+1 ?></td>
-                          <td><?php echo ucwords($pasien->name) ?><!-- <br><span class="font-12"><?php echo $pasien->username ?></span> --></td>
-                          <td><?php echo $pasien->username ?></td>
+                          <td><?php echo ucwords($pasien->name)." " ?></td>
+                          <td><?= $pasien->card_number ?></td>
+                          <td><?php echo $pasien->username?></td>
                           <td><?php echo $pasien->email ?></td>
                           <td><?php echo $pasien->telp ?></td>
+                          <td><?= $pasien->vip ? "👑" : "❌" ?> </td>
                          <!--  <td class="text-center"><a href="" class="font-14 text-detail">Lihat Detail</a></td> -->
                           <td class="text-center"><?php echo $pasien->aktif == 1 ? '<span class="status-aktif">Aktif</span>' : '<span class="status-nonaktif">Tidak Aktif</span>' ?></td>
-                          <td> 
+                          <td>
                               <a class="font-icon" href="#modalHapus" data-toggle="modal" data-href="<?php echo base_url('admin/Pasien/hapusPasien/'.$pasien->id);?>" data-nama="<?php echo $pasien->name ?>" onclick="$('#modalHapus #form')" >
                                 <i><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                   <path d="M17.5 1.875H2.5C1.80964 1.875 1.25 2.43464 1.25 3.125V3.75C1.25 4.44036 1.80964 5 2.5 5H17.5C18.1904 5 18.75 4.44036 18.75 3.75V3.125C18.75 2.43464 18.1904 1.875 17.5 1.875Z" fill="black" fill-opacity="0.35"/>
@@ -74,7 +78,7 @@
                             </tr>
                           <?php } ?>
                         </tbody>
-                    </table> 
+                    </table>
                     </div>
                   </div>
                 </div>
@@ -86,7 +90,7 @@
         </div>
         <!-- /.col -->
         </div>
-        
+
 
 <div class="modal fade" tabindex="-1" role="dialog" id="modalHapus">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -108,7 +112,7 @@
     </div>
   </div>
   </div>
-  
+
   <?php echo $this->session->flashdata('msg_edit_pasien') ? "<script>alert('".$this->session->flashdata('msg_edit_pasien')."')</script>" : ''; ?>
   <?php echo $this->session->flashdata('msg_hps_pasien') ? "<script>alert('".$this->session->flashdata('msg_hps_pasien')."')</script>" : ''; ?>
 

@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="row" id="konten-panggilan" hidden>
+      <div class="row" id="konten-panggilan">
         <div class="col-md-12">
           <div class="card card-5 p-1 px-4 pt-3 pb-5">
             <ul class="nav nav-tabs-konsul nav-tabs-bottom">
@@ -162,7 +162,15 @@
           height: '400px',
           parentNode: document.querySelector('#meet'),
           configOverwrite: {
+                toolbarButtons: [
+                    'microphone',
+                ],
                 disableDeepLinking: true,
+                startVideoMuted: true,
+                startWithVideoMuted: true
+            },
+            userInfo: {
+                displayName: userName
             },
       };
 
@@ -170,7 +178,9 @@
             audio: true,
             video: true
         }).then(function(stream) {
-            const api = new JitsiMeetExternalAPI(domain, options);
+            const api = new JitsiMeetExternalAPI(domain, options).then(() => {
+                document.querySelector("#jitsiConferenceFrame0").contentWindow.location.reload();
+            });
             api.executeCommand('displayName', userName);
             api.addEventListener('participantRoleChanged', function(event) {
                 if (event.role === 'moderator') {

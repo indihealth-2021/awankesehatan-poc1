@@ -262,6 +262,41 @@ class Teleconsultasi extends CI_Controller
         $this->load->view('template', $data);
     }
 
+    public function send_data_penunjang($data) {
+        $arr = [
+            "id_jadwal_konsultasi"  =>  $data["id_jadwal_konsultasi"],
+            "planning"      =>  $data["planning"],
+            "kesimpulan"    =>  $data["kesimpulan"]
+        ];
+
+        if( $data["laboratorium"] ) {
+            $arr["pemeriksaan_penunjang_laboratorium"] = [];
+            for($i = 0; $i < $data["count-lab"]; $i ++) {
+                if($data["tipe-pemeriksaan-1-".$i]) {
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-1-".$i]);
+                }
+            }
+
+            $arr["pemeriksaan_penunjang_laboratorium"] = json_encode($arr["pemeriksaan_penunjang_laboratorium"]);
+        }
+
+        if( $data["radiologi"] ) {
+            $arr["pemeriksaan_penunjang_radiologi"] = [];
+            for($i = 0; $i < $data["count-rad"]; $i ++) {
+                if($data["tipe-pemeriksaan-2-".$i]) {
+                    array_push($arr["pemeriksaan_penunjang_radiologi"], $data["tipe-pemeriksaan-2-".$i]);
+                }
+            }
+
+            $arr["pemeriksaan_penunjang_radiologi"] = json_encode($arr["pemeriksaan_penunjang_radiologi"]);
+        }
+
+        $arr["id"] = $this->db->query("SELECT id FROM data_penunjang ORDER BY id DESC")->row()->id + 1;
+
+        $this->db->insert("data_penunjang", $arr);
+
+    }
+
     public function send_data_konsultasi()
     {
         if (!$this->session->userdata('is_login')) {
@@ -388,6 +423,10 @@ class Teleconsultasi extends CI_Controller
             );
             $this->db->insert('resep_dokter', $data_resep);
         }
+
+        $this->send_data_penunjang($data);
+        $this->all_controllers->setHargaObatFrom([$id_jadwal_konsultasi]);
+
         $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
         $id_notif = $this->db->insert_id();
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
@@ -403,6 +442,7 @@ class Teleconsultasi extends CI_Controller
           $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
 
           $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
+
         $this->db->insert('data_notifikasi', $data_notif);
 
         $data_history = array("activity" => "Resep Dokter", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
@@ -456,6 +496,58 @@ class Teleconsultasi extends CI_Controller
 
     }
 
+    public function createRacikan() {
+
+        $data = $this->input->post();
+
+        if(empty($data["selectedObats"])) {
+            echo json_encode(["error" => "Tidak ada obat yang dipilih"]); exit();
+        }
+
+        $total = 0;
+        $name = [];
+
+        foreach(explode(",", $data["selectedObats"]) as $idObat) {
+            $obat = $this->db->query("SELECT name, harga FROM master_obat WHERE id=".$idObat)->row();
+            $total += $obat->harga;
+
+            array_push($name, $obat->name);
+        }
+
+        $name = implode("; ", $name);
+        $name = $data["nama_racikan"]." (".$name.")";
+
+        $nameIsExist = $this->db->query("SELECT name FROM master_obat WHERE name LIKE '%".$name."%'");
+
+        if($nameIsExist->num_rows() != 0) {
+            echo json_encode(["error" => "Racikan dengan nama yang sama sudah ada, harap masukkan nama yang lain"]);
+            exit();
+        }
+
+        $id = $this->db->query("SELECT id FROM master_obat ORDER BY id DESC")->row()->id + 1;
+
+        // json_encode(["racikan" => $data["selectedObats"]])
+
+        $insertVal = [
+            "id" => $id,
+            "name" => $name,
+            "unit" => "racikan",
+            "harga_per_n_unit" => $total,
+            "harga" => $total,
+            "created_at" => (new DateTime("now"))->format("Y-m-d H:i:s"),
+            "created_by" => $this->session->userdata("id_user"),
+        ];
+
+        $this->db->insert("master_obat", $insertVal);
+
+        echo json_encode(["success" => json_encode([
+            "id" => $id,
+            "name" => $name,
+            "jumlah_obat" => $data["jumlah_obat"],
+            "keterangan" => $data["keterangan"],
+        ])]);
+    }
+
     public function proses_teleconsultasi()
     {
         if (!$this->session->userdata('is_login')) {
@@ -492,6 +584,9 @@ class Teleconsultasi extends CI_Controller
         }
         $data['list_obat'] = $this->db->query('SELECT id, name, unit FROM master_obat WHERE active = 1 ORDER BY name')->result();
         $data['diagnosis'] = $this->db->query('SELECT master_diagnosa.id as id_diagnosa, master_diagnosa.nama as nama_diagnosa FROM diagnosis_dokter INNER JOIN master_diagnosa ON diagnosis_dokter.diagnosis = master_diagnosa.id WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $id_pasien)->row();
+        $data['detail_dokter'] = $this->db->query('SELECT n.use_diagnosa,n.durasi as durasi,id_poli  FROM detail_dokter dd INNER JOIN nominal n ON dd.id_poli = n.id WHERE dd.id_dokter = ?', $this->session->userdata('id_user'))->row();
+
+        $data['file_asesmen'] = $this->db->query('SELECT * FROM file_asesmen WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
 
         $birthDate = new DateTime($data['pasien']->lahir_tanggal);
         $now = new DateTime('today');
@@ -531,6 +626,28 @@ function checkRemove() {
     }
 };
 $(document).ready(function() {
+
+    $('#diagnosis-detail-laboratorium').hide();
+    $('#diagnosis-detail-radiologi').hide();
+
+    $('#tipe-pemeriksaan-1').click( function () {
+        if($('#tipe-pemeriksaan-1').is(':checked'))
+        {
+            $('#diagnosis-detail-laboratorium').show();
+        }else {
+            $('#diagnosis-detail-laboratorium').hide();
+        }
+    });
+
+    $('#tipe-pemeriksaan-2').click( function () {
+        if($('#tipe-pemeriksaan-2').is(':checked'))
+        {
+            $('#diagnosis-detail-radiologi').show();
+        }else {
+            $('#diagnosis-detail-radiologi').hide();
+        }
+    });
+
     $('.chat-wrap-inner').scrollTop($('.chat-wrap-inner')[0].scrollHeight);
     checkRemove();
     $('#add').click(function() {
@@ -557,9 +674,56 @@ $(document).ready(function() {
         var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td>'+dataResep[3].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
         listResep.append(templateListResep);
         $(this)[0].reset();
-        $('#ModalResep').modal('hide');
+        // $('#ModalResep').modal('hide');
         alert('Resep telah ditambahkan!');
         e.preventDefault();
+    });
+
+    $('#formRacikanDokter').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: baseUrl+'dokter/Teleconsultasi/createRacikan',
+            type: 'POST',
+            data : $(this).serializeArray(),
+            success: function(res){
+                console.log(res);
+                res = JSON.parse(res);
+                if(res.error) {
+                    alert(res.error); return;
+                }else if(res.success) {
+                    res = JSON.parse(res.success);
+
+                    var namaObat = $('select[name=id_obat] option:selected').text();
+                    var listResep = $('#listResep');
+                    var countTr = $('#listResep tr');
+                    countTr = countTr.length;
+                    if(countTr == null){
+                        countTr = 0;
+                    }
+                    countTr+=1;
+                    var templateListResep = '<tr id=\''+res.id+'\'><td>'+res.name+'</td><td id=\''+'jumlah_obat'+'\'>'+res.jumlah_obat+'</td><td>'+''+'</td><td id=\''+'keterangan'+'\'>'+res.keterangan+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+'id_obat'+'[]\' value=\''+res.id+'\'><input type=\'hidden\' name=\''+'jumlah_obat'+'[]\' value=\''+res.jumlah_obat+'\'><input type=\'hidden\' name=\''+'keterangan'+'[]\' value=\''+res.keterangan+'\'></tr>';
+                    listResep.append(templateListResep);
+                    $('#formRacikanDokter')[0].reset();
+                    // $('#ModalResep').modal('hide');
+                    alert('Resep telah ditambahkan!');
+                }
+             },
+        });
+        // var dataResep = $(this).serializeArray();
+        // var namaObat = $('select[name=id_obat] option:selected').text();
+        // var listResep = $('#listResep');
+        // var countTr = $('#listResep tr');
+        // countTr = countTr.length;
+        // if(countTr == null){
+        //     countTr = 0;
+        // }
+        // countTr+=1;
+        // var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td>'+dataResep[3].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
+        // listResep.append(templateListResep);
+        // $(this)[0].reset();
+        // // $('#ModalResep').modal('hide');
+        // alert('Resep telah ditambahkan!');
+        // e.preventDefault();
     });
 
     $('select[name=diagnosis]').select2({
@@ -600,11 +764,7 @@ $(document).ready(function() {
                   searchTerm: params.term, // search term
                   page_limit: 50,
                   page: params.page || 0,
-                  id_kota: ".$data["pasien"]->alamat_kota.",
-                  id_kecamatan: ".$data["pasien"]->alamat_kecamatan.",
-                  lat: ".($data["pasien"]->latitude ? $data["pasien"]->latitude : 'null').",
-                  long: ".($data["pasien"]->longitude ? $data["pasien"]->longitude : 'null').",
-                  get_all: true
+                  get_all: true, //id_kota, id_kecamatan, lat, long removed
               };
           },
           processResults: function (data, params) {

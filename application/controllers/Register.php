@@ -62,6 +62,7 @@ class Register extends CI_Controller {
 				'id_fasyankes' =>$id_pasyankes->id,
 				'id_user_kategori'=>$this->input->post('id_user_kategori'),
 				'telp'=>$this->input->post('telp'),
+				"card_number" => $this->input->post("card_number"),
 				'aktif'=>0,
 			];
 

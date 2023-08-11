@@ -26,6 +26,7 @@ class SelfAssesment extends CI_Controller {
         $data['view'] = 'dokter/detail_assesment';
       	$data['title'] = 'Assesment Pasien';
         $data['assesment'] = $this->assesment_model->get_by_konsultasi($id_jadwal_konsultasi, $this->session->userdata('id_user'));
+        $data['file_asesmen'] = $this->db->query('SELECT * FROM file_asesmen WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();
         $this->load->view('template', $data);
     }
     public function verification()

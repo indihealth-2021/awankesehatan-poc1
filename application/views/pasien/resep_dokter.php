@@ -68,39 +68,22 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    if($resep->diverifikasi_user == 1){
-                                                        if($resep->status_bukti == 1){
-                                                          if($user->vip == 1){
-                                                            if($resep->diterima_user == 1){
-                                                              $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
-                                                              $button = 'Diterima';
-                                                              $warna = 'lunas';
-                                                            } else{
-                                                              $directLink = base_url('pasien/ResepDokter/terima/'.$resep->id_jadwal_konsultasi);
-                                                              $button = 'Belum Diterima';
-                                                              $warna = 'simpan';
-                                                            }
-                                                          }else{
+                                                    // if($resep->diverifikasi_user == 1){
+                                                      if($resep->status_bukti != null){
+                                                        if($resep->status_bukti){
                                                             $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                             $button = 'Lunas';
                                                             $warna = 'lunas';
-                                                          }
-                                                        }
-                                                        else if($resep->status_bukti == 0){
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
-                                                            $button = 'Sedang Diproses';
-                                                            $warna = 'simpan';
                                                         }
                                                         else{
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
-                                                          $button = 'Bayar';
-                                                          $warna = 'bayar';                                 
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);$button = 'Sedang Diroses';
+                                                          $warna = 'simpan';
                                                         }
                                                     }
                                                     else{
-                                                        $directLink = base_url('pasien/ResepDokter/konfirmasi/'.$resep->id_jadwal_konsultasi);
-                                                        $button = 'Konfirmasi Obat';
-                                                        $warna = 'simpan';
+                                                      $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                        $button = 'Bayar';
+                                                        $warna = 'bayar';
                                                     }
                                                 ?>
                                                 <td class='text-center'>

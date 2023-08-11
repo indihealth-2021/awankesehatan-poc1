@@ -23,13 +23,13 @@ date_default_timezone_set('Asia/Jakarta');
 | a PHP script and you can easily do that on your own.
 |
 */
-// $config['base_url'] = 'https://poc1.telemedical.id';//'https://telemedicinelintasdev.indihealth.com';//'http://125.213.128.90/telemedicinelintas2';//'https://telemedicinelintas.indihealth.com/';//'http://125.213.128.90/konsultasi-dokter/';
-// $config['path_to_env'] = 'https://poc1.telemedical.id/';
-// $config['path_to_api'] = 'https://api-poc1.telemedical.id/';
+// $config['base_url'] = 'https://poc1.awankesehatan.com';//'https://telemedicinelintasdev.indihealth.com';//'http://125.213.128.90/telemedicinelintas2';//'https://telemedicinelintas.indihealth.com/';//'http://125.213.128.90/konsultasi-dokter/';
+// $config['path_to_env'] = 'https://poc1.awankesehatan.com/';
+// $config['path_to_api'] = 'https://api-poc1.awankesehatan.com/';
 
-$config["base_url"] = "http://localhost/IDH/awankesehatan-poc1/";
-$config["path_to_env"] = "http://localhost/IDH/awankesehatan-poc1/";
-$config["recaptcha_site"] = "http://localhost/IDH/awankesehatan-poc1/";
+$config["base_url"] = "http://localhost/poc1";
+$config["path_to_env"] = "http://localhost/poc1";
+$config["recaptcha_site"] = "http://localhost/poc1";
 
 ///recaptcha
 //$config['recaptcha_site'] = 'idok.telemedical.id';

@@ -128,12 +128,26 @@
               </div>
             </div>
             <div class="col-md-12">
-              <div class="mb-5 pb-5">
+              <div class="mb-5 pb-3">
                   <div class="form-group form-focus-asses">
                       <label class="focus-label">Keluhan</label>
                       <textarea required rows="4" class="font-12 form-control floating" name="keluhan"><?php if ($assesment) { echo $assesment->keluhan; } ?></textarea>
                  </div>
               </div>
+            </div>
+            <div class="col-md-12">
+              <div class="mb-5 pb-5">
+                <?php if (!empty($file_asesmen)) { ?>
+                  <?php foreach ($file_asesmen as $file) { ?>
+                    <div class="card" onclick="window.open('<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>', '_blank')">
+                        <div class="card-body">
+                          <h5><?php echo $file->nama_file ?></h5>
+                          <p><?php echo $file->type_file ?></p>
+                        </div>
+                      </div>
+                    <?php } ?>
+                    <?php } ?>
+                  </div>
             </div>
         </div>
       </div>

@@ -17,7 +17,7 @@
             <div class="col-sm-12 col-12">
                 <h7 class="page-subtitle">Manage Data Rumah Sakit</h7>
             </div>
-        </div>  
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="bg-tab px-3">
@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <select class="form-control form-control-sm" name="alamat_kota" id="kotkab" required>
-                                        <?php if($rs){ ?> 
+                                        <?php if($rs){ ?>
                                             <?php if($rs->alamat_kota){ ?>
                                                 <option value="<?php echo $rs->alamat_kota ?>"><?php echo $rs->nama_kota ?></option>
                                             <?php }else{ ?>
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="col-md-6 mt-2">
                                     <select class="form-control form-control-sm" name="alamat_kecamatan" id="kecamatan" required>
-                                    <?php if($rs){ ?> 
+                                    <?php if($rs){ ?>
                                             <?php if($rs->alamat_kecamatan){ ?>
                                                 <option value="<?php echo $rs->alamat_kecamatan ?>"><?php echo $rs->nama_kecamatan ?></option>
                                             <?php }else{ ?>
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-md-6 mt-2">
                                     <select class="form-control form-control-sm" name="alamat_kelurahan" id="kelurahan" required>
-                                        <?php if($rs){ ?> 
+                                        <?php if($rs){ ?>
                                             <?php if($rs->alamat_kelurahan){ ?>
                                                 <option value="<?php echo $rs->alamat_kelurahan ?>"><?php echo $rs->nama_kelurahan ?></option>
                                             <?php }else{ ?>
@@ -93,7 +93,7 @@
                             <label for="logo-rs">Logo</label><br/>
                             <?php if($rs){ ?>
                                 <?php if($rs->logo){ ?>
-                                    <img src="<?php echo base_url('assets/images/logo/logo.png?id='.date('now')) ?>" height="50px" class="img-fluid mb-2">
+                                    <img src="<?php echo base_url('assets/images/logo/'.$rs->logo.'?id='.date('now')) ?>" height="50px" class="img-fluid mb-2">
                                 <?php } ?>
                             <?php } ?>
                             <div class="custom-file">

@@ -19,7 +19,14 @@ class Apotek extends CI_Controller {
 		$base = "https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?origins=".$origin."&destinations=".$destination;
 		$base .= "&travelMode=driving&key=".$this->bingMapsAPIKey;
 
-		return file_get_contents($base);
+		$context_options = array(
+			"http" => array(
+			  "ignore_errors" => true // This will allow getting the response body in case of error
+			)
+		);
+
+		  // Get the contents of the URL
+		return file_get_contents($base, false, stream_context_create($context_options));
 	}
 
 	private function DistanceMatrix($origins, $destinations) {
@@ -58,11 +65,22 @@ class Apotek extends CI_Controller {
 	 */
 	private function getTravelDistanceAndDuration($origin, $destination) {
 		$temp = json_decode($this->singularDistanceMatrix($origin=$origin, $destination=$destination), $associative=true);
-		$temp = $temp["resourceSets"][0]["resources"][0]["results"][0];
-		return [
-			"travelDistance" => $temp["travelDistance"],
-			"travelDuration" => $temp["travelDuration"]
-		];
+
+		if(isset($temp["resourceSets"][0])) {
+			$temp = $temp["resourceSets"][0]["resources"][0]["results"][0];
+
+			return [
+				"travelDistance" => $temp["travelDistance"],
+				"travelDuration" => $temp["travelDuration"]
+			];
+		} else {
+			return [
+				"travelDistance" => "> Jauh",
+				"travelDuration" => "-",
+			];
+		}
+
+
 	}
 
 	private function approximateLocation($query) {
@@ -85,11 +103,25 @@ class Apotek extends CI_Controller {
 		$pg 		= $this->input->post("page");
 		$page 		= (empty($pg) ? 0 : $pg);
 		$limit 		= $page * $page_lim;
+		$id_pasien	= $this->input->post("id_pasien");
 
 		if($this->input->post("get_all")) {
-			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text FROM master_apotek")->result_array();
-			for($i = 0; $i < count($temp); $i ++) {
-				$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"];
+			$pasien = $this->db->query("SELECT * FROM master_user WHERE id=".$id_pasien)->row();
+			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text, master_apotek.latitude, master_apotek.longitude FROM master_apotek")->result_array();
+			$origin			= $pasien->latitude.",".$pasien->longitude;
+
+			if($origin == ",") {
+				for($i = 0; $i < count($temp); $i ++) {
+					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " (pasien belum lengkap mengisi alamat, tidak bisa mengestimasi jarak) ";
+				}
+			}else {
+				for($i = 0; $i < count($temp); $i ++) {
+					$destination	= $temp[$i]["latitude"].",".$temp[$i]["longitude"];
+
+					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
+
+					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
+				}
 			}
 
 			echo json_encode(array(

@@ -766,6 +766,7 @@ $(document).ready(function() {
                   page_limit: 50,
                   page: params.page || 0,
                   get_all: true, //id_kota, id_kecamatan, lat, long removed
+                  id_pasien: ".$id_pasien."
               };
           },
           processResults: function (data, params) {

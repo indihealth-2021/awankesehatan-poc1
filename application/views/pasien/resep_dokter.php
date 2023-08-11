@@ -41,7 +41,6 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach($list_resep as $idx => $resep){?>
-                                        <?php if($resep->status_bukti != 1){ ?>
                                             <tr>        
                                                 <td class="text-center"><?php echo $idx+1 ?></td>
                                                 <td>
@@ -68,15 +67,21 @@
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    if($resep->dirilis == 1){
                                                       if($resep->status_bukti != null){
                                                         if($resep->status_bukti){
-                                                            $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
-                                                            $button = 'Lunas';
-                                                            $warna = 'simpan';
+                                                            if ($resep->dirilis && !$resep->diterima){
+                                                              $directLink = base_url('pasien/ResepDokter/terima/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Konfirmasi';
+                                                              $warna = 'simpan';
+                                                            } else {
+                                                              $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Lunas';
+                                                              $warna = 'simpan';
+                                                            }
                                                         }
                                                         else{
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran');$button = 'Sedang Diproses';
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                          $button = 'Sedang Diproses';
                                                           $warna = 'simpan';
                                                         }
                                                     }
@@ -85,10 +90,6 @@
                                                         $button = 'Bayar';
                                                         $warna = 'simpan';
                                                     }
-                                                  }else {
-                                                    $directLink = base_url('pasien/ResepDokter/#');$button = 'Sedang Diproses';
-                                                        $warna = 'simpan';
-                                                  }
                                                 ?>
                                                 <td class='text-center'>
                                                 <a href="<?php echo $directLink ?>" class='btn btn-<?php echo $warna ?>  font-12'> <?php echo $button ?></a>
@@ -112,7 +113,6 @@
                                                 <?php } ?> -->
                                                 </td>                              
                                             </tr>
-                                        <?php } ?>
                                     </tbody>
                                     </table>
               </div> 

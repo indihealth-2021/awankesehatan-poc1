@@ -98,7 +98,7 @@
                   </div>
                   <div class="form-group row">
                     <label for="metode-pembayaran" class="col-md-4 col-4 mt-2 text-abu">
-                      Upload Bukti Pembayaran
+                      Upload Owlexa
                     </label>
                     <div class="col-md-6 col-6">
                       <div class="row" id="form_pembayaran">

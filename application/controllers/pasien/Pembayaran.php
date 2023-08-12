@@ -1059,25 +1059,21 @@ class Pembayaran extends CI_Controller
             $this->db->where('id', $this->input->post('regid'));
             $this->db->update('data_registrasi');
 
-            $data_biaya_pengiriman_obat = array(
-                'alamat' => $dikirim ? $alamat_pengiriman_obat : "",
-                'alamat_kustom' => $alamat_kustom,
-                'id_registrasi' => $id_registrasi,
-                "id_jadwal_konsultasi" => "",
+            $message = 'Bukti Pembayaran Berhasil Diupload, tunggu verifikasi dari Admin';
+
+            $alamat = $dikirim ? $alamat_pengiriman_obat : "";
+            $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
+
+            $this->db->insert("biaya_pengiriman_obat", [
+                "id" => $latestId,
+                "alamat" => $dikirim ? $alamat_pengiriman_obat : "",
+                "alamat_kustom" => $alamat_kustom,
+                "id_registrasi" => $id_registrasi,
                 //'lat' => $koordinat->lat,
                 //'lng' => $koordinat->lng
-            );
-            $biaya_pengiriman_obat = $this->db->query('SELECT id FROM biaya_pengiriman_obat WHERE id_registrasi = "'.$this->input->post('regid').'"');
-            if($biaya_pengiriman_obat->num_rows() != 0){
-                $biaya_pengiriman_obat = $biaya_pengiriman_obat->row();
-                $this->db->set($data_biaya_pengiriman_obat);
-                $this->db->where(array('id'=>$biaya_pengiriman_obat->id));
-                $this->db->set('biaya_pengiriman_obat');
-            }else{
-                $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
-            }
+            ]);
 
-            $this->session->set_flashdata('msg_pmbyrn', 'Bukti Pembayaran Berhasil Diupload, tunggu verifikasi dari Admin');
+            $this->session->set_flashdata('msg_pmbyrn', $message);
 
             $uploader = $this->db->query('SELECT name,reg_id FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
             $admins = $this->db->query('SELECT id, reg_id FROM master_user WHERE id_user_kategori = 5')->result();

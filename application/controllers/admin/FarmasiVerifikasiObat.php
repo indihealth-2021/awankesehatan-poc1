@@ -232,13 +232,20 @@ class FarmasiVerifikasiObat extends CI_Controller
             'harga_obat' => $this->input->post("harga_obat")
         );
 
-        if ($id_jadwal_konsultasi){
-            $this->db->where('id_jadwal_konsultasi', $id_jadwal_konsultasi);
-            $this->db->update('biaya_pengiriman_obat', $data_update);
+        if($this->db->update("biaya_pengiriman_obat", $data_update, ["id_jadwal_konsultasi" => $id_jadwal_konsultasi])) {
+            $this->session->set_flashdata('msg_hapus_obat', "Berhasil update harga!");
             redirect(base_url('admin/FarmasiVerifikasiObat'));
-        } else {
-            redirect(base_url('admin/FarmasiVerifikasiObat/edit_harga/'.$this->input->post("id_jadwal_konsultasi")));
+        }else {
+            $this->session->set_flashdata('msg_hapus_obat', "ERR:".$this->db->error());
+            redirect(base_url('admin/FarmasiVerifikasiObat/edit_harga/'.$id_jadwal_konsultasi));
         }
+        // if ($id_jadwal_konsultasi){
+        //     $this->db->where('id_jadwal_konsultasi', $id_jadwal_konsultasi);
+        //     $this->db->update('biaya_pengiriman_obat', $data_update);
+        //     redirect(base_url('admin/FarmasiVerifikasiObat'));
+        // } else {
+        //     redirect(base_url('admin/FarmasiVerifikasiObat/edit_harga/'.$id_jadwal_konsultasi));
+        // }
     }
 
     public function edit_harga($id_jadwal_konsultasi) {

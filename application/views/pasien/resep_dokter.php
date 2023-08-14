@@ -90,9 +90,21 @@
                                                         }
                                                     }
                                                     else{
-                                                      $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                      if ($resep->alamat_pengiriman){
+                                                        if($resep->biaya_pengiriman){
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                          $button = 'Bayar';
+                                                          $warna = 'simpan';
+                                                        }else{
+                                                          $directLink = base_url('pasien/ResepDokter/#');
+                                                          $button = 'Sedang Diproses';
+                                                          $warna = 'simpan';
+                                                        }
+                                                      } else {
+                                                        $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                         $button = 'Bayar';
                                                         $warna = 'simpan';
+                                                      }
                                                     }
                                                 ?>
                                                 <td class='text-center'>

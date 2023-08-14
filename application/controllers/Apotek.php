@@ -109,10 +109,26 @@ class Apotek extends CI_Controller {
 			$pasien = $this->db->query("SELECT * FROM master_user WHERE id=".$id_pasien)->row();
 			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text, master_apotek.latitude, master_apotek.longitude FROM master_apotek")->result_array();
 			$origin			= $pasien->latitude.",".$pasien->longitude;
+			$langitude = 0;
+			$longitude = 0;
 
 			if($origin == ",") {
+				if($pasien->alamat_kecamatan != null) {
+					$executable_query = "SELECT master_kecamatan.name FROM master_kecamatan WHERE master_kecamatan.id=".$pasien->alamat_kecamatan;
+					$kecamatan = $this->db->query($executable_query)->result()[0]->name;
+
+					[$langitude, $longitude] = $this->approximateLocation($kecamatan)["point"]["coordinates"];
+				}else {
+					$executable_query = "SELECT master_kota.name FROM master_kota WHERE master_kota.id=".$alamat_kota;
+					$kota = $this->db->query($executable_query)->result()[0]->name;
+
+					[$langitude, $longitude] = $this->approximateLocation($kota)["point"]["coordinates"];
+				}
 				for($i = 0; $i < count($temp); $i ++) {
-					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " (pasien belum lengkap mengisi alamat, tidak bisa mengestimasi jarak) ";
+					$origin = $langitude.",".$longitude;
+					$destination	= $temp[$i]["latitude"].",".$temp[$i]["longitude"];
+					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
+					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
 				}
 			}else {
 				for($i = 0; $i < count($temp); $i ++) {

@@ -1159,7 +1159,7 @@ textarea.form-control {
 	right: 9.43%;
 	left: 0;
 	transition: all 0.2s ease-in-out;
-*/}
+}*/
 .sidebar.opened {
 	-webkit-transition: all 0.4s ease;
 	-moz-transition: all 0.4s ease;
@@ -1385,7 +1385,8 @@ textarea.form-control {
 .sidebar-menu ul li a i svg{
 	fill: #fff;
 }
-}.sidebar-menu ul li.menu-title a i {
+
+.sidebar-menu ul li.menu-title a i {
 	font-size: 16px;
 	margin-right: 0;
 	text-align: right;
@@ -1608,7 +1609,6 @@ textarea.form-control {
 
 .dash-widget-bg1 {
 	width: 65px;
-	float: ;
 	color: #fff;
 	display: block;
 	font-size: 50px;
@@ -2312,7 +2312,6 @@ ul.chat-user-total li i.old-users {
 	top: 0;
 }
 .chat-main-wrapper {
-	display: ;
 	height: 100%;
 	table-layout: fixed;
 	width: 100%;
@@ -2327,7 +2326,6 @@ ul.chat-user-total li i.old-users {
 	width: 75%;
 }
 .chat-window {
-	display: ;
 	/*height: 370px;*/
 	table-layout: fixed;
 	width: 100%;
@@ -3466,7 +3464,6 @@ a.fc-event:not([href]) {
 
 .card-box.profile-header {
 	margin: 0;
-	box-shadow:
 }
 .profile-details {
 	text-align: center;
@@ -5544,7 +5541,6 @@ text-align: center;
 	.nav-tabs-justified.nav-tabs-top > li > a:focus {
 		border-width: 2px 0 0 0;
 	}
-	<--->
 	.nav-tabs-lg.nav-justified.nav-tabs-top {
 		border-bottom: 1px solid #ddd;
 	}
@@ -5831,6 +5827,7 @@ text-align: center;
 		transition: all 0.4s ease;
 	}
 	.header {
+		left:0px;
 		-webkit-transition: all 0.4s ease;
 		-moz-transition: all 0.4s ease;
 		/*transition: all 0.4s ease;*/
@@ -5851,7 +5848,7 @@ text-align: center;
 		right: -48px;
 	}
 	.header {
-	    left:0px;
+	    left:0px!important;
 		-webkit-transition: all 0.4s ease;
 		-moz-transition: all 0.4s ease;
 		transition: all 0.4s ease;
@@ -7394,7 +7391,7 @@ text-align: center;
 			border: 1px solid #59A799;
 			box-sizing: border-box;
 			border-radius: 10px;
-			width: 362px;
+			/* width: 362px; */
 			height: 35px;
 			color: #4e4e4e!important;
 		}
@@ -7461,7 +7458,7 @@ text-align: center;
 		    position: relative;
 		    width: 0px;
 		}
-		..profile-bayar {
+		.profile-bayar {
 		    cursor: pointer;
 		    margin: 0;
 		    position: relative;
@@ -7756,7 +7753,7 @@ text-align: center;
 			    border-radius: 10px;
 			    outline: 0;
 			    width: auto;
-			    margin: auto
+			    margin: auto;
 			    height: 289px;
 			}
 			.card-box {
@@ -7843,10 +7840,10 @@ text-align: center;
 			    margin-top: 140px;
 			}
 			.profile-img-bayar {
-			    margin-left: 90px;
+			    /* margin-left: 90px; */
+				margin-left: 0px;
 			}
 			.chat-window {
-			    display: ;
 			    height: 370px;
 			    table-layout: fixed;
 			    width: 63%;

@@ -7,7 +7,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
 <div class="page-wrapper">
   <div class="content">
     <div class="row mb-3">
-      <div class="col-sm-12 col-12 ">
+      <div class="col-sm-12 ">
         <nav aria-label="">
           <ol class="breadcrumb" style="background-color: transparent;">
             <li class="breadcrumb-item active"><a href="<?php echo base_url('pasien/pasien'); ?>" class="text-black">Dashboard</a></li>
@@ -16,7 +16,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
           </ol>
         </nav>
       </div>
-      <div class="col-sm-12 col-12">
+      <div class="col-sm-12">
         <h3 class="page-title">Pembayaran</h3>
       </div>
     </div>
@@ -51,21 +51,21 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
               </div>
               <div class="profile-basic d-mobile-none">
                 <div class="row">
-                  <div class="col-md-4 col-12">
+                  <div class="col-md-4">
                     <div class="">
                       <p class="font-18">Dokter</p>
                       <p class="font-24" style="line-height: 30px !important;"><?php echo $registrasi->nama_dokter; ?></p>
                       <p class="font-18">Poli : <?php echo $registrasi->poli; ?></p>
                     </div>
                   </div>
-                  <div class="col-md-3 col-12">
+                  <div class="col-md-3">
                     <div class="">
                       <p class="font-18 text-abu">Tanggal Konsultasi</p>
                       <span class="font-18"><?php echo $tanggal_konsultasi; ?></span>
                       <p class="font-18"><?php echo $waktu_konsultasi ? $waktu_konsultasi . ' - ' . $waktu_konsultasi_berakhir . ' WIB' : ''; ?></p>
                     </div>
                   </div>
-                  <div class="col-md-5 col-12">
+                  <div class="col-md-12">
                     <div class="">
                       <p class="font-18 text-abu">No Registrasi</p>
                       <p class="font-18"><?php echo $registrasi->registrasi_id ?></p>
@@ -75,21 +75,21 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
               </div>
               <div class="profile-basic d-mobile-show">
                 <div class="row">
-                  <div class="col-md-4 col-12">
+                  <div class="col-md-4">
                     <div class="">
                       <p class="font-16">Dokter</p>
                       <p class="font-22"><?php echo $registrasi->nama_dokter; ?></p>
                       <p class="font-16">Poli : <?php echo $registrasi->poli; ?></p>
                     </div>
                   </div>
-                  <div class="col-md-3 col-12">
+                  <div class="col-md-3">
                     <div class="">
                       <p class="font-16 text-abu">Tanggal Konsultasi</p>
                       <span class="font-16"><?php echo $tanggal_konsultasi; ?></span>
                       <p class="font-16"><?php echo $waktu_konsultasi ? $waktu_konsultasi . ' - ' . $waktu_konsultasi_berakhir . ' WIB' : ''; ?></p>
                     </div>
                   </div>
-                  <div class="col-md-5 col-12">
+                  <div class="col-md-5">
                     <div class="">
                       <p class="font-16 text-abu">No Registrasi</p>
                       <p class="font-16"><?php echo $registrasi->registrasi_id ?></p>
@@ -122,84 +122,24 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                 <div class="col-md-3 text-right font-22"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
               </div>
             </div>
-            <!-- <div class="text-center" style=" border-top: 3px solid #59A799;border-bottom: 0.5px solid #59A799;">
-                <div class="row p-2 py-3">
-                  <div class="col-md-4">Biaya Konsultasi</div>
-                  <div class="col-md-4">Biaya Administrasi</div>
-                  <div class="col-md-4">Total Biaya</div>
-                </div>
-              </div>
-              <div class="text-center" style=" border-bottom: 0.5px solid #59A799;">
-                <div class="row p-2 pt-3">
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4">
-                    <p class="font-24 font-bold">
-
-                    </p>
-                  </div>
-                </div>
-              </div> -->
-            <!-- <div class="text-center" style=" border-bottom: 3px solid #59A799;">
-                <div class="row p-2 py-4">
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4"></div>
-                </div>
-              </div> -->
           </div>
-          <!-- <div class="d-mobile-show">
-            <div class="text-center" style=" border-top: 3px solid #59A799;border-bottom: 0.5px solid #59A799;">
-              <div class="row p-2 py-3">
-                <div class="col-md-4">Biaya Konsultasi</div>
-                <div class="col-md-4"><?php echo 'Rp. ' . number_format($biaya_konsultasi, 2, ',', '.'); ?></div>
-                <div class="col-md-4"></div>
-              </div>
-            </div>
-            <div class="text-center" style=" border-bottom: 0.5px solid #59A799;">
-              <div class="row p-2 pt-3">
-                <div class="col-md-4">Biaya Administrasi</div>
-                <div class="col-md-4"><?php echo 'Rp. ' . number_format($biaya_adm, 2, ',', '.'); ?></div>
-                <div class="col-md-4"></div>
-              </div>
-            </div>
-            <div class="text-center" style=" border-bottom: 3px solid #59A799;">
-              <div class="row p-2 py-4">
-                <div class="col-md-4">Total Biaya</div>
-                <div class="col-md-4">
-                  <p class="font-24 font-bold">
-                    <?php
-                    echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?>
-                  </p>
-                </div>
-                <div class="col-md-4"></div>
-              </div>
-            </div>
-          </div> -->
           <div class="pt-5">
-            <div class="">
-              <div class="d-mobile-none_ pl-3">
-                <div class="col-md-11 ml-3">
-                  <div class="form-group row">
-                    <label for="metode-pembayaran" class="col-md-3 col-5  mt-2 <?php echo !$bukti_pembayaran && $registrasi->id_status_pembayaran == 0 ? 'text-abu' : 'text-dark'; ?>">Metode Pembayaran </label>
-                    <div class="col-md-7">
-                      <div class="row">
-                        <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                        <?php if ($registrasi->id_status_pembayaran == 0 && !$bukti_pembayaran) { ?>
-                          <select class="form-control form-select-bayar col-10" name="metode_pembayaran" id="metode-pembayaran">
-                            <option value="0" selected>Pilih Metode</option>
-                            <!-- <option value="1">Transfer Bank (Virtual Account)</option> -->
-                            <option value="2">Upload Manual</option>
-                            <!-- <option value="3">Dompet Digital</option> -->
-                            <option value="4">Owlexa</option>
-                            <!-- <option value="5">Credit Card / Debit Card</option> -->
-                          </select>
-                        <?php } else { ?>
-                          <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran->metode_pembayaran == 3 ? 'Virtual Account' : ($bukti_pembayaran->metode_pembayaran == 4 ? 'Dompet Digital' : 'Credit Card / Debit Card'))); ?></p>
-                        <?php } ?>
-                      </div>
-                    </div>
-                  </div>
+            <div class="col-md-12 mx-auto">
+              <div class="form-group row">
+                <div for="metode-pembayaran" class="col-md-3 mt-2 <?php echo !$bukti_pembayaran && $registrasi->id_status_pembayaran == 0 ? 'text-abu' : 'text-dark'; ?>">Metode Pembayaran: </div>
+                <div class="col-md-6">
+                  <?php if ($registrasi->id_status_pembayaran == 0 && !$bukti_pembayaran) { ?>
+                    <select class="form-control form-select-bayar" name="metode_pembayaran" id="metode-pembayaran">
+                      <option value="0" selected>Pilih Metode</option>
+                      <!-- <option value="1">Transfer Bank (Virtual Account)</option> -->
+                      <option value="2">Upload Manual</option>
+                      <!-- <option value="3">Dompet Digital</option> -->
+                      <option value="4">Owlexa</option>
+                      <!-- <option value="5">Credit Card / Debit Card</option> -->
+                    </select>
+                  <?php } else { ?>
+                    <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran->metode_pembayaran == 3 ? 'Virtual Account' : ($bukti_pembayaran->metode_pembayaran == 4 ? 'Dompet Digital' : 'Credit Card / Debit Card'))); ?></p>
+                  <?php } ?>
                 </div>
               </div>
             </div>
@@ -217,60 +157,60 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     </div>
                   </div>
                 </div>
-                <?php if($bukti_pembayaran){ ?>
-                  <?php if($bukti_pembayaran->metode_pembayaran == 1){ ?>
+                <?php if ($bukti_pembayaran) { ?>
+                  <?php if ($bukti_pembayaran->metode_pembayaran == 1) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark"></label>
+                        <label class="col-md-3 col-4 mt-2 text-dark"></label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                          <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                          <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran->manual_payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran->manual_payment_name ?>" alt="<?php echo $bukti_pembayaran->manual_payment_name ?>"></p>
+                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                            <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran->manual_payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran->manual_payment_name ?>" alt="<?php echo $bukti_pembayaran->manual_payment_name ?>"></p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  <?php }else if($bukti_pembayaran->metode_pembayaran == 4){ ?>
+                  <?php } else if ($bukti_pembayaran->metode_pembayaran == 4) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark">Platform: </label>
+                        <label class="col-md-3 col-4 mt-2 text-dark">Platform: </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                          <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                          <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran->payment_logo); ?>" class="img-platform" width="100px" title="<?php echo $bukti_pembayaran->payment_name ?>" alt="<?php echo $bukti_pembayaran->payment_name ?>"></p>
+                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                            <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran->payment_logo); ?>" class="img-platform" width="100px" title="<?php echo $bukti_pembayaran->payment_name ?>" alt="<?php echo $bukti_pembayaran->payment_name ?>"></p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  <?php }else if($bukti_pembayaran->metode_pembayaran == 3){ ?>
+                  <?php } else if ($bukti_pembayaran->metode_pembayaran == 3) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark"> </label>
+                        <label class="col-md-3 col-4 mt-2 text-dark"> </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                          <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                          <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran->payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran->payment_name ?>" alt="<?php echo $bukti_pembayaran->payment_name ?>"></p>
+                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                            <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran->payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran->payment_name ?>" alt="<?php echo $bukti_pembayaran->payment_name ?>"></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   <?php } ?>
-                  <?php if($bukti_pembayaran->id_payment == 4 || $bukti_pembayaran->id_payment == 5 || $bukti_pembayaran->id_payment == 6) { ?>
-                    <?php if($bukti_pembayaran->status == 0){ ?>
+                  <?php if ($bukti_pembayaran->id_payment == 4 || $bukti_pembayaran->id_payment == 5 || $bukti_pembayaran->id_payment == 6) { ?>
+                    <?php if ($bukti_pembayaran->status == 0) { ?>
                       <div class="col-md-11">
                         <div class="form-group row">
-                        <label class="col-md-3 col-4 mt-2 text-dark">Link Pembayaran: </label>
+                          <label class="col-md-3 col-4 mt-2 text-dark">Link Pembayaran: </label>
                           <div class="col-md-7 col-8">
                             <div class="row">
-                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                            <p class="mt-2"><a target="_blank" href="<?php echo $bukti_pembayaran->va_number ?>" class="btn btn-sm bg-tele text-white">LINK PEMBAYARAN</a></p>
+                              <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                              <p class="mt-2"><a target="_blank" href="<?php echo $bukti_pembayaran->va_number ?>" class="btn btn-sm bg-tele text-white">LINK PEMBAYARAN</a></p>
                             </div>
                           </div>
                         </div>
                       </div>
                     <?php } ?>
                   <?php } ?>
-                  <?php if($bukti_pembayaran->metode_pembayaran == 1 || $bukti_pembayaran->metode_pembayaran == 2 || $bukti_pembayaran->metode_pembayaran == 3) { ?>
+                  <?php if ($bukti_pembayaran->metode_pembayaran == 1 || $bukti_pembayaran->metode_pembayaran == 2 || $bukti_pembayaran->metode_pembayaran == 3) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
                         <label class="col-md-3 col-4 mt-2 text-dark">Bukti Pembayaran / Claim Number / VA Number</label>
@@ -287,33 +227,30 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                 <?php } ?>
             </div>
           <?php } ?>
-          <!-- <div class="col-md-5">
-                    <span class="text-abu font-16" id="note-transfer-konsultasi">Note : Silahkan Tranfers ke rekening 234456655567 Bank BNI Syariah Atas Nama Rumah Sakit Sejahtera</span>
-                    </div> -->
           </div>
 
           <?php
           if (!$bukti_pembayaran && $registrasi->id_status_pembayaran == 0) {
           ?>
             <form id="form-va" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_va') ?>">
-              <div class="row pl-5">
+              <div class="">
                 <div class="col-md-11" id="transfer_va">
                   <div class="form-group row">
-                    <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu"></label>
-                    <div class="col-md-7 col-6">
+                    <label for="metode-pembayaran" class="col-md-3 mt-2 text-abu"></label>
+                    <div class="col-md-7">
                       <div class="row">
                         <p class="text-abu mt-2">:&nbsp</p>
                         <div class="pl-3 mt-2">
-                        <?php foreach($list_bank_va as $bank_va){ ?>
-                          <?php if($bank_va->payment=="OWLEXA HEALTHCARE") { ?>
-                            <div class="form-check mb-4">
-                            <input class="form-check-input" type="radio" name="bank_id" id="bank_<?php echo $bank_va->payment_id ?>" value="<?php echo $bank_va->payment_id ?>">
-                            <label class="form-check-label font-bank" for="bank_<?php echo $bank_va->payment_id ?>" style="margin-top: -20px">
-                              <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata"> <?php echo $bank_va->payment ?>
-                            </label>
-                          </div>
-                          <?php }?>
-                        <?php } ?>
+                          <?php foreach ($list_bank_va as $bank_va) { ?>
+                            <?php if ($bank_va->payment == "OWLEXA HEALTHCARE") { ?>
+                              <div class="form-check mb-4">
+                                <input class="form-check-input" type="radio" name="bank_id" id="bank_<?php echo $bank_va->payment_id ?>" value="<?php echo $bank_va->payment_id ?>">
+                                <label class="form-check-label font-bank" for="bank_<?php echo $bank_va->payment_id ?>" style="margin-top: -20px">
+                                  <img src="<?php echo base_url($bank_va->logo); ?>" class="img-permata"> <?php echo $bank_va->payment ?>
+                                </label>
+                              </div>
+                            <?php } ?>
+                          <?php } ?>
                         </div>
                       </div>
                     </div>
@@ -327,57 +264,56 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                 <input type="hidden" name="alamat_detail">
                 <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
             </form>
-            <div class="col-md-11" id="transfer_manual">
+            <div class="col-md-12 mx-auto" id="transfer_manual">
               <form action="" method="POST" id="form-transfer-manual">
-
                 <div class="form-group row">
-                  <div class="col-3">
-                    <p>Pengambilan Obat</p>
+                  <div class="col-md-3">
+                    <p class="text-abu">Pengambilan Obat</p>
                   </div>
-                  <div class="col-6">
-                  <select name="dikirim" id="dikirim" class="form-control text-abu">
-                    <option value="0">Diambil sendiri</option>
-                    <option value="1">Dikirim</option>
-                  </select>
+                  <div class="col-md-6">
+                    <select name="dikirim" id="dikirim" class="form-control form-select-bayar">
+                      <option value="0">Diambil sendiri</option>
+                      <option value="1">Dikirim</option>
+                    </select>
                   </div>
-                  <div class="col-3"></div>
+
                 </div>
                 <div class="row">
-                <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu"></label>
-                <div class="col-md-7 col-6">
-                  <div class="row">
-                    <p class="text-abu mt-2">&nbsp</p>
-                    <div class="pl-3 mt-2">
-                    <?php foreach($list_manual_payment as $manual_payment){ ?>
-                      <div class="form-check mb-4">
-                        <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
-                        <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
-                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"> <?php echo $manual_payment->payment ?>
-                        </label>
+                  <label for="metode-pembayaran" class="col-md-3 mt-2 text-abu"></label>
+                  <div class="col-md-7">
+                    <div class="row">
+                      <p class="text-abu mt-2">&nbsp</p>
+                      <div class="pl-3 mt-2">
+                        <?php foreach ($list_manual_payment as $manual_payment) { ?>
+                          <div class="form-check mb-4">
+                            <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
+                            <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
+                              <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"> <?php echo $manual_payment->payment ?>
+                            </label>
+                          </div>
+                        <?php } ?>
                       </div>
-                    <?php } ?>
                     </div>
                   </div>
                 </div>
-                </div>
-              </div>
-                <input type="hidden" name="alamat_provinsi">
-                <input type="hidden" name="alamat_kota">
-                <input type="hidden" name="alamat_kecamatan">
-                <input type="hidden" name="alamat_kelurahan">
-                <input type="hidden" name="kode_pos">
-                <input type="hidden" name="alamat_detail">
-              </form>
             </div>
-            <div class="col-md-11" id="dompet_digital">
-            <form id="form-dompet-digital" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_va') ?>">
-              <div class="form-group row">
-                <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Platform</label>
-                <div class="col-md-7 col-6">
-                  <div class="row">
-                    <p class="text-abu mt-2">:&nbsp</p>
-                    <div class="pl-3">
-                    <?php foreach($list_e_wallet as $e_wallet){ ?>
+            <input type="hidden" name="alamat_provinsi">
+            <input type="hidden" name="alamat_kota">
+            <input type="hidden" name="alamat_kecamatan">
+            <input type="hidden" name="alamat_kelurahan">
+            <input type="hidden" name="kode_pos">
+            <input type="hidden" name="alamat_detail">
+            </form>
+        </div>
+        <div class="col-md-11" id="dompet_digital">
+          <form id="form-dompet-digital" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_va') ?>">
+            <div class="form-group row">
+              <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Platform</label>
+              <div class="col-md-7 col-6">
+                <div class="row">
+                  <p class="text-abu mt-2">:&nbsp</p>
+                  <div class="pl-3">
+                    <?php foreach ($list_e_wallet as $e_wallet) { ?>
                       <div class="form-check mt-2 mb-4">
                         <input class="form-check-input" type="radio" name="platform" value="<?php echo $e_wallet->payment_id ?>" id="platform-<?php echo $e_wallet->payment_id ?>">
                         <label class="form-check-label font-bank" style="margin-top: -20px" for="platform-<?php echo $e_wallet->payment_id ?>">
@@ -385,196 +321,195 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                         </label>
                       </div>
                     <?php } ?>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row no-hp">
-                <label for="no-hp" class="col-md-3 col-4 mt-2 text-abu">
-                  No. HP
-                </label>
-                <div class="col-md-7 pr-3 ml-0 col-8">
-                  <div class="row">
-                    <span class="text-abu mt-2">:&nbsp </span>
-                    <input type="number" id="no-hp" class="form-control col-10" name="no_hp" value="<?php echo $user->telp ?>" required>
-                  </div>
-                </div>
-              </div>
-                <input type="hidden" name="alamat_provinsi">
-                <input type="hidden" name="alamat_kota">
-                <input type="hidden" name="alamat_kecamatan">
-                <input type="hidden" name="alamat_kelurahan">
-                <input type="hidden" name="kode_pos">
-                <input type="hidden" name="alamat_detail">
-              <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
-              </form>
-            </div>
-            <div class="col-md-11">
-              <form id="form-owlexa" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_owlexa'); ?>">
-                <div class="">
-                  <div class="row">
-                    <div class="metode-owlexa col-md-11">
-                      <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Nama Lengkap </label>
-                        <div class="col-md-7 col-8">
-                          <div class="row">
-                            <p class="text-abu mt-2 pl-3">:&nbsp </p>
-                            <input type="text" class="form-control col-11" name="fullName" placeholder="Masukkan Nama Lengkap" value="<?php echo $user->name ?>">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metode-owlexa col-md-11">
-                      <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Nomor Kartu </label>
-                        <div class="col-md-7 col-8">
-                          <div class="row">
-                            <p class="text-abu mt-2 pl-3">:&nbsp </p>
-                            <input type="number" class="form-control col-11" name="cardNumber" placeholder="Masukkan Nomor Kartu">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metode-owlexa col-md-11">
-                      <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Tanggal Lahir </label>
-                        <div class="col-md-7 col-8">
-                          <div class="row">
-                            <p class="text-abu mt-2 pl-3">:&nbsp </p>
-                            <input type="date" class="form-control col-11" name="birthDate" placeholder="Masukkan Tanggal Lahir" value="<?php echo $user->lahir_tanggal; ?>" readonly disabled>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="metode-owlexa col-md-11">
-                      <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">OTP </label>
-                        <div class="col-md-7 col-8">
-                          <div class="row">
-                            <p class="text-abu mt-2 pl-3">:&nbsp </p>
-                            <input type="number" class="form-control col-11" name="otp" placeholder="Masukkan OTP" aria-describedby="send_otp">
-                            <p class="col-md-6 ml-3"><a href="#" id="btnSendOtp" class="form-text font-14"> <i class="fa fa-sign-in"> Send OTP</i> </a></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <input type="hidden" name="alamat_provinsi">
-                    <input type="hidden" name="alamat_kota">
-                    <input type="hidden" name="alamat_kecamatan">
-                    <input type="hidden" name="alamat_kelurahan">
-                    <input type="hidden" name="kode_pos">
-                    <input type="hidden" name="alamat_detail">
-                    <input type="hidden" name="id_dokter" value="<?php echo $registrasi->id_dokter; ?>">
-                    <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id; ?>">
-                    <input type="hidden" name="chargeValue" value="<?php echo $total_harga; ?>">
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-11" id="cc_debit" style="display: none;">
-              <form action="<?php echo base_url('pasien/Pembayaran/bayar_va') ?>" id="form-cc-debit" method="POST">
-                <input type="hidden" name="alamat_provinsi">
-                <input type="hidden" name="alamat_kota">
-                <input type="hidden" name="alamat_kecamatan">
-                <input type="hidden" name="alamat_kelurahan">
-                <input type="hidden" name="kode_pos">
-                <input type="hidden" name="alamat_detail">
-                <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
-              </form>
-            </div>
-            <div class="col-md-11" id="alamat-pengiriman-obat">
-              <div class="form-group row">
-                <label for="alamat" class="col-md-3 col-4 text-abu" id="label-select-alamat">
-                  Alamat Pengiriman Obat
-                </label>
-                <div class="col-md-7 col-8">
-                  <div class="row" id="select-alamat">
-                    <span class="text-abu">:&nbsp </span>
-                    <div class="col-10" style="margin-left: -10px;">
-                      <div class="form-group form-focus">
-                          <label class="focus-label">Provinsi</label>
-                            <select class="form-control floating" name="alamat_provinsi" id="provinsi">
-                                <?php if($user->id_provinsi){ ?>
-                                    <option value="<?php echo $user->id_provinsi ?>"><?php echo $user->nama_provinsi ?></option>
-                                <?php } else { ?>
-                                    <option>PILIH PROVINSI</option>
-                                <?php } ?>
-                            </select>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="form-group form-focus">
-                          <label class="focus-label">Kabupaten/Kota</label>
-                            <select class="form-control floating" name="alamat_kota" id="kotkab">
-                              <?php if($user->id_kota){ ?>
-                                  <option value="<?php echo $user->id_kota ?>"><?php echo $user->nama_kota ?></option>
-                              <?php } else { ?>
-                                  <option>Pilih Kab/Kota</option>
-                              <?php } ?>
-                            </select>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="form-group form-focus">
-                          <label class="focus-label">Kecamatan</label>
-                            <select class="form-control floating" name="alamat_kecamatan" id="kecamatan">
-                              <?php if($user->id_kecamatan){ ?>
-                                  <option value="<?php echo $user->id_kecamatan ?>"><?php echo $user->nama_kecamatan ?></option>
-                              <?php } else { ?>
-                                  <option>Pilih Kecamatan</option>
-                              <?php } ?>
-                            </select>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="form-group form-focus">
-                          <label class="focus-label">Kelurahan</label>
-                            <select class="form-control floating" name="alamat_kelurahan" id="kelurahan">
-                              <?php if($user->id_kelurahan){ ?>
-                                <option value="<?php echo $user->id_kelurahan ?>"><?php echo $user->nama_kelurahan ?></option>
-                              <?php } else { ?>
-                                <option>Pilih Kelurahan</option>
-                              <?php } ?>
-                            </select>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="form-group form-focus">
-                          <label class="focus-label">Kode Pos</label>
-                          <input type="text" class="form-control floating"  name="kode_pos" value="<?php echo ucwords($user->kode_pos) ?>" placeholder="Masukan Kode Pos">
-                      </div>
-                    </div>
-                    <div class="col-md-10">
-                      <div class="form-group form-focus">
-                          <label class="focus-label">Detail Alamat</label>
-                          <input type="text" class="form-control floating" name="alamat_detail" value="<?php echo ucwords($user->alamat_jalan) ?>"  placeholder="Masukkan Detail Alamat">
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-12 mt-5">
-              <div class="pb-5 pr-5 text-center" style="float: right!important;">
-                <a href="<?php echo base_url('pasien/JadwalTerdaftar') ?>" class="btn btn-batal-sm">Kembali</a>
-                <!-- <button class="ml-3 btn btn-simpan-sm" type="button" <?php echo $registrasi->id_status_pembayaran == 0 ? 'id="btnKirim"' : '' ?>><?php echo $registrasi->id_status_pembayaran == 0 ? 'Bayar' : ($registrasi->id_status_pembayaran == 1 ? 'Lunas' : 'Diproses') ?></button> -->
-                <?php if ($registrasi->id_status_pembayaran == 0) { ?>
-                  <a href="#" class="ml-3 btn btn-simpan-sm" id="btnBayar" type="button">Bayar</a>
-                <?php } ?>
+            <div class="form-group row no-hp">
+              <label for="no-hp" class="col-md-3 col-4 mt-2 text-abu">
+                No. HP
+              </label>
+              <div class="col-md-7 pr-3 ml-0 col-8">
+                <div class="row">
+                  <span class="text-abu mt-2">:&nbsp </span>
+                  <input type="number" id="no-hp" class="form-control col-10" name="no_hp" value="<?php echo $user->telp ?>" required>
+                </div>
               </div>
             </div>
+            <input type="hidden" name="alamat_provinsi">
+            <input type="hidden" name="alamat_kota">
+            <input type="hidden" name="alamat_kecamatan">
+            <input type="hidden" name="alamat_kelurahan">
+            <input type="hidden" name="kode_pos">
+            <input type="hidden" name="alamat_detail">
             <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
-            </form>
+          </form>
         </div>
+        <div class="col-md-11">
+          <form id="form-owlexa" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_owlexa'); ?>">
+            <div class="">
+              <div class="row">
+                <div class="metode-owlexa col-md-11">
+                  <div class="form-group row">
+                    <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Nama Lengkap </label>
+                    <div class="col-md-7 col-8">
+                      <div class="row">
+                        <p class="text-abu mt-2 pl-3">:&nbsp </p>
+                        <input type="text" class="form-control col-11" name="fullName" placeholder="Masukkan Nama Lengkap" value="<?php echo $user->name ?>">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="metode-owlexa col-md-11">
+                  <div class="form-group row">
+                    <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Nomor Kartu </label>
+                    <div class="col-md-7 col-8">
+                      <div class="row">
+                        <p class="text-abu mt-2 pl-3">:&nbsp </p>
+                        <input type="number" class="form-control col-11" name="cardNumber" placeholder="Masukkan Nomor Kartu">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="metode-owlexa col-md-11">
+                  <div class="form-group row">
+                    <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Tanggal Lahir </label>
+                    <div class="col-md-7 col-8">
+                      <div class="row">
+                        <p class="text-abu mt-2 pl-3">:&nbsp </p>
+                        <input type="date" class="form-control col-11" name="birthDate" placeholder="Masukkan Tanggal Lahir" value="<?php echo $user->lahir_tanggal; ?>" readonly disabled>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="metode-owlexa col-md-11">
+                  <div class="form-group row">
+                    <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">OTP </label>
+                    <div class="col-md-7 col-8">
+                      <div class="row">
+                        <p class="text-abu mt-2 pl-3">:&nbsp </p>
+                        <input type="number" class="form-control col-11" name="otp" placeholder="Masukkan OTP" aria-describedby="send_otp">
+                        <p class="col-md-6 ml-3"><a href="#" id="btnSendOtp" class="form-text font-14"> <i class="fa fa-sign-in"> Send OTP</i> </a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
+                <input type="hidden" name="alamat_provinsi">
+                <input type="hidden" name="alamat_kota">
+                <input type="hidden" name="alamat_kecamatan">
+                <input type="hidden" name="alamat_kelurahan">
+                <input type="hidden" name="kode_pos">
+                <input type="hidden" name="alamat_detail">
+                <input type="hidden" name="id_dokter" value="<?php echo $registrasi->id_dokter; ?>">
+                <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id; ?>">
+                <input type="hidden" name="chargeValue" value="<?php echo $total_harga; ?>">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-11" id="cc_debit" style="display: none;">
+          <form action="<?php echo base_url('pasien/Pembayaran/bayar_va') ?>" id="form-cc-debit" method="POST">
+            <input type="hidden" name="alamat_provinsi">
+            <input type="hidden" name="alamat_kota">
+            <input type="hidden" name="alamat_kecamatan">
+            <input type="hidden" name="alamat_kelurahan">
+            <input type="hidden" name="kode_pos">
+            <input type="hidden" name="alamat_detail">
+            <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
+          </form>
+        </div>
+        <div class="col-md-12 mx-auto" id="alamat-pengiriman-obat">
+          <div class="form-group row">
+            <label for="alamat" class="col-md-3 text-abu" id="label-select-alamat">
+              Alamat Pengiriman Obat:
+            </label>
+            <div class="col-md-6">
+              <div class="" id="select-alamat">
+                <div class="col-md-12">
+                  <div class="form-group form-focus">
+                    <label class="focus-label">Provinsi</label>
+                    <select class="form-control floating form-select-bayar" name="alamat_provinsi" id="provinsi">
+                      <?php if ($user->id_provinsi) { ?>
+                        <option value="<?php echo $user->id_provinsi ?>"><?php echo $user->nama_provinsi ?></option>
+                      <?php } else { ?>
+                        <option>PILIH PROVINSI</option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group form-focus">
+                    <label class="focus-label">Kabupaten/Kota</label>
+                    <select class="form-control floating form-select-bayar" name="alamat_kota" id="kotkab">
+                      <?php if ($user->id_kota) { ?>
+                        <option value="<?php echo $user->id_kota ?>"><?php echo $user->nama_kota ?></option>
+                      <?php } else { ?>
+                        <option>Pilih Kab/Kota</option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group form-focus">
+                    <label class="focus-label">Kecamatan</label>
+                    <select class="form-control floating form-select-bayar" name="alamat_kecamatan" id="kecamatan">
+                      <?php if ($user->id_kecamatan) { ?>
+                        <option value="<?php echo $user->id_kecamatan ?>"><?php echo $user->nama_kecamatan ?></option>
+                      <?php } else { ?>
+                        <option>Pilih Kecamatan</option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group form-focus">
+                    <label class="focus-label">Kelurahan</label>
+                    <select class="form-control floating form-select-bayar" name="alamat_kelurahan" id="kelurahan">
+                      <?php if ($user->id_kelurahan) { ?>
+                        <option value="<?php echo $user->id_kelurahan ?>"><?php echo $user->nama_kelurahan ?></option>
+                      <?php } else { ?>
+                        <option>Pilih Kelurahan</option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group form-focus">
+                    <label class="focus-label">Kode Pos</label>
+                    <input type="text" class="form-control floating form-select-bayar" name="kode_pos" value="<?php echo ucwords($user->kode_pos) ?>" placeholder="Masukan Kode Pos">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group form-focus">
+                    <label class="focus-label">Detail Alamat</label>
+                    <input type="text" class="form-control floating form-select-bayar" name="alamat_detail" value="<?php echo ucwords($user->alamat_jalan) ?>" placeholder="Masukkan Detail Alamat">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 my-5">
+          <div class="text-right">
+            <a href="<?php echo base_url('pasien/JadwalTerdaftar') ?>" class="btn btn-batal-sm">Kembali</a>
+            <!-- <button class="ml-3 btn btn-simpan-sm" type="button" <?php echo $registrasi->id_status_pembayaran == 0 ? 'id="btnKirim"' : '' ?>><?php echo $registrasi->id_status_pembayaran == 0 ? 'Bayar' : ($registrasi->id_status_pembayaran == 1 ? 'Lunas' : 'Diproses') ?></button> -->
+            <?php if ($registrasi->id_status_pembayaran == 0) { ?>
+              <a href="#" class="btn btn-simpan-sm" id="btnBayar" type="button">Bayar</a>
+            <?php } ?>
+          </div>
+        </div>
+        <input type="hidden" name="id_registrasi" value="<?php echo $registrasi->registrasi_id ?>">
+        </form>
       </div>
-    <?php } ?>
-
-
 
     </div>
+  <?php } ?>
+
+
+
   </div>
+</div>
 </div>
 
 </div>

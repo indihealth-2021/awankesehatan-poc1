@@ -113,16 +113,16 @@ class Apotek extends CI_Controller {
 			$longitude = 0;
 
 			if($origin == ",") {
-				if($pasien->alamat_kecamatan != null) {
-					$executable_query = "SELECT master_kecamatan.name FROM master_kecamatan WHERE master_kecamatan.id=".$pasien->alamat_kecamatan;
-					$kecamatan = $this->db->query($executable_query)->result()[0]->name;
+				if($pasien->alamat_kelurahan != null) {
+					$executable_query = "SELECT master_kelurahan.name FROM master_kelurahan WHERE master_kelurahan.id=".$pasien->alamat_kelurahan;
+					$kelurahan = $this->db->query($executable_query)->result()[0]->name;
+
+					[$langitude, $longitude] = $this->approximateLocation($kelurahan)["point"]["coordinates"];
+				}else {
+					$executable_query = "SELECT master_kecamatan.name FROM master_kecamatan WHERE master_kecamatan.id=".$pasien->$alamat_kecamatan;
+					$kecamatan= $this->db->query($executable_query)->result()[0]->name;
 
 					[$langitude, $longitude] = $this->approximateLocation($kecamatan)["point"]["coordinates"];
-				}else {
-					$executable_query = "SELECT master_kota.name FROM master_kota WHERE master_kota.id=".$alamat_kota;
-					$kota = $this->db->query($executable_query)->result()[0]->name;
-
-					[$langitude, $longitude] = $this->approximateLocation($kota)["point"]["coordinates"];
 				}
 				for($i = 0; $i < count($temp); $i ++) {
 					$origin = $langitude.",".$longitude;

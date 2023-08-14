@@ -318,17 +318,17 @@ if(data.status == "OK"){
             die;
         }
 
+        $id_registrasi = gettype($id_registrasi) == "object" ? $id_registrasi->id_registrasi : $id_registrasi;
+
         $data_biaya_pengiriman = array(
-            'id_registrasi'=>$id_registrasi->id_registrasi,
+            'id_registrasi'=>$id_registrasi,
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
             'alamat'=>$alamat
         );
 
-        $id_registrasi = gettype($id_registrasi) == "object" ? $id_registrasi->id_registrasi : $id_registrasi;
-
         $biaya_pengiriman_isExists = $this->db->query("SELECT id, jumlah_edit,alamat FROM biaya_pengiriman_obat WHERE id_registrasi = '".$id_registrasi."'")->row();
-        if($biaya_pengiriman_isExists != null){
+        if($biaya_pengiriman_isExists == null){
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
             $jml_edit = 1;
         }

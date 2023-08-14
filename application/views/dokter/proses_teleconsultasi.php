@@ -742,10 +742,6 @@
             alert("Kami ingin mengingatkan bahwa waktu konsultasi telah habis sesuai jadwal. Namun, jika Anda merasa perlu untuk melanjutkan konsultasi dengan pasien yang sedang Anda layani saat ini, silakan lanjutkan sesuai kebijakan Anda.");
         }
     }
-
-    if (document.querySelector('[name="keluhan"]')) {
-        startTimer();
-    }
 </script>
 <!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script> -->
 <?php $foto_pasien = $pasien->foto ? base_url('assets/images/users/' . $pasien->foto) : base_url('assets/telemedicine/img/default.png'); ?>

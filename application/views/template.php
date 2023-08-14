@@ -619,6 +619,9 @@
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_dokter')) {
           $('#memanggil').modal('hide');
+          if($('textarea[name=keluhan]').val()){
+            startTimer();
+          }
         }
 
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_pasien')) {

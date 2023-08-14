@@ -156,7 +156,7 @@
               </div>
             </div>
 
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
               <div class="col-md-6">
                 <div class="form-group form-focus">
                       <label class="focus-label">Latitude</label>
@@ -169,7 +169,7 @@
                       <input type="text" class="form-control floating" name="longitude" value="<?php noxss($user->latitude) ?>" placeholder="Masukan Latitude">
                   </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="row mt-5">
               <div class="mx-auto">

@@ -212,18 +212,6 @@ if ($resep->harga_kustom){
                       </div>
                     </div>
                   <?php } ?>
-                  <?php if($bukti_pembayaran_obat->status == 0 && ($bukti_pembayaran_obat->id_payment == 4 || $bukti_pembayaran_obat->id_payment == 5 || $bukti_pembayaran_obat->id_payment == 6)){ ?>
-                    <div class="col-md-11">
-                      <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-3 mt-2 text-abu">Link Pembayaran</label>
-                        <div class="col-md-7 col-8">
-                          <div class="row">
-                            <p class="text-abu">:&nbsp</p> <a target="_blank" href="<?php echo $bukti_pembayaran_obat->va_number ?>" class="btn btn-sm bg-tele text-white">LINK PEMBAYARAN</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <?php } ?>
                   <?php if($bukti_pembayaran_obat->metode_pembayaran == 1 || $bukti_pembayaran_obat->metode_pembayaran == 2 || $bukti_pembayaran_obat->metode_pembayaran == 3){ ?>
                     <div class="col-md-11">
                       <div class="form-group row">

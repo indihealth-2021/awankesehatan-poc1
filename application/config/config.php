@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 date_default_timezone_set('Asia/Jakarta');
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +27,9 @@ date_default_timezone_set('Asia/Jakarta');
 // $config['path_to_env'] = 'https://poc1.awankesehatan.com/';
 // $config['path_to_api'] = 'https://api-poc1.awankesehatan.com/';
 
-$config["base_url"] = "http://localhost/poc1";
-$config["path_to_env"] = "http://localhost/poc1";
-$config["recaptcha_site"] = "http://localhost/poc1";
+$config["base_url"] = "http://localhost/work/awankesehatan-poc1";
+$config["path_to_env"] = "http://localhost/work/awankesehatan-poc1";
+$config["recaptcha_site"] = "http://localhost/work/awankesehatan-poc1";
 
 ///recaptcha
 //$config['recaptcha_site'] = 'idok.telemedical.id';
@@ -67,7 +67,7 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol']    = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -91,7 +91,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']    = 'english';
 
 /*
 |--------------------------------------------------------------------------
@@ -415,8 +415,8 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
+$config['cookie_prefix']    = '';
+$config['cookie_domain']    = '';
 $config['cookie_path']      = '/';
 $config['cookie_secure']    = TRUE;
 $config['cookie_httponly']  = FALSE;

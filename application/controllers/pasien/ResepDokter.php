@@ -65,9 +65,6 @@ class ResepDokter extends CI_Controller
                 redirect(base_url('admin/Admin'));
             }
         }
-        if ($valid->vip != 1) {
-            redirect(base_url('pasien/ResepDokter'));
-        }
         $id_pasien = $this->session->userdata('id_user');
         // $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;

@@ -183,6 +183,18 @@ class Pendaftaran extends CI_Controller {
         }
 
         if($jadwal_konsultasi){
+            $last_day_konsultasi = new DateTime($jadwal_konsultasi->tanggal);
+            $today = new DateTime();
+            $three_days_ago = $today->sub(new DateInterval('P3D'));
+            $three_days_later = clone $last_day_konsultasi;
+            $three_days_later->add(new DateInterval('P3D'));
+          
+            if ($three_days_ago <= $last_day_konsultasi) {
+                $msg = 'Anda telah melakukan konsultasi pada tanggal ' . $last_day_konsultasi->format('d F Y') . '. Anda bisa mendaftar kembali pada tanggal ' . $three_days_later->format('d F Y') . '.';
+                $this->session->set_flashdata('msg', $msg);
+                redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+            }
+            
             $last_jam_konsultasi = new DateTime($jadwal_konsultasi->tanggal.' '.$jadwal_konsultasi->jam);
             $last_jam_konsultasi->modify('+30 minutes');
             // echo var_dump($last_jam_konsultasi);

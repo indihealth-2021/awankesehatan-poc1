@@ -95,7 +95,7 @@
                             <td><?php echo $resep->alamat ?></td>
                             <td class="text-center">
                                       <button class="btn btn-kirim" data-link="<?php echo base_url('admin/PengirimanObat/kirim_obat/'.$resep->id_bukti) ?>" data-alamat="<?php echo $resep->alamat ?>" data-biaya-obat="<?php echo "Rp. " . number_format($total_harga,2,',','.'); ?>" data-biaya-pengiriman="<?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?>" data-total-harga="<?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?>" data-toggle="modal" data-target="#modalPengiriman-<?php echo $resep->id_bukti ?>">Via Manual</button>
-                                      <button class="btn btn-kirim mt-2" data-bukti-pembayaran-obat-id="<?php echo $resep->id_bukti; ?>" data-lat="<?php echo @$resep->lat ?>" data-lng="<?php echo @$resep->lng ?>" data-alamat="<?php echo $resep->alamat ?>" data-biaya-obat="<?php echo "Rp. " . number_format($total_harga,2,',','.'); ?>" data-biaya-pengiriman="<?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?>" data-total-harga="<?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?>" data-toggle="modal" data-target="#modalPengirimanJNE">Via JNE</button>
+                                      <button class="btn btn-kirim mt-2" data-bukti-pembayaran-obat-id="<?php echo $resep->id_bukti; ?>" data-lat="<?php echo @$resep->lat ?>" data-lng="<?php echo @$resep->lng ?>" data-alamat="<?php echo $resep->alamat ?>" data-biaya-obat="<?php echo "Rp. " . number_format($total_harga,2,',','.'); ?>" data-biaya-pengiriman="<?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?>" data-total-harga="<?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?>" data-toggle="modal" data-target="#modalPengirimanJNE-<?php echo $resep->id_bukti ?>">Via JNE</button>
                             </td>
                             <td>
                               <a class="font-icon" href="#modalHapus" data-toggle="modal" data-href="#" data-nama="#" onclick="$('#modalHapus #form')" >
@@ -157,7 +157,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="modalPengirimanJNE" tabindex="-1" role="dialog" aria-labelledby="modalPengirimanJNELabel" aria-hidden="true">
+<div class="modal fade" id="modalPengirimanJNE-<?php echo $resep->id_bukti ?>" tabindex="-1" role="dialog" aria-labelledby="modalPengirimanJNELabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content" style="height: auto;">
       <div class="modal-header">

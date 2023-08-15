@@ -77,12 +77,16 @@
                                                     $jml_data = count($list_harga_obat);
                                                     $list_total_harga = [];
                                                     $total_harga = 0;
-                                                    for($i=0; $i<$jml_data; $i++){
-                                                        $list_total_harga[$i] = ( $list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i] ) * $list_harga_obat[$i];
-                                                    }
-
-                                                    foreach($list_total_harga as $tot_harga){
-                                                        $total_harga+=$tot_harga;
+                                                    if ($resep->harga_kustom){
+                                                      $total_harga = $resep->harga_kustom;
+                                                    } else{
+                                                      for ($i = 0; $i < $jml_data; $i++) {
+                                                        $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                                                      }
+                                                      
+                                                      foreach ($list_total_harga as $tot_harga) {
+                                                        $total_harga += $tot_harga;
+                                                      }
                                                     }
                                                 ?>
                             <td width="12%"><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>

@@ -187,8 +187,8 @@ class Pendaftaran extends CI_Controller {
             $today = new DateTime();
             $three_days_later = clone $last_day_konsultasi;
             $three_days_later->add(new DateInterval('P3D'));
-          
-            if ($three_days_later <= $today) {
+
+            if ($today < $three_days_later) {
                 $msg = 'Anda telah melakukan konsultasi pada tanggal ' . $last_day_konsultasi->format('d F Y') . '. Anda bisa mendaftar kembali pada tanggal ' . $three_days_later->format('d F Y') . '.';
                 $this->session->set_flashdata('msg', $msg);
                 redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));

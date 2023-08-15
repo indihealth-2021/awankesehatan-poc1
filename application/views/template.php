@@ -604,12 +604,12 @@
         //   var audio = document.getElementById('bell-ring');
         //   audio.play();
         // }
-        if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_obat_diverifikasi')) {
-          alert('Resep obat sudah diverifikasi oleh farmasi!');
-          var audio = document.getElementById('bell-ring');
-          const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;
-          audio.play();
-        }
+        // if (JSON.parse(JSON.parse(payload.data.body).name == 'resep_obat_diverifikasi')) {
+        //   alert('Resep obat sudah diverifikasi oleh farmasi!');
+        //   var audio = document.getElementById('bell-ring');
+        //   const id_jadwal_konsultasi = JSON.parse(payload.data.body).id_jadwal_konsultasi;
+        //   audio.play();
+        // }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'vp') || JSON.parse(JSON.parse(payload.data.body).name == 'universal')) {
           $("#isinotifmodal").text(JSON.parse(payload.data.body).keterangan);
           $("#ModalNotif").modal('show');

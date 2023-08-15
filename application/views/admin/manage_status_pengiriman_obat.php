@@ -94,7 +94,7 @@
                             <td><?php echo 'Rp. '.number_format($resep->biaya_pengiriman,2,',','.'); ?></td> -->
                             <td><?php echo $resep->alamat ?></td>
                             <td class="text-center">
-                                      <button class="btn btn-kirim" data-link="<?php echo base_url('admin/PengirimanObat/kirim_obat/'.$resep->id_bukti) ?>" data-alamat="<?php echo $resep->alamat ?>" data-biaya-obat="<?php echo "Rp. " . number_format($total_harga,2,',','.'); ?>" data-biaya-pengiriman="<?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?>" data-total-harga="<?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?>" data-toggle="modal" data-target="#modalPengiriman">Via Manual</button>
+                                      <button class="btn btn-kirim" data-link="<?php echo base_url('admin/PengirimanObat/kirim_obat/'.$resep->id_bukti) ?>" data-alamat="<?php echo $resep->alamat ?>" data-biaya-obat="<?php echo "Rp. " . number_format($total_harga,2,',','.'); ?>" data-biaya-pengiriman="<?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?>" data-total-harga="<?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?>" data-toggle="modal" data-target="#modalPengiriman-<?php echo $resep->id_bukti ?>">Via Manual</button>
                                       <button class="btn btn-kirim mt-2" data-bukti-pembayaran-obat-id="<?php echo $resep->id_bukti; ?>" data-lat="<?php echo @$resep->lat ?>" data-lng="<?php echo @$resep->lng ?>" data-alamat="<?php echo $resep->alamat ?>" data-biaya-obat="<?php echo "Rp. " . number_format($total_harga,2,',','.'); ?>" data-biaya-pengiriman="<?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?>" data-total-harga="<?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?>" data-toggle="modal" data-target="#modalPengirimanJNE">Via JNE</button>
                             </td>
                             <td>
@@ -106,7 +106,6 @@
                               </a>
                             </td>
                           </tr>
-                              <?php } ?>
                         </tbody>
                     </table> 
                     </div>
@@ -121,7 +120,7 @@
         <!-- /.col -->
         </div>
         
-        <div class="modal fade" id="modalPengiriman" tabindex="-1" role="dialog" aria-labelledby="modalPengirimanLabel" aria-hidden="true">
+        <div class="modal fade" id="modalPengiriman-<?php echo $resep->id_bukti ?>" tabindex="-1" role="dialog" aria-labelledby="modalPengirimanLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content" style="height: auto;">
       <div class="modal-header">
@@ -134,16 +133,16 @@
             <div class="row">
               <div class="col-md-4 font-weight-bold">Alamat : </div>
               <div class="col-md-8">
-                <p class="alamat"></p>
+                <p class="alamat"><?php echo $resep->alamat ?></p>
               </div>
             </div>
             <div class="row">
               <div class="col-md-4 font-weight-bold">Biaya : </div>
               <div class="col-md-8">
                 <p>
-                Biaya Obat: <span class="biaya-obat"></span><br/>
-                Biaya Pengiriman: <span class="biaya-pengiriman"></span><br/>
-                Total Biaya: <span class="total-harga"></span>
+                Biaya Obat: <span class="biaya-obat"><?php echo $total_harga ?></span><br/>
+                Biaya Pengiriman: <span class="biaya-pengiriman"><?php echo $biaya_pengiriman ?></span><br/>
+                Total Biaya: <span class="total-harga"><?php echo $total_harga+$biaya_pengiriman ?></span>
                 </p>
               </div>
             </div>
@@ -171,16 +170,16 @@
             <div class="row">
               <div class="col-md-4 font-weight-bold">Alamat : </div>
               <div class="col-md-8">
-                <p class="alamat"></p>
+                <p class="alamat"><?php echo $resep->alamat ?></p>
               </div>
             </div>
             <div class="row">
               <div class="col-md-4 font-weight-bold">Biaya : </div>
               <div class="col-md-8">
                 <p>
-                Biaya Obat: <span class="biaya-obat"></span><br/>
-                Biaya Pengiriman: <span class="biaya-pengiriman"></span><br/>
-                Total Biaya: <span class="total-harga"></span>
+                Biaya Obat: <span class="biaya-obat"><?php echo $total_harga ?></span><br/>
+                Biaya Pengiriman: <span class="biaya-pengiriman"><?php echo $biaya_pengiriman ?></span><br/>
+                Total Biaya: <span class="total-harga"><?php echo $total_harga+$biaya_pengiriman ?></span>
                 </p>
               </div>
             </div>
@@ -205,6 +204,7 @@
     </div>
   </div>
 </div>
+<?php } ?>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="modalHapus">
   <div class="modal-dialog modal-dialog-centered" role="document">

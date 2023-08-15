@@ -140,9 +140,9 @@
               <div class="col-md-4 font-weight-bold">Biaya : </div>
               <div class="col-md-8">
                 <p>
-                Biaya Obat: <span class="biaya-obat"><?php echo $total_harga ?></span><br/>
-                Biaya Pengiriman: <span class="biaya-pengiriman"><?php echo $biaya_pengiriman ?></span><br/>
-                Total Biaya: <span class="total-harga"><?php echo $total_harga+$biaya_pengiriman ?></span>
+                Biaya Obat: <span class="biaya-obat"><?php echo "Rp. " . number_format($total_harga,2,',','.'); ?></span><br/>
+                Biaya Pengiriman: <span class="biaya-pengiriman"><?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?></span><br/>
+                Total Biaya: <span class="total-harga"><?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?></span>
                 </p>
               </div>
             </div>
@@ -177,9 +177,9 @@
               <div class="col-md-4 font-weight-bold">Biaya : </div>
               <div class="col-md-8">
                 <p>
-                Biaya Obat: <span class="biaya-obat"><?php echo $total_harga ?></span><br/>
-                Biaya Pengiriman: <span class="biaya-pengiriman"><?php echo $biaya_pengiriman ?></span><br/>
-                Total Biaya: <span class="total-harga"><?php echo $total_harga+$biaya_pengiriman ?></span>
+                Biaya Obat: <span class="biaya-obat"><?php echo "Rp. " . number_format($total_harga,2,',','.'); ?></span><br/>
+                Biaya Pengiriman: <span class="biaya-pengiriman"><?php echo "Rp. " . number_format($biaya_pengiriman,2,',','.'); ?></span><br/>
+                Total Biaya: <span class="total-harga"><?php echo "Rp. " . number_format($total_harga+$biaya_pengiriman,2,',','.'); ?></span>
                 </p>
               </div>
             </div>

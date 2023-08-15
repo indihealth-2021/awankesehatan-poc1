@@ -486,8 +486,15 @@
                     cardTitle.textContent = file.nama_file;
                     var cardDescription = document.createElement('p');
                     cardDescription.textContent = file.type_file;
+                    var cardButton = document.createElement('button');
+                    cardButton.className = 'btn btn-primary btn-sm';
+                    cardButton.textContent = 'Lihat File';
+                    cardButton.onclick = function() {
+                      window.open('<?php echo base_url("assets/files/file_pemeriksaan_luar/") ?>' + file.path_file, '_blank');
+                    }
                     cardBody.appendChild(cardTitle);
                     cardBody.appendChild(cardDescription);
+                    cardBody.appendChild(cardButton);
                     card.appendChild(cardBody);
                     document.getElementById('file_asesmen').appendChild(card);
                   });

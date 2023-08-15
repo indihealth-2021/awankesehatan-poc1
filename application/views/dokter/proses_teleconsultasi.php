@@ -536,6 +536,7 @@
                                                 <div class="card-body">
                                                     <h5><?php echo $file->nama_file ?></h5>
                                                     <p><?php echo $file->type_file ?></p>
+                                                    <a href="<?php echo base_url('assets/files/file_pemeriksaan_luar/' . $file->path_file) ?>" class="btn btn-primary btn-sm" target="_blank">Lihat File</a>
                                                 </div>
                                             </div>
                                         <?php } ?>

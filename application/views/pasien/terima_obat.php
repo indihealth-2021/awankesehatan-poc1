@@ -7,29 +7,43 @@
                     <ol class="breadcrumb" style="background-color: transparent;">
                         <li class="breadcrumb-item active"><a href="<?php echo base_url('dokter/Dashboard'); ?>" class="text-black">Dashboard</a></li>
                         <li class="breadcrumb-item" aria-current="page"><a href="<?php echo base_url('pasien/ResepDokter'); ?>" class="text-black">Resep Dokter</a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a href="" class="text-black font-bold-7">Konfirmasi Penerimaan Obat</a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="" class="text-black font-bold-7">Lacak Obat</a></li>
                     </ol>
                 </nav>
             </div>
             <div class="col-sm-12 col-12">
-                <h3 class="page-title">Konfirmasi Penerimaan Obat</h3>
+                <h3 class="page-title">Lacak Obat</h3>
+                <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <!--card diagnosa-->
-                <div class="card card-5 p-2 px-4">
-                    <form id="formKonsultasi_2">
-                        <h3>Apakah anda yakin sudah menerima obat?</h3>
-                        <p>Tekan tombol di bawah ini jika sudah menerima obat.</p>
-                        <button type="button" id="btn-terima-obat" class="btn btn-primary">Ya, saya sudah menerimanya</button>
-                    </form>
-                    <p style="display: none;" id="id-jadwal-konsultasi"><?php echo $id_jadwal_konsultasi; ?></p>
+                <p>
+                    <span>Status: Dikirim</span>
+                </p>
+            </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalKonfirmasi">Konfirmasi</button>
+            <!-- batas col-md-7 -->
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalKonfirmasi">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-modal-header p-3">Konfirmasi Penerimaan Obat</h5>
+                </div>
+                <form method="post" action="">
+                <div class="modal-body font-modal-body">
+                <p class="p-3">Anda yakin sudah menerima obat?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="mx-auto">
+                    <button type="button" class="btn btn-ya" id="btn-terima-obat">Ya</a>
+                    <button type="button" class="btn btn-tidak ml-5" data-dismiss="modal">Tidak</button>
                 </div>
             </div>
-
-            <!-- batas col-md-7 -->
+            </form>
         </div>
     </div>
 </div>

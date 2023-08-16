@@ -1062,15 +1062,13 @@ class Pembayaran extends CI_Controller
             $message = 'Bukti Pembayaran Berhasil Diupload, tunggu verifikasi dari Admin';
 
             $alamat = $dikirim ? $alamat_pengiriman_obat : "";
-            $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
+            // $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
 
             $this->db->insert("biaya_pengiriman_obat", [
-                "id" => $latestId,
+                // "id" => $latestId, ->Solusi sementara
                 "alamat" => $dikirim ? $alamat_pengiriman_obat : "",
                 "alamat_kustom" => $alamat_kustom,
                 "id_registrasi" => $id_registrasi,
-                //'lat' => $koordinat->lat,
-                //'lng' => $koordinat->lng
             ]);
 
             $this->session->set_flashdata('msg_pmbyrn', $message);
@@ -1446,7 +1444,7 @@ class Pembayaran extends CI_Controller
                 "tanggal" => $tanggal,
                 "jam" => $jam,
             );
-            $this->db->insert('jadwal_konsultasi', $data3);
+            // $this->db->insert('jadwal_konsultasi', $data3);
             $id_jadwal_konsultasi = $this->db->insert_id();
 
             $data_biaya_pengiriman_obat = array(

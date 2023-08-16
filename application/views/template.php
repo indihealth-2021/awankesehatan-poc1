@@ -474,6 +474,7 @@
               if (JSON.parse(payload.data.body).user_file) {
                 var userFiles = JSON.parse(payload.data.body).user_file;
                 if (appendAssesment){
+                  document.getElementById('file_asesmen').innerHTML = "";
                   userFiles.forEach(function(file) {
                     var card = document.createElement('div');
                     card.className = 'card';

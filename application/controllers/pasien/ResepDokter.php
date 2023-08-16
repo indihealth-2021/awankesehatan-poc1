@@ -38,7 +38,7 @@ class ResepDokter extends CI_Controller
         $data['user'] = $this->db->query('SELECT id,name, foto, vip FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
 
-        $data['list_resep'] = $this->db->query("SELECT MAX(bp.tanggal_konsultasi) AS tanggal_konsultasi, MAX(rd.id) AS id, MAX(rd.diverifikasi_user) AS diverifikasi_user, MAX(rd.created_at) AS created_at, MAX(bpo.status) AS status_bukti, MAX(bpo.id) AS id_bukti_obat, rd.id_jadwal_konsultasi, MAX(d.name) AS nama_dokter, GROUP_CONCAT('<li>', mo.name, ' ( ', rd.jumlah_obat, ' ', mo.unit, ' )', ' ( ', rd.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, GROUP_CONCAT(rd.harga SEPARATOR ',') AS harga_obat, GROUP_CONCAT(rd.harga_per_n_unit SEPARATOR ',') AS harga_obat_per_n_unit, GROUP_CONCAT(rd.jumlah_obat SEPARATOR ',') AS jumlah_obat, (SELECT MAX(bpo2.biaya_pengiriman) FROM biaya_pengiriman_obat bpo2 WHERE bpo2.id_jadwal_konsultasi = rd.id_jadwal_konsultasi) AS biaya_pengiriman, (SELECT MAX(bpo2.alamat) FROM biaya_pengiriman_obat bpo2 WHERE bpo2.id_jadwal_konsultasi = rd.id_jadwal_konsultasi) AS alamat_pengiriman FROM resep_dokter rd INNER JOIN master_obat mo ON rd.id_obat = mo.id INNER JOIN master_user d ON rd.id_dokter = d.id LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter dd ON dd.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran bp ON bp.id_registrasi = dd.id_registrasi WHERE rd.id_pasien =" . $this->session->userdata("id_user") . " AND rd.dibatalkan = 0 AND rd.dirilis = 1 AND rd.diverifikasi = 1 AND (bpo.status = 0 OR bpo.status IS NULL) GROUP BY rd.id_jadwal_konsultasi ORDER BY MAX(rd.created_at) DESC;
+        $data['list_resep'] = $this->db->query("SELECT MAX(bp.tanggal_konsultasi) AS tanggal_konsultasi, MAX(rd.id) AS id, MAX(rd.diverifikasi_user) AS diverifikasi_user, MAX(rd.diterima_user) AS diterima, MAX(rd.dirilis) AS dirilis, MAX(rd.created_at) AS created_at, MAX(bpo.status) AS status_bukti, MAX(bpo.order_status) AS order_status, MAX(bpo.id) AS id_bukti_obat, rd.id_jadwal_konsultasi, MAX(d.name) AS nama_dokter, GROUP_CONCAT('<li>', mo.name, ' ( ', rd.jumlah_obat, ' ', mo.unit, ' )', ' ( ', rd.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, GROUP_CONCAT(rd.harga SEPARATOR ',') AS harga_obat, GROUP_CONCAT(rd.harga_per_n_unit SEPARATOR ',') AS harga_obat_per_n_unit, GROUP_CONCAT(rd.jumlah_obat SEPARATOR ',') AS jumlah_obat, (SELECT MAX(bpo2.biaya_pengiriman) FROM biaya_pengiriman_obat bpo2 WHERE bpo2.id_jadwal_konsultasi = rd.id_jadwal_konsultasi) AS biaya_pengiriman, (SELECT MAX(bpo2.alamat) FROM biaya_pengiriman_obat bpo2 WHERE bpo2.id_jadwal_konsultasi = rd.id_jadwal_konsultasi) AS alamat_pengiriman, (SELECT MAX(bpo2.harga_obat) FROM biaya_pengiriman_obat bpo2 WHERE bpo2.id_jadwal_konsultasi = rd.id_jadwal_konsultasi) AS harga_kustom FROM resep_dokter rd INNER JOIN master_obat mo ON rd.id_obat = mo.id INNER JOIN master_user d ON rd.id_dokter = d.id LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter dd ON dd.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran bp ON bp.id_registrasi = dd.id_registrasi WHERE rd.id_pasien =" . $this->session->userdata("id_user") . " AND rd.dibatalkan = 0 AND rd.diverifikasi = 1 AND rd.dirilis = 1 GROUP BY rd.id_jadwal_konsultasi ORDER BY MAX(rd.created_at) DESC;
         ")->result();
 
         // $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.diverifikasi_user, resep_dokter.diterima_user, bpo.status as status_bukti, bpo.id as id_bukti_obat, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter,GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 1 AND (bpo.status = 0 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
@@ -53,7 +53,7 @@ class ResepDokter extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function terima($id_jadwal_konsultasi){
+    public function lacak($id_jadwal_konsultasi){
         if (!$this->session->userdata('is_login')) {
             redirect(base_url('Login'));
         }
@@ -65,9 +65,6 @@ class ResepDokter extends CI_Controller
                 redirect(base_url('admin/Admin'));
             }
         }
-        if ($valid->vip != 1) {
-            redirect(base_url('pasien/ResepDokter'));
-        }
         $id_pasien = $this->session->userdata('id_user');
         // $id_jadwal_konsultasi = $this->input->get('id_jadwal_konsultasi');
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
@@ -78,6 +75,8 @@ class ResepDokter extends CI_Controller
         }
         $data['view'] = 'pasien/terima_obat';
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
+
+        $data['resep'] = $this->db->query("SELECT (biaya_pengiriman_obat.alamat != '') AS dikirim, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id_jadwal_konsultasi, resep_dokter.created_at, d.name AS nama_dokter, d.foto AS foto_dokter, GROUP_CONCAT('<li>', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') AS harga_obat, biaya_pengiriman_obat.harga_obat AS harga_kustom, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') AS harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') AS jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat AS alamat_pengiriman, n.poli AS poli_dokter FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 GROUP BY resep_dokter.id_jadwal_konsultasi, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.created_at, d.name, d.foto, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat, n.poli ORDER BY resep_dokter.created_at DESC;")->row();
 
         $data['user'] = $this->all_model->select('master_user', 'row', 'id = ' . $this->session->userdata('id_user'));
         $data['title'] = 'Konfirmasi Penerimaan Obat';
@@ -248,15 +247,13 @@ class ResepDokter extends CI_Controller
         </script>
         ";
 
-        $data['resep'] = $this->db->query("SELECT (biaya_pengiriman_obat.alamat != '') AS dikirim, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
+        $data['resep'] = $this->db->query("SELECT (biaya_pengiriman_obat.alamat != '') AS dikirim, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id_jadwal_konsultasi, resep_dokter.created_at, d.name AS nama_dokter, d.foto AS foto_dokter, GROUP_CONCAT('<li>', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') AS harga_obat, biaya_pengiriman_obat.harga_obat AS harga_kustom, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') AS harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') AS jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat AS alamat_pengiriman, n.poli AS poli_dokter FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 GROUP BY resep_dokter.id_jadwal_konsultasi, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.created_at, d.name, d.foto, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat, n.poli ORDER BY resep_dokter.created_at DESC;")->row();
 
-        $data['bukti_pembayaran_obat'] = $this->db->query('SELECT status,foto,metode_pembayaran,claim_number,va_number,id_payment FROM bukti_pembayaran_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $this->session->userdata('id_user'))->row();
-
-        $data['bukti_pembayaran_obat'] = $this->db->query('SELECT bukti_pembayaran_obat.*, (SELECT payment FROM payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as payment_name, (SELECT logo FROM payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as payment_logo, (SELECT payment FROM master_manual_payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as manual_payment_name, (SELECT logo FROM master_manual_payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as manual_payment_logo FROM bukti_pembayaran_obat WHERE bukti_pembayaran_obat.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran_obat.status != 2')->row();
+        $data['bukti_pembayaran_obat'] = $this->db->query('SELECT bukti_pembayaran_obat.*, (SELECT payment FROM payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as payment_name, (SELECT logo FROM payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as payment_logo, (SELECT payment FROM master_manual_payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as manual_payment_name, (SELECT logo FROM master_manual_payment WHERE payment_id = bukti_pembayaran_obat.id_payment) as manual_payment_logo FROM bukti_pembayaran_obat WHERE bukti_pembayaran_obat.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran_obat.status != 2 AND id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
 
 
 
-        $data['list_manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE payment NOT LIKE "%OWLEXA%"')->result();
+        $data['list_manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE payment LIKE "%OWLEXA%"')->result();
         $data['list_bank_va'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND vendor = "arthajasa" AND payment NOT LIKE "%OWLEXA%"')->result();
         $data['list_e_wallet'] = $this->db->query('SELECT * FROM payment WHERE type = "ewallet" AND vendor = "arthajasa"')->result();
 
@@ -273,7 +270,7 @@ class ResepDokter extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function transfer_manual($id_jadwal_konsultasi = null, $bank_id = null)
+    public function transfer_manual($id_jadwal_konsultasi = null, $bank_id = 4)
     {
         if (!$this->session->userdata('is_login')) {
             redirect(base_url('Login'));
@@ -334,6 +331,10 @@ class ResepDokter extends CI_Controller
                 $bank_name = 'CIMB';
                 $bank_logo = 'cimb.png';
                 break;
+            case 4:  
+                $bank_name = 'OWLEXA HEALTHCARE';
+                $bank_logo = 'owlexa.png';  
+                break;
             default:
                 $bank_name = '';
                 $bank_logo = '';
@@ -347,14 +348,15 @@ class ResepDokter extends CI_Controller
             'logo_bank' => $bank_logo,
         );
 
-        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
+        $data['resep'] = $this->db->query("SELECT MAX(biaya_pengiriman_obat.alamat != '') AS dikirim, MAX(bukti_pembayaran.tanggal_konsultasi) AS tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, MAX(resep_dokter.created_at) AS created_at, MAX(d.name) AS nama_dokter, MAX(d.foto) AS foto_dokter, GROUP_CONCAT('<li>', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') AS harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') AS harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') AS jumlah_obat, MAX(biaya_pengiriman_obat.biaya_pengiriman) AS biaya_pengiriman, MAX(biaya_pengiriman_obat.alamat) AS alamat_pengiriman, MAX(n.poli) AS poli_dokter FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY diagnosis_dokter.id_registrasi, resep_dokter.id ORDER BY created_at DESC")->row();
+
         $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE payment_id = '.$bank_id)->row();
 
 
 
-        if (!$data['resep']) {
-            show_404();
-        }
+        // if (!$data['resep']) {
+        //     show_404();
+        // }
         $data['id_jadwal_konsultasi'] = $id_jadwal_konsultasi;
 
         $this->load->view('template', $data);
@@ -424,7 +426,7 @@ class ResepDokter extends CI_Controller
             'logo_bank' => $bank_logo,
         );
 
-        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter, bpo.va_number FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
+        $data['resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.id, resep_dokter.created_at, d.name as nama_dokter, d.foto as foto_dokter, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat as alamat_pengiriman, n.poli as poli_dokter, bpo.va_number FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ddr ON ddr.id_dokter = d.id INNER JOIN nominal n ON ddr.id_poli = n.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.id_pasien = " . $this->session->userdata('id_user') . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 AND (bpo.status != 2 OR bpo.status IS NULL) GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->row();
         if (!$data['resep']) {
             show_404();
         }
@@ -447,15 +449,19 @@ class ResepDokter extends CI_Controller
             }
         }
 
-        $resep = $this->db->query('SELECT resep_dokter.id, resep_dokter.id_dokter, resep_dokter.jumlah_obat, master_obat.harga_per_n_unit, master_obat.harga FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id WHERE resep_dokter.id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND resep_dokter.dirilis = 1 AND resep_dokter.diverifikasi = 1')->result();
-        $biaya_pengiriman_obat = $this->db->query('SELECT biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
+        $resep = $this->db->query('SELECT resep_dokter.id, resep_dokter.id_dokter, resep_dokter.jumlah_obat, master_obat.harga_per_n_unit, master_obat.harga FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id WHERE resep_dokter.id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1')->result();
+        $biaya_pengiriman_obat = $this->db->query('SELECT biaya_pengiriman, harga_obat FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
         $pembayaran = $this->db->query('SELECT id,foto FROM bukti_pembayaran_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND id_pasien = ' . $this->session->userdata('id_user'))->row();
         if (!$resep) {
             show_404();
         }
         $total_harga = 0;
-        foreach ($resep as $r) {
-            $total_harga = $total_harga + (($r->harga / $r->harga_per_n_unit) * $r->jumlah_obat);
+        if ($biaya_pengiriman_obat->harga_obat) {
+            $total_harga += $biaya_pengiriman_obat->harga_obat;
+        } else {
+            foreach ($resep as $r) {
+                $total_harga = $total_harga + (($r->harga / $r->harga_per_n_unit) * $r->jumlah_obat);
+            }
         }
         $total_harga += $biaya_pengiriman_obat->biaya_pengiriman;
 

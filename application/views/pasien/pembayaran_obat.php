@@ -5,12 +5,17 @@ $list_jumlah_obat = explode(',', $resep->jumlah_obat);
 $jml_data = count($list_harga_obat);
 $list_total_harga = [];
 $total_harga = 0;
-for ($i = 0; $i < $jml_data; $i++) {
-  $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
-}
 
-foreach ($list_total_harga as $tot_harga) {
-  $total_harga += $tot_harga;
+if ($resep->harga_kustom){
+  $total_harga = $resep->harga_kustom;
+} else{
+  for ($i = 0; $i < $jml_data; $i++) {
+    $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+  }
+  
+  foreach ($list_total_harga as $tot_harga) {
+    $total_harga += $tot_harga;
+  }
 }
 ?>
 <!-- Main content -->
@@ -107,11 +112,13 @@ foreach ($list_total_harga as $tot_harga) {
             </div>
             <?php } ?>
             <div class="text-center" style=" border-top: 3px solid #01A9AC;border-bottom: 0.5px solid #01A9AC;">
+            <?php if($resep->dikirim)  { ?>
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Biaya Pengiriman</div>
                 <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?></div>
               </div>
             </div>
+            <?php } ?>
             <div class="text-center" style=" border-bottom: 0.5px solid #01A9AC;">
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Biaya Obat</div>
@@ -121,7 +128,11 @@ foreach ($list_total_harga as $tot_harga) {
             <div class="text-center">
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Total Harga</div>
+                <?php if($resep->dikirim)  { ?>
                 <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga += $resep->biaya_pengiriman, 2, ',', '.'); ?></div>
+                <?php }else { ?>
+                <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
+                <?php } ?>
               </div>
             </div>
           </div>
@@ -141,11 +152,8 @@ foreach ($list_total_harga as $tot_harga) {
                         <?php if (!$bukti_pembayaran_obat || $bukti_pembayaran_obat->status == 2) { ?>
                           <select class="form-control form-select-bayar  col-10" name="metode_pembayaran" id="metode-pembayaran">
                             <option value="0" selected>Pilih Metode</option>
-                            <option value="1">Transfer Bank (Virtual Account)</option>
-                            <option value="2">Transfer Bank (Upload Manual)</option>
-                            <option value="3">Dompet Digital</option>
+                            <option value="2">Upload Manual</option>
                             <option value="4">Owlexa</option>
-                            <option value="5">Credit Card / Debit Card</option>
                           </select>
                         <?php } else { ?>
                           <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran_obat->metode_pembayaran == 3 ? "Virtual Account" : ($bukti_pembayaran_obat->metode_pembayaran == 4 ? "Dompet Digital" : "Credit Card / Debit Card"))); ?></p>
@@ -199,18 +207,6 @@ foreach ($list_total_harga as $tot_harga) {
                           <div class="row">
                           <p class="text-abu mt-2">:&nbsp&nbsp</p>
                           <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran_obat->payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->payment_name ?>"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <?php } ?>
-                  <?php if($bukti_pembayaran_obat->status == 0 && ($bukti_pembayaran_obat->id_payment == 4 || $bukti_pembayaran_obat->id_payment == 5 || $bukti_pembayaran_obat->id_payment == 6)){ ?>
-                    <div class="col-md-11">
-                      <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-3 mt-2 text-abu">Link Pembayaran</label>
-                        <div class="col-md-7 col-8">
-                          <div class="row">
-                            <p class="text-abu">:&nbsp</p> <a target="_blank" href="<?php echo $bukti_pembayaran_obat->va_number ?>" class="btn btn-sm bg-tele text-white">LINK PEMBAYARAN</a>
                           </div>
                         </div>
                       </div>
@@ -322,7 +318,7 @@ foreach ($list_total_harga as $tot_harga) {
                       <div class="form-check mb-4">
                         <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
                         <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
-                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata">Bank <?php echo $manual_payment->payment ?>
+                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"><?php echo $manual_payment->payment ?>
                         </label>
                       </div>
                     <?php } ?>

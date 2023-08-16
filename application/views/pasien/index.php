@@ -332,6 +332,18 @@
   </div>
 </div>
 
+<script>
+  var baseUrl = "<?php echo base_url() ?>";
+  if (document.referrer.toLowerCase() == baseUrl + 'login') {
+    <?php if ($data_not_complete) { ?>
+      confirm("Kami menyarankan untuk lengkapi data pendaftaran terlebih dahulu. Apa anda ingin melengkapi data pendaftaran?");
+      if (confirm) {
+        window.location.href = "<?php echo base_url('pasien/Profile/edit') ?>";
+      }
+    <?php } ?>
+  }
+</script>
+
 <style>
   .col-md-4 {
     padding-right: 0px!important;

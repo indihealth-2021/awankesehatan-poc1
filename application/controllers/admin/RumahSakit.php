@@ -228,6 +228,13 @@ class RumahSakit extends CI_Controller
             redirect(base_url('admin/RumahSakit/manage_rs'));
         }
 
+        $currentLogo = $this->db->query('SELECT logo FROM master_rs WHERE id = '.$id_rs)->row()->logo;
+        $file_path = './assets/images/logo/'.$currentLogo;
+
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+
         $this->all_model->update('master_rs', [
             "lat" => $lat,
             "lng" => $long,
@@ -243,7 +250,7 @@ class RumahSakit extends CI_Controller
             $this->upload->initialize($config);
             $this->upload->overwrite = true;
 
-            if ( ! $this->upload->do_upload('logo')){
+            if (!$this->upload->do_upload('logo')){
                 $error = array('error' => $this->upload->display_errors());
                 $this->session->set_flashdata('msg', 'Upload Foto Gagal!');
                 redirect(base_url('admin/RumahSakit/manage_rs'));

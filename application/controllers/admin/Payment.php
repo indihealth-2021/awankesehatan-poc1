@@ -53,7 +53,7 @@ class Payment extends CI_Controller
 			$title = "Verifikasi Pembayaran",
 			$view = "admin/manage_payment"
 		);
-		
+
 		$temp = $this->payment_model->get_dataPayment(array('data_registrasi.id_status_pembayaran' => 2, 'bukti_pembayaran.metode_pembayaran' => 1, 'bukti_pembayaran.status' => 0), 'bukti_pembayaran.created_at');
 		$master_web = $this->db->query('SELECT * FROM master_web')->row();
 		foreach ($temp as $key => $value) {
@@ -163,7 +163,7 @@ var alt = $(this).attr('alt');
 	});
 });
 });
-</script> 
+</script>
 							<script src='" . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . "'></script>
 							<script src='" . base_url('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') . "'></script>
 							<script src='" . base_url('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') . "'></script>
@@ -486,6 +486,13 @@ var alt = $(this).attr('alt');
 		// echo var_dump($data3);
 		// die;
 		$id_jadwal_konsultasi = $this->db->insert_id();
+
+		$this->db->update($table="biaya_pengiriman_obat",$set=[
+			"id_jadwal_konsultasi" => $id_jadwal_konsultasi
+		],$where=[
+			"id_registrasi" => $bukti[0]->id_registrasi
+		]);
+
 		$assesment = $this->db->query('SELECT assesment.* FROM assesment INNER JOIN jadwal_konsultasi ON assesment.id_jadwal_konsultasi = jadwal_konsultasi.id WHERE assesment.id_pasien = ' . $bukti[0]->id_pasien . ' ORDER BY assesment.created_at DESC')->row();
 		$dokter = $this->db->query('SELECT id,name FROM master_user WHERE id = ' . $jadwal->id_dokter)->row();
 		// if ($assesment) {

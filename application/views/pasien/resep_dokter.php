@@ -41,7 +41,6 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach($list_resep as $idx => $resep){?>
-                                        <?php if($resep->status_bukti != 1){ ?>
                                             <tr>        
                                                 <td class="text-center"><?php echo $idx+1 ?></td>
                                                 <td>
@@ -56,34 +55,44 @@
                                                     $jml_data = count($list_harga_obat);
                                                     $list_total_harga = [];
                                                     $total_harga = 0;
-                                                    for($i=0; $i<$jml_data; $i++){
-                                                        $list_total_harga[$i] = ( $list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i] ) * $list_harga_obat[$i];
-                                                    }
-
-                                                    foreach($list_total_harga as $tot_harga){
-                                                        $total_harga+=$tot_harga;
+                                                    if ($resep->harga_kustom){
+                                                      $total_harga = $resep->harga_kustom;
+                                                    } else{
+                                                      for ($i = 0; $i < $jml_data; $i++) {
+                                                        $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                                                      }
+                                                      
+                                                      foreach ($list_total_harga as $tot_harga) {
+                                                        $total_harga += $tot_harga;
+                                                      }
                                                     }
                                                     $total_harga+=$resep->biaya_pengiriman;
                                                 ?>
                                                 <td><?php echo 'Rp. '.number_format($total_harga,2,',','.'); ?></td>
                                                 <td><?php echo $resep->nama_dokter ?></td>    
                                                 <?php 
-                                                    // if($resep->diverifikasi_user == 1){
                                                       if($resep->status_bukti != null){
                                                         if($resep->status_bukti){
-                                                            $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
-                                                            $button = 'Lunas';
-                                                            $warna = 'lunas';
+                                                            if ($resep->order_status == 1 && !$resep->diterima){
+                                                              $directLink = base_url('pasien/ResepDokter/lacak/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Lacak';
+                                                              $warna = 'simpan';
+                                                            } else {
+                                                              $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Lunas';
+                                                              $warna = 'simpan';
+                                                            }
                                                         }
                                                         else{
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);$button = 'Sedang Diroses';
+                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                          $button = 'Sedang Diproses';
                                                           $warna = 'simpan';
                                                         }
                                                     }
                                                     else{
                                                       $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
-                                                        $button = 'Bayar';
-                                                        $warna = 'bayar';
+                                                      $button = 'Bayar';
+                                                      $warna = 'simpan';
                                                     }
                                                 ?>
                                                 <td class='text-center'>
@@ -108,7 +117,6 @@
                                                 <?php } ?> -->
                                                 </td>                              
                                             </tr>
-                                        <?php } ?>
                                     </tbody>
                                     </table>
               </div> 

@@ -54,7 +54,7 @@
                      <td colspan="5">
 
                        <span>Tanggal Konsultasi</span><br>
-                       <?php $tanggal = new DateTime($resep->tanggal_konsultasi);
+                       <?php $tanggal = new DateTime($resep->konsultasi_date);
                         echo $tanggal->format('d-m-Y H:i:s'); ?>
                      </td>
                      <td>

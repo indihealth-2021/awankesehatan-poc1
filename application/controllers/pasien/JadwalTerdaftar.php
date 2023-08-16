@@ -158,6 +158,7 @@ class JadwalTerdaftar extends CI_Controller {
         }
         else{
             $this->db->delete('data_registrasi', array('id'=>$id_registrasi));
+            $this->db->delete('jadwal_konsultasi', array('id_registrasi'=>$id_registrasi));
             $this->session->set_flashdata("msg_jadwal_terdaftar", "Pendaftaran dibatalkan!");
             redirect(base_url('pasien/JadwalTerdaftar'));
         }

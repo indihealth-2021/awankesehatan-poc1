@@ -161,6 +161,7 @@ class Pendaftaran extends CI_Controller {
         // $hari_dokter = new DateTime($hari_dokter);
         $spare_waktu_jd = explode('-', str_replace(' ', '', $jadwal_dokter->waktu));
         $jadwal_konsultasi = $this->db->query('SELECT jk.jam,jk.tanggal FROM jadwal_konsultasi jk INNER JOIN data_registrasi dreg ON jk.id_registrasi = dreg.id INNER JOIN jadwal_dokter jd ON dreg.id_jadwal = jd.id WHERE jd.id = '.$this->db->escape($jadwal_dokter->id).' ORDER BY jk.created_at DESC LIMIT 1')->row();
+        $terakhir_daftar = $this->db->query('SELECT jk.jam,jk.tanggal FROM jadwal_konsultasi jk INNER JOIN data_registrasi dreg ON jk.id_registrasi = dreg.id INNER JOIN jadwal_dokter jd ON dreg.id_jadwal = jd.id WHERE jk.id_pasien = '.$this->session->userdata('id_user').' ORDER BY jk.created_at DESC LIMIT 1')->row();
         // echo var_dump($hari_dokter.' '.$spare_waktu_jd[0]);
         // die;
         $jam_awal = new DateTime($hari_dokter.' '.$spare_waktu_jd[0]);
@@ -176,6 +177,19 @@ class Pendaftaran extends CI_Controller {
             redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
         }
 
+        if ($terakhir_daftar){
+            $last_day_konsultasi = new DateTime($terakhir_daftar->tanggal);
+            $today = new DateTime();
+            $three_days_later = clone $last_day_konsultasi;
+            $three_days_later->add(new DateInterval('P3D'));
+
+            if ($today < $three_days_later) {
+                $msg = 'Anda telah mendaftar konsultasi pada tanggal ' . $last_day_konsultasi->format('d F Y') . '. Anda bisa mendaftar kembali pada tanggal ' . $three_days_later->format('d F Y') . '.';
+                $this->session->set_flashdata('msg', $msg);
+                redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+            }
+        }
+
         $isRegistered = $this->db->query('SELECT id FROM data_registrasi WHERE id_pasien = '.$this->db->escape($id_pasien).' AND id_jadwal = '.$this->db->escape($id_jadwal))->row();
         if($isRegistered){
             $this->session->set_flashdata('msg', 'Anda tidak bisa mendaftar 2x dalam satu jadwal!');
@@ -183,6 +197,7 @@ class Pendaftaran extends CI_Controller {
         }
 
         if($jadwal_konsultasi){
+            
             $last_jam_konsultasi = new DateTime($jadwal_konsultasi->tanggal.' '.$jadwal_konsultasi->jam);
             $last_jam_konsultasi->modify('+30 minutes');
             // echo var_dump($last_jam_konsultasi);
@@ -274,6 +289,7 @@ class Pendaftaran extends CI_Controller {
             //     redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
             // }
         }
+
         $list_registrasi = $this->db->query('SELECT bukti_pembayaran.id FROM bukti_pembayaran INNER JOIN data_registrasi ON data_registrasi.id = bukti_pembayaran.id_registrasi WHERE data_registrasi.id_jadwal = '.$this->db->escape($id_jadwal).' AND bukti_pembayaran.status = 0')->result();
         foreach($list_registrasi as $registrasi){
             $diff_spare_last = $jam_awal->diff($jam_terakhir);
@@ -366,13 +382,13 @@ class Pendaftaran extends CI_Controller {
         if($regis){
             $this->session->set_flashdata('msg', 'Pendaftaran Berhasil! Segera lakukan pembayaran.');
 
-            // $data3 = array(
-            //     "id_dokter" => $jadwal->id_dokter,
-            //     "id_pasien" => $pasien->id,
-            //     "id_registrasi" => $id_registrasi,
-            //     "tanggal" => (new DateTime("now"))->format("Y-m-d"),
-            //     "jam" => (new DateTime("now"))->format("h:i"),
-            // );
+            $data3 = array(
+                "id_dokter" => $jadwal->id_dokter,
+                "id_pasien" => $pasien->id,
+                "id_registrasi" => $id_registrasi,
+                "tanggal" => (new DateTime("now"))->format("Y-m-d"),
+                "jam" => (new DateTime("now"))->format("h:i"),
+            );
             // $this->db->insert('jadwal_konsultasi', $data3);
         }
         else{

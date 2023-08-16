@@ -19,9 +19,12 @@
 
         <div class="row">
             <div class="col-md-12">
-                <p>
-                    <span>Status: Dikirim</span>
-                </p>
+                <div class="card card-5 p-2 px-4">
+                    <p>
+                        <span>Status:</span>
+                        <span>Dikirim</span>
+                    </p>
+                </div>
             </div>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalKonfirmasi">Konfirmasi</button>
             <!-- batas col-md-7 -->
@@ -47,10 +50,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 <!-- <script type="text/javascript" src="<?php echo base_url('assets/js/conference.js'); ?>"></script> -->
 <?php $foto_pasien = $pasien->foto ? base_url('assets/images/users/' . $pasien->foto) : base_url('assets/telemedicine/img/default.png'); ?>

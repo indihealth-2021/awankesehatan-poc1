@@ -389,7 +389,7 @@ class Pendaftaran extends CI_Controller {
                 "tanggal" => (new DateTime("now"))->format("Y-m-d"),
                 "jam" => (new DateTime("now"))->format("h:i"),
             );
-            $this->db->insert('jadwal_konsultasi', $data3);
+            // $this->db->insert('jadwal_konsultasi', $data3);
         }
         else{
             $this->session->set_flashdata('msg', 'Pendaftaran Gagal!');

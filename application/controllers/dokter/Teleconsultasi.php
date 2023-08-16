@@ -33,6 +33,9 @@ class Teleconsultasi extends CI_Controller
         $data['user'] = $this->all_model->select('master_user', 'row', 'id = ' . $this->session->userdata('id_user'));
         $data['title'] = 'Jadwal Telekonsultasi';
         $data['list_jadwal_konsultasi'] = $this->jadwal_telekonsultasi_model->get_all_by_id_dokter($this->session->userdata('id_user'));
+
+        // $data['list_jadwal_konsultasi'] = $this->db->query('SELECT jk.id, jk.tanggal, jk.jam, p.name AS nama_pasien, p.foto AS foto_pasien, p.id AS id_pasien, n.poli, dr.id AS id_registrasi, dr.id_status_pembayaran FROM jadwal_konsultasi AS jk INNER JOIN master_user AS p ON jk.id_pasien = p.id INNER JOIN master_user AS d ON jk.id_dokter = d.id INNER JOIN detail_dokter AS dd ON dd.id_dokter = d.id INNER JOIN data_registrasi AS dr ON dr.id = jk.id_registrasi INNER JOIN nominal AS n ON dd.id_poli = n.id WHERE jk.id_dokter = '.$this->session->userdata('id_user') . ' AND dr.id_status_pembayaran = 1 ORDER BY jk.tanggal, jk.jam ASC')->result();
+
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
 
 

@@ -161,7 +161,7 @@ class Pendaftaran extends CI_Controller {
         // $hari_dokter = new DateTime($hari_dokter);
         $spare_waktu_jd = explode('-', str_replace(' ', '', $jadwal_dokter->waktu));
         $jadwal_konsultasi = $this->db->query('SELECT jk.jam,jk.tanggal FROM jadwal_konsultasi jk INNER JOIN data_registrasi dreg ON jk.id_registrasi = dreg.id INNER JOIN jadwal_dokter jd ON dreg.id_jadwal = jd.id WHERE jd.id = '.$this->db->escape($jadwal_dokter->id).' ORDER BY jk.created_at DESC LIMIT 1')->row();
-        $terakhir_daftar = $this->db->query('SELECT jk.jam,jk.tanggal FROM jadwal_konsultasi jk INNER JOIN data_registrasi dreg ON jk.id_registrasi = dreg.id INNER JOIN jadwal_dokter jd ON dreg.id_jadwal = jd.id WHERE jk.id_pasien = '.$this->session->userdata('id_user').' ORDER BY jk.created_at DESC LIMIT 1')->row();
+        $terakhir_daftar = $this->db->query('SELECT bp.tanggal_konsultasi FROM bukti_pembayaran bp WHERE bp.id_pasien = '. $this->session->userdata('id_user').' ORDER BY bp.tanggal_konsultasi DESC LIMIT 1;')->row();
         // echo var_dump($hari_dokter.' '.$spare_waktu_jd[0]);
         // die;
         $jam_awal = new DateTime($hari_dokter.' '.$spare_waktu_jd[0]);

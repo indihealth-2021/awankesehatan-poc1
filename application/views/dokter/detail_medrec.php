@@ -122,6 +122,14 @@
                   <div class="col-md-10 col-10">
                       <p>: <?php echo '('.$rekam_medis->diagnosis_code.') '.$rekam_medis->diagnosis ?></p>
                   </div>
+                  <label class="col-md-2 col-4">Kronis</label>
+                  <div class="col-md-10 col-10">
+                      <?php if ($rekam_medis->kronis) { ?>
+                        <p>: Ya</p>
+                      <?php } else { ?>
+                        <p>: Tidak</p>
+                      <?php }?>
+                  </div>
                   <?php
                     $tanggal_lahir = new DateTime($rekam_medis->tanggal_lahir_pasien);
                     $tanggal_lahir = $tanggal_lahir->format('d-m-Y');

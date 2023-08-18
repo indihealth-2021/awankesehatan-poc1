@@ -101,7 +101,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     echo $resep->alamat_kustom ? $resep->alamat_pengiriman : '';                                                                                                                                             } ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalEditBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">Submit Biaya Pengiriman</button>
 
 
-            <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+            <?php $alamat_inputan = $resep->alamat_pengiriman; ?>
                             <button class="btn btn-kirim-biaya btnSubmit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->alamat_pengiriman ?: ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-tipe="submit" data-harga-obat="<?php echo $total_harga; ?>" data-harga-obat-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga, 2, ',', '.')); ?>" data-total-harga="<?php echo $total_harga + $biaya_pengiriman ?>" data-total-harga-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga + $biaya_pengiriman, 2, ',', '.')); ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-toggle="modal" data-alamat-inputan="<?php echo $alamat_inputan; ?>" data-target="#modalBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Kirim
                             </button>
@@ -148,7 +148,7 @@
                                   </input>
                                   <script>
                                   $("#alamat-inputan").val("<?php echo $alamat_inputan; ?>"); </script>
-                                  <?php $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;?>
+                                  <?php $alamat_inputan = $resep->alamat_pengiriman; ?>
                                   <!-- <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
                                   </textarea> -->
                                   <script>
@@ -238,7 +238,7 @@
                                   <?php
                                   // $alamat_inputan = $resep->alamat_jalan.", ".$resep->nama_kelurahan.", ".$resep->nama_kecamatan.", ".$resep->nama_kota.", ".$resep->nama_provinsi." ".$resep->kode_pos;
 
-                                  $alamat_inputan = (!empty($resep->alamat_kustom))? $resep->alamat_kustom : $resep->alamat_pengiriman;
+                                  $alamat_inputan = $resep->alamat_pengiriman;
                                   ?>
                                   <!-- <textarea class="form-control" id="alamat <?php echo $resep->id; ?>" name="alamat" placeholder="<?php echo $alamat_inputan ?>"><?php echo $alamat_inputan; ?>
                                   </textarea> -->

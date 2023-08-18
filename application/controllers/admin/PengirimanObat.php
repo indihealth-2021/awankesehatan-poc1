@@ -29,16 +29,11 @@ class PengirimanObat extends CI_Controller {
         $data_biaya_pengiriman = array(
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
-            'alamat_kustom'=>$alamat_kustom,
-            'alamat'=>$alamat
         );
 
         $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ".$id_jadwal_konsultasi)->row();
         if(!$biaya_pengiriman_isExists){
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-        }
-        else{
-            $this->all_model->update('biaya_pengiriman_obat', array('biaya_pengiriman'=>$biaya_pengiriman, 'alamat_kustom'=>$alamat_kustom, 'alamat'=>$alamat), array('id'=>$biaya_pengiriman_isExists->id));
         }
 
         $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
@@ -365,16 +360,11 @@ if(data.status == "OK"){
         $data_biaya_pengiriman = array(
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
-            'alamat_kustom'=>$alamat_kustom,
-            'alamat'=>$alamat
         );
 
         $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ".$id_jadwal_konsultasi)->row();
         if(!$biaya_pengiriman_isExists){
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-        }
-        else{
-            $this->all_model->update('biaya_pengiriman_obat', array('biaya_pengiriman'=>$biaya_pengiriman, 'alamat_kustom'=>$alamat_kustom, 'alamat'=>$alamat), array('id'=>$biaya_pengiriman_isExists->id));
         }
 
         $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();

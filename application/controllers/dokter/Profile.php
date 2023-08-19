@@ -207,28 +207,22 @@ class Profile extends CI_Controller {
 			$id   = $this->session->userdata('id_user');
 			$user = $this->db->query('SELECT foto FROM master_user WHERE id = '.$id)->row();
 
-			if(isset($_FILES['foto'])){
-				$config['upload_path']          = './assets/images/users';
-				$config['allowed_types']        = 'gif|jpg|png|jpeg|jfif';
-				$config['max_size']             = 10024;
-				// $config['max_width']            = 1024;
-				// $config['max_height']           = 768;
+			if (!empty($_FILES['foto']['name'])) {
+				$config['upload_path'] = './assets/images/users';
+				$config['allowed_types'] = 'gif|jpg|png|jpeg|jfif';
+				$config['max_size'] = 10024;
 				$config['file_name'] = 'userfoto_'.$this->session->userdata('id_user');
-
+	
 				$this->load->library('upload', $config);
 				$this->upload->initialize($config);
-				$this->upload->overwrite = TRUE;
-
-				if ( ! $this->upload->do_upload('foto')){
+				$this->upload->overwrite = true;
+	
+				if (!$this->upload->do_upload('foto')){
 					$error = array('error' => $this->upload->display_errors());
-					// echo var_dump($error);
-					// die;
-					$this->session->set_flashdata('msg', 'Upload Foto Gagal!');
-				}else{
+					$this->session->set_flashdata('msg', 'Upload Foto Gagal!');				
+				} else {
 					$data_foto = array('upload_data' => $this->upload->data());
-					$data['foto'] = $data_foto['upload_data']['file_name'];
-					// echo var_dump($data_foto);
-					// die;
+					$data_noxss['foto'] = $data_foto['upload_data']['file_name'];
 				}
 			}
 

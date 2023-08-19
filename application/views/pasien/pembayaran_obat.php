@@ -84,6 +84,16 @@ if ($resep->harga_kustom){
                     <p class="font-15"><?php echo $resep->id_registrasi ?></p>
                   </div>
                 </div>
+                <div class="col-md-5 col-12">
+                  <div class="">
+                    <p class="font-15 text-abu">Pengambilan Obat</p>
+                    <?php if($resep->dikirim)  { ?>
+                      <p class="font-15">Dikirim</p>
+                    <?php }else { ?>
+                      <p class="font-15">Diambil Sendiri</p>
+                    <?php } ?>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

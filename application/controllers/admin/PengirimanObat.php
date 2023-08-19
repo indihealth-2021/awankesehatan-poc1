@@ -29,16 +29,11 @@ class PengirimanObat extends CI_Controller {
         $data_biaya_pengiriman = array(
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
-            'alamat_kustom'=>$alamat_kustom,
-            'alamat'=>$alamat
         );
 
         $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ".$id_jadwal_konsultasi)->row();
         if(!$biaya_pengiriman_isExists){
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-        }
-        else{
-            $this->all_model->update('biaya_pengiriman_obat', array('biaya_pengiriman'=>$biaya_pengiriman, 'alamat_kustom'=>$alamat_kustom, 'alamat'=>$alamat), array('id'=>$biaya_pengiriman_isExists->id));
         }
 
         $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();
@@ -62,11 +57,11 @@ class PengirimanObat extends CI_Controller {
         $data['list_resep'] = $this->db->query("SELECT bukti_pembayaran.tanggal_konsultasi, biaya_pengiriman_obat.biaya_pengiriman, !(biaya_pengiriman_obat.alamat = '' OR biaya_pengiriman_obat.alamat IS NULL) AS dikirim, biaya_pengiriman_obat.alamat_kustom, biaya_pengiriman_obat.alamat as alamat_pengiriman, biaya_pengiriman_obat.harga_obat as harga_kustom, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, p.card_number as card_number , p.vip as pasien_is_vip, p.telp as telp_pasien, p.email as email_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('<li>',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>'  SEPARATOR '') as detail_obat, GROUP_CONCAT(resep_dokter.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(resep_dokter.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat FROM (resep_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 1 AND resep_dokter.id_apotek=".$user["id_apotek"]." GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY resep_dokter.created_at DESC")->result();
 
         // Filter dikirim = 1
-        for( $i = 0; $i < count($data["list_resep"]); $i ++ ) {
-            if($data["list_resep"][$i]->dikirim == 0) {
-                unset($data["list_resep"][$i]);
-            }
-        }
+        // for( $i = 0; $i < count($data["list_resep"]); $i ++ ) {
+        //     if($data["list_resep"][$i]->dikirim == 0) {
+        //         unset($data["list_resep"][$i]);
+        //     }
+        // }
 
         // 2023/8/5 - Changed from id_reg to jadwal_konsultasi
 
@@ -365,16 +360,11 @@ if(data.status == "OK"){
         $data_biaya_pengiriman = array(
             'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
             'biaya_pengiriman'=>$biaya_pengiriman,
-            'alamat_kustom'=>$alamat_kustom,
-            'alamat'=>$alamat
         );
 
         $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ".$id_jadwal_konsultasi)->row();
         if(!$biaya_pengiriman_isExists){
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-        }
-        else{
-            $this->all_model->update('biaya_pengiriman_obat', array('biaya_pengiriman'=>$biaya_pengiriman, 'alamat_kustom'=>$alamat_kustom, 'alamat'=>$alamat), array('id'=>$biaya_pengiriman_isExists->id));
         }
 
         $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = '.$id_jadwal_konsultasi)->row();

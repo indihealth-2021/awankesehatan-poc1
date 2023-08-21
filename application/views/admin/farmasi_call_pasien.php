@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="input-group">
-            <select class="custom-select" id="pasien" name="pasien">
+            <select class="custom-select" id="pasien-select" name="pasien">
               <option selected disabled>Pilih pasien...</option>
               <?php foreach($list_pasien as $pasien){ ?>
                 <?php 
@@ -28,7 +28,7 @@
               <?php } ?>
             </select>
             <div class="input-group-append">
-              <button class="btn bg-tele text-light" type="button" id="panggil-pasien" disabled>Panggil</button>
+              <button class="btn bg-tele text-light" type="button" id="farmasi-panggil-pasien" >Panggil</button>
             </div>
           </div>
         </div>
@@ -131,6 +131,25 @@
     chat_id = '';
 </script>
 <script type="text/javascript">
+
+  $('#farmasi-panggil-pasien').click(function(){
+    var value = $('#pasien-select').val();
+
+    if(value == null)
+    {
+      alert('Mohon pilih pasien yang akan dipanggil.')
+      return false;
+    }
+     firebase
+          .database()
+          .ref("farmasi/panggilan/"+value)
+          .set({
+           calling: 1,
+           message: "Panggilan dari Farmasi",
+           time: Date.now(),         
+             });
+    
+  })
     var room_name = '';
     function start_consultation(){
       name = '<?php echo $user->name; ?>';
@@ -172,7 +191,6 @@
                 api.executeCommand('password', '123456');
             });
         });
-
       function recordJitsi(e) {
           api.executeCommand('stopRecording', 'stream');
           var isRecording = e.getAttribute('data-is-recording');

@@ -271,8 +271,9 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     <p class="text-abu">Pengambilan Obat</p>
                   </div>
                   <div class="col-md-6">
-                    <select name="dikirim" id="dikirim" class="form-control form-select-bayar">
-                      <option value="0">Diambil sendiri</option>
+                    <select name="dikirim" required id="dikirim" class="form-control form-select-bayar">
+                      <option value="">-Pilih-</option>
+                      <option value="2">Diambil sendiri</option>
                       <option value="1">Dikirim</option>
                     </select>
                   </div>

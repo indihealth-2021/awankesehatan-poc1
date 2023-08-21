@@ -116,7 +116,7 @@
                                 if (count($list_jadwal_dokter) > 0) {
                                     foreach ($list_jadwal_dokter as $idx => $jadwal_dokter) {
                                         $foto = $jadwal_dokter['foto_dokter'] ? base_url('assets/images/users/' . $jadwal_dokter['foto_dokter']) : base_url('assets/dashboard/img/user.jpg');
-                                        $button = "<td class='text-center'><a class='btn btn-pilih' onclick=\"openModalAndRedirect('" . base_url('pasien/Pendaftaran/daftar?id_jadwal=' . $jadwal_dokter['id'] . '&token=' . $this->session->userdata("_token")) . "')\">Pilih</a></td>";
+                                        $button = "<td class='text-center'><a class='btn btn-pilih' onclick=\"openModalAndRedirect('" . base_url('pasien/Pendaftaran/daftar?id_jadwal=' . $jadwal_dokter['id'] . '&token=' . $this->session->userdata("_token")) . "','spinner-".$jadwal_dokter['id']."')\"><i style='display:none;' id='spinner-".$jadwal_dokter['id']."' class='fa fa-spinner fa-spin'></i>&nbsp;Pilih</a></td>";
                                         $nominal = $this->db->query('SELECT harga FROM nominal WHERE poli = "' . $jadwal_dokter["poli"] . '"')->row();
                                         echo "<tr>";
                                         echo "<td>" . ($idx + 1) . "</td>";
@@ -434,14 +434,34 @@
 } ?>
 
 <script>
-    function openModalAndRedirect(url) {
-        $('#tac_modal_daftar').modal('show');
-        $("#simpan_toc").on("click", function() {
-            window.location.href = url;
-        });
-        $("#batal_toc").on("click", function() {
-            $('#tac_modal_daftar').modal('hide');
-        });
+    function openModalAndRedirect(url,spinner) {
+        $('#'+spinner).show();
+
+        const form = new FormData();
+    form.append('userId', <?= $this->session->userdata("id_user")  ?>);
+        axios.post('<?= config_item('pg_api') ?>/owlexa/Api/plafonCheck', form)
+          .then(function (response) {
+             $('#'+spinner).hide();
+            if(response.data.data < 1000000)
+            {
+                alert('Tidak dapat melakukan pendaftaran konsultasi karena plafon tidak mencukupi, silahkan cek plafon anda kembali');
+                return false;
+            }
+
+            $('#tac_modal_daftar').modal('show');
+                $("#simpan_toc").on("click", function() {
+                    window.location.href = url;
+                });
+                $("#batal_toc").on("click", function() {
+                    $('#tac_modal_daftar').modal('hide');
+                });
+              
+            })
+          .catch(function (error) {
+                $('#'+spinner).hide();
+            alert('Tidak dapat terhubung ke endpoint payment. ');
+          });
+      
     }
     $(document).ready(function() {
         $('#toc_body').scroll(function(e) {

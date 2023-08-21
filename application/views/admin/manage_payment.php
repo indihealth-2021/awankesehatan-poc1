@@ -43,6 +43,7 @@
                           <th>Pasien</th>
                           <th>Biaya</th>
                           <th>Tanggal Upload</th>
+                          <th>Pengambilan Obat</th>
                           <th>Bukti Pembayaran</th>
                           <th>Aksi</th>
                           <th></th>
@@ -63,7 +64,8 @@
                               <td><?php echo 'Biaya Konsultasi: <span class="text-success">'.$biaya_konsultasi.'</span><br/><br/>Biaya Administrasi: <span class="text-success">'.$biaya_adm.'</span><br/><br/>Total Biaya: <span class="text-success">'.$data->total_biaya.'</span>'; ?></td>
                               <!-- <td><img data-toggle="modal" data-target="#myModal" style="width:100px; max-height: auto;" src="<?php echo $data->photo; ?>" alt="<?php //echo $data->photo ?>" class="myImg"></td> -->
                               
-                              <td width="18%"><?php $tanggal = new DateTime($data->tanggal_upload_pembayaran); echo $tanggal->format('d-m-Y H:i:s');  ?></td>
+                              <td width="18%"><?php $tanggal = new DateTime($data->tanggal_upload_pembayaran); echo $tanggal->format('d-m-Y H:i:s');  ?></td>  
+                              <td width="18%"><?php if($data->metode_pengambilan_obat == 1){ echo"<span class='badge badge-success'>Dikirim ke alamat</span>";} elseif($data->metode_pengambilan_obat){ echo"<span class='badge badge-info'>Ambil Sendiri</span>";}  ?></td>
                               <td>
                                 <!-- Button trigger modal -->
                                 <img data-toggle="modal" data-target="#exampleModal" width="88" height="61" src="<?php echo $data->photo; ?>" alt="<?php echo $data->photo ?>" class="myImg">

@@ -129,11 +129,13 @@
                   </div>
                   <label class="col-md-2 col-4">Kronis</label>
                   <div class="col-md-10 col-10">
-                      <?php if ($rekam_medis->kronis) { ?>
-                        <p>: Ya</p>
+                      <?php if ($rekam_medis->kronis == 1) { ?>
+                        <p>: Kronis</p>
+                      <?php } else if ($rekam_medis->kronis == 2) { ?>
+                        <p>: Akut</p>
                       <?php } else { ?>
                         <p>: Tidak</p>
-                      <?php }?>
+                      <?php } ?>
                   </div>
                   <?php
                     $tanggal_lahir = new DateTime($rekam_medis->tanggal_lahir_pasien);

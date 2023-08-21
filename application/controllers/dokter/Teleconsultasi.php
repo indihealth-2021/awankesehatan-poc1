@@ -374,6 +374,8 @@ class Teleconsultasi extends CI_Controller
 
         $data["id_registrasi"] = isset($data["id_registrasi"]) ?
             $data["id_registrasi"]  : $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
+            
+        $kronis = isset($data["kronis"]) ? $data["kronis"] : 0;    
 
         $data_diagnosis_dokter = array(
             "id_dokter" => $id_dokter,
@@ -381,7 +383,7 @@ class Teleconsultasi extends CI_Controller
             "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
             "id_registrasi" => $data['id_registrasi'],
             "diagnosis" => $data['diagnosis'],
-            "kronis" => $data['kronis'],
+            "kronis" => $kronis,
         );
         $diagnosis = $this->db->query('SELECT diagnosis,id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'] . ' AND id_pasien = ' . $data['id_pasien'])->row();
         if ($diagnosis) {

@@ -190,16 +190,15 @@
                                 <input type="hidden" name="id_registrasi" value="<?php echo $id_registrasi ?>" required>
                             </div>
                         </div>
-                        <p class="py-2 font-12">Penyakit Kronis</p>
                         <div class="col-md-12" id="tipepenyakit">
                             <div class="form-group row">
                                 <div class="form-check form-check-inline">
                                     <input name="kronis" class="form-check-input" type="radio" id="tipe-penyakit-2" value="1">
-                                    <label class="form-check-label" for="tipe-penyakit-1">Ya</label>
+                                    <label class="form-check-label" for="tipe-penyakit-1">Kronis</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input name="kronis" class="form-check-input" type="radio" id="tipe-penyakit-2" value="0">
-                                    <label class="form-check-label" for="tipe-penyakit-2">Tidak</label>
+                                    <input name="kronis" class="form-check-input" type="radio" id="tipe-penyakit-2" value="2">
+                                    <label class="form-check-label" for="tipe-penyakit-2">Akut</label>
                                 </div>
                             </div>
                         </div>

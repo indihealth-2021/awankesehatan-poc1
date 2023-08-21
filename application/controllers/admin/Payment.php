@@ -338,7 +338,7 @@ var alt = $(this).attr('alt');
 			if ($last_konsultasi->tanggal_dokter) {
 				$now = new DateTime('now');
 				$diff_reg_time = $now->diff(new DateTime($last_konsultasi->tanggal));
-				if ($dif_reg_time->invert) {
+				if ($diff_reg_time->invert) {
 					$tanggal = new DateTime($last_konsultasi->tanggal);
 					$tanggal = $tanggal->modify("+7 days");
 					$tanggal = $tanggal->format('Y-m-d');

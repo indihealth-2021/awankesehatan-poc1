@@ -190,16 +190,15 @@
                                 <input type="hidden" name="id_registrasi" value="<?php echo $id_registrasi ?>" required>
                             </div>
                         </div>
-                        <p class="py-2 font-12">Penyakit Kronis</p>
                         <div class="col-md-12" id="tipepenyakit">
                             <div class="form-group row">
                                 <div class="form-check form-check-inline">
                                     <input name="kronis" class="form-check-input" type="radio" id="tipe-penyakit-2" value="1">
-                                    <label class="form-check-label" for="tipe-penyakit-1">Ya</label>
+                                    <label class="form-check-label" for="tipe-penyakit-1">Kronis</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input name="kronis" class="form-check-input" type="radio" id="tipe-penyakit-2" value="0">
-                                    <label class="form-check-label" for="tipe-penyakit-2">Tidak</label>
+                                    <input name="kronis" class="form-check-input" type="radio" id="tipe-penyakit-2" value="2">
+                                    <label class="form-check-label" for="tipe-penyakit-2">Akut</label>
                                 </div>
                             </div>
                         </div>
@@ -330,22 +329,26 @@
                                                     <th scope="row">Tanggal Kunjungan</th>
                                                     <th>Tempat</th>
                                                     <th>Diagnosa</th>
-                                                    <th>Terapi/Obat</th>
+                                                    <th>Status</th>
+                                                    <th>Biaya</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php if ($history_diagnosa) { ?>
+                                                <?php foreach ($history_diagnosa as $diagnosa) { ?>
                                                 <tr>
-                                                    <th scope="row">01 Januari 1970</th>
-                                                    <td>RS Santo Borromeus</td>
-                                                    <td>Alergi</td>
-                                                    <td>Panadol</td>
+                                                    <th scope="row"><?php echo $diagnosa->admissionDate ?></th>
+                                                    <td><?php echo $diagnosa->providerName ?></td>
+                                                    <td><?php echo $diagnosa->diagnosis ?></td>
+                                                    <td><?php echo $diagnosa->claimStatus ?></td>
+                                                    <td><?php echo 'Rp. '. $diagnosa->chargeValue ?></td>
                                                 </tr>
-                                                <tr>
-                                                    <th scope="row">01 Januari 1970</th>
-                                                    <td>RS Santo Borromeus</td>
-                                                    <td>Alergi</td>
-                                                    <td>Panadol</td>
+                                                <?php } ?>
+                                                <?php } else { ?>
+                                                <tr>    
+                                                    <td colspan="5" align="center">Tidak ada riwayat pasien</td>
                                                 </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>

@@ -75,7 +75,7 @@
                                                         if($resep->status_bukti){
                                                             if ($resep->order_status == 1 && !$resep->diterima){
                                                               $directLink = base_url('pasien/ResepDokter/lacak/'.$resep->id_jadwal_konsultasi);
-                                                              $button = 'Lacak';
+                                                              $button = 'Terima Obat';
                                                               $warna = 'simpan';
                                                             } else {
                                                               $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);

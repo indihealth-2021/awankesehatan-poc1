@@ -150,7 +150,7 @@
         <div class="modal-footer">
           <div class="px-3">
             <button type="button" class="btn btn-batal-2" data-dismiss="modal">Batal</button>
-            <a href="" id="link-delete"><button type="submit" class="btn btn-simpan-2 buttonSave" id="saveBiayaPengiriman">Kirim</button></a>
+            <a href="<?php echo base_url('admin/PengirimanObat/kirim_obat/'.$resep->id_bukti) ?>" id="link-delete"><button type="button" class="btn btn-simpan-2 buttonSave" id="kirimObatManual">Kirim</button></a>
           </div>
         </div>
     </div>

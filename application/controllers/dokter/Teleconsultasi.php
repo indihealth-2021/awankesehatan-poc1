@@ -599,6 +599,36 @@ class Teleconsultasi extends CI_Controller
         $now = new DateTime('today');
         $data['pasien']->age = $birthDate->diff($now)->y;
         $data['user'] = $this->all_model->select('master_user', 'row', 'id = ' . $this->session->userdata('id_user'));
+        $curl = curl_init();
+
+        //GET HISTORY DIAGNOSA
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://test.owlexa.com/api/telemedicine/v2/claim-transaction-history',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Api-Key: VO6v8Id9eqEchgogLE1nDVFopJdnXxk9K/ZEm7xqX5I="
+            ),
+            CURLOPT_POSTFIELDS => json_encode(array(
+                'cardNumber' => $data['pasien']->card_number, 
+            ))
+        ));
+
+        $result = curl_exec($curl);
+        $result = json_decode($result);
+
+        curl_close($curl);
+
+        if ($result){
+            $data['history_diagnosa'] = $result->data;
+        }
+
         $data['title'] = 'Telekonsultasi';
         $data['css_addons'] = '
           <link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">
@@ -840,5 +870,40 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
         ";
         $data['diagnoses'] = $this->db->query('SELECT * FROM master_diagnosa WHERE aktif = 1')->result();
         $this->load->view('template', $data);
+    }
+
+    public function history_diagnosa(){
+        $curl = curl_init();
+
+        //GET HISTORY DIAGNOSA
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://test.owlexa.com/api/telemedicine/v2/claim-transaction-history',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Api-Key: VO6v8Id9eqEchgogLE1nDVFopJdnXxk9K/ZEm7xqX5I="
+            ),
+            CURLOPT_POSTFIELDS => json_encode(array(
+                'cardNumber' => '1000620030004536', 
+            ))
+        ));
+
+        $result = curl_exec($curl);
+        $result = json_decode($result);
+
+        curl_close($curl);
+
+        if ($result){
+            $data['history_diagnosa'] = $result->data;
+            echo json_encode($data['history_diagnosa']);
+        } else {
+            echo 'tidak ada result';
+        }
     }
 }

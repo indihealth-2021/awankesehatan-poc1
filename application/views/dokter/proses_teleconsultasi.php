@@ -329,22 +329,26 @@
                                                     <th scope="row">Tanggal Kunjungan</th>
                                                     <th>Tempat</th>
                                                     <th>Diagnosa</th>
-                                                    <th>Terapi/Obat</th>
+                                                    <th>Status</th>
+                                                    <th>Biaya</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php if ($history_diagnosa) { ?>
+                                                <?php foreach ($history_diagnosa as $diagnosa) { ?>
                                                 <tr>
-                                                    <th scope="row">01 Januari 1970</th>
-                                                    <td>RS Santo Borromeus</td>
-                                                    <td>Alergi</td>
-                                                    <td>Panadol</td>
+                                                    <th scope="row"><?php echo $diagnosa->admissionDate ?></th>
+                                                    <td><?php echo $diagnosa->providerName ?></td>
+                                                    <td><?php echo $diagnosa->diagnosis ?></td>
+                                                    <td><?php echo $diagnosa->claimStatus ?></td>
+                                                    <td><?php echo 'Rp. '. $diagnosa->chargeValue ?></td>
                                                 </tr>
-                                                <tr>
-                                                    <th scope="row">01 Januari 1970</th>
-                                                    <td>RS Santo Borromeus</td>
-                                                    <td>Alergi</td>
-                                                    <td>Panadol</td>
+                                                <?php } ?>
+                                                <?php } else { ?>
+                                                <tr>    
+                                                    <td colspan="5" align="center">Tidak ada riwayat pasien</td>
                                                 </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>

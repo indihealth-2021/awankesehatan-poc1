@@ -87,7 +87,7 @@ if ($resep->harga_kustom){
                 <div class="col-md-5 col-12">
                   <div class="">
                     <p class="font-15 text-abu">Pengambilan Obat</p>
-                    <?php if($resep->dikirim)  { ?>
+                    <?php if($resep->dikirim == 1)  { ?>
                       <p class="font-15">Dikirim</p>
                     <?php }else { ?>
                       <p class="font-15">Diambil Sendiri</p>
@@ -101,7 +101,7 @@ if ($resep->harga_kustom){
         <div style="background: #FFF;border: 1px solid #DEDEDE" class="shadow-sm rounded">
 
           <div class="d-mobile-none_">
-            <?php if($resep->dikirim)  { ?>
+            <?php if($resep->dikirim == 1)  { ?>
               <div class="row p-4">
               <div class="col-md-8">
               <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-map-marker pr-2" style="color: #01A9AC"></span>Alamat Tujuan Pengiriman</h4>
@@ -122,7 +122,7 @@ if ($resep->harga_kustom){
             </div>
             <?php } ?>
             <div class="text-center" style=" border-top: 3px solid #01A9AC;border-bottom: 0.5px solid #01A9AC;">
-            <?php if($resep->dikirim)  { ?>
+            <?php if($resep->dikirim == 1)  { ?>
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Biaya Pengiriman</div>
                 <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?></div>
@@ -138,7 +138,7 @@ if ($resep->harga_kustom){
             <div class="text-center">
               <div class="row p-2 py-3">
                 <div class="col-md-8 text-right">Total Harga</div>
-                <?php if($resep->dikirim)  { ?>
+                <?php if($resep->dikirim == 1)  { ?>
                 <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga += $resep->biaya_pengiriman, 2, ',', '.'); ?></div>
                 <?php }else { ?>
                 <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
@@ -297,10 +297,10 @@ if ($resep->harga_kustom){
               <div class="row pl-5">
                 <div class="col-md-11" id="transfer_va">
                   <div class="form-group row">
-                    <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Bank</label>
+                    <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu"></label>
                     <div class="col-md-7 col-6">
                       <div class="row">
-                        <p class="text-abu mt-2">:&nbsp</p>
+                        <p class="text-abu mt-2"></p>
                         <div class="pl-3 mt-2">
                         <?php foreach($list_bank_va as $bank_va){ ?>
                           <div class="form-check mb-4">
@@ -319,10 +319,10 @@ if ($resep->harga_kustom){
             </form>
             <div class="col-md-11" id="transfer_manual">
               <div class="form-group row">
-                <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu">Pilih Bank</label>
+                <label for="metode-pembayaran" class="col-md-3 col-4 mt-2 text-abu"></label>
                 <div class="col-md-7 col-6">
                   <div class="row">
-                    <p class="text-abu mt-2">:&nbsp</p>
+                    <p class="text-abu mt-2"></p>
                     <div class="pl-3 mt-2">
                     <?php foreach($list_manual_payment as $manual_payment){ ?>
                       <div class="form-check mb-4">

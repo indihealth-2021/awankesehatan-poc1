@@ -1040,6 +1040,7 @@ class Pembayaran extends CI_Controller
                 'id_dokter' => $this->input->post('id_dokter'),
                 'id_pasien' => $this->session->userdata('id_user'),
                 'id_registrasi' => $this->input->post('regid'),
+                'metode_pengambilan_obat' => $this->input->post('dikirim'),
                 'id_payment' => $this->input->post('bank_id'),
                 'photo' => $this->upload->data('file_name'),
                 'biaya_adm' => $biaya_adm,

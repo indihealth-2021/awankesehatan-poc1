@@ -849,7 +849,6 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
                                 .ref(JSON.parse(payload.data.body).chat_id)
                                 .remove().then(function() {
 										console.log('SUKSES Hapus Chat');
-										location.href = '" . base_url('dokter/Teleconsultasi') . "';
 										api.executeCommand('stopRecording', {
 											mode: 'file' //recording mode to stop, `stream` or `file`
 										});
@@ -858,6 +857,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
 								});
                         }
                     });
+                    location.href = '" . base_url('dokter/Teleconsultasi') . "';
                 },
                 error : function(request, status, error){
                     console.log(request);

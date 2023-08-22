@@ -459,7 +459,12 @@
             })
           .catch(function (error) {
                 $('#'+spinner).hide();
-            alert('Tidak dapat terhubung ke endpoint payment. ');
+                console.log(error.response.data.msg)
+            if(error.response.data.msg == "Data tidak ditemukan")
+            {
+                alert("Akun anda belum terdaftar di Owlexa");
+
+            }
           });
       
     }

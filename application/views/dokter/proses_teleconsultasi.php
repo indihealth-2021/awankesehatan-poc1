@@ -329,7 +329,7 @@
                                                     <th scope="row">Tanggal Kunjungan</th>
                                                     <th>Tempat</th>
                                                     <th>Diagnosa</th>
-                                                    <th>Status</th>
+                                                    <th>Obat</th>
                                                     <th>Biaya</th>
                                                 </tr>
                                             </thead>
@@ -340,7 +340,8 @@
                                                     <th scope="row"><?php echo $diagnosa->admissionDate ?></th>
                                                     <td><?php echo $diagnosa->providerName ?></td>
                                                     <td><?php echo $diagnosa->diagnosis ?></td>
-                                                    <td><?php echo $diagnosa->claimStatus ?></td>
+                                                    <td><button class="btn btn-info" data-toggle="modal" data-target="#resep-obat-list">Detail</button></td>
+                                                    <!-- <td><?php echo $diagnosa->claimStatus ?></td> -->
                                                     <td><?php echo 'Rp. '. $diagnosa->chargeValue ?></td>
                                                 </tr>
                                                 <?php } ?>
@@ -710,6 +711,41 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="resep-obat-list" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Resep Obat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <table class="table table-stripped table-bordered">
+        <thead>
+            <th>Nama obat</th>
+            <th>Jumlah</th>
+            <th>Keterangan</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Amoxilin</td>
+                <td>1 Strip</td>
+                <td>1x2 Setelah makan</td>
+            </tr> 
+            <tr>
+                <td>Vit C </td>
+                <td>1 Strip</td>
+                <td>1x1 Setelah makan</td>
+            </tr>
+        </tbody>
+       </table>
+      </div>
+   
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
     function makeid(length) {

@@ -177,18 +177,18 @@ class Pendaftaran extends CI_Controller {
             redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
         }
 
-        if ($terakhir_daftar){
-            $last_day_konsultasi = new DateTime($terakhir_daftar->tanggal);
-            $today = new DateTime();
-            $three_days_later = clone $last_day_konsultasi;
-            $three_days_later->add(new DateInterval('P3D'));
+        // if ($terakhir_daftar){
+        //     $last_day_konsultasi = new DateTime($terakhir_daftar->tanggal);
+        //     $today = new DateTime();
+        //     $three_days_later = clone $last_day_konsultasi;
+        //     $three_days_later->add(new DateInterval('P3D'));
 
-            if ($today < $three_days_later) {
-                $msg = 'Anda telah mendaftar konsultasi pada tanggal ' . $last_day_konsultasi->format('d F Y') . '. Anda bisa mendaftar kembali pada tanggal ' . $three_days_later->format('d F Y') . '.';
-                $this->session->set_flashdata('msg', $msg);
-                redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
-            }
-        }
+        //     if ($today < $three_days_later) {
+        //         $msg = 'Anda telah mendaftar konsultasi pada tanggal ' . $last_day_konsultasi->format('d F Y') . '. Anda bisa mendaftar kembali pada tanggal ' . $three_days_later->format('d F Y') . '.';
+        //         $this->session->set_flashdata('msg', $msg);
+        //         redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+        //     }
+        // }
 
         $isRegistered = $this->db->query('SELECT id FROM data_registrasi WHERE id_pasien = '.$this->db->escape($id_pasien).' AND id_jadwal = '.$this->db->escape($id_jadwal))->row();
         if($isRegistered){

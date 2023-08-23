@@ -127,6 +127,18 @@ class Pembayaran extends CI_Controller
         $('#form-transfer-manual').attr('action', href_btn+'/'+this.value+'/');
     });
 
+    $('#select-alamat').hide();
+      $('#label-select-alamat').hide();
+      $('select#dikirim').on('change', function() {
+        if(this.value == '1') {
+          $('#select-alamat').show();
+          $('#label-select-alamat').show();
+        }else {
+          $('#select-alamat').hide();
+          $('#label-select-alamat').hide();
+        }
+      });
+
     $('select[name=metode_pembayaran]').change(function(e){
         $('#btnBayar').off('click');
         alamat_lain = '';
@@ -267,63 +279,6 @@ class Pembayaran extends CI_Controller
                 // }
             });
         }else if(this.value == '4'){
-            $.ajax({
-                method : 'GET',
-                url : baseUrl+'pasien/Pembayaran/get_toc',
-                success : function(data){
-                    data = JSON.parse(data);
-                    if(data.code == 200){
-                        $('#tac_modal_owlexa').modal('show');
-                        $('#tac_checkbox_owlexa').prop('disabled', true);
-                        $('#simpan_tac_owlexa').prop('disabled', true);
-                        $('#tac_checkbox_owlexa').prop('checked', false);
-                        $('#simpan_tac_owlexa').prop('disabled', true);
-                        $('#simpan_tac_owlexa').removeClass('btn-primary').addClass('btn-secondary');
-
-                        $('#tac_body_owlexa').empty();
-                        $.each(data.data, function(key, value){
-                            $('#tac_body_owlexa').append(value+'<br/>');
-                        });
-
-                        $('#tac_body_owlexa').html();
-                        $('#tac_body_owlexa').scroll(function(e){
-                          if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                              $('#tac_checkbox_owlexa').prop('disabled', false);
-                          }
-                        });
-                        $('#tac_checkbox_owlexa').change(function(e){
-                          if(this.checked){
-                            $('#simpan_tac_owlexa').prop('disabled', false);
-                            $('#simpan_tac_owlexa').removeClass('btn-secondary').addClass('btn-primary');
-                          }
-                          else{
-                            $('#simpan_tac_owlexa').prop('disabled', true);
-                            $('#simpan_tac_owlexa').removeClass('btn-primary').addClass('btn-secondary');
-                          }
-                        });
-
-                        $('#simpan_tac_owlexa').click(function(e){
-                          $('#tac_modal_owlexa').modal('hide');
-                        });
-
-                        $('#batal_tac_owlexa').click(function(e){
-                            $('#tac_modal_owlexa').modal('hide');
-
-                            $('#form-owlexa').hide();
-                            $('#transfer_va').hide();
-                            $('#transfer_manual').hide();
-                            $('#dompet_digital').hide();
-                            $('#cc_debit').hide();
-                            $('select[name=metode_pembayaran]').val(0);
-                        })
-                    }else{
-                        console.log(data.message);
-                    }
-                },
-                error : function(data){
-                    console.log(data);
-                }
-            });
             $('#form-owlexa').show();
             $('#transfer_va').hide();
             $('#transfer_manual').hide();

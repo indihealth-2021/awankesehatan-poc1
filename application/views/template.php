@@ -818,22 +818,6 @@
   }
   ?>
 
-  <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
-    <script>
-      $("#select-alamat").hide();
-      $("#label-select-alamat").hide();
-      $('select#dikirim').on('change', function() {
-        if(this.value == "1") {
-          $("#select-alamat").show();
-          $("#label-select-alamat").show();
-        }else {
-          $("#select-alamat").hide();
-          $("#label-select-alamat").hide();
-        }
-      });
-    </script>
-  <?php } ?>
-
  <!--  <script>
     $.widget.bridge('uibutton', $.ui.button)
   </script> -->

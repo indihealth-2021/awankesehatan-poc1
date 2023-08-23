@@ -77,6 +77,10 @@
                                                               $directLink = base_url('pasien/ResepDokter/lacak/'.$resep->id_jadwal_konsultasi);
                                                               $button = 'Terima Obat';
                                                               $warna = 'simpan';
+                                                            } else if ($resep->order_status == 1 && $resep->diterima){
+                                                              $directLink = base_url('pasien/ResepDokter/lacak/'.$resep->id_jadwal_konsultasi);
+                                                              $button = 'Diterima';
+                                                              $warna = 'simpan';
                                                             } else {
                                                               $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
                                                               $button = 'Lunas';
@@ -84,7 +88,7 @@
                                                             }
                                                         }
                                                         else{
-                                                          $directLink = base_url('pasien/ResepDokter/pembayaran/'.$resep->id_jadwal_konsultasi);
+                                                          $directLink = base_url('pasien/ResepDokter/lacak/'.$resep->id_jadwal_konsultasi);
                                                           $button = 'Sedang Diproses';
                                                           $warna = 'simpan';
                                                         }

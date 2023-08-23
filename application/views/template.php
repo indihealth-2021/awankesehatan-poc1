@@ -482,9 +482,6 @@
                   userFiles.forEach(function(file) {
                     var card = document.createElement('div');
                     card.className = 'card';
-                    card.onclick = function() {
-                      window.open('<?php echo base_url("assets/files/file_pemeriksaan_luar/") ?>' + file.path_file, '_blank');
-                    };
                     var cardBody = document.createElement('div');
                     cardBody.className = 'card-body';
                     var cardTitle = document.createElement('h5');
@@ -495,7 +492,8 @@
                     cardButton.className = 'btn btn-primary btn-sm';
                     cardButton.textContent = 'Lihat File';
                     cardButton.onclick = function() {
-                      window.open('<?php echo base_url("assets/files/file_pemeriksaan_luar/") ?>' + file.path_file, '_blank');
+                      var filePath = baseUrl + 'assets/files/file_pemeriksaan_luar/' + file.path_file;
+                      window.open(filePath, '_blank');
                     }
                     cardBody.appendChild(cardTitle);
                     cardBody.appendChild(cardDescription);

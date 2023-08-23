@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class PengirimanObat extends CI_Controller {
 	var $menu = 6;
+    private $bingMapsAPIKey = "AuPkBhRU1tlp5gG2Vki8-LpP7ooPssnBv_MQ_u1BNoPXIWZiY7AF_3BVvpLQz7XC";
 
 	public function __construct() {
         parent::__construct();
@@ -551,5 +552,47 @@ if(data.status == "OK"){
 
         $this->session->set_flashdata('msg_kirim_obat', 'SUKSES: Resep obat telah dikirim!');
         redirect(base_url('admin/PengirimanObat/status_resep'));
+    }
+
+    private function approximateLocation($query) {
+		# docs: https://learn.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query#url-template
+		$base = "http://dev.virtualearth.net/REST/v1/Locations/".urlencode($query)."?o=json&key=".$this->bingMapsAPIKey;
+
+        $data = json_decode(file_get_contents($base), $associative=true)["resourceSets"][0];
+
+        if($data["estimatedTotal"] == 0) {
+            return 0;
+        }
+
+        return $data["resources"][0];
+	}
+
+    public function getOngkir(){
+        $this->all_controllers->check_user_farmasi();
+        $data = $this->input->post();  
+
+        $pengirim = $this->db->query('SELECT name, apotek_id FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
+
+        $apotek = $this->db->query('SELECT master_apotek.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan FROM master_apotek LEFT JOIN master_provinsi ON master_apotek.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_apotek.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_apotek.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_apotek.alamat_kelurahan = master_kelurahan.id WHERE master_apotek.id = '. $pengirim->apotek_id)->row();
+
+        //detail pengirim
+        $nama_pengirim = $pengirim->name;
+        $poi_pengirim = $apotek->nama;
+        $nomor_pengirim = $apotek->telp;
+        $alamat_pengirim = $apotek->alamat_jalan .', '. $apotek->nama_kelurahan.', '. $apotek->nama_kecamatan.', '. $apotek->nama_kota.', '. $apotek->nama_provinsi.', '. $apotek->kode_pos;
+        $lat_pengirim = $apotek->latitude;
+        $long_pengirim = $apotek->longitude;
+
+        //detail penerima
+        $nama_penerima = $data['nama_penerima'];
+        $telp_penerima = $data['telp_penerima'];
+        $alamat_penerima = $data['alamat'];
+
+        if (!$alamat_penerima) {
+            redirect(base_url('admin/PengirimanObat/'));
+        }
+        
+        //get penerima location coordinates
+        [$lat_penerima, $long_penerima] = $this->approximateLocation($alamat_penerima)["point"]["coordinates"];
     }
 }

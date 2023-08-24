@@ -569,66 +569,125 @@ if(data.status == "OK"){
 
     public function getOngkir(){
         $this->all_controllers->check_user_farmasi();
-        $data = $this->input->post();  
+        $data = $this->input->post(); 
 
-        $pengirim = $this->db->query('SELECT name, apotek_id FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
+        $pengirim = $this->db->query('SELECT name, id_apotek FROM master_user WHERE id = ' .$this->session->userdata('id_user'))->row();
 
-        $apotek = $this->db->query('SELECT master_apotek.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan FROM master_apotek LEFT JOIN master_provinsi ON master_apotek.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_apotek.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_apotek.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_apotek.alamat_kelurahan = master_kelurahan.id WHERE master_apotek.id = '. $pengirim->apotek_id)->row();
+        $apotek = $this->db->query('SELECT master_apotek.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan FROM master_apotek LEFT JOIN master_provinsi ON master_apotek.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_apotek.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_apotek.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_apotek.alamat_kelurahan = master_kelurahan.id WHERE master_apotek.id = '. $pengirim->id_apotek)->row();
 
-        //detail pengirim
-        $nama_pengirim = $pengirim->name;
-        $poi_pengirim = $apotek->nama;
-        $nomor_pengirim = $apotek->telp;
-        $alamat_pengirim = $apotek->alamat_jalan .', '. $apotek->nama_kelurahan.', '. $apotek->nama_kecamatan.', '. $apotek->nama_kota.', '. $apotek->nama_provinsi.', '. $apotek->kode_pos;
-        $lat_pengirim = $apotek->latitude;
-        $long_pengirim = $apotek->longitude;
-
-        //detail penerima
-        $nama_penerima = $data['nama_penerima'];
-        $telp_penerima = $data['telp_penerima'];
-        $alamat_penerima = $data['alamat'];
-        // $poi_penerima =
-        // $goods =
-
-        if (!$alamat_penerima) {
-            redirect(base_url('admin/PengirimanObat/'));
+        if (!$apotek){
+            $data = array(
+                'success' => false,
+                'message' => 'ERROR: Apotek tidak ditemukan!'
+            );
+            $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+        } else {
+            //detail pengirim
+            $nama_pengirim = $pengirim->name;
+            $poi_pengirim = $apotek->nama;
+            $nomor_pengirim = $apotek->telp;
+            $alamat_pengirim = $apotek->alamat_jalan .', '. $apotek->nama_kelurahan.', '. $apotek->nama_kecamatan.', '. $apotek->nama_kota.', '. $apotek->nama_provinsi.', '. $apotek->kode_pos;
+            $lat_pengirim = $apotek->latitude;
+            $long_pengirim = $apotek->longitude;
         }
-        
-        //get penerima location coordinates
-        [$lat_penerima, $long_penerima] = $this->approximateLocation($alamat_penerima)["point"]["coordinates"];
-    }
-
-    public function kirim_obat_jne($id_jadwal_konsultasi){
-        $this->all_controllers->check_user_farmasi();
-        // $data = $this->input->post();  
-
-        $pengirim = $this->db->query('SELECT name, apotek_id FROM master_user WHERE id = '.$this->session->userdata('id_user'))->row();
-
-        $apotek = $this->db->query('SELECT master_apotek.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan FROM master_apotek LEFT JOIN master_provinsi ON master_apotek.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_apotek.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_apotek.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_apotek.alamat_kelurahan = master_kelurahan.id WHERE master_apotek.id = '. $pengirim->apotek_id)->row();
-
-        //detail pengirim
-        $nama_pengirim = $pengirim->name;
-        $poi_pengirim = $apotek->nama;
-        $nomor_pengirim = $apotek->telp;
-        $alamat_pengirim = $apotek->alamat_jalan .', '. $apotek->nama_kelurahan.', '. $apotek->nama_kecamatan.', '. $apotek->nama_kota.', '. $apotek->nama_provinsi.', '. $apotek->kode_pos;
-        $lat_pengirim = $apotek->latitude;
-        $long_pengirim = $apotek->longitude;
 
         $penerima = $this->db->query("SELECT bukti_pembayaran.metode_pengambilan_obat AS dikirim,
-        bukti_pembayaran.tanggal_konsultasi, resep_dokter.id_jadwal_konsultasi, resep_dokter.created_at, p.name AS nama_pasien, p.telp AS telp_pasien, GROUP_CONCAT('<li>', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, biaya_pengiriman_obat.harga_obat AS harga_kustom, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat AS alamat_pengiriman FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $id_jadwal_konsultasi . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 GROUP BY resep_dokter.id_jadwal_konsultasi, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.created_at, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat ORDER BY resep_dokter.created_at DESC;")->row();
+        bukti_pembayaran.tanggal_konsultasi, resep_dokter.id_jadwal_konsultasi, resep_dokter.created_at, p.name AS nama_pasien, p.telp AS telp_pasien, GROUP_CONCAT('<li>', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, biaya_pengiriman_obat.harga_obat AS harga_kustom, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat AS alamat_pengiriman FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $data['id_jadwal_konsultasi'] . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 GROUP BY resep_dokter.id_jadwal_konsultasi, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.created_at, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat ORDER BY resep_dokter.created_at DESC;")->row();
 
-        if (!$penerima) {
-            redirect(base_url('admin/PengirimanObat/'));
+        if (!$penerima){
+            $data = array(
+                'success' => false,
+                'message' => 'ERROR: Data penerima tidak ditemukan!'
+            );
+            $this->output->set_content_type('application/json')->set_output(json_encode($data));
+        } else {
+            //detail penerima
+            $nama_penerima = $penerima->nama_pasien;
+            $telp_penerima = $penerima->telp_pasien;
+            $alamat_penerima = $penerima->alamat_pengiriman;
+            // $poi_penerima =
+            // $goods =
+
+            if (!$alamat_penerima) {
+                $data = array(
+                    'success' => false,
+                    'message' => 'ERROR: Resep ini diambil sendiri!'
+                );
+                $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+            }
+
+            //get penerima location coordinates
+            [$lat_penerima, $long_penerima] = $this->approximateLocation($alamat_penerima)["point"]["coordinates"];
+
+            if (!$lat_penerima || !$long_penerima) {
+                $data = array(
+                    'success' => false,
+                    'message' => 'ERROR: Alamat penerima tidak ditemukan!'
+                );
+                $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+            }
         }
+    }
 
-        //detail penerima
-        $nama_penerima = $penerima->nama_pasien;
-        $telp_penerima = $penerima->telp_pasien;
-        $alamat_penerima = $penerima->alamat_pengiriman;
-        // $poi_penerima =
-        // $goods =
+    public function kirim_obat_jne(){
+        $this->all_controllers->check_user_farmasi();
+        $data = $this->input->post(); 
+
+        $pengirim = $this->db->query('SELECT name, id_apotek FROM master_user WHERE id = ' .$this->session->userdata('id_user'))->row();
+
+        $apotek = $this->db->query('SELECT master_apotek.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan FROM master_apotek LEFT JOIN master_provinsi ON master_apotek.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_apotek.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_apotek.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_apotek.alamat_kelurahan = master_kelurahan.id WHERE master_apotek.id = '. $pengirim->id_apotek)->row();
+
+        if (!$apotek){
+            $data = array(
+                'success' => false,
+                'message' => 'ERROR: Apotek tidak ditemukan!'
+            );
+            $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+        } else {
+            //detail pengirim
+            $nama_pengirim = $pengirim->name;
+            $poi_pengirim = $apotek->nama;
+            $nomor_pengirim = $apotek->telp;
+            $alamat_pengirim = $apotek->alamat_jalan .', '. $apotek->nama_kelurahan.', '. $apotek->nama_kecamatan.', '. $apotek->nama_kota.', '. $apotek->nama_provinsi.', '. $apotek->kode_pos;
+            $lat_pengirim = $apotek->latitude;
+            $long_pengirim = $apotek->longitude;
+        }
         
-        //get penerima location coordinates
-        [$lat_penerima, $long_penerima] = $this->approximateLocation($alamat_penerima)["point"]["coordinates"];
+        $penerima = $this->db->query("SELECT bukti_pembayaran.metode_pengambilan_obat AS dikirim,
+        bukti_pembayaran.tanggal_konsultasi, resep_dokter.id_jadwal_konsultasi, resep_dokter.created_at, p.name AS nama_pasien, p.telp AS telp_pasien, GROUP_CONCAT('<li>', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )',' ( ', resep_dokter.keterangan, ' ) ', '</li>' SEPARATOR '') AS detail_obat, biaya_pengiriman_obat.harga_obat AS harga_kustom, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat AS alamat_pengiriman FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi LEFT JOIN bukti_pembayaran_obat bpo ON bpo.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi WHERE resep_dokter.id_jadwal_konsultasi = " . $data['id_jadwal_konsultasi'] . " AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 GROUP BY resep_dokter.id_jadwal_konsultasi, bukti_pembayaran.tanggal_konsultasi, diagnosis_dokter.id_registrasi, resep_dokter.created_at, biaya_pengiriman_obat.biaya_pengiriman, biaya_pengiriman_obat.alamat ORDER BY resep_dokter.created_at DESC;")->row();
+
+        if (!$penerima){
+            $data = array(
+                'success' => false,
+                'message' => 'ERROR: Data penerima tidak ditemukan!'
+            );
+            $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+        } else {
+            //detail penerima
+            $nama_penerima = $penerima->nama_pasien;
+            $telp_penerima = $penerima->telp_pasien;
+            $alamat_penerima = $penerima->alamat_pengiriman;
+            // $poi_penerima =
+            // $goods =
+
+            if (!$alamat_penerima) {
+                $data = array(
+                    'success' => false,
+                    'message' => 'ERROR: Resep ini diambil sendiri!'
+                );
+                $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+            }
+
+            //get penerima location coordinates
+            [$lat_penerima, $long_penerima] = $this->approximateLocation($alamat_penerima)["point"]["coordinates"];
+
+            if (!$lat_penerima || !$long_penerima) {
+                $data = array(
+                    'success' => false,
+                    'message' => 'ERROR: Alamat penerima tidak ditemukan!'
+                );
+                $this->output->set_content_type('application/json')->set_output(json_encode($data));;
+            }
+        }
     }
 }

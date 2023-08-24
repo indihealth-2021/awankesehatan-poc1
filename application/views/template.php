@@ -488,16 +488,14 @@
                     cardTitle.textContent = file.nama_file;
                     var cardDescription = document.createElement('p');
                     cardDescription.textContent = file.type_file;
-                    var cardButton = document.createElement('button');
-                    cardButton.className = 'btn btn-primary btn-sm';
-                    cardButton.textContent = 'Lihat File';
-                    cardButton.onclick = function() {
-                      var filePath = baseUrl + 'assets/files/file_pemeriksaan_luar/' + file.path_file;
-                      window.open(filePath, '_blank');
-                    }
+                    var cardLink = document.createElement('a');
+                    cardLink.className = 'btn btn-primary btn-sm';
+                    cardLink.textContent = 'Lihat File';
+                    cardLink.href = baseUrl + 'assets/files/file_pemeriksaan_luar/' + file.path_file;
+                    cardLink.target = '_blank';
                     cardBody.appendChild(cardTitle);
                     cardBody.appendChild(cardDescription);
-                    cardBody.appendChild(cardButton);
+                    cardBody.appendChild(cardLink);
                     card.appendChild(cardBody);
                     document.getElementById('file_asesmen').appendChild(card);
                   });

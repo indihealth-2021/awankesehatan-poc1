@@ -6,13 +6,13 @@ $jml_data = count($list_harga_obat);
 $list_total_harga = [];
 $total_harga = 0;
 
-if ($resep->harga_kustom){
+if ($resep->harga_kustom) {
   $total_harga = $resep->harga_kustom;
-} else{
+} else {
   for ($i = 0; $i < $jml_data; $i++) {
     $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
   }
-  
+
   foreach ($list_total_harga as $tot_harga) {
     $total_harga += $tot_harga;
   }
@@ -87,9 +87,9 @@ if ($resep->harga_kustom){
                 <div class="col-md-5 col-12">
                   <div class="">
                     <p class="font-15 text-abu">Pengambilan Obat</p>
-                    <?php if($resep->dikirim == 1)  { ?>
+                    <?php if ($resep->dikirim == 1) { ?>
                       <p class="font-15">Dikirim</p>
-                    <?php }else { ?>
+                    <?php } else { ?>
                       <p class="font-15">Diambil Sendiri</p>
                     <?php } ?>
                   </div>
@@ -101,50 +101,50 @@ if ($resep->harga_kustom){
         <div style="background: #FFF;border: 1px solid #DEDEDE" class="shadow-sm rounded">
 
           <div class="d-mobile-none_">
-            <?php if($resep->dikirim == 1)  { ?>
+            <?php if ($resep->dikirim == 1) { ?>
               <div class="row p-4">
-              <div class="col-md-8">
-              <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-map-marker pr-2" style="color: #01A9AC"></span>Alamat Tujuan Pengiriman</h4>
-              <p class="font-15 ml-3 border p-3">
-                <?php echo ucwords($user->name) ?> ( <?php echo $user->telp ? $user->telp:'-' ?> )<br/>
-                <?php echo $resep->alamat_pengiriman ?>
-                <br/><br/>
-              </p>
-              <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
+                <div class="col-md-8">
+                  <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-map-marker pr-2" style="color: #01A9AC"></span>Alamat Tujuan Pengiriman</h4>
+                  <p class="font-15 ml-3 border p-3">
+                    <?php echo ucwords($user->name) ?> ( <?php echo $user->telp ? $user->telp : '-' ?> )<br />
+                    <?php echo $resep->alamat_pengiriman ?>
+                    <br /><br />
+                  </p>
+                  <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
+                </div>
               </div>
-            </div>
-            <?php }else { ?>
+            <?php } else { ?>
               <div class="row p-4">
-              <div class="col-md-8">
-              <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-shopping-bag pr-2" style="color: #01A9AC"></span>Silahkan ambil obat di apotek setelah pembayaran</h4>
-              <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
+                <div class="col-md-8">
+                  <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-shopping-bag pr-2" style="color: #01A9AC"></span>Silahkan ambil obat di apotek setelah pembayaran</h4>
+                  <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
+                </div>
               </div>
-            </div>
             <?php } ?>
             <div class="text-center" style=" border-top: 3px solid #01A9AC;border-bottom: 0.5px solid #01A9AC;">
-            <?php if($resep->dikirim == 1)  { ?>
-              <div class="row p-2 py-3">
-                <div class="col-md-8 text-right">Biaya Pengiriman</div>
-                <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?></div>
-              </div>
+              <?php if ($resep->dikirim == 1) { ?>
+                <div class="row p-2 py-3">
+                  <div class="col-md-8 text-right">Biaya Pengiriman</div>
+                  <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?></div>
+                </div>
             </div>
-            <?php } ?>
-            <div class="text-center" style=" border-bottom: 0.5px solid #01A9AC;">
-              <div class="row p-2 py-3">
-                <div class="col-md-8 text-right">Biaya Obat</div>
-                <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
-              </div>
+          <?php } ?>
+          <div class="text-center" style=" border-bottom: 0.5px solid #01A9AC;">
+            <div class="row p-2 py-3">
+              <div class="col-md-8 text-right">Biaya Obat</div>
+              <div class="col-md-3 text-right"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
             </div>
-            <div class="text-center">
-              <div class="row p-2 py-3">
-                <div class="col-md-8 text-right">Total Harga</div>
-                <?php if($resep->dikirim == 1)  { ?>
+          </div>
+          <div class="text-center">
+            <div class="row p-2 py-3">
+              <div class="col-md-8 text-right">Total Harga</div>
+              <?php if ($resep->dikirim == 1) { ?>
                 <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga += $resep->biaya_pengiriman, 2, ',', '.'); ?></div>
-                <?php }else { ?>
+              <?php } else { ?>
                 <div class="col-md-3 text-right font-24 font-bold"><?php echo 'Rp. ' . number_format($total_harga, 2, ',', '.'); ?></div>
-                <?php } ?>
-              </div>
+              <?php } ?>
             </div>
+          </div>
           </div>
         </div>
         <div style="background: #FFF;border: 1px solid #DEDEDE" class="mt-3 shadow-sm rounded">
@@ -166,7 +166,7 @@ if ($resep->harga_kustom){
                             <option value="4">Owlexa</option>
                           </select>
                         <?php } else { ?>
-                          <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran_obat->metode_pembayaran == 3 ? "Virtual Account" : ($bukti_pembayaran_obat->metode_pembayaran == 4 ? "Dompet Digital" : "Credit Card / Debit Card"))); ?></p>
+                          <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? 'Upload Owlexa' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran_obat->metode_pembayaran == 3 ? "Virtual Account" : ($bukti_pembayaran_obat->metode_pembayaran == 4 ? "Dompet Digital" : "Credit Card / Debit Card"))); ?></p>
                         <?php } ?>
                       </div>
                     </div>
@@ -185,50 +185,50 @@ if ($resep->harga_kustom){
                       </div>
                     </div>
                   </div>
-                  <?php if($bukti_pembayaran_obat->metode_pembayaran == 1){ ?>
+                  <?php if ($bukti_pembayaran_obat->metode_pembayaran == 1) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark">BANK </label>
+                        <label class="col-md-3 col-4 mt-2 text-dark">BANK </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                          <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                          <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->manual_payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran_obat->manual_payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->manual_payment_name ?>"></p>
+                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                            <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->manual_payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran_obat->manual_payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->manual_payment_name ?>"></p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  <?php }else if($bukti_pembayaran_obat->metode_pembayaran == 4){ ?>
+                  <?php } else if ($bukti_pembayaran_obat->metode_pembayaran == 4) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark">Platform: </label>
+                        <label class="col-md-3 col-4 mt-2 text-dark">Platform: </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                          <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                          <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->payment_logo); ?>" class="img-platform" width="100px" title="<?php echo $bukti_pembayaran_obat->payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->payment_name ?>"></p>
+                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                            <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->payment_logo); ?>" class="img-platform" width="100px" title="<?php echo $bukti_pembayaran_obat->payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->payment_name ?>"></p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  <?php }else if($bukti_pembayaran_obat->metode_pembayaran == 3){ ?>
+                  <?php } else if ($bukti_pembayaran_obat->metode_pembayaran == 3) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                      <label class="col-md-3 col-4 mt-2 text-dark">BANK: </label>
+                        <label class="col-md-3 col-4 mt-2 text-dark">Owlexa: </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                          <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                          <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran_obat->payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->payment_name ?>"></p>
+                            <p class="text-abu mt-2">:&nbsp&nbsp</p>
+                            <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran_obat->payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->payment_name ?>"></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   <?php } ?>
-                  <?php if($bukti_pembayaran_obat->metode_pembayaran == 1 || $bukti_pembayaran_obat->metode_pembayaran == 2 || $bukti_pembayaran_obat->metode_pembayaran == 3){ ?>
+                  <?php if ($bukti_pembayaran_obat->metode_pembayaran == 1 || $bukti_pembayaran_obat->metode_pembayaran == 2 || $bukti_pembayaran_obat->metode_pembayaran == 3) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
                         <label for="metode-pembayaran" class="col-md-3 col-3 mt-2 text-abu">Bukti Pembayaran / Claim Number / VA Num </label>
                         <div class="col-md-7 col-8">
                           <div class="row">
-                            <p class="text-abu">:&nbsp</p> <?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? '<img src="' . base_url('assets/images/bukti_pembayaran_obat/' . $bukti_pembayaran_obat->foto) . '" width="300px">' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? $bukti_pembayaran_obat->claim_number : $bukti_pembayaran_obat->va_number); ?>
+                            <p class="text-abu">:&nbsp</p> <?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? '<img src="' . base_url('assets/images/bukti_pembayaran_obat/' . $bukti_pembayaran_obat->foto) . '" width="100px">' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? $bukti_pembayaran_obat->claim_number : $bukti_pembayaran_obat->va_number); ?>
                           </div>
                         </div>
                       </div>
@@ -300,14 +300,14 @@ if ($resep->harga_kustom){
                   <div class="row">
                     <p class="text-abu mt-2"></p>
                     <div class="pl-3 mt-2">
-                    <?php foreach($list_manual_payment as $manual_payment){ ?>
-                      <div class="form-check mb-4">
-                        <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
-                        <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
-                          <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"><?php echo $manual_payment->payment ?>
-                        </label>
-                      </div>
-                    <?php } ?>
+                      <?php foreach ($list_manual_payment as $manual_payment) { ?>
+                        <div class="form-check mb-4">
+                          <input class="form-check-input" type="radio" name="bank_id_2" id="bank_<?php echo $manual_payment->payment_id ?>_2" value="<?php echo $manual_payment->payment_id ?>">
+                          <label class="form-check-label font-bank" for="bank_<?php echo $manual_payment->payment_id ?>_2" style="margin-top: -20px">
+                            <img src="<?php echo base_url($manual_payment->logo); ?>" class="img-permata"><?php echo $manual_payment->payment ?>
+                          </label>
+                        </div>
+                      <?php } ?>
                     </div>
                   </div>
                 </div>

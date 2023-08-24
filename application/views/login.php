@@ -39,18 +39,18 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/website/css/flaticon.css'); ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/website/css/icomoon.css'); ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/website/css/style.css'); ?>">
-      <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=id-ID"></script>
-      <style>
-      #g-recaptcha-response {
-    display: block !important;
-    position: absolute;
-    margin: -78px 0 0 0 !important;
-    width: 302px !important;
-    height: 76px !important;
-    z-index: -999999;
-    opacity: 0;
-}
-      </style>
+  <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=id-ID"></script>
+  <style>
+    #g-recaptcha-response {
+      display: block !important;
+      position: absolute;
+      margin: -78px 0 0 0 !important;
+      width: 302px !important;
+      height: 76px !important;
+      z-index: -999999;
+      opacity: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -58,16 +58,16 @@
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light font-ubuntu" id="ftco-navbar" style="border-bottom:1px; box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);">
     <div class="container">
       <a class="navbar-brand" href="<?php echo base_url('Home'); ?>">
-                          <?php
-                            $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
-                            foreach ($imageFormats as $format) {
-                                $imagePath = './assets/images/logo/logo.' . $format;
-                                if (file_exists($imagePath)) {
-                                    echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
-                                    break;
-                                }
-                            }
-                            ?></a>
+        <?php
+        $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+        foreach ($imageFormats as $format) {
+          $imagePath = './assets/images/logo/logo.' . $format;
+          if (file_exists($imagePath)) {
+            echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
+            break;
+          }
+        }
+        ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
@@ -108,9 +108,9 @@
                   $isSukses = $this->session->flashdata('msg_login_sukses') ? 'alert-success' : 'alert-danger';
                   echo '<div class="' . $isSukses . ' border pb-1">' . $this->session->flashdata('msg_login') . '</div>';
                 } ?>
-                <label class="form-label">Username / ID Pelanggan</label>
+                <label class="form-label">Username / Card Number</label>
                 <div class="input-icon">
-                  <input required type="text" autocomplete="off" class="form-control" name="email" placeholder="Masukan Username / ID Pelanggan">
+                  <input required type="text" autocomplete="off" class="form-control" name="email" placeholder="Masukan Username / Card Number">
                   <!-- <i class="fa fa-user"></i> -->
                   <i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="19" viewBox="0 0 16 19" fill="none">
                       <path d="M10.5984 11.6264C10.4824 11.588 9.7495 11.2535 10.2075 9.84376H10.2009C11.3947 8.5987 12.307 6.59524 12.307 4.6228C12.307 1.58992 10.3154 0 8.00073 0C5.6846 0 3.70392 1.58918 3.70392 4.6228C3.70392 6.60337 4.61112 8.61495 5.81222 9.85705C6.2804 11.1006 5.44321 11.5622 5.26819 11.6272C2.84412 12.5148 0 14.1328 0 15.7301V16.329C0 18.5052 4.167 19 8.02334 19C11.8855 19 16 18.5052 16 16.329V15.7301C16 14.0848 13.142 12.4793 10.5984 11.6264Z" fill="#999999" />
@@ -128,7 +128,7 @@
                 </div>
                 <hr>
                 <div align='center'>
-                <div class="g-recaptcha form-field" data-sitekey='<?= $this->config->item('recaptcha_site_key') ?>'></div>
+                  <div class="g-recaptcha form-field" data-sitekey='<?= $this->config->item('recaptcha_site_key') ?>'></div>
                 </div>
                 <div class="form-check">
                   <input class="form-check-input mt-3" type="checkbox" name="remember_me" value="true" id="flexCheckDefault">
@@ -178,11 +178,11 @@
           <div class="col-lg-5">
             <p class="font-bold font-tele">Hubungi Kami</p>
             <div class="font-black font-18 text-justify">
-                <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
-                <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
-                <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
-                <span></span><br>
-                <span>Telp : +622130003000</span><br>
+              <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
+              <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
+              <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
+              <span></span><br>
+              <span>Telp : +622130003000</span><br>
             </div>
           </div>
           <!-- <div class="col-lg-3 font-18 text-right">
@@ -254,12 +254,12 @@
       }
     }
     window.onload = function() {
-    var $recaptcha = document.querySelector('#g-recaptcha-response');
+      var $recaptcha = document.querySelector('#g-recaptcha-response');
 
-    if($recaptcha) {
+      if ($recaptcha) {
         $recaptcha.setAttribute("required", "required");
-    }
-};
+      }
+    };
   </script>
 </body>
 

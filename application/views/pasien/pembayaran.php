@@ -214,10 +214,10 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     <div class="col-md-11">
                       <div class="form-group row">
                         <label class="col-md-3 col-4 mt-2 text-dark">Bukti Pembayaran / Claim Number / VA Number</label>
-                        <div class="col-md-7 col-8">
+                        <div class="col-md-7 col-4">
                           <div class="row">
                             <p class="text-abu mt-2">:&nbsp&nbsp</p>
-                            <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? '<img src="' . base_url('assets/images/bukti_pembayaran/' . $bukti_pembayaran->photo) . '" width="300px">' : ($bukti_pembayaran->metode_pembayaran == 2 ? $bukti_pembayaran->claim_number : $bukti_pembayaran->va_number); ?></p>
+                            <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? '<img src="' . base_url('assets/images/bukti_pembayaran/' . $bukti_pembayaran->photo) . '" width="100px">' : ($bukti_pembayaran->metode_pembayaran == 2 ? $bukti_pembayaran->claim_number : $bukti_pembayaran->va_number); ?></p>
                           </div>
 
                         </div>

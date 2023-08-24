@@ -93,7 +93,9 @@
                                             $status = '<font color="red">Ditolak</font>';
                                         } ?>
                                         <td><?php echo $status ?></td>
-                                        <td><?php echo $bpo->order_status == 2 ? 'On Progress' : ($bpo->order_status == 3 ? 'REJECTED' : ($bpo->order_status == 1 ? 'DELIVERED' : 'PENDING')); ?><?php if ($bpo->metode_pengiriman == 2) { ?><br /><button class="btn btn-success btn-block" data-toggle="modal" data-target="#modalTrackingJNE" data-token="<?= $bpo->token ?>" data-resi="<?= $bpo->no_resi ?>" id="btnTrack-1" type="button"><i class="fas fa-search"></i> Track</button><?php } ?></td>
+                                        <td><?php echo $bpo->order_status == 2 ? 'On Progress' : ($bpo->order_status == 3 ? 'REJECTED' : ($bpo->order_status == 1 ? 'DELIVERED' : 'PENDING')); ?><?php if ($bpo->metode_pengambilan_obat == 1) { ?><br />
+                                            <!-- <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modalTrackingJNE" data-token="<?= $bpo->token ?>" data-resi="<?= $bpo->no_resi ?>" id="btnTrack-1" type="button"><i class="fas fa-search"></i> Track</button> -->
+                                        <?php } ?></td>
                                         <?php
                                         $tanggal = new DateTime($bpo->created_at);
                                         $tanggal = $tanggal->format('d-m-Y H:i:s');

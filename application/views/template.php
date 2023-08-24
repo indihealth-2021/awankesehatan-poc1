@@ -482,24 +482,20 @@
                   userFiles.forEach(function(file) {
                     var card = document.createElement('div');
                     card.className = 'card';
-                    card.onclick = function() {
-                      window.open('<?php echo base_url("assets/files/file_pemeriksaan_luar/") ?>' + file.path_file, '_blank');
-                    };
                     var cardBody = document.createElement('div');
                     cardBody.className = 'card-body';
                     var cardTitle = document.createElement('h5');
                     cardTitle.textContent = file.nama_file;
                     var cardDescription = document.createElement('p');
                     cardDescription.textContent = file.type_file;
-                    var cardButton = document.createElement('button');
-                    cardButton.className = 'btn btn-primary btn-sm';
-                    cardButton.textContent = 'Lihat File';
-                    cardButton.onclick = function() {
-                      window.open('<?php echo base_url("assets/files/file_pemeriksaan_luar/") ?>' + file.path_file, '_blank');
-                    }
+                    var cardLink = document.createElement('a');
+                    cardLink.className = 'btn btn-primary btn-sm';
+                    cardLink.textContent = 'Lihat File';
+                    cardLink.href = baseUrl + 'assets/files/file_pemeriksaan_luar/' + file.path_file;
+                    cardLink.target = '_blank';
                     cardBody.appendChild(cardTitle);
                     cardBody.appendChild(cardDescription);
-                    cardBody.appendChild(cardButton);
+                    cardBody.appendChild(cardLink);
                     card.appendChild(cardBody);
                     document.getElementById('file_asesmen').appendChild(card);
                   });
@@ -819,22 +815,6 @@
 
   }
   ?>
-
-  <?php if ($user_2 && $user_2->id_user_kategori == 0) { ?>
-    <script>
-      $("#select-alamat").hide();
-      $("#label-select-alamat").hide();
-      $('select#dikirim').on('change', function() {
-        if(this.value == "1") {
-          $("#select-alamat").show();
-          $("#label-select-alamat").show();
-        }else {
-          $("#select-alamat").hide();
-          $("#label-select-alamat").hide();
-        }
-      });
-    </script>
-  <?php } ?>
 
  <!--  <script>
     $.widget.bridge('uibutton', $.ui.button)

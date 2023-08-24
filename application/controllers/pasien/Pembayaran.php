@@ -127,6 +127,18 @@ class Pembayaran extends CI_Controller
         $('#form-transfer-manual').attr('action', href_btn+'/'+this.value+'/');
     });
 
+    $('#select-alamat').hide();
+      $('#label-select-alamat').hide();
+      $('select#dikirim').on('change', function() {
+        if(this.value == '1') {
+          $('#select-alamat').show();
+          $('#label-select-alamat').show();
+        }else {
+          $('#select-alamat').hide();
+          $('#label-select-alamat').hide();
+        }
+      });
+
     $('select[name=metode_pembayaran]').change(function(e){
         $('#btnBayar').off('click');
         alamat_lain = '';
@@ -267,63 +279,6 @@ class Pembayaran extends CI_Controller
                 // }
             });
         }else if(this.value == '4'){
-            $.ajax({
-                method : 'GET',
-                url : baseUrl+'pasien/Pembayaran/get_toc',
-                success : function(data){
-                    data = JSON.parse(data);
-                    if(data.code == 200){
-                        $('#tac_modal_owlexa').modal('show');
-                        $('#tac_checkbox_owlexa').prop('disabled', true);
-                        $('#simpan_tac_owlexa').prop('disabled', true);
-                        $('#tac_checkbox_owlexa').prop('checked', false);
-                        $('#simpan_tac_owlexa').prop('disabled', true);
-                        $('#simpan_tac_owlexa').removeClass('btn-primary').addClass('btn-secondary');
-
-                        $('#tac_body_owlexa').empty();
-                        $.each(data.data, function(key, value){
-                            $('#tac_body_owlexa').append(value+'<br/>');
-                        });
-
-                        $('#tac_body_owlexa').html();
-                        $('#tac_body_owlexa').scroll(function(e){
-                          if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                              $('#tac_checkbox_owlexa').prop('disabled', false);
-                          }
-                        });
-                        $('#tac_checkbox_owlexa').change(function(e){
-                          if(this.checked){
-                            $('#simpan_tac_owlexa').prop('disabled', false);
-                            $('#simpan_tac_owlexa').removeClass('btn-secondary').addClass('btn-primary');
-                          }
-                          else{
-                            $('#simpan_tac_owlexa').prop('disabled', true);
-                            $('#simpan_tac_owlexa').removeClass('btn-primary').addClass('btn-secondary');
-                          }
-                        });
-
-                        $('#simpan_tac_owlexa').click(function(e){
-                          $('#tac_modal_owlexa').modal('hide');
-                        });
-
-                        $('#batal_tac_owlexa').click(function(e){
-                            $('#tac_modal_owlexa').modal('hide');
-
-                            $('#form-owlexa').hide();
-                            $('#transfer_va').hide();
-                            $('#transfer_manual').hide();
-                            $('#dompet_digital').hide();
-                            $('#cc_debit').hide();
-                            $('select[name=metode_pembayaran]').val(0);
-                        })
-                    }else{
-                        console.log(data.message);
-                    }
-                },
-                error : function(data){
-                    console.log(data);
-                }
-            });
             $('#form-owlexa').show();
             $('#transfer_va').hide();
             $('#transfer_manual').hide();
@@ -1904,7 +1859,7 @@ class Pembayaran extends CI_Controller
                 redirect(base_url('admin/Admin'));
             }
         }
-        $data['list_pembayaran'] = $this->db->query('SELECT bukti_pembayaran.tanggal_konsultasi, bpo.id as id, bpo.id_payment, bpo.metode_pembayaran, bpo.order_status, bpo.claim_number, bpo.created_at, bpo.foto as foto, bpo.status as status, bpo.va_number as va_number, bpo.metode_pengiriman, biaya_pengiriman_obat.token, biaya_pengiriman_obat.no_resi, d.name as nama_dokter, p.name as nama_pasien,GROUP_CONCAT("<li>",master_obat.name, " ( ", rd.jumlah_obat, " ",master_obat.unit ," )"," ( ", rd.keterangan, " )", "</li>"  SEPARATOR "") as detail_obat, GROUP_CONCAT(rd.harga SEPARATOR ",") as harga_obat, GROUP_CONCAT(rd.harga_per_n_unit SEPARATOR ",") as harga_obat_per_n_unit, GROUP_CONCAT(rd.jumlah_obat SEPARATOR ",") as jumlah_obat, rd.created_at as tanggal_resep, biaya_pengiriman_obat.biaya_pengiriman FROM bukti_pembayaran_obat bpo LEFT JOIN master_user d ON bpo.id_dokter = d.id INNER JOIN master_user p ON bpo.id_pasien = p.id INNER JOIN resep_dokter rd ON rd.id_jadwal_konsultasi = bpo.id_jadwal_konsultasi INNER JOIN master_obat ON rd.id_obat = master_obat.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE bpo.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.status = 1 GROUP BY rd.id_jadwal_konsultasi ORDER BY rd.created_at DESC')->result();
+        $data['list_pembayaran'] = $this->db->query('SELECT bukti_pembayaran.tanggal_konsultasi, bukti_pembayaran.metode_pengambilan_obat, bpo.id as id, bpo.id_payment, bpo.metode_pembayaran, bpo.order_status, bpo.claim_number, bpo.created_at, bpo.foto as foto, bpo.status as status, bpo.va_number as va_number, d.name as nama_dokter, p.name as nama_pasien,GROUP_CONCAT("<li>",master_obat.name, " ( ", rd.jumlah_obat, " ",master_obat.unit ," )"," ( ", rd.keterangan, " )", "</li>"  SEPARATOR "") as detail_obat, GROUP_CONCAT(rd.harga SEPARATOR ",") as harga_obat, GROUP_CONCAT(rd.harga_per_n_unit SEPARATOR ",") as harga_obat_per_n_unit, GROUP_CONCAT(rd.jumlah_obat SEPARATOR ",") as jumlah_obat, rd.created_at as tanggal_resep, biaya_pengiriman_obat.biaya_pengiriman FROM bukti_pembayaran_obat bpo LEFT JOIN master_user d ON bpo.id_dokter = d.id INNER JOIN master_user p ON bpo.id_pasien = p.id INNER JOIN resep_dokter rd ON rd.id_jadwal_konsultasi = bpo.id_jadwal_konsultasi INNER JOIN master_obat ON rd.id_obat = master_obat.id INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_jadwal_konsultasi = rd.id_jadwal_konsultasi LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE bpo.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.status = 1 GROUP BY rd.id_jadwal_konsultasi ORDER BY rd.created_at DESC')->result();
         // var_dump($this->db->error());
 
         $data['title'] = 'History Pembayaran Obat';

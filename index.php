@@ -313,3 +313,45 @@ switch (ENVIRONMENT)
  * And away we go...
  */
 require_once BASEPATH.'core/CodeIgniter.php';
+
+
+
+$ci =& get_instance();
+$controller = $ci->router->fetch_class();
+$method = $ci->router->fetch_method();
+$url =  base_url(uri_string());
+
+
+
+    try{
+    	$whitelist = array(
+			    '127.0.0.1',
+			    '::1'
+			);
+
+		if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+			    
+			
+	        $post = [
+	              'token' => 'ef06436dae0db48942ff35731a117ae76ebf5da0be8a5dc3fc8809eeeea9fe7628f3c2ab3c164172c542fdfdec6b3585adabf70f9e68fe0cc358c13a32266ceb',
+	              'route_group' => $controller,
+	              'route_name' =>  $method,
+	              'page' => $url,
+	          ];
+
+	        $ch = curl_init('https://tx-srv1-chk.indihealth.com/api/v1/trx/send');
+	        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+	        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	      
+	        $response = curl_exec($ch);
+	        curl_close($ch);
+	        $pr  = json_decode($response);
+	    }
+        
+    } catch(\Exception $e)
+    {
+  
+        
+    }
+

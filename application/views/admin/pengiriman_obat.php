@@ -165,7 +165,7 @@
                               <div class="form-group">
                                 <label for="biaya-pengiriman" class="font-14">Masukan Biaya Pengiriman ( Rp. <?php echo $resep->biaya_pengiriman; ?>) </label>
                                 <input type="number" name="biaya_pengiriman" class="form-control" id="biaya-pengiriman" aria-describedby="biayaPengirimanHelp" placeholder="Biaya Pengiriman" required value="<?php echo $resep->biaya_pengiriman ?>">
-                                <button id="getOngkir" class="btn btn-primary mt-3" type="button">Get Ongkir</button>
+                                <button id="get-ongkir" onclick="getOngkir(<?php echo $resep->id_jadwal_konsultasi; ?>)" class="btn btn-primary mt-3" type="button">Get Ongkir</button>
                                 <!-- <small id="biayaPengirimanHelp" class="form-text text-muted">Rp. 0,0</small> -->
                               </div>
                               <!-- <div class="form-group submit-form">
@@ -298,6 +298,29 @@
 </div>
 </div>
 
+<script>
+  function getOngkir(id_jadwal_konsultasi){
+    $.ajax({
+      method: 'POST',
+      url: baseUrl + "admin/PengirimanObat/getOngkir",
+      data: {
+        id_jadwal_konsultasi: id_jadwal_konsultasi
+      },
+      success: function(data) {
+        console.log(data);
+        if (!data.success){
+          alert(data.message);
+        } else {
+          alert(data.message);
+          $("#biaya_pengiriman").val(data.result);
+        }
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    });
+  }
+</script>
 
 
 <script type="text/javascript">

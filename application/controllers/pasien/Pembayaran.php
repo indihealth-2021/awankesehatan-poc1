@@ -1106,7 +1106,7 @@ class Pembayaran extends CI_Controller
         // $fullName = 'OWLEXA TESTING CARD 3566'; //$user->name;
         // $birthDate = '1991-05-01'; //$user->lahir_tanggal;
         $cardNumber = $this->input->post('cardNumber');
-        $otp = $this->input->post('otp');
+        // $otp = $this->input->post('otp');
         $id_dokter = $this->input->post('id_dokter');
         $id_registrasi = $this->input->post('id_registrasi');
         // echo var_dump($this->input->post());
@@ -1116,14 +1116,25 @@ class Pembayaran extends CI_Controller
         $admissionDate = date("Y-m-d");
         $currentTime = date("Y-m-d H:i:s");
 
-        $alamat_kustom = $this->input->post('alamat_kustom');
-        $alamat_pengiriman_obat = $this->input->post('alamat');
-        if (!isset($data['cardNumber'])  || $alamat_kustom == null || !$alamat_pengiriman_obat || preg_match("/Alamat tidak lengkap/i", $alamat_pengiriman_obat)) {
-            $response['msg'] = 'Data yang anda masukan tidak lengkap!';
-            $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
-            //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
-            redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
+        $post_data = $this->input->post();
+
+        // $alamat_kustom = $this->input->post('alamat_kustom');
+        if ($post_data['dikirim'] == 1) {
+            $alamat_provinsi = $post_data['alamat_provinsi'];
+            $alamat_kota = $post_data['alamat_kota'];
+            $alamat_kecamatan = $post_data['alamat_kecamatan'];
+            $alamat_kelurahan = $post_data['alamat_kelurahan'];
+            $kode_pos = $post_data['kode_pos'];
+            $alamat_detail = $post_data['alamat_detail'];
+            $alamat_pengiriman_obat = $alamat_detail . "," . $alamat_kelurahan . "," . $alamat_kecamatan . "," . $alamat_kota . "," . $alamat_provinsi . "," . $kode_pos; 
+            if (!isset($data['cardNumber'])  || !$alamat_pengiriman_obat) {
+                $response['msg'] = 'Data yang anda masukan tidak lengkap!';
+                $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
+                //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
+                redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
+            }
         }
+        
 
         $pasien = $this->db->query('SELECT id FROM master_user WHERE id = ' . $id_pasien . ' AND id_user_kategori = 0')->row();
         if (!$pasien) {
@@ -1345,7 +1356,7 @@ class Pembayaran extends CI_Controller
             "admissionDate" => $admissionDate,
             "fullName" => $fullName,
             "chargeValue" => floatval($chargeValue),
-            "otp" => $otp,
+            // "otp" => $otp,
             "telemedicineType" => 'TM-001',
         );
 
@@ -1405,8 +1416,8 @@ class Pembayaran extends CI_Controller
             $id_jadwal_konsultasi = $this->db->insert_id();
 
             $data_biaya_pengiriman_obat = array(
-                'alamat' => $alamat_pengiriman_obat,
-                'alamat_kustom' => $alamat_kustom,
+                'alamat' => $post_data['dikirim'] == 1 ? $alamat_pengiriman_obat : '',
+                'alamat_kustom' => 0,
                 'id_registrasi' => $id_registrasi
             );
             $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);

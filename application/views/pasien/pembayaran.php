@@ -397,7 +397,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     </div>
                   </div>
                 </div>
-                <div class="metode-owlexa col-md-11">
+              <!--   <div class="metode-owlexa col-md-11">
                   <div class="form-group row">
                     <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">OTP </label>
                     <div class="col-md-7 col-8">
@@ -408,7 +408,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
                 <input type="hidden" name="alamat_provinsi">
                 <input type="hidden" name="alamat_kota">

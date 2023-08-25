@@ -218,7 +218,7 @@
         <div class="modal-footer">
           <div class="px-3">
             <button type="button" class="btn btn-batal-2" data-dismiss="modal">Batal</button>
-            <button type="button" title="" class="btn btn-simpan-2 buttonSave" id="kirimObatJNE" data-bukti-pembayaran-obat-id="" disabled>Kirim</button>
+            <a href="<?php echo base_url('admin/PengirimanObat/kirim_obat_jne/' . $resep->id_jadwal_konsultasi) ?>" id="link-delete"><button type="button" class="btn btn-simpan-2 buttonSave" id="kirimObatManual" disabled>Kirim</button></a>
           </div>
         </div>
       </div>

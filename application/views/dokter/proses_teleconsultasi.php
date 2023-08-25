@@ -730,15 +730,9 @@
         </thead>
         <tbody>
             <tr>
-                <td>Amoxilin</td>
-                <td>1 Strip</td>
-                <td>1x2 Setelah makan</td>
+                <td colspan="3" align="center">Belum ada data</td>
             </tr> 
-            <tr>
-                <td>Vit C </td>
-                <td>1 Strip</td>
-                <td>1x1 Setelah makan</td>
-            </tr>
+            
         </tbody>
        </table>
       </div>

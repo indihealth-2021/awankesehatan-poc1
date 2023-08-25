@@ -1386,6 +1386,7 @@ class Pembayaran extends CI_Controller
                 "biaya_adm" => $biaya_adm,
                 "biaya_konsultasi" => $jadwal->biaya_konsultasi,
                 "metode_pembayaran" => 2,
+                'metode_pengambilan_obat' => $this->input->post('dikirim'),
                 "status" => 1,
                 "card_number" => $cardNumber,
                 "claim_number" => $claim_number

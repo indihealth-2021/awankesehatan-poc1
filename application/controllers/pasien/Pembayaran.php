@@ -1118,7 +1118,7 @@ class Pembayaran extends CI_Controller
 
         $alamat_kustom = $this->input->post('alamat_kustom');
         $alamat_pengiriman_obat = $this->input->post('alamat');
-        if (!isset($data['cardNumber']) || !isset($data['otp']) || $alamat_kustom == null || !$alamat_pengiriman_obat || preg_match("/Alamat tidak lengkap/i", $alamat_pengiriman_obat)) {
+        if (!isset($data['cardNumber'])  || $alamat_kustom == null || !$alamat_pengiriman_obat || preg_match("/Alamat tidak lengkap/i", $alamat_pengiriman_obat)) {
             $response['msg'] = 'Data yang anda masukan tidak lengkap!';
             $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
             //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));

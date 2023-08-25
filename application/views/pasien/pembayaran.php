@@ -350,6 +350,16 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
           <form id="form-owlexa" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_owlexa'); ?>">
             <div class="">
               <div class="row">
+              <div class="col-md-3">
+                    <p class="text-abu">Pengambilan Obat</p>
+                  </div>
+                  <div class="col-md-6">
+                    <select name="dikirim" required id="dikirim" class="form-control form-select-bayar">
+                      <option value="">-Pilih-</option>
+                      <option value="2">Diambil sendiri</option>
+                      <option value="1">Dikirim</option>
+                    </select>
+                  </div>
                 <div class="metode-owlexa col-md-11">
                   <div class="form-group row">
                     <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">Nama Lengkap </label>

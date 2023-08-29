@@ -1371,7 +1371,7 @@ class Pembayaran extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_env')."/owlexa/Api/guarantee",
+            CURLOPT_URL => $this->config->item('pg_api')."/owlexa/Api/guarantee",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,

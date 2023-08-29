@@ -1366,12 +1366,13 @@ class Pembayaran extends CI_Controller
             "registrasiId" => $id_registrasi,
         );
 
-        $dataRaw = json_encode($dataRaw);
+
+        $dataRaw = $dataRaw;
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_env')."/owlexa/Api/guarantee",
+            CURLOPT_URL => $this->config->item('pg_api')."/owlexa/Api/guarantee",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -1380,17 +1381,15 @@ class Pembayaran extends CI_Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $dataRaw,
-            CURLOPT_HTTPHEADER => array(
-                "Api-Key: VO6v8Id9eqEchgogLE1nDVFopJdnXxk9K/ZEm7xqX5I=",
-                "Content-Type: application/json"
-            ),
+            
         ));
 
         $result = curl_exec($curl);
+         // var_dump($result);
         $result = json_decode($result, true);
-
+        
         curl_close($curl);
-  
+        // exit();
         $response['data'] = $result['data'];
         // $this->response($result, REST_Controller::HTTP_OK);
         if ($result['code'] == 200) {

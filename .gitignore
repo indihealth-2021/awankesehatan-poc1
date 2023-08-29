@@ -6,3 +6,4 @@ assets/files/attachments/*
 .well-known/*
 ~/.vscode-root-fixed
 vendor
+.vscode

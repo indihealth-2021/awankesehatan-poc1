@@ -43,7 +43,7 @@
                             </div>
                         <?php } ?>
                         <div class="text-center" style=" border-top: 3px solid #01A9AC;border-bottom: 0.5px solid #01A9AC;">
-                        <div class="row p-2 py-3">
+                            <div class="row p-2 py-3">
                                 <div class="col-md-4 text-left text-abu">Resep Obat</div>
                                 <div class="col-md-4 text-left"><?php echo $resep->detail_obat ?></div>
                             </div>
@@ -172,7 +172,7 @@
         }
 
         /* Firefox */
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        /* input[type=number] { */
+        /* -moz-appearance: textfield; */
+        /* } */
     </style>

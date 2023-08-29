@@ -9,7 +9,8 @@ class Pembayaran extends CI_Controller
 {
     public $data;
 
-    private function getIndoDay($dayInEnglish) {
+    private function getIndoDay($dayInEnglish)
+    {
         switch ($dayInEnglish) {
             case "Mon":
                 $value = "Senin";
@@ -33,7 +34,7 @@ class Pembayaran extends CI_Controller
                 $value = "Minggu";
                 break;
             default:
-              $value = "Unknown";
+                $value = "Unknown";
         }
 
         return $value;
@@ -73,7 +74,7 @@ class Pembayaran extends CI_Controller
         }
         $data['view'] = 'pasien/pembayaran';
         $data['title'] = 'Pembayaran';
-		$data['user'] = $this->db->query('SELECT master_user.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan, master_user.vip FROM master_user LEFT JOIN master_provinsi ON master_user.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_user.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_user.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_user.alamat_kelurahan = master_kelurahan.id WHERE master_user.id = '.$this->session->userdata('id_user'))->row();
+        $data['user'] = $this->db->query('SELECT master_user.*, master_provinsi.id as id_provinsi, master_provinsi.name as nama_provinsi, master_kota.id as id_kota, master_kota.name as nama_kota, master_kecamatan.id as id_kecamatan, master_kecamatan.name as nama_kecamatan, master_kelurahan.id as id_kelurahan, master_kelurahan.name as nama_kelurahan, master_user.vip FROM master_user LEFT JOIN master_provinsi ON master_user.alamat_provinsi = master_provinsi.id LEFT JOIN master_kota ON master_user.alamat_kota = master_kota.id LEFT JOIN master_kecamatan ON master_user.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kelurahan ON master_user.alamat_kelurahan = master_kelurahan.id WHERE master_user.id = ' . $this->session->userdata('id_user'))->row();
         $data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
         $data['js_addons'] = "
     <script>
@@ -429,7 +430,7 @@ class Pembayaran extends CI_Controller
         $.ajax({
             method : 'POST',
             url    : baseUrl+'Alamat/getProvinsi',
-            data   : {id_user:".$this->session->userdata('id_user')."},
+            data   : {id_user:" . $this->session->userdata('id_user') . "},
             success : function(data){
                 $('#provinsi').empty();
                 data = JSON.parse(data);
@@ -559,15 +560,15 @@ class Pembayaran extends CI_Controller
         curl_close($curl);
         // ==
 
-        $day_ind = $this->getIndoDay($dayInEnglish=(new DateTime($data['registrasi']->tanggal_konsultasi))->format('D'));
+        $day_ind = $this->getIndoDay($dayInEnglish = (new DateTime($data['registrasi']->tanggal_konsultasi))->format('D'));
 
-        if($result) {
+        if ($result) {
             if ($result->status) {
                 $data['tanggal_konsultasi'] = $result->status ? $result->data->tanggal_konsultasi : $day_ind . ', ' . (new DateTime($data['registrasi']->tanggal_konsultasi))->format('d/m/Y');
                 $data['waktu_konsultasi'] = $result->status ? '' : $data['registrasi']->waktu_konsultasi;
                 $data['waktu_konsultasi_berakhir'] = $result->status ? '' : (new DateTime($data['registrasi']->waktu_konsultasi))->modify('+30 Minutes')->format('H:i');
             }
-        }else {
+        } else {
             $data['tanggal_konsultasi'] = $day_ind . ', ' . (new DateTime($data['registrasi']->tanggal_konsultasi))->format('d/m/Y');
             $data['waktu_konsultasi'] = $data['registrasi']->waktu_konsultasi;
             $data['waktu_konsultasi_berakhir'] = (new DateTime($data['registrasi']->waktu_konsultasi))->modify('+30 Minutes')->format('H:i');
@@ -600,9 +601,9 @@ class Pembayaran extends CI_Controller
 
         $data['registrasi'] = $this->db->query('SELECT reg.id as registrasi_id, reg.keterangan, reg.id_status_pembayaran, reg.id_pasien, d.name as nama_dokter, p.poli, d.id as id_dokter, p.id as jadwal_id, nominal.biaya_adm as biaya_adm_poli, bukti_pembayaran.biaya_adm as biaya_adm_bukti, bukti_pembayaran.expired_date, bukti_pembayaran.id_payment, nominal.harga as biaya_konsultasi_poli,bukti_pembayaran.biaya_konsultasi as biaya_konsultasi_bukti, jk.tanggal as tanggal_konsultasi, jk.jam as waktu_konsultasi, bukti_pembayaran.va_number FROM data_registrasi reg INNER JOIN jadwal_dokter p ON reg.id_jadwal=p.id INNER JOIN master_user d ON p.id_dokter = d.id INNER JOIN detail_dokter ON d.id = detail_dokter.id_dokter INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = reg.id LEFT JOIN jadwal_konsultasi jk ON reg.id = jk.id_registrasi WHERE reg.id = "' . $id_registrasi . '" AND reg.id_status_pembayaran = 0 AND reg.id_pasien = ' . $this->session->userdata('id_user') . ' AND bukti_pembayaran.metode_pembayaran = 3')->row();
 
-        $data['payment'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND payment_id = '.$data['registrasi']->id_payment)->row();
+        $data['payment'] = $this->db->query('SELECT * FROM payment WHERE type = "va" AND payment_id = ' . $data['registrasi']->id_payment)->row();
 
-        if(!$data['payment'] || !$data["registrasi"]){
+        if (!$data['payment'] || !$data["registrasi"]) {
             show_404();
         }
 
@@ -639,21 +640,21 @@ class Pembayaran extends CI_Controller
         $kode_pos = $post_data['kode_pos'];
         $alamat_detail = $post_data['alamat_detail'];
 
-        if( !($bank_id || $alamat_provinsi || $alamat_kota || $alamat_kecamatan || $alamat_kelurahan || $kode_pos || $alamat_detail) ) {
+        if (!($bank_id || $alamat_provinsi || $alamat_kota || $alamat_kecamatan || $alamat_kelurahan || $kode_pos || $alamat_detail)) {
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi));
         }
 
-        $alamat_provinsi = $this->db->query('SELECT name FROM master_provinsi WHERE id = '.$alamat_provinsi)->row()->name;
-        $alamat_kota = $this->db->query('SELECT name FROM master_kota WHERE id = '.$alamat_kota)->row()->name;
-        $alamat_kecamatan = $this->db->query('SELECT name FROM master_kecamatan WHERE id = '.$alamat_kecamatan)->row()->name;
-        $alamat_kelurahan = $this->db->query('SELECT name FROM master_kelurahan WHERE id = '.$alamat_kelurahan)->row()->name;
+        $alamat_provinsi = $this->db->query('SELECT name FROM master_provinsi WHERE id = ' . $alamat_provinsi)->row()->name;
+        $alamat_kota = $this->db->query('SELECT name FROM master_kota WHERE id = ' . $alamat_kota)->row()->name;
+        $alamat_kecamatan = $this->db->query('SELECT name FROM master_kecamatan WHERE id = ' . $alamat_kecamatan)->row()->name;
+        $alamat_kelurahan = $this->db->query('SELECT name FROM master_kelurahan WHERE id = ' . $alamat_kelurahan)->row()->name;
 
-        if(!$alamat_provinsi || !$alamat_kota || !$alamat_kecamatan || !$alamat_kelurahan){
+        if (!$alamat_provinsi || !$alamat_kota || !$alamat_kecamatan || !$alamat_kelurahan) {
             $this->session->set_flashdata('msg_pmbyrn', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi));
         }
-        $alamat = $alamat_detail.', KELURAHAN '.$alamat_kelurahan.', KECAMATAN '.$alamat_kecamatan.', '.$alamat_kota.', '.$alamat_provinsi.' '.$kode_pos;
+        $alamat = $alamat_detail . ', KELURAHAN ' . $alamat_kelurahan . ', KECAMATAN ' . $alamat_kecamatan . ', ' . $alamat_kota . ', ' . $alamat_provinsi . ' ' . $kode_pos;
         $data['alamat'] = $alamat;
 
         if ($id_registrasi == null) {
@@ -739,9 +740,9 @@ class Pembayaran extends CI_Controller
             'logo_bank' => $bank_logo,
         );
 
-        $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1 AND payment_id = '.$bank_id)->row();
+        $data['manual_payment'] = $this->db->query('SELECT * FROM master_manual_payment WHERE aktif = 1 AND payment_id = ' . $bank_id)->row();
 
-        if(!$data['manual_payment']){
+        if (!$data['manual_payment']) {
             show_404();
         }
 
@@ -786,7 +787,7 @@ class Pembayaran extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7IdKoPYrF-6bqtHHOt3Rwa3xvsnSO2TQ&address='.urlencode($alamat_pengiriman_obat),
+            CURLOPT_URL => 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7IdKoPYrF-6bqtHHOt3Rwa3xvsnSO2TQ&address=' . urlencode($alamat_pengiriman_obat),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -977,8 +978,8 @@ class Pembayaran extends CI_Controller
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
 
-        $bp = $this->db->query('SELECT id, status FROM bukti_pembayaran WHERE id_registrasi = "'.$id_registrasi.'" AND status = 0')->row();
-        if($bp){
+        $bp = $this->db->query('SELECT id, status FROM bukti_pembayaran WHERE id_registrasi = "' . $id_registrasi . '" AND status = 0')->row();
+        if ($bp) {
             $this->upload->overwrite = true;
         }
 
@@ -1002,11 +1003,11 @@ class Pembayaran extends CI_Controller
                 'biaya_konsultasi' => $jadwal->biaya_konsultasi,
                 'status' => 0, 'metode_pembayaran' => 1
             );
-            if($bp){
+            if ($bp) {
                 $this->db->set($data_bukti);
-                $this->db->where(array('id'=>$bp->id));
+                $this->db->where(array('id' => $bp->id));
                 $this->db->update('bukti_pembayaran');
-            }else{
+            } else {
                 $this->db->insert('bukti_pembayaran', $data_bukti);
             }
 
@@ -1679,7 +1680,7 @@ class Pembayaran extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_api').'arthajasa/api/purchaseTelekonsul',
+            CURLOPT_URL => $this->config->item('path_to_api') . 'arthajasa/api/purchaseTelekonsul',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1744,7 +1745,7 @@ class Pembayaran extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('path_to_api')."owlexa/Api/generateOtp",
+            CURLOPT_URL => $this->config->item('path_to_api') . "owlexa/Api/generateOtp",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,

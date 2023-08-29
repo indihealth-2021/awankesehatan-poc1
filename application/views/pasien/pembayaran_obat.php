@@ -177,10 +177,11 @@ if ($resep->harga_kustom) {
                 ?>
                   <div class="col-md-11">
                     <div class="form-group row">
-                      <label for="metode-pembayaran" class="col-md-3 col-3 mt-2 text-abu">Status</label>
-                      <div class="col-md-7 col-8">
+                      <label for="metode-pembayaran" class="col-md-3 col-5 mt-2 text-abu">Status</label>
+                      <div class="col-md-7 col-7">
                         <div class="row">
-                          <p class="text-abu">:&nbsp</p> <?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 || $bukti_pembayaran_obat->metode_pembayaran == 2 || $bukti_pembayaran_obat->metode_pembayaran == 3 ? ($bukti_pembayaran_obat->status == 0 ? 'Sedang Diproses' : 'Lunas') : ($bukti_pembayaran_obat->status == 0 ? 'Belum Bayar' : 'Lunas') ?>
+                          <p class="text-abu mt-2">:&nbsp</p>
+                          <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 || $bukti_pembayaran_obat->metode_pembayaran == 2 || $bukti_pembayaran_obat->metode_pembayaran == 3 ? ($bukti_pembayaran_obat->status == 0 ? 'Sedang Diproses' : 'Lunas') : ($bukti_pembayaran_obat->status == 0 ? 'Belum Bayar' : 'Lunas') ?></p>
                         </div>
                       </div>
                     </div>
@@ -188,8 +189,8 @@ if ($resep->harga_kustom) {
                   <?php if ($bukti_pembayaran_obat->metode_pembayaran == 1) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                        <label class="col-md-3 col-4 mt-2 text-dark">BANK </label>
-                        <div class="col-md-7 col-8">
+                        <label class="col-md-3 col-5 mt-2 text-dark">Owlexa </label>
+                        <div class="col-md-7 col-7">
                           <div class="row">
                             <p class="text-abu mt-2">:&nbsp&nbsp</p>
                             <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->manual_payment_logo); ?>" class="img-permata" width="100px" title="<?php echo $bukti_pembayaran_obat->manual_payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->manual_payment_name ?>"></p>
@@ -200,8 +201,8 @@ if ($resep->harga_kustom) {
                   <?php } else if ($bukti_pembayaran_obat->metode_pembayaran == 4) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                        <label class="col-md-3 col-4 mt-2 text-dark">Platform: </label>
-                        <div class="col-md-7 col-8">
+                        <label class="col-md-3 col-5 mt-2 text-dark">Platform: </label>
+                        <div class="col-md-7 col-7">
                           <div class="row">
                             <p class="text-abu mt-2">:&nbsp&nbsp</p>
                             <p class="mt-2"><img src="<?php echo base_url($bukti_pembayaran_obat->payment_logo); ?>" class="img-platform" width="100px" title="<?php echo $bukti_pembayaran_obat->payment_name ?>" alt="<?php echo $bukti_pembayaran_obat->payment_name ?>"></p>
@@ -225,8 +226,8 @@ if ($resep->harga_kustom) {
                   <?php if ($bukti_pembayaran_obat->metode_pembayaran == 1 || $bukti_pembayaran_obat->metode_pembayaran == 2 || $bukti_pembayaran_obat->metode_pembayaran == 3) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                        <label for="metode-pembayaran" class="col-md-3 col-3 mt-2 text-abu">Bukti Pembayaran / Claim Number / VA Num </label>
-                        <div class="col-md-7 col-8">
+                        <label for="metode-pembayaran" class="col-md-4 col-5 mt-2 text-abu">Bukti Owlexa / Claim Number / VA Num </label>
+                        <div class="col-md-7 col-7">
                           <div class="row">
                             <p class="text-abu">:&nbsp</p> <?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? '<img src="' . base_url('assets/images/bukti_pembayaran_obat/' . $bukti_pembayaran_obat->foto) . '" width="100px">' : ($bukti_pembayaran_obat->metode_pembayaran == 2 ? $bukti_pembayaran_obat->claim_number : $bukti_pembayaran_obat->va_number); ?>
                           </div>
@@ -279,7 +280,7 @@ if ($resep->harga_kustom) {
                             <option value="4">Owlexa</option>
                           </select>
                         <?php } else { ?>
-                          <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran_obat->metode_pembayaran == 3 ? 'Virtual Account' : 'Owlexa'); ?></p>
+                          <p class="mt-2"><?php echo $bukti_pembayaran_obat->metode_pembayaran == 1 ? 'Upload Owlexa' : ($bukti_pembayaran_obat->metode_pembayaran == 3 ? 'Virtual Account' : 'Owlexa'); ?></p>
                         <?php } ?>
                       </div>
                     </div>

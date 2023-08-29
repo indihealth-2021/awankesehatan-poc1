@@ -116,7 +116,7 @@
                                 if (count($list_jadwal_dokter) > 0) {
                                     foreach ($list_jadwal_dokter as $idx => $jadwal_dokter) {
                                         $foto = $jadwal_dokter['foto_dokter'] ? base_url('assets/images/users/' . $jadwal_dokter['foto_dokter']) : base_url('assets/dashboard/img/user.jpg');
-                                        $button = "<td class='text-center'><a class='btn btn-pilih' onclick=\"openModalAndRedirect('" . base_url('pasien/Pendaftaran/daftar?id_jadwal=' . $jadwal_dokter['id'] . '&token=' . $this->session->userdata("_token")) . "','spinner-".$jadwal_dokter['id']."')\"><i style='display:none;' id='spinner-".$jadwal_dokter['id']."' class='fa fa-spinner fa-spin'></i>&nbsp;Pilih</a></td>";
+                                        $button = "<td class='text-center'><a class='btn btn-pilih' onclick=\"openModalAndRedirect('" . base_url('pasien/Pendaftaran/daftar?id_jadwal=' . $jadwal_dokter['id'] . '&token=' . $this->session->userdata("_token")) . "','spinner-" . $jadwal_dokter['id'] . "')\"><i style='display:none;' id='spinner-" . $jadwal_dokter['id'] . "' class='fa fa-spinner fa-spin'></i>&nbsp;Pilih</a></td>";
                                         $nominal = $this->db->query('SELECT harga FROM nominal WHERE poli = "' . $jadwal_dokter["poli"] . '"')->row();
                                         echo "<tr>";
                                         echo "<td>" . ($idx + 1) . "</td>";
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div class="modal fade" id="tac_modal_daftar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document" style="">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content" style="height: 600px;">
                             <div class="modal-header text-modal-header">
                                 <h5 class="modal-title font-16" id="exampleModalScrollableTitles">SYARAT DAN KETENTUAN PENGGUNAAN</h5>
@@ -276,13 +276,13 @@
                                     <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:justify;vertical-align:baseline;'><span style='font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</span></p>
                                     <ol style="list-style-type: lower-roman;margin-left:35px;">
                                         <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Anda akan dikenakan tarif dengan jumlah tertentu yang sudah di tentukan oleh pihak Rumah Sakit.</span></li>
-                                        <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Saat menghubungi dokter melalui <em><span style=";">chat</span></em>, Anda dapat mengirimkan gambar kepada dokter yang berkaitan dengan kondisi medis Anda dengan format png, jpg, dan bitmap.&nbsp;</span></li>
+                                        <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Saat menghubungi dokter melalui <em><span>chat</span></em>, Anda dapat mengirimkan gambar kepada dokter yang berkaitan dengan kondisi medis Anda dengan format png, jpg, dan bitmap.&nbsp;</span></li>
                                         <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Setelah sesi Chat dengan Dokter selesai, dokter dapat memberikan <em><span style='font-family:"Calibri",sans-serif;'>Diagnosa&nbsp;</span></em>dan <em><span style='font-family:"Calibri",sans-serif;'>Electronic Prescription</span></em>.&nbsp;</span></li>
                                         <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Dokter dapat melakukan <em><span style='font-family:"Calibri",sans-serif;'>Follow Up&nbsp;</span></em>kepada Anda untuk mengecek kondisi kesehatan Anda setelah dilakukannya sesi Chat dengan Dokter.</span></li>
                                         <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Transaksi tidak dapat dibatalkan setelah sesi Chat dengan Dokter berakhir atau selesai dilakukan.</span></li>
                                         <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Kami dapat memblokir atau membatalkan akun Anda apabila terdapat penyalahgunaan fitur Chat dengan Dokter pada akun Anda.</span></li>
                                         <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Biaya yang dikenakan tersebut belum termasuk penggunaan pembayaran dengan metode : e-banking, m-banking..</span></li>
-                                        <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Ketepatan serta keakuratan Dokter dalam memberikan <em><span style='font-family:"Calibri",sans-serif;'>Electronic Prescription&nbsp;</span></em>akan bergantung pada informasi yang diberikan oleh Anda. Setiap isi dan/atau pernyataan-pernyataan dalam percakapan yang dilakukan oleh Anda dengan Dokter menggunakan fitur <em><span style=";">video call, chat, Diagnosa</span></em>, <em><span style='font-family:"Calibri",sans-serif;'>Electronic Prescription</span></em>, pada Platform, hal tersebut ialah percakapan dan interaksi pribadi antara Anda dengan Dokter rekanan sebagai pemberi jasa layanan kesehatan.</span></li>
+                                        <li><span style='font-family:"Calibri",sans-serif;font-size:11.0pt;'>Ketepatan serta keakuratan Dokter dalam memberikan <em><span style='font-family:"Calibri",sans-serif;'>Electronic Prescription&nbsp;</span></em>akan bergantung pada informasi yang diberikan oleh Anda. Setiap isi dan/atau pernyataan-pernyataan dalam percakapan yang dilakukan oleh Anda dengan Dokter menggunakan fitur <em><span>video call, chat, Diagnosa</span></em>, <em><span style='font-family:"Calibri",sans-serif;'>Electronic Prescription</span></em>, pada Platform, hal tersebut ialah percakapan dan interaksi pribadi antara Anda dengan Dokter rekanan sebagai pemberi jasa layanan kesehatan.</span></li>
                                     </ol>
                                     <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:justify;vertical-align:baseline;'><span style='font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</span></p>
                                     <p style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:justify;vertical-align:baseline;'><span style='font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</span></p>
@@ -434,39 +434,37 @@
 } ?>
 
 <script>
-    function openModalAndRedirect(url,spinner) {
-        $('#'+spinner).show();
+    function openModalAndRedirect(url, spinner) {
+        $('#' + spinner).show();
 
         const form = new FormData();
-    form.append('userId', <?= $this->session->userdata("id_user")  ?>);
+        form.append('userId', <?= $this->session->userdata("id_user")  ?>);
         axios.post('<?= config_item('pg_api') ?>/owlexa/Api/plafonCheck', form)
-          .then(function (response) {
-             $('#'+spinner).hide();
-            if(response.data.data < 1000000)
-            {
-                alert('Tidak dapat melakukan pendaftaran konsultasi karena plafon tidak mencukupi, silahkan cek plafon anda kembali');
-                return false;
-            }
+            .then(function(response) {
+                $('#' + spinner).hide();
+                if (response.data.data < 1000000) {
+                    alert('Tidak dapat melakukan pendaftaran konsultasi karena plafon tidak mencukupi, silahkan cek plafon anda kembali');
+                    return false;
+                }
 
-            $('#tac_modal_daftar').modal('show');
+                $('#tac_modal_daftar').modal('show');
                 $("#simpan_toc").on("click", function() {
                     window.location.href = url;
                 });
                 $("#batal_toc").on("click", function() {
                     $('#tac_modal_daftar').modal('hide');
                 });
-              
-            })
-          .catch(function (error) {
-                $('#'+spinner).hide();
-                console.log(error.response.data.msg)
-            if(error.response.data.msg == "Data tidak ditemukan")
-            {
-                alert("Akun anda belum terdaftar di Owlexa");
 
-            }
-          });
-      
+            })
+            .catch(function(error) {
+                $('#' + spinner).hide();
+                console.log(error.response.data.msg)
+                if (error.response.data.msg == "Data tidak ditemukan") {
+                    alert("Akun anda belum terdaftar di Owlexa");
+
+                }
+            });
+
     }
     $(document).ready(function() {
         $('#toc_body').scroll(function(e) {

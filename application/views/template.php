@@ -45,7 +45,6 @@
   <script src="<?php echo base_url('assets/bower_components/lodash/dist/lodash.min.js') ?>"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script type="text/javascript">
-    
     const firebaseConfig = {
 
       apiKey: "AIzaSyBQVFzlB_hnd8Td48GuQSUbhV60DXENiRw",
@@ -242,26 +241,26 @@
 
  -->
 
-      <div class="modal fade" id="jawaban_farmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content mx-auto" style="width: 400px">
-            <div class="modal-header">
-              <p class="modal-title font-24" id="exampleModalLabel">Panggilan...</p>
-            </div>
-            <div class="modal-body" align="center">
-              <i class="fas fa-phone fa-5x text-tele">....</i>
-            </div>
-            <div class="modal-footer">
-              <div class="mt-5 mx-auto">
-                <button type="button" class="btn btn-simpan" data-dismiss="modal" id="jawab_farmasi" data-room-name="" data-id-farmasi="" data-pd=''>Jawab</button>
-                <button type="button" class="btn btn-batal" data-dismiss="modal" id="tolak_farmasi" data-id-farmasi="" data-pd=''>Tolak</button>
-              </div>
+    <div class="modal fade" id="jawaban_farmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content mx-auto" style="width: 400px">
+          <div class="modal-header">
+            <p class="modal-title font-24" id="exampleModalLabel">Panggilan...</p>
+          </div>
+          <div class="modal-body" align="center">
+            <i class="fas fa-phone fa-5x text-tele">....</i>
+          </div>
+          <div class="modal-footer">
+            <div class="mt-5 mx-auto">
+              <button type="button" class="btn btn-simpan" data-dismiss="modal" id="jawab_farmasi" data-room-name="" data-id-farmasi="" data-pd=''>Jawab</button>
+              <button type="button" class="btn btn-batal" data-dismiss="modal" id="tolak_farmasi" data-id-farmasi="" data-pd=''>Tolak</button>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-    <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ?',[$user->id])->row(); ?>
+    <?php $user_2 = $this->db->query('select master_user.id_user_kategori, detail_pasien.accept_tac from master_user INNER JOIN detail_pasien ON detail_pasien.id_pasien = master_user.id where master_user.id = ?', [$user->id])->row(); ?>
 
 
 
@@ -452,8 +451,8 @@
     pesan.onMessage(function(payload) {
       var test = payload || {};
       loadData = test.data.body;
-      console.log('payload',payload);
-       // console.log('name',JSON.parse(JSON.parse(payload.data.body).name);
+      console.log('payload', payload);
+      // console.log('name',JSON.parse(JSON.parse(payload.data.body).name);
       //  $("#jawaban").modal('show');
       if (loadData == "ok") {
         $('#memanggil').modal('hide');
@@ -477,7 +476,7 @@
               $('input[name=tekanan_darah]').val(JSON.parse(payload.data.body).tekanan_darah);
               if (JSON.parse(payload.data.body).user_file) {
                 var userFiles = JSON.parse(payload.data.body).user_file;
-                if (appendAssesment){
+                if (appendAssesment) {
                   document.getElementById('file_asesmen').innerHTML = "";
                   userFiles.forEach(function(file) {
                     var card = document.createElement('div');
@@ -540,7 +539,7 @@
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_berakhir_pasien')) {
           location.href = "<?php echo base_url('pasien/Pasien') ?>";
         }
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_pasien')){
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_pasien')) {
           $("#jawab_farmasi").data('room-name', JSON.parse(payload.data.body).room_name);
           $('#jawab_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
           $('#jawab_farmasi').data('pd', JSON.parse(payload.data.body).p_or_d);
@@ -553,19 +552,19 @@
           $("#jawaban_farmasi").modal('show');
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_pasien')){
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_pasien')) {
           $('#memanggil').modal('hide');
           $('#konten-panggilan').prop('hidden', false);
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'reject_panggilan_farmasi_pasien')){
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'reject_panggilan_farmasi_pasien')) {
           $('#memanggil').modal('hide');
           $('#konten-panggilan').prop('hidden', true);
 
           alert('Panggilan ditolak oleh pasien');
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_dokter')){
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_farmasi_dokter')) {
           $("#jawab_farmasi").data('room-name', JSON.parse(payload.data.body).room_name);
           $('#jawab_farmasi').data('id-farmasi', JSON.parse(payload.data.body).id_farmasi);
           $('#jawab_farmasi').data('pd', JSON.parse(payload.data.body).p_or_d);
@@ -578,24 +577,24 @@
           $("#jawaban_farmasi").modal('show');
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_dokter')){
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'accept_panggilan_farmasi_dokter')) {
           $('#memanggil').modal('hide');
           $('#konten-panggilan').prop('hidden', false);
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'reject_panggilan_farmasi_dokter')){
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'reject_panggilan_farmasi_dokter')) {
           $('#memanggil').modal('hide');
           $('#konten-panggilan').prop('hidden', true);
 
           alert('Panggilan ditolak oleh dokter');
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'akhiri_panggilan_farmasi_pasien')){
-          location.href = baseUrl+'pasien/Pasien';
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'akhiri_panggilan_farmasi_pasien')) {
+          location.href = baseUrl + 'pasien/Pasien';
         }
 
-        if(JSON.parse(JSON.parse(payload.data.body).name == 'akhiri_panggilan_farmasi_dokter')){
-          location.href = baseUrl+'dokter/Dashboard';
+        if (JSON.parse(JSON.parse(payload.data.body).name == 'akhiri_panggilan_farmasi_dokter')) {
+          location.href = baseUrl + 'dokter/Dashboard';
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'pendaftaran_konsultasi')) {
           alert('Terdapat jadwal konsultasi baru yang didaftarkan!');
@@ -627,7 +626,7 @@
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_dokter')) {
           $('#memanggil').modal('hide');
-          if($('textarea[name=keluhan]').val()){
+          if ($('textarea[name=keluhan]').val()) {
             startTimer();
           }
         }
@@ -711,12 +710,12 @@
 
   <script>
     function getParameterByName(name, url = window.location.href) {
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
     $("#update_diagnosa").click(function() {
       let data_konsultasi_2 = $('#formKonsultasi_2').serializeArray();
@@ -726,7 +725,7 @@
 
       $('tr').each(function() {
         let temp = $(this).attr("id");
-        if(!(temp == undefined)) {
+        if (!(temp == undefined)) {
           list_id_obat.push(temp);
         }
       });
@@ -744,38 +743,40 @@
       let invalid = 0;
 
       data_konsultasi_2.forEach(item => {
-        if(item.value == "0" || item.value == "" || item.value=="-- Pilih Apotek --" || item.value=="-- Pilih Diagnosa --") {
-          invalid ++;
+        if (item.value == "0" || item.value == "" || item.value == "-- Pilih Apotek --" || item.value == "-- Pilih Diagnosa --") {
+          invalid++;
         }
       });
 
-      if(invalid > 0) {
+      if (invalid > 0) {
         alert("Form masih kosong!");
-      }else {
+      } else {
         $.ajax({
-            method: 'POST',
-            url: baseUrl + "dokter/Teleconsultasi/update_diagnosa",
-            data: {
-              id_pasien: id_pasien,
-              id_jadwal_konsultasi: id_jadwal_konsultasi,
-              data_konsultasi: data_konsultasi_2,
-              list_id_obat: list_id_obat,
-              list_keterangan_obat: list_keterangan_obat ,
-              list_jumlah_obat: list_jumlah_obat,
-              apotek: $('#apotek option:selected').text(),
-              diagnosis: $('#diagnosis option:selected').text()
+          method: 'POST',
+          url: baseUrl + "dokter/Teleconsultasi/update_diagnosa",
+          data: {
+            id_pasien: id_pasien,
+            id_jadwal_konsultasi: id_jadwal_konsultasi,
+            data_konsultasi: data_konsultasi_2,
+            list_id_obat: list_id_obat,
+            list_keterangan_obat: list_keterangan_obat,
+            list_jumlah_obat: list_jumlah_obat,
+            apotek: $('#apotek option:selected').text(),
+            diagnosis: $('#diagnosis option:selected').text()
 
-            },success: function (data) {
-              alert("Berhasil menyelesaikan telekonsultasi!");
-              location.href = baseUrl+"dokter/HistoryMedisPasien/index/all";
-            },
-            error: function (data) {
-              console.log(data);
-            }
-          });
+          },
+          success: function(data) {
+            alert("Berhasil menyelesaikan telekonsultasi!");
+            location.href = baseUrl + "dokter/HistoryMedisPasien/index/all";
+          },
+          error: function(data) {
+            console.log(data);
+          }
+        });
       }
 
     });
+
     function readNotif(id_notif) {
       $.ajax({
         method: 'GET',
@@ -812,11 +813,10 @@
   <?php
   if (isset($js_addons)) {
     echo $js_addons;
-
   }
   ?>
 
- <!--  <script>
+  <!--  <script>
     $.widget.bridge('uibutton', $.ui.button)
   </script> -->
 

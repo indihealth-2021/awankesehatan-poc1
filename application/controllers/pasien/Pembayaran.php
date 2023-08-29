@@ -1347,17 +1347,22 @@ class Pembayaran extends CI_Controller
         $chargeValue = $biaya_konsultasi + $biaya_adm;
         // echo var_dump(floatval($data['chargeValue']));
         // die;
+        // $dataRaw = array(
+        //     "birthDate" => $birthDate,
+        //     "cardNumber" => $cardNumber,
+        //     "currentTime" => $currentTime,
+        //     "email" => $email,
+        //     "providerCode" => 3495,
+        //     "admissionDate" => $admissionDate,
+        //     "fullName" => $fullName,
+        //     "chargeValue" => floatval($chargeValue),
+        //     // "otp" => $otp,
+        //     "telemedicineType" => 'TM-001',
+        // ); 
         $dataRaw = array(
-            "birthDate" => $birthDate,
-            "cardNumber" => $cardNumber,
-            "currentTime" => $currentTime,
-            "email" => $email,
-            "providerCode" => 3495,
-            "admissionDate" => $admissionDate,
-            "fullName" => $fullName,
-            "chargeValue" => floatval($chargeValue),
-            // "otp" => $otp,
-            "telemedicineType" => 'TM-001',
+            "userId" => $id_pasien,
+            "dokterId" => $id_dokter,
+            "registrasiId" => $id_registrasi,
         );
 
         $dataRaw = json_encode($dataRaw);
@@ -1365,7 +1370,7 @@ class Pembayaran extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://test.owlexa.com/owlexa-api/telemedicine/v1/verification",
+            CURLOPT_URL => $this->config->item('path_to_env')."/owlexa/Api/guarantee",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -1384,7 +1389,7 @@ class Pembayaran extends CI_Controller
         $result = json_decode($result, true);
 
         curl_close($curl);
-
+  
         $response['data'] = $result['data'];
         // $this->response($result, REST_Controller::HTTP_OK);
         if ($result['code'] == 200) {
@@ -1582,7 +1587,7 @@ class Pembayaran extends CI_Controller
                 redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
             }
         } else {
-            $response['msg'] = 'GAGAL: ' . $result['message'];
+            $response['msg'] = 'GAGAL:' . $result['msg'];
             $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
             //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
             redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));

@@ -28,10 +28,15 @@ function checkform(form) {
   for (var i = 0; i < inputs.length; i++) {
     // only validate the inputs that have the required attribute
     if (inputs[i]) {
-      if (inputs[i].value == "") {
-        // found an empty field that is required
-        return false;
+      if(inputs[i].name != 'tekanan_darah')
+      {
+          // console.log(inputs[i].name)
+          if (inputs[i].value == "") {
+            // found an empty field that is required
+            return false;
+          }
       }
+    
     }
   }
 

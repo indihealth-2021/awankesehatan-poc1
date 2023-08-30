@@ -6,6 +6,7 @@ class Apotek extends CI_Controller {
 
 	private $bingMapsAPIKey = "AuPkBhRU1tlp5gG2Vki8-LpP7ooPssnBv_MQ_u1BNoPXIWZiY7AF_3BVvpLQz7XC";
 
+
 	public function __construct() {
 		parent::__construct();
 		$this->load->model("apotek_model");
@@ -107,11 +108,11 @@ class Apotek extends CI_Controller {
 
 		if($this->input->post("get_all")) {
 			$pasien = $this->db->query("SELECT * FROM master_user WHERE id=".$id_pasien)->row();
-			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text, master_apotek.latitude, master_apotek.longitude FROM master_apotek")->result_array();
+			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text,master_apotek.alamat_jalan, master_apotek.latitude, master_apotek.longitude FROM master_apotek")->result_array();
 			$origin			= $pasien->latitude.",".$pasien->longitude;
 			$langitude = 0;
 			$longitude = 0;
-
+			// error_reporting(0);
 			if($origin == ",") {
 				if($pasien->alamat_kelurahan != null) {
 					$executable_query = "SELECT master_kelurahan.name FROM master_kelurahan WHERE master_kelurahan.id=".$pasien->alamat_kelurahan;
@@ -126,8 +127,11 @@ class Apotek extends CI_Controller {
 				}
 				for($i = 0; $i < count($temp); $i ++) {
 					$origin = $langitude.",".$longitude;
-					$destination	= $temp[$i]["latitude"].",".$temp[$i]["longitude"];
+					$coord = $this->approximateLocation($temp[$i]["alamat_jalan"])["bbox"];
+					
+					$destination	= $coord[0].",".$coord[1];
 					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
+					$distance = number_format($distance,2,',','.');
 					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
 				}
 			}else {
@@ -135,7 +139,7 @@ class Apotek extends CI_Controller {
 					$destination	= $temp[$i]["latitude"].",".$temp[$i]["longitude"];
 
 					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
-
+					$distance = number_format($distance,2,',','.');
 					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
 				}
 			}

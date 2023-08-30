@@ -224,7 +224,7 @@ class Pasien extends CI_Controller
             $this->session->set_flashdata('error', 'email');
             redirect(base_url('admin/Pasien/form_edit_pasien/' . $id));
         }
-        $data["password"] = md5($data["password"]);
+        $data["password"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT, $this->config->item('hash_config'));
         if ($data["id_user_kategori"] == 0) {
             if (!empty($_FILES['foto']['name'])) {
                 $data['foto'] = $this->_upload_file('foto');
@@ -522,22 +522,22 @@ class Pasien extends CI_Controller
     {
         $this->all_controllers->check_user_admin();
 
-        $where = array('id' => $id,'id_user_kategori'=>0);
-		$data_registrasi = $this->db->query('SELECT data_registrasi.id FROM data_registrasi WHERE data_registrasi.id_pasien = '.$id)->row();
-		$bukti_pembayaran = $this->db->query('SELECT id FROM bukti_pembayaran WHERE id_pasien = '.$id)->row();
-		$bukti_pembayaran_obat = $this->db->query('SELECT id FROM bukti_pembayaran_obat WHERE id_pasien = '.$id)->row();
-		$jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id_pasien = '.$id)->row();
-		$resep_dokter = $this->db->query('SELECT id FROM resep_dokter WHERE id_pasien = '.$id)->row();
-		if($data_registrasi || $bukti_pembayaran || $bukti_pembayaran_obat || $jadwal_konsultasi || $resep_dokter){
-			$result->message = "GAGAL: Pasien masih memiliki transaksi / jadwal yang terkait!";
-			$this->session->set_flashdata('msg_hps_pasien', $result->message);
-			redirect(base_url('admin/Pasien'));
-		}
+        $where = array('id' => $id, 'id_user_kategori' => 0);
+        $data_registrasi = $this->db->query('SELECT data_registrasi.id FROM data_registrasi WHERE data_registrasi.id_pasien = ' . $id)->row();
+        $bukti_pembayaran = $this->db->query('SELECT id FROM bukti_pembayaran WHERE id_pasien = ' . $id)->row();
+        $bukti_pembayaran_obat = $this->db->query('SELECT id FROM bukti_pembayaran_obat WHERE id_pasien = ' . $id)->row();
+        $jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id_pasien = ' . $id)->row();
+        $resep_dokter = $this->db->query('SELECT id FROM resep_dokter WHERE id_pasien = ' . $id)->row();
+        if ($data_registrasi || $bukti_pembayaran || $bukti_pembayaran_obat || $jadwal_konsultasi || $resep_dokter) {
+            $result->message = "GAGAL: Pasien masih memiliki transaksi / jadwal yang terkait!";
+            $this->session->set_flashdata('msg_hps_pasien', $result->message);
+            redirect(base_url('admin/Pasien'));
+        }
 
         if ($this->all_model->delete('master_user', $where) == 1) {
-            $detail_pasien = $this->db->query('SELECT id FROM detail_pasien WHERE id_pasien = '.$id)->row();
-            if($detail_pasien){
-                $this->db->delete('detail_pasien', array('id_pasien'=>$id));
+            $detail_pasien = $this->db->query('SELECT id FROM detail_pasien WHERE id_pasien = ' . $id)->row();
+            if ($detail_pasien) {
+                $this->db->delete('detail_pasien', array('id_pasien' => $id));
             }
             $result->message = "Data user pasien berhasil dihapus!";
         } else {
@@ -548,7 +548,8 @@ class Pasien extends CI_Controller
         redirect(base_url('admin/Pasien'));
     }
 
-    public function assignment($id_pasien){
+    public function assignment($id_pasien)
+    {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
             'Assesment',

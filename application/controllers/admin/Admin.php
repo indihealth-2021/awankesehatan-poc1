@@ -22,8 +22,8 @@ class Admin extends CI_Controller
     {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
-            $title="Dashboard Admin",
-            $view="admin/index"
+            $title = "Dashboard Admin",
+            $view = "admin/index"
         );
 
         $data['list_dokter'] = $this->dokter_model->get_all(null, 4);
@@ -76,10 +76,10 @@ class Admin extends CI_Controller
     {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
-            $title="Manage Admin",
-            $view="admin/manage_admin"
+            $title = "Manage Admin",
+            $view = "admin/manage_admin"
         );
-        
+
         $data['list_admin'] = $this->admin_model->get_all();
         $data['css_addons'] = '<link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">';
         $data['js_addons'] = '
@@ -135,7 +135,7 @@ class Admin extends CI_Controller
             //   }
             // }
 
-            $data["password"] = md5($data["password"]);
+            $data["password"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT, $this->config->item('hash_config'));
             unset($data['id_user_jenis']);
             unset($data['id_user_spesialis']);
             unset($data['id_layanan']);
@@ -242,8 +242,8 @@ class Admin extends CI_Controller
     {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
-            $title="Tambah Admin",
-            $view="admin/form_admin"
+            $title = "Tambah Admin",
+            $view = "admin/form_admin"
         );
 
         if ($this->session->flashdata('old_form')) {
@@ -526,8 +526,8 @@ class Admin extends CI_Controller
     {
         $this->all_controllers->check_user_admin();
         $hasil = $this->all_controllers->get_data_view(
-            $title="Edit Admin",
-            $view="admin/form_edit_admin"
+            $title = "Edit Admin",
+            $view = "admin/form_edit_admin"
         );
 
         $result = $this->_get_json_data();
@@ -725,7 +725,7 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('msg_hps_admin', $result->message);
         } else {
             $result->message = "Data user admin gagal dihapus";
-        $this->session->set_flashdata('msg_hps_admin', $result->message);
+            $this->session->set_flashdata('msg_hps_admin', $result->message);
         }
 
         redirect(base_url('admin/admin/manage_admin'));

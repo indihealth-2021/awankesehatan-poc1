@@ -6,4 +6,5 @@ assets/files/attachments/*
 .well-known/*
 ~/.vscode-root-fixed
 vendor
-config
+.vscode
+application/config/config.php

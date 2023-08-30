@@ -1,8 +1,10 @@
 <?php
 defined("BASEPATH") or exit("No direct script access allowed");
 
-class AdminApotek extends CI_Controller {
-    public function __construct() {
+class AdminApotek extends CI_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model("all_model");
         $this->load->model("adminApotek_model");
@@ -12,7 +14,8 @@ class AdminApotek extends CI_Controller {
         $this->load->library('all_controllers');
     }
 
-    private function js_addons($key) {
+    private function js_addons($key)
+    {
         $dictionary = array();
         $dictionary["index"] = '
             <script src="' . base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') . '"></script>
@@ -46,7 +49,8 @@ class AdminApotek extends CI_Controller {
         return $dictionary[$key];
     }
 
-    private function css_addons($key) {
+    private function css_addons($key)
+    {
         $dictionary = [
             "index" => '<link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') . '"><link rel="stylesheet" href="' . base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') . '">'
         ];
@@ -54,31 +58,33 @@ class AdminApotek extends CI_Controller {
         return $dictionary[$key];
     }
 
-    public function index() {
-      $this->all_controllers->check_user_admin();
-      $data = $this->all_controllers->get_data_view(
-        $title = "Manage Admin Apotek",
-        $view = "admin/manage_admin_apotek"
-      );
+    public function index()
+    {
+        $this->all_controllers->check_user_admin();
+        $data = $this->all_controllers->get_data_view(
+            $title = "Manage Admin Apotek",
+            $view = "admin/manage_admin_apotek"
+        );
 
-      $data['css_addons'] = $this->css_addons("index");
-      $data['js_addons'] = $this->js_addons("index");
-      $data['list_admin_apotek'] = $this->adminApotek_model->get_all();
+        $data['css_addons'] = $this->css_addons("index");
+        $data['js_addons'] = $this->js_addons("index");
+        $data['list_admin_apotek'] = $this->adminApotek_model->get_all();
 
-      $this->load->view('template', $data);
+        $this->load->view('template', $data);
     }
 
-    public function form_admin_apotek() {
+    public function form_admin_apotek()
+    {
         $this->all_controllers->check_user_admin();
-      $data = $this->all_controllers->get_data_view(
-        $title = "Tambah Dokter",
-        $view = "admin/form_admin_apotek"
-      );
+        $data = $this->all_controllers->get_data_view(
+            $title = "Tambah Dokter",
+            $view = "admin/form_admin_apotek"
+        );
 
-		$data['list_poli'] = $this->db->query('SELECT id,poli FROM nominal WHERE aktif=1 ORDER BY nominal.poli')->result();
+        $data['list_poli'] = $this->db->query('SELECT id,poli FROM nominal WHERE aktif=1 ORDER BY nominal.poli')->result();
         $data["list_apotek"] = $this->db->query("SELECT * FROM master_apotek ORDER BY nama")->result();
-		if ($this->session->flashdata('old_form')) {
-			$data['js_addons'] = '
+        if ($this->session->flashdata('old_form')) {
+            $data['js_addons'] = '
       <script>
       $(document).ready(function(){
           $("#provinsi").empty();
@@ -93,7 +99,6 @@ class AdminApotek extends CI_Controller {
                 data = JSON.parse(data);
                 $.each(data, function(index, item){
                     var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
-                    $("#apotek").append(template_apotek);
                 });
 
             },
@@ -256,8 +261,8 @@ class AdminApotek extends CI_Controller {
       });
       </script>
       ';
-		} else {
-			$data['js_addons'] = '
+        } else {
+            $data['js_addons'] = '
 			<script>
 			$(document).ready(function(){
                 $.ajax({
@@ -267,7 +272,6 @@ class AdminApotek extends CI_Controller {
                         data = JSON.parse(data);
                         $.each(data, function(index, item){
                             var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
-                            $("#apotek").append(template_apotek);
                         });
 
                     },
@@ -304,7 +308,6 @@ class AdminApotek extends CI_Controller {
                         console.log(data);
 						$.each(data, function(index, item){
 							var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
-							$("#apotek").append(template_apotek);
 						});
 
 					},
@@ -399,8 +402,8 @@ class AdminApotek extends CI_Controller {
 			});
 			</script>
 			';
-		}
-		$this->load->view('template', $data);
+        }
+        $this->load->view('template', $data);
     }
 
     private function _get_json_data($status = FALSE, $message = '', $data = NULL)
@@ -414,7 +417,8 @@ class AdminApotek extends CI_Controller {
         return $result;
     }
 
-    public function addAdminApotek() {
+    public function addAdminApotek()
+    {
         $this->all_controllers->check_user_admin();
 
         $result = $this->_get_json_data();
@@ -435,7 +439,7 @@ class AdminApotek extends CI_Controller {
             //   }
             // }
 
-            $data["password"] = md5($data["password"]);
+            $data["password"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT, $this->config->item('hash_config'));
             unset($data['id_user_jenis']);
             unset($data['id_user_spesialis']);
             unset($data['id_layanan']);
@@ -543,11 +547,12 @@ class AdminApotek extends CI_Controller {
         //   die;
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $this->all_controllers->check_user_admin();
         $hasil = $this->all_controllers->get_data_view(
-            $title="Edit Admin",
-            $view="admin/form_edit_admin_apotek"
+            $title = "Edit Admin",
+            $view = "admin/form_edit_admin_apotek"
         );
 
         $result = $this->_get_json_data();
@@ -685,7 +690,8 @@ class AdminApotek extends CI_Controller {
         $this->load->view('template', $hasil);
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $this->all_controllers->check_user_admin();
 
         $result = $this->_get_json_data();
@@ -752,7 +758,8 @@ class AdminApotek extends CI_Controller {
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->all_controllers->check_user_admin();
 
         if ($id == $this->session->userdata('id_user')) {
@@ -766,7 +773,7 @@ class AdminApotek extends CI_Controller {
             $this->session->set_flashdata('msg_hps_admin', $result->message);
         } else {
             $result->message = "Data user admin gagal dihapus";
-        $this->session->set_flashdata('msg_hps_admin', $result->message);
+            $this->session->set_flashdata('msg_hps_admin', $result->message);
         }
 
         redirect(base_url('admin/admin/manage_admin'));

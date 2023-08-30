@@ -509,7 +509,7 @@ $(document).ready(function(){
 			//             die();
 			//         }
 			//     }
-			$data["password"] = md5($data["password"]);
+			$data["password"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT, $this->config->item('hash_config'));
 			unset($data['id_user_jenis']);
 			unset($data['id_user_spesialis']);
 			unset($data['id_layanan']);
@@ -817,14 +817,14 @@ $(document).ready(function(){
 	{
 		$this->all_controllers->check_user_admin();
 
-		$where = array('id' => $id,'id_user_kategori'=>2);
-		$jadwal_dokter = $this->db->query('SELECT id FROM jadwal_dokter WHERE id_dokter = '.$id)->row();
-		$data_registrasi = $this->db->query('SELECT data_registrasi.id FROM data_registrasi INNER JOIN jadwal_dokter ON jadwal_dokter.id =  data_registrasi.id_jadwal WHERE jadwal_dokter.id_dokter = '.$id)->row();
-		$bukti_pembayaran = $this->db->query('SELECT id FROM bukti_pembayaran WHERE id_dokter = '.$id)->row();
-		$bukti_pembayaran_obat = $this->db->query('SELECT id FROM bukti_pembayaran_obat WHERE id_dokter = '.$id)->row();
-		$jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id_dokter = '.$id)->row();
-		$resep_dokter = $this->db->query('SELECT id FROM resep_dokter WHERE id_dokter = '.$id)->row();
-		if($jadwal_dokter || $data_registrasi || $bukti_pembayaran || $bukti_pembayaran_obat || $jadwal_konsultasi || $resep_dokter){
+		$where = array('id' => $id, 'id_user_kategori' => 2);
+		$jadwal_dokter = $this->db->query('SELECT id FROM jadwal_dokter WHERE id_dokter = ' . $id)->row();
+		$data_registrasi = $this->db->query('SELECT data_registrasi.id FROM data_registrasi INNER JOIN jadwal_dokter ON jadwal_dokter.id =  data_registrasi.id_jadwal WHERE jadwal_dokter.id_dokter = ' . $id)->row();
+		$bukti_pembayaran = $this->db->query('SELECT id FROM bukti_pembayaran WHERE id_dokter = ' . $id)->row();
+		$bukti_pembayaran_obat = $this->db->query('SELECT id FROM bukti_pembayaran_obat WHERE id_dokter = ' . $id)->row();
+		$jadwal_konsultasi = $this->db->query('SELECT id FROM jadwal_konsultasi WHERE id_dokter = ' . $id)->row();
+		$resep_dokter = $this->db->query('SELECT id FROM resep_dokter WHERE id_dokter = ' . $id)->row();
+		if ($jadwal_dokter || $data_registrasi || $bukti_pembayaran || $bukti_pembayaran_obat || $jadwal_konsultasi || $resep_dokter) {
 			$result->message = "GAGAL: Dokter masih memiliki transaksi / jadwal yang terkait!";
 			$this->session->set_flashdata('msg_hps_dokter', $result->message);
 			redirect(base_url('admin/Dokter'));
@@ -972,11 +972,11 @@ $(document).ready(function(){
 		$deleter = $this->db->query('SELECT name FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
 		$jadwal_dokter = $this->db->query('SELECT d.reg_id as dokter_reg_id, d.id as id_dokter FROM jadwal_dokter jd INNER JOIN master_user d ON jd.id_dokter = d.id WHERE jd.id = ' . $id)->row();
 
-		$data_registrasi = $this->db->query('SELECT id FROM data_registrasi WHERE id_jadwal = '.$id)->row();
-		if($data_registrasi){
-			 $result->message = "GAGAL: Jadwal Dokter masih memiliki transaksi terkait!";
-			 $this->session->set_flashdata('msg_jadwal_dokter', $result->message);
-			 redirect(base_url('admin/Dokter/jadwal_dokter'));
+		$data_registrasi = $this->db->query('SELECT id FROM data_registrasi WHERE id_jadwal = ' . $id)->row();
+		if ($data_registrasi) {
+			$result->message = "GAGAL: Jadwal Dokter masih memiliki transaksi terkait!";
+			$this->session->set_flashdata('msg_jadwal_dokter', $result->message);
+			redirect(base_url('admin/Dokter/jadwal_dokter'));
 		}
 
 		$where = array('id' => $id);
@@ -1004,7 +1004,7 @@ $(document).ready(function(){
 		} else {
 			$result->message = "Data jadwal dokter gagal dihapus!";
 		}
-		
+
 		$this->session->set_flashdata('msg_jadwal_dokter', $result->message);
 		redirect(base_url('admin/Dokter/jadwal_dokter'));
 	}
@@ -1017,7 +1017,7 @@ $(document).ready(function(){
 			$view = "admin/form_edit_jadwalDokter"
 		);
 
-		$data['dokter'] = $this->all_model->select('master_user', 'tabel', array('id_user_kategori'=>2, 'aktif'=>1));
+		$data['dokter'] = $this->all_model->select('master_user', 'tabel', array('id_user_kategori' => 2, 'aktif' => 1));
 		$data['list_notifikasi'] = $this->db->query('SELECT * FROM data_notifikasi WHERE find_in_set("' . $this->session->userdata('id_user') . '", id_user) <> 0 AND status = 0 ORDER BY tanggal DESC')->result();
 
 		$data['specialist'] = $this->all_model->select('master_specialist', 'tabel');
@@ -1063,14 +1063,14 @@ $("input[name=\"colorRadio\"]").click(function(){
 
 		$result = $this->_get_json_data();
 		$data = $this->input->post();
-		$jadwal_dokter = $this->db->query('SELECT jd.id, jd.aktif, dr.id_status_pembayaran, dr.id as id_registrasi, bp.id as id_bukti FROM jadwal_dokter jd LEFT JOIN data_registrasi dr ON dr.id_jadwal = jd.id LEFT JOIN bukti_pembayaran bp ON bp.id_registrasi = dr.id WHERE jd.id = '.$id)->row();
-		if($data['aktif'] == 0 && $jadwal_dokter->aktif != 0){
-			if($jadwal_dokter->id_registrasi != null){
+		$jadwal_dokter = $this->db->query('SELECT jd.id, jd.aktif, dr.id_status_pembayaran, dr.id as id_registrasi, bp.id as id_bukti FROM jadwal_dokter jd LEFT JOIN data_registrasi dr ON dr.id_jadwal = jd.id LEFT JOIN bukti_pembayaran bp ON bp.id_registrasi = dr.id WHERE jd.id = ' . $id)->row();
+		if ($data['aktif'] == 0 && $jadwal_dokter->aktif != 0) {
+			if ($jadwal_dokter->id_registrasi != null) {
 				$this->session->set_flashdata('msg_jadwal_dokter', 'GAGAL: Jadwal ini tidak dapat dinonaktifkan, karena sudah ada pasien yang mendaftar!');
 				redirect(base_url('admin/Dokter/tampilEdit_jadwalDokter/' . $id));
 			}
-		}else if($data['aktif'] == $jadwal_dokter->aktif){
-			if($jadwal_dokter->id_registrasi != null || $jadwal_dokter->id_bukti != null){
+		} else if ($data['aktif'] == $jadwal_dokter->aktif) {
+			if ($jadwal_dokter->id_registrasi != null || $jadwal_dokter->id_bukti != null) {
 				$this->session->set_flashdata('msg_jadwal_dokter', 'GAGAL: Jadwal ini tidak dapat diubah, karena sudah ada pasien yang mendaftar!');
 				redirect(base_url('admin/Dokter/tampilEdit_jadwalDokter/' . $id));
 			}
@@ -1118,7 +1118,7 @@ $("input[name=\"colorRadio\"]").click(function(){
 		$new_diff_minutes += $new_since_start->h * 60;
 		$new_diff_minutes += $new_since_start->i;
 
-		$list_jadwal_dokter = $this->db->query('SELECT tanggal, waktu FROM jadwal_dokter WHERE id_dokter = ' . $data['id_dokter'] . ' AND hari = "' . $data['hari'] . '" AND id != '.$id)->result();
+		$list_jadwal_dokter = $this->db->query('SELECT tanggal, waktu FROM jadwal_dokter WHERE id_dokter = ' . $data['id_dokter'] . ' AND hari = "' . $data['hari'] . '" AND id != ' . $id)->result();
 		$isJadwalExists = false;
 		foreach ($list_jadwal_dokter as $jadwal_dokter) {
 			$jadwal_dokter_waktu = explode('-', str_replace(' ', '', $jadwal_dokter->waktu));
@@ -1128,14 +1128,14 @@ $("input[name=\"colorRadio\"]").click(function(){
 			$diff_minutes_jadwal += $since_start_jadwal->h * 60;
 			$diff_minutes_jadwal += $since_start_jadwal->i;
 			if ($diff_minutes_jadwal < $new_diff_minutes && $jadwal_dokter->id != $id) {
-				if($jadwal_dokter->tanggal){
+				if ($jadwal_dokter->tanggal) {
 					$tgl_dokter = new DateTime($jadwal_dokter->tanggal);
 					$now = new DateTime('now');
 					$diff_now_tgl_dokter = $now->diff($tgl_dokter);
-					if(!$diff_now_tgl_dokter->invert){
+					if (!$diff_now_tgl_dokter->invert) {
 						$isJadwalExists = true;
 					}
-				}else{
+				} else {
 					$isJadwalExists = true;
 				}
 			}
@@ -1146,14 +1146,14 @@ $("input[name=\"colorRadio\"]").click(function(){
 			$diff_minutes_jadwal += $since_start_jadwal->h * 60;
 			$diff_minutes_jadwal += $since_start_jadwal->i;
 			if ($diff_minutes_jadwal < $new_diff_minutes && $jadwal_dokter->id != $id) {
-				if($jadwal_dokter->tanggal){
+				if ($jadwal_dokter->tanggal) {
 					$tgl_dokter = new DateTime($jadwal_dokter->tanggal);
 					$now = new DateTime('now');
 					$diff_now_tgl_dokter = $now->diff($tgl_dokter);
-					if(!$diff_now_tgl_dokter->invert){
+					if (!$diff_now_tgl_dokter->invert) {
 						$isJadwalExists = true;
 					}
-				}else{
+				} else {
 					$isJadwalExists = true;
 				}
 			}

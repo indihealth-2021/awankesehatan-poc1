@@ -27,9 +27,8 @@ date_default_timezone_set('Asia/Jakarta');
 // $config['path_to_env'] = 'https://poc1.awankesehatan.com/';
 // $config['path_to_api'] = 'https://api-poc1.awankesehatan.com/';
 
-$config["base_url"] = "http://localhost/work/awankesehatan-poc1";
-$config["path_to_env"] = "https://api-poc1.awankesehatan.com";
-$config["pg_api"] = "https://api-poc1.awankesehatan.com";
+$config["base_url"] = "http://localhost/awankesehatan-poc1";
+$config["path_to_env"] = "http://localhost/work/awankesehatan-poc1";
 $config["recaptcha_site"] = "http://localhost/work/awankesehatan-poc1";
 
 ///recaptcha

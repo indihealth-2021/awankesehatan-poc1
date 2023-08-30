@@ -157,7 +157,7 @@ $(document).ready(function () {
       $view = "admin/manage_history_payment_obat"
     );
 
-    $nama_pasien = isset($_GET['nama_pasien']) ? $_GET['nama_pasien']:null;
+    $nama_pasien = isset($_GET['nama_pasien']) ? $_GET['nama_pasien'] : null;
     $count_rows = count($this->pembayaran_obat_model->get_all_history($nama_pasien));
     $config = $this->my_pagination->paginate(5, 4, $count_rows, base_url('admin/PembayaranObat/history'));
     $this->pagination->initialize($config);
@@ -314,6 +314,20 @@ $(document).ready(function () {
     $msg_notif = json_encode($msg_notif);
     $user = $this->db->query('SELECT reg_id FROM master_user WHERE id = ' . $bukti_pembayaran_obat->id_pasien)->row();
     $this->key->_send_fcm($pasien_reg->reg_id, $msg_notif);
+
+    // Send notification to admin farmasi
+    $farmasi_reg = $this->db->query('SELECT name, reg_id, email FROM master_user WHERE id_apotek = ' . $bukti_pembayaran_obat->id_apotek)->row();
+    $msg_notif2 = array(
+      'name' => 'vp',
+      "id_notif" => $id_notif,
+      'keterangan' => $notifikasi,
+      'tanggal' => $now,
+      'id_user' => json_encode(array($bukti_pembayaran_obat->id_pasien)),
+      'direct_link' => $direct_link,
+    );
+    $msg_notif2 = json_encode($msg_notif2);
+    $this->key->_send_fcm($farmasi_reg->reg_id, $msg_notif2);
+
 
     // KIRIM EMAIL //
     $data_message['nama_pasien'] = $pasien_reg->name;

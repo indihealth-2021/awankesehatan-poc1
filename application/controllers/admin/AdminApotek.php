@@ -590,6 +590,7 @@ class AdminApotek extends CI_Controller
                 $("#apotek").append("<option>PILIH APOTEK</option>");
                 $.each(data, function(index, item){
                     var template_apotek = "<option value=\""+item.id+"\" "+item.selected+">"+item.nama+"</option>";
+                    $("#apotek").append(template_apotek);
                 });
 
             },

@@ -28,7 +28,7 @@ function checkform(form) {
   for (var i = 0; i < inputs.length; i++) {
     // only validate the inputs that have the required attribute
     if (inputs[i]) {
-      if(inputs[i].name != 'tekanan_darah')
+      if(inputs[i].name != 'tekanan_darah' || inputs[i].name != 'suhu' )
       {
           // console.log(inputs[i].name)
           if (inputs[i].value == "") {

@@ -7,3 +7,4 @@ assets/files/attachments/*
 ~/.vscode-root-fixed
 vendor
 .vscode
+application/config/config.php

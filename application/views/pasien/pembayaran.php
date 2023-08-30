@@ -124,10 +124,10 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
             </div>
           </div>
           <div class="pt-5">
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-11">
               <div class="form-group row">
-                <div for="metode-pembayaran" class="col-md-3 mt-2 <?php echo !$bukti_pembayaran && $registrasi->id_status_pembayaran == 0 ? 'text-abu' : 'text-dark'; ?>">Metode Pembayaran: </div>
-                <div class="col-md-6">
+                <div for="metode-pembayaran" class="col-md-3 col-5 mt-2 <?php echo !$bukti_pembayaran && $registrasi->id_status_pembayaran == 0 ? 'text-abu' : 'text-dark'; ?>">Metode Pembayaran: </div>
+                <div class="col-md-7 col-7">
                   <?php if ($registrasi->id_status_pembayaran == 0 && !$bukti_pembayaran) { ?>
                     <select class="form-control form-select-bayar" name="metode_pembayaran" id="metode-pembayaran">
                       <option value="0" selected>Pilih Metode</option>
@@ -148,8 +148,8 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
               <?php if ($registrasi->id_status_pembayaran != 0 || ($registrasi->id_status_pembayaran == 0 && $bukti_pembayaran)) { ?>
                 <div class="col-md-11">
                   <div class="form-group row">
-                    <label class="col-md-3 col-4 mt-2 text-dark">Status </label>
-                    <div class="col-md-7 col-8">
+                    <label class="col-md-3 col-5 mt-2 text-dark">Status </label>
+                    <div class="col-md-7 col-7">
                       <div class="row">
                         <p class="text-abu mt-2">:&nbsp&nbsp</p>
                         <p class="mt-2"><?php echo $registrasi->id_status_pembayaran == 1 ? 'Lunas' : ($registrasi->id_status_pembayaran == 0 ? 'Belum Bayar' : 'Sedang Diproses'); ?></p>
@@ -213,8 +213,8 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                   <?php if ($bukti_pembayaran->metode_pembayaran == 1 || $bukti_pembayaran->metode_pembayaran == 2 || $bukti_pembayaran->metode_pembayaran == 3) { ?>
                     <div class="col-md-11">
                       <div class="form-group row">
-                        <label class="col-md-3 col-4 mt-2 text-dark">Bukti Pembayaran / Claim Number / VA Number</label>
-                        <div class="col-md-7 col-4">
+                        <label class="col-md-3 col-5 mt-2 text-dark">Bukti Owlexa / Claim Number / VA Number</label>
+                        <div class="col-md-7 col-7">
                           <div class="row">
                             <p class="text-abu mt-2">:&nbsp&nbsp</p>
                             <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? '<img src="' . base_url('assets/images/bukti_pembayaran/' . $bukti_pembayaran->photo) . '" width="100px">' : ($bukti_pembayaran->metode_pembayaran == 2 ? $bukti_pembayaran->claim_number : $bukti_pembayaran->va_number); ?></p>
@@ -350,19 +350,19 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
           <form id="form-owlexa" method="POST" action="<?php echo base_url('pasien/Pembayaran/bayar_owlexa'); ?>">
             <div class="">
               <div class="row">
-              <div class="metode-owlexa col-md-11">
-                <div class="form-group row">
-                  <div class="col-md-3 col-4">
-                    <p class="text-abu">Pengambilan Obat</p>
+                <div class="metode-owlexa col-md-11">
+                  <div class="form-group row">
+                    <div class="col-md-3 col-4">
+                      <p class="text-abu">Pengambilan Obat</p>
+                    </div>
+                    <div class="col-md-7 col-6">
+                      <select name="dikirim" required id="dikirim" class="form-control form-select-bayar">
+                        <option value="">-Pilih-</option>
+                        <option value="2">Diambil sendiri</option>
+                        <option value="1">Dikirim</option>
+                      </select>
+                    </div>
                   </div>
-                  <div class="col-md-7 col-6">
-                    <select name="dikirim" required id="dikirim" class="form-control form-select-bayar">
-                      <option value="">-Pilih-</option>
-                      <option value="2">Diambil sendiri</option>
-                      <option value="1">Dikirim</option>
-                    </select>
-                  </div>
-                </div>
                 </div>
                 <div class="metode-owlexa col-md-11">
                   <div class="form-group row">
@@ -397,7 +397,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                     </div>
                   </div>
                 </div>
-              <!--   <div class="metode-owlexa col-md-11">
+                <!--   <div class="metode-owlexa col-md-11">
                   <div class="form-group row">
                     <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">OTP </label>
                     <div class="col-md-7 col-8">

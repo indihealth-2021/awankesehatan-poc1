@@ -1107,6 +1107,7 @@ class Pembayaran extends CI_Controller
         // $fullName = 'OWLEXA TESTING CARD 3566'; //$user->name;
         // $birthDate = '1991-05-01'; //$user->lahir_tanggal;
         $cardNumber = $this->input->post('cardNumber');
+
         // $otp = $this->input->post('otp');
         $id_dokter = $this->input->post('id_dokter');
         $id_registrasi = $this->input->post('id_registrasi');
@@ -1118,7 +1119,13 @@ class Pembayaran extends CI_Controller
         $currentTime = date("Y-m-d H:i:s");
 
         $post_data = $this->input->post();
-
+        if(empty($cardNumber))
+        {
+            $response['msg'] = 'Mohon isi no Kartu';
+            $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
+            //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
+            redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
+        }
         // $alamat_kustom = $this->input->post('alamat_kustom');
         if ($post_data['dikirim'] == 1) {
             $alamat_provinsi = $post_data['alamat_provinsi'];
@@ -1133,6 +1140,7 @@ class Pembayaran extends CI_Controller
                 $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
                 //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
                 redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
+                exit();
             }
         }
         
@@ -1581,7 +1589,7 @@ class Pembayaran extends CI_Controller
                 $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
                 redirect(base_url('pasien/JadwalTerdaftar'));
             } else {
-                $response = array('status' => $save1, 'msg' => 'Pembayaran tidak terverifikasi');
+                $response = array('status' => $save1, 'msg' => 'Pembayaran  terverifikasi');
                 $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
                 //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
                 redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));

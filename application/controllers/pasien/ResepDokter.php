@@ -478,31 +478,28 @@ class ResepDokter extends CI_Controller
         $currentTime = date("Y-m-d H:i:s");
         $chargeValue = $total_harga;
         $cardNumber = $data['cardNumber'];
+         if (empty($data['cardNumber'])) {
+            $this->session->set_flashdata('msg_pmbyrn_obat', 'GAGAL: Card Number Wajib Diisi!');
+            redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
+        }
         $otp = $data['otp'];
-        if (!$birthDate || !$fullName || !$cardNumber || !$otp) {
+        if (!$birthDate || !$fullName) {
             $this->session->set_flashdata('msg_pmbyrn_obat', 'GAGAL: Form tidak lengkap!');
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }
 
         $dataRaw = array(
-            "birthDate" => $birthDate,
-            "cardNumber" => $cardNumber,
-            "currentTime" => $currentTime,
-            "providerCode" => 3495,
-            "email" => $email,
-            "admissionDate" => '2020-12-03',
-            "fullName" => $fullName,
-            "chargeValue" => floatval($chargeValue),
-            "otp" => $otp,
-            "telemedicineType" => 'TM-002',
+            'userId' => $id_pasien,
+            'jadwalKonsultasiId' => $id_jadwal_konsultasi,
+            'providerCode' => '6309'
         );
 
-        $dataRaw = json_encode($dataRaw);
-
+        // $dataRaw = json_encode($dataRaw);
+        
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://test.owlexa.com/owlexa-api/telemedicine/v1/verification",
+            CURLOPT_URL => $this->config->item('pg_api')."/owlexa/Api/guaranteeObat",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -511,15 +508,13 @@ class ResepDokter extends CI_Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $dataRaw,
-            CURLOPT_HTTPHEADER => array(
-                "Api-Key: VO6v8Id9eqEchgogLE1nDVFopJdnXxk9K/ZEm7xqX5I=",
-                "Content-Type: application/json"
-            ),
+            
         ));
 
         $result = curl_exec($curl);
-        $result = json_decode($result, true);
 
+        $result = json_decode($result, true);
+        
         curl_close($curl);
 
         $response['data'] = $result['data'];
@@ -600,7 +595,7 @@ class ResepDokter extends CI_Controller
             $this->session->set_flashdata('msg_pmbyrn_obat', $response['msg']);
             redirect(base_url('pasien/ResepDokter'));
         } else {
-            $response['msg'] = 'GAGAL: ' . $result['message'];
+            $response['msg'] = 'GAGAL: ' . $result['msg'];
             $this->session->set_flashdata('msg_pmbyrn_obat', $response['msg']);
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }

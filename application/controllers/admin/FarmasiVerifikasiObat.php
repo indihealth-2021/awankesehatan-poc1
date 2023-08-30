@@ -43,14 +43,14 @@ class FarmasiVerifikasiObat extends CI_Controller
         $data['list_resep'] = $this->db->query("SELECT resep_dokter.id_pasien, bukti_pembayaran.tanggal_konsultasi AS konsultasi_date, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name AS nama_dokter, p.name AS nama_pasien, p.card_number, master_kelurahan.name AS nama_kelurahan, master_kecamatan.name AS nama_kecamatan, master_kota.name AS nama_kota, master_provinsi.name AS nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli AS nama_poli, GROUP_CONCAT('', master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ', master_obat.unit, ' )', ' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', '<span class=\"badge badge-danger\">Nonaktif</span>') ,'|' SEPARATOR '') AS detail_obat, master_obat.harga, master_obat.harga_per_n_unit, GROUP_CONCAT(master_obat.harga SEPARATOR ',') AS harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') AS harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') AS jumlah_obat, md.nama AS diagnosis FROM resep_dokter INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN diagnosis_dokter ON resep_dokter.id_jadwal_konsultasi = diagnosis_dokter.id_jadwal_konsultasi INNER JOIN master_diagnosa md ON diagnosis_dokter.diagnosis = md.id LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_apotek=" . $apotekId . " GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY konsultasi_date ASC" . $limit)->result();
 
         $list_id_konsultasi = [];
-        foreach($data["list_resep"] as $list) {
+        foreach ($data["list_resep"] as $list) {
             array_push($list_id_konsultasi, $list->id_jadwal_konsultasi);
         }
 
         $data["harga_obat"] = $this->all_controllers->getTotalHargaObatFrom($list_id_konsultasi);
 
-//         SELECT resep_dokter.id_pasien,bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('
-// ',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', 'Nonaktif<\/span>') ,'<\/li>' SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, master_diagnosa.nama as diagnosis FROM (resep_dokter, diagnosis_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_apotek=3 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bukti_pembayaran.tanggal_konsultasi ASC LIMIT 4 OFFSET 0;
+        //         SELECT resep_dokter.id_pasien,bukti_pembayaran.tanggal_konsultasi, resep_dokter.id, resep_dokter.created_at, resep_dokter.id_jadwal_konsultasi, d.name as nama_dokter, p.name as nama_pasien, master_kelurahan.name as nama_kelurahan, master_kecamatan.name as nama_kecamatan, master_kota.name as nama_kota, master_provinsi.name as nama_provinsi, p.alamat_jalan, p.kode_pos, nominal.poli as nama_poli, GROUP_CONCAT('
+        // ',master_obat.name, ' ( ', resep_dokter.jumlah_obat, ' ',master_obat.unit ,' )',' ( ', resep_dokter.keterangan, ' ) ', IF(master_obat.active, '', 'Nonaktif<\/span>') ,'<\/li>' SEPARATOR '') as detail_obat, GROUP_CONCAT(master_obat.harga SEPARATOR ',') as harga_obat, GROUP_CONCAT(master_obat.harga_per_n_unit SEPARATOR ',') as harga_obat_per_n_unit, GROUP_CONCAT(resep_dokter.jumlah_obat SEPARATOR ',') as jumlah_obat, master_diagnosa.nama as diagnosis FROM (resep_dokter, diagnosis_dokter) INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id INNER JOIN master_user d ON resep_dokter.id_dokter = d.id INNER JOIN detail_dokter ON detail_dokter.id_dokter = d.id INNER JOIN nominal ON nominal.id = detail_dokter.id_poli INNER JOIN master_user p ON resep_dokter.id_pasien = p.id LEFT JOIN master_kecamatan ON master_kecamatan.id = p.alamat_kecamatan LEFT JOIN master_kelurahan ON master_kelurahan.id = p.alamat_kelurahan LEFT JOIN master_kota ON master_kota.id = p.alamat_kota LEFT JOIN master_provinsi ON master_provinsi.id = p.alamat_provinsi LEFT JOIN master_kategori_obat mko ON master_obat.id_kategori_obat = mko.id INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis LEFT JOIN bukti_pembayaran ON bukti_pembayaran.id_registrasi = diagnosis_dokter.id_registrasi WHERE resep_dokter.dibatalkan = 0 AND resep_dokter.dirilis = 0 AND resep_dokter.diverifikasi = 0 AND resep_dokter.id_apotek=3 GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bukti_pembayaran.tanggal_konsultasi ASC LIMIT 4 OFFSET 0;
         $data["apotek"] = $this->db->query("SELECT * FROM master_apotek WHERE master_apotek.id=" . $apotekId)->result()[0];
 
         // $data["apotek"]->alamat_provinsi = $this->db->query("SELECT name FROM master_provinsi WHERE master_provinsi.id=".$data["apotek"]->alamat_provinsi)->result()[0];
@@ -228,17 +228,18 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function update_harga_obat($id_jadwal_konsultasi) {
+    public function update_harga_obat($id_jadwal_konsultasi)
+    {
         $data_update = array(
             'harga_obat' => $this->input->post("harga_obat")
         );
 
-        if($this->db->update("biaya_pengiriman_obat", $data_update, ["id_jadwal_konsultasi" => $id_jadwal_konsultasi])) {
+        if ($this->db->update("biaya_pengiriman_obat", $data_update, ["id_jadwal_konsultasi" => $id_jadwal_konsultasi])) {
             $this->session->set_flashdata('msg_hapus_obat', "Berhasil update harga!");
             redirect(base_url('admin/FarmasiVerifikasiObat'));
-        }else {
-            $this->session->set_flashdata('msg_hapus_obat', "ERR:".$this->db->error());
-            redirect(base_url('admin/FarmasiVerifikasiObat/edit_harga/'.$id_jadwal_konsultasi));
+        } else {
+            $this->session->set_flashdata('msg_hapus_obat', "ERR:" . $this->db->error());
+            redirect(base_url('admin/FarmasiVerifikasiObat/edit_harga/' . $id_jadwal_konsultasi));
         }
         // if ($id_jadwal_konsultasi){
         //     $this->db->where('id_jadwal_konsultasi', $id_jadwal_konsultasi);
@@ -249,7 +250,8 @@ class FarmasiVerifikasiObat extends CI_Controller
         // }
     }
 
-    public function edit_harga($id_jadwal_konsultasi) {
+    public function edit_harga($id_jadwal_konsultasi)
+    {
         $this->all_controllers->check_user_farmasi();
         $data = $this->all_controllers->get_data_view(
             $title = "Edit Resep Obat",
@@ -366,7 +368,8 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function hapus_obat($id) {
+    public function hapus_obat($id)
+    {
         $this->all_controllers->check_user_farmasi();
 
         $obat = $this->db->query('SELECT id_jadwal_konsultasi FROM resep_dokter WHERE id = ' . $id)->row();
@@ -378,7 +381,8 @@ class FarmasiVerifikasiObat extends CI_Controller
         redirect(base_url('admin/FarmasiVerifikasiObat/form_edit_resep/' . $obat->id_jadwal_konsultasi));
     }
 
-    public function tambah_obat() {
+    public function tambah_obat()
+    {
         $this->all_controllers->check_user_farmasi();
 
         $data_obat = array(
@@ -390,16 +394,17 @@ class FarmasiVerifikasiObat extends CI_Controller
         $this->db->insert('resep_dokter', $data_obat);
     }
 
-    public function submit_resep() {
+    public function submit_resep()
+    {
         $this->all_controllers->check_user_farmasi();
 
         $post_data = $this->input->post();
         $list_resep = $this->db->query('SELECT * FROM resep_dokter WHERE id_jadwal_konsultasi = ' . $post_data['id_jadwal_konsultasi'])->result();
 
-        if(isset($post_data["id_obat"])) {
+        if (isset($post_data["id_obat"])) {
             for ($i = 0; $i < count($post_data["id_obat"]); $i++) {
-                $resepExists = $this->db->query("SELECT * FROM resep_dokter WHERE id_obat=".$post_data["id_obat"][$i])->row();
-                if(!$resepExists) {
+                $resepExists = $this->db->query("SELECT * FROM resep_dokter WHERE id_obat=" . $post_data["id_obat"][$i])->row();
+                if (!$resepExists) {
                     $resep = $this->db->query('SELECT harga, harga_per_n_unit FROM master_obat WHERE id = ' . $post_data['id_obat'][$i])->row();
                     $data_resep = array(
                         "id_jadwal_konsultasi" => $post_data['id_jadwal_konsultasi'],
@@ -417,12 +422,12 @@ class FarmasiVerifikasiObat extends CI_Controller
                 }
             }
 
-            foreach($list_resep as $resep) {
-                if( !in_array($resep->id_obat, $post_data["id_obat"])  ) {
+            foreach ($list_resep as $resep) {
+                if (!in_array($resep->id_obat, $post_data["id_obat"])) {
                     $this->db->delete("resep_dokter", ["id" => $resep->id]);
                 }
             }
-        }else {
+        } else {
             foreach ($list_resep as $resep) {
                 $this->db->delete('resep_dokter', array('id' => $resep->id));
             }
@@ -432,7 +437,8 @@ class FarmasiVerifikasiObat extends CI_Controller
         redirect(base_url('admin/FarmasiVerifikasiObat'));
     }
 
-    public function verifikasi($id_jadwal_konsultasi) {
+    public function verifikasi($id_jadwal_konsultasi)
+    {
         $this->all_controllers->check_user_farmasi();
 
         $list_resep = $this->db->query('SELECT id, id_pasien FROM resep_dokter WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->result();

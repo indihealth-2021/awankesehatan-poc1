@@ -104,7 +104,8 @@ class Teleconsultasi extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function get_active_apotek() {
+    public function get_active_apotek()
+    {
         $searchTerm = $this->input->get('searchTerm');
 
         $pglm = $this->input->get("page_limit");
@@ -265,29 +266,30 @@ class Teleconsultasi extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function send_data_penunjang($data) {
+    public function send_data_penunjang($data)
+    {
         $arr = [
             "id_jadwal_konsultasi"  =>  $data["id_jadwal_konsultasi"],
             "planning"      =>  $data["planning"],
             "kesimpulan"    =>  $data["kesimpulan"]
         ];
 
-        if( $data["laboratorium"] ) {
+        if ($data["laboratorium"]) {
             $arr["pemeriksaan_penunjang_laboratorium"] = [];
-            for($i = 0; $i < $data["count-lab"]; $i ++) {
-                if($data["tipe-pemeriksaan-1-".$i]) {
-                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-1-".$i]);
+            for ($i = 0; $i < $data["count-lab"]; $i++) {
+                if ($data["tipe-pemeriksaan-1-" . $i]) {
+                    array_push($arr["pemeriksaan_penunjang_laboratorium"], $data["tipe-pemeriksaan-1-" . $i]);
                 }
             }
 
             $arr["pemeriksaan_penunjang_laboratorium"] = json_encode($arr["pemeriksaan_penunjang_laboratorium"]);
         }
 
-        if( $data["radiologi"] ) {
+        if ($data["radiologi"]) {
             $arr["pemeriksaan_penunjang_radiologi"] = [];
-            for($i = 0; $i < $data["count-rad"]; $i ++) {
-                if($data["tipe-pemeriksaan-2-".$i]) {
-                    array_push($arr["pemeriksaan_penunjang_radiologi"], $data["tipe-pemeriksaan-2-".$i]);
+            for ($i = 0; $i < $data["count-rad"]; $i++) {
+                if ($data["tipe-pemeriksaan-2-" . $i]) {
+                    array_push($arr["pemeriksaan_penunjang_radiologi"], $data["tipe-pemeriksaan-2-" . $i]);
                 }
             }
 
@@ -297,7 +299,6 @@ class Teleconsultasi extends CI_Controller
         $arr["id"] = $this->db->query("SELECT id FROM data_penunjang ORDER BY id DESC")->row()->id + 1;
 
         $this->db->insert("data_penunjang", $arr);
-
     }
 
     public function send_data_konsultasi()
@@ -323,7 +324,7 @@ class Teleconsultasi extends CI_Controller
         //     parse_str($this->input->raw_input_stream, $data);
         // }
 
-        if(!$data["apotek"]) {
+        if (!$data["apotek"]) {
             echo "Apotek null";
         }
 
@@ -373,9 +374,9 @@ class Teleconsultasi extends CI_Controller
         $this->db->insert('data_history_log_dokter', $data_history);
 
         $data["id_registrasi"] = isset($data["id_registrasi"]) ?
-            $data["id_registrasi"]  : $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
-            
-        $kronis = isset($data["kronis"]) ? $data["kronis"] : 0;    
+            $data["id_registrasi"]  : $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=" . $data["id_jadwal_konsultasi"])->row()->id_registrasi;
+
+        $kronis = isset($data["kronis"]) ? $data["kronis"] : 0;
 
         $data_diagnosis_dokter = array(
             "id_dokter" => $id_dokter,
@@ -415,7 +416,7 @@ class Teleconsultasi extends CI_Controller
 
         $jml_data_resep = count($data['keterangan']);
         for ($i = 0; $i < $jml_data_resep; $i++) {
-            $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = '.$data['id_obat'][$i])->row();
+            $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = ' . $data['id_obat'][$i])->row();
             $data_resep = array(
                 "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
                 "id_pasien" => $data['id_pasien'],
@@ -430,6 +431,33 @@ class Teleconsultasi extends CI_Controller
             $this->db->insert('resep_dokter', $data_resep);
         }
 
+        // == Insert to biaya_pengiriman_obat table ==
+
+        $user = $this->all_model->select('master_user', 'row', ['id' => $data['id_pasien']], 1); // Get user data reference
+
+        // Get all prices for id_jadwal_konsultasi in resep_dokter table
+        $resepDokter = $this->all_model->select('resep_dokter', 'row', ['id_jadwal_konsultasi' => $data['id_jadwal_konsultasi']]);
+        $hargaObat = 0;
+        // Sum all prices and save it to harga_obat variable
+        foreach ($resepDokter as $data) {
+            $hargaObat += intval($data->harga);
+        }
+
+        // Get Registration ID from data_registrasi table
+        $dataRegistrasi = $this->all_model->select('data_registrasi', 'row', ['id_pasien' => $data['id_pasien']], 1);
+
+        $data_biaya_pengiriman_obat = [
+            'alamat'                => $user->alamat_jalan,
+            'id_registrasi'         => $dataRegistrasi->id,
+            'id_jadwal_konsultasi'  => $data['id_jadwal_konsultasi'],
+            'created_at'            => date('Y-m-d H:i:s'),
+            'updated_at'            => date('Y-m-d H:i:s'),
+            'harga_obat'            => $hargaObat,
+        ];
+        $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+
+        // == End of insert to biaya_pengiriman_obat ==
+
         $this->send_data_penunjang($data);
         $this->all_controllers->setHargaObatFrom([$data["id_jadwal_konsultasi"]]);
 
@@ -443,11 +471,11 @@ class Teleconsultasi extends CI_Controller
             'keterangan' => $notifikasi,
             'tanggal' => $now,
             'id_jadwal_konsultasi' => $data["id_jadwal_konsultasi"],
-          );
-          $msg_notif = json_encode($msg_notif);
-          $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
+        );
+        $msg_notif = json_encode($msg_notif);
+        $this->key->_send_fcm($farmasi->reg_id, $msg_notif);
 
-          $data_notif = array("id_user"=>$farmasi->id, "notifikasi"=>$notifikasi, "tanggal"=>$now, "direct_link"=>base_url('admin/FarmasiVerifikasiObat'));
+        $data_notif = array("id_user" => $farmasi->id, "notifikasi" => $notifikasi, "tanggal" => $now, "direct_link" => base_url('admin/FarmasiVerifikasiObat'));
 
         $this->db->insert('data_notifikasi', $data_notif);
 
@@ -457,19 +485,20 @@ class Teleconsultasi extends CI_Controller
         echo "OK";
     }
 
-    private function update_diagnosa() {
+    private function update_diagnosa()
+    {
         $data = $this->input->post();
-        $resep_dokter = $this->db->query("SELECT * FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=".$data["id_jadwal_konsultasi"])->row();
+        $resep_dokter = $this->db->query("SELECT * FROM resep_dokter WHERE resep_dokter.id_jadwal_konsultasi=" . $data["id_jadwal_konsultasi"])->row();
 
-        if(false) {
+        if (false) {
             show_404();
-        }else {
+        } else {
             $id_pasien = $data["id_pasien"];
             $data_konsultasi = $data["data_konsultasi"];
 
             $data_resep = [];
 
-            $apotek = $this->db->query("SELECT id FROM master_apotek WHERE master_apotek.nama='".explode(" - ", $data["apotek"])[0]."'")->row();
+            $apotek = $this->db->query("SELECT id FROM master_apotek WHERE master_apotek.nama='" . explode(" - ", $data["apotek"])[0] . "'")->row();
             for ($i = 0; $i < count($data["list_id_obat"]); $i++) {
                 $data_resep[$i] = array(
                     "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
@@ -483,8 +512,8 @@ class Teleconsultasi extends CI_Controller
                 $this->db->insert('resep_dokter', $data_resep[$i]);
             }
 
-            $diagnosis = $this->db->query("SELECT id FROM master_diagnosa WHERE master_diagnosa.nama='".$data["diagnosis"]."'")->row()->id;
-            $regId = $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=".$data["id_jadwal_konsultasi"])->row()->id_registrasi;
+            $diagnosis = $this->db->query("SELECT id FROM master_diagnosa WHERE master_diagnosa.nama='" . $data["diagnosis"] . "'")->row()->id;
+            $regId = $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=" . $data["id_jadwal_konsultasi"])->row()->id_registrasi;
             $this->db->insert("diagnosis_dokter", [
                 "id_dokter" => $this->session->userdata("id_user"),
                 "id_pasien" => $data["id_pasien"],
@@ -499,34 +528,35 @@ class Teleconsultasi extends CI_Controller
 
             echo "OK";
         }
-
     }
 
-    public function createRacikan() {
+    public function createRacikan()
+    {
 
         $data = $this->input->post();
 
-        if(empty($data["selectedObats"])) {
-            echo json_encode(["error" => "Tidak ada obat yang dipilih"]); exit();
+        if (empty($data["selectedObats"])) {
+            echo json_encode(["error" => "Tidak ada obat yang dipilih"]);
+            exit();
         }
 
         $total = 0;
         $name = [];
 
-        foreach(explode(",", $data["selectedObats"]) as $idObat) {
-            $jumlah = $data["jumlahObat-".$idObat];
-            $obat = $this->db->query("SELECT name, harga FROM master_obat WHERE id=".$idObat)->row();
+        foreach (explode(",", $data["selectedObats"]) as $idObat) {
+            $jumlah = $data["jumlahObat-" . $idObat];
+            $obat = $this->db->query("SELECT name, harga FROM master_obat WHERE id=" . $idObat)->row();
             $total += $obat->harga;
 
-            array_push($name, $obat->name." [".$jumlah." dosis] ");
+            array_push($name, $obat->name . " [" . $jumlah . " dosis] ");
         }
 
         $name = implode("; ", $name);
-        $name = $data["nama_racikan"]." (".$name.")";
+        $name = $data["nama_racikan"] . " (" . $name . ")";
 
-        $nameIsExist = $this->db->query("SELECT name FROM master_obat WHERE name LIKE '%".$name."%'");
+        $nameIsExist = $this->db->query("SELECT name FROM master_obat WHERE name LIKE '%" . $name . "%'");
 
-        if($nameIsExist->num_rows() != 0) {
+        if ($nameIsExist->num_rows() != 0) {
             echo json_encode(["error" => "Racikan dengan nama yang sama sudah ada, harap masukkan nama yang lain"]);
             exit();
         }
@@ -616,7 +646,7 @@ class Teleconsultasi extends CI_Controller
                 "Api-Key: VO6v8Id9eqEchgogLE1nDVFopJdnXxk9K/ZEm7xqX5I="
             ),
             CURLOPT_POSTFIELDS => json_encode(array(
-                'cardNumber' => $data['pasien']->card_number, 
+                'cardNumber' => $data['pasien']->card_number,
             ))
         ));
 
@@ -625,7 +655,7 @@ class Teleconsultasi extends CI_Controller
 
         curl_close($curl);
 
-        if ($result){
+        if ($result) {
             $data['history_diagnosa'] = $result->data;
         }
 
@@ -792,7 +822,7 @@ $(document).ready(function() {
     });
     $('select[name=apotek]').select2({
         ajax: {
-          url: '" . base_url('Apotek/findNearest'). "',
+          url: '" . base_url('Apotek/findNearest') . "',
           dataType: 'json',
           method: 'POST',
           //delay: 250,
@@ -802,7 +832,7 @@ $(document).ready(function() {
                   page_limit: 50,
                   page: params.page || 0,
                   get_all: true, //id_kota, id_kecamatan, lat, long removed
-                  id_pasien: ".$id_pasien."
+                  id_pasien: " . $id_pasien . "
               };
           },
           processResults: function (data, params) {
@@ -872,7 +902,8 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
         $this->load->view('template', $data);
     }
 
-    public function history_diagnosa(){
+    public function history_diagnosa()
+    {
         $curl = curl_init();
 
         //GET HISTORY DIAGNOSA
@@ -890,7 +921,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
                 "Api-Key: VO6v8Id9eqEchgogLE1nDVFopJdnXxk9K/ZEm7xqX5I="
             ),
             CURLOPT_POSTFIELDS => json_encode(array(
-                'cardNumber' => '1000620030004536', 
+                'cardNumber' => '1000620030004536',
             ))
         ));
 
@@ -899,7 +930,7 @@ if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())
 
         curl_close($curl);
 
-        if ($result){
+        if ($result) {
             $data['history_diagnosa'] = $result->data;
             echo json_encode($data['history_diagnosa']);
         } else {

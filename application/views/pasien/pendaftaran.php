@@ -459,9 +459,12 @@
             .catch(function(error) {
                 $('#' + spinner).hide();
                 console.log(error.response.data.msg)
+
                 if (error.response.data.msg == "Data tidak ditemukan") {
                     alert("Akun anda belum terdaftar di Owlexa");
 
+                }else{
+                    alert(error.response.data.msg);
                 }
             });
 

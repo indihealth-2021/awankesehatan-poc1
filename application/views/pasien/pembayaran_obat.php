@@ -352,7 +352,7 @@ if ($resep->harga_kustom) {
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-11 pl-3 metode-owlexa">
+                  <!-- <div class="col-sm-11 pl-3 metode-owlexa">
                     <div class="form-group row">
                       <label for="metode-pembayaran" class="col-md-3 col-4 text-abu">OTP </label>
                       <div class="col-md-7 col-8">
@@ -365,7 +365,7 @@ if ($resep->harga_kustom) {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <input type="hidden" name="chargeValue" value="<?php echo $total_harga; ?>;">
 
                 </div>

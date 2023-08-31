@@ -478,31 +478,38 @@ class ResepDokter extends CI_Controller
         $currentTime = date("Y-m-d H:i:s");
         $chargeValue = $total_harga;
         $cardNumber = $data['cardNumber'];
-        $otp = $data['otp'];
-        if (!$birthDate || !$fullName || !$cardNumber || !$otp) {
+        // $otp = $data['otp'];
+        // if (!$birthDate || !$fullName || !$cardNumber || !$otp) {
+        if (!$birthDate || !$fullName || !$cardNumber) {
             $this->session->set_flashdata('msg_pmbyrn_obat', 'GAGAL: Form tidak lengkap!');
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }
 
-        $dataRaw = array(
-            "birthDate" => $birthDate,
-            "cardNumber" => $cardNumber,
-            "currentTime" => $currentTime,
-            "providerCode" => 3495,
-            "email" => $email,
-            "admissionDate" => '2020-12-03',
-            "fullName" => $fullName,
-            "chargeValue" => floatval($chargeValue),
-            "otp" => $otp,
-            "telemedicineType" => 'TM-002',
-        );
+        // $dataRaw = array(
+        //     "birthDate" => $birthDate,
+        //     "cardNumber" => $cardNumber,
+        //     "currentTime" => $currentTime,
+        //     "providerCode" => 3495,
+        //     "email" => $email,
+        //     "admissionDate" => '2020-12-03',
+        //     "fullName" => $fullName,
+        //     "chargeValue" => floatval($chargeValue),
+        //     "otp" => $otp,
+        //     "telemedicineType" => 'TM-002',
+        // );
 
+        $dataRaw = array(
+            "userId" => $id_pasien,
+            "jadwalKonsultasiId" => $id_jadwal_konsultasi,
+            "providerCode" => 6309,
+        );
         $dataRaw = json_encode($dataRaw);
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://test.owlexa.com/owlexa-api/telemedicine/v1/verification",
+            // CURLOPT_URL => "https://test.owlexa.com/owlexa-api/telemedicine/v1/verification",
+            CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/guaranteeObat",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,

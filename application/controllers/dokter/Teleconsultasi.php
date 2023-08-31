@@ -455,7 +455,10 @@ class Teleconsultasi extends CI_Controller
             'updated_at'            => date('Y-m-d H:i:s'),
             'harga_obat'            => $hargaObat,
         ];
-        $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+
+        if ($data_biaya_pengiriman_obat['id_jadwal_konsultasi'] != '' && $data['id_jadwal_konsultasi'] != '' && $hargaObat != '') {
+            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+        }
 
         // == End of insert to biaya_pengiriman_obat ==
 

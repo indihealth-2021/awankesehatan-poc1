@@ -131,7 +131,8 @@ class Apotek extends CI_Controller {
 					
 					$destination	= $coord[0].",".$coord[1];
 					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
-					$distance = number_format($distance,2,',','.');
+					$calc = $distance*0.20;
+					$distance = number_format($distance-$calc,2,',','.');
 					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
 				}
 			}else {
@@ -139,7 +140,8 @@ class Apotek extends CI_Controller {
 					$destination	= $temp[$i]["latitude"].",".$temp[$i]["longitude"];
 
 					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
-					$distance = number_format($distance,2,',','.');
+					$calc = $distance*0.20;
+					$distance = number_format($distance-$calc,2,',','.');
 					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
 				}
 			}

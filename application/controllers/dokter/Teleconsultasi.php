@@ -433,22 +433,23 @@ class Teleconsultasi extends CI_Controller
 
         // == Insert to biaya_pengiriman_obat table ==
 
-        $user = $this->all_model->select('master_user', 'row', ['id' => $data['id_pasien']], 1); // Get user data reference
+        $user = $this->all_model->select('master_user', 'row', 'id = ' . $data['id_pasien'], 1); // Get user data reference
 
         // Get all prices for id_jadwal_konsultasi in resep_dokter table
-        $resepDokter = $this->all_model->select('resep_dokter', 'row', ['id_jadwal_konsultasi' => $data['id_jadwal_konsultasi']]);
+        $resepDokter = $this->all_model->select('resep_dokter', 'result', 'id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi']);
         $hargaObat = 0;
         // Sum all prices and save it to harga_obat variable
-        foreach ($resepDokter as $data) {
-            $hargaObat += intval($data->harga);
+        foreach ($resepDokter as $resep) {
+            $hargaObat += intval($resep->harga);
         }
 
         // Get Registration ID from data_registrasi table
-        $dataRegistrasi = $this->all_model->select('data_registrasi', 'row', ['id_pasien' => $data['id_pasien']], 1);
+        $dataRegistrasi = $this->all_model->select('diagnosis_dokter', 'row', 'id_pasien = ' . $data['id_pasien'], 1);
 
         $data_biaya_pengiriman_obat = [
+            'alamat_kustom'         => 1,
             'alamat'                => $user->alamat_jalan,
-            'id_registrasi'         => $dataRegistrasi->id,
+            'id_registrasi'         => $dataRegistrasi->id_registrasi,
             'id_jadwal_konsultasi'  => $data['id_jadwal_konsultasi'],
             'created_at'            => date('Y-m-d H:i:s'),
             'updated_at'            => date('Y-m-d H:i:s'),
@@ -859,6 +860,7 @@ $(document).ready(function() {
         $data['teleconsul_admin_js'] = "
 if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())){
     if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_berakhir_dokter')){
+            console.log('test');
             console.log(JSON.parse(payload.data.body).chat_id);
             $.ajax({
                 method : 'POST',

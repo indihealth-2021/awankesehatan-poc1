@@ -1119,8 +1119,7 @@ class Pembayaran extends CI_Controller
         $currentTime = date("Y-m-d H:i:s");
 
         $post_data = $this->input->post();
-        if(empty($cardNumber))
-        {
+        if (empty($cardNumber)) {
             $response['msg'] = 'Mohon isi no Kartu';
             $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
             //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
@@ -1134,7 +1133,7 @@ class Pembayaran extends CI_Controller
             $alamat_kelurahan = $post_data['alamat_kelurahan'];
             $kode_pos = $post_data['kode_pos'];
             $alamat_detail = $post_data['alamat_detail'];
-            $alamat_pengiriman_obat = $alamat_detail . "," . $alamat_kelurahan . "," . $alamat_kecamatan . "," . $alamat_kota . "," . $alamat_provinsi . "," . $kode_pos; 
+            $alamat_pengiriman_obat = $alamat_detail . "," . $alamat_kelurahan . "," . $alamat_kecamatan . "," . $alamat_kota . "," . $alamat_provinsi . "," . $kode_pos;
             if (!isset($data['cardNumber'])  || !$alamat_pengiriman_obat) {
                 $response['msg'] = 'Data yang anda masukan tidak lengkap!';
                 $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
@@ -1143,7 +1142,7 @@ class Pembayaran extends CI_Controller
                 exit();
             }
         }
-        
+
 
         $pasien = $this->db->query('SELECT id FROM master_user WHERE id = ' . $id_pasien . ' AND id_user_kategori = 0')->row();
         if (!$pasien) {
@@ -1380,7 +1379,7 @@ class Pembayaran extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('pg_api')."/owlexa/Api/guarantee",
+            CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/guarantee",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -1389,13 +1388,13 @@ class Pembayaran extends CI_Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $dataRaw,
-            
+
         ));
 
         $result = curl_exec($curl);
-         // var_dump($result);
+        // var_dump($result);
         $result = json_decode($result, true);
-        
+
         curl_close($curl);
         // exit();
         $response['data'] = $result['data'];
@@ -1415,8 +1414,9 @@ class Pembayaran extends CI_Controller
                 "card_number" => $cardNumber,
                 "claim_number" => $claim_number
             );
-            $this->db->insert('bukti_pembayaran', $data_bukti_pembayaran);
-            $bukti_id = $this->db->insert_id();
+            $this->db->set($data_bukti_pembayaran);
+            $this->db->where('id_registrasi', $data_bukti_pembayaran['id_registrasi']);
+            $this->db->update('bukti_pembayaran');
 
             $data3 = array(
                 "id_dokter" => $jadwal->id_dokter,

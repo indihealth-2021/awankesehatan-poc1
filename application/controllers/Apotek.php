@@ -108,7 +108,7 @@ class Apotek extends CI_Controller {
 
 		if($this->input->post("get_all")) {
 			$pasien = $this->db->query("SELECT * FROM master_user WHERE id=".$id_pasien)->row();
-			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text,master_apotek.alamat_jalan, master_apotek.latitude, master_apotek.longitude FROM master_apotek")->result_array();
+			$temp = $this->db->query("SELECT master_apotek.id, master_apotek.nama as text,master_apotek.alamat_jalan, master_apotek.latitude, master_apotek.longitude FROM master_apotek where aktif = 1")->result_array();
 			$origin			= $pasien->latitude.",".$pasien->longitude;
 			$langitude = 0;
 			$longitude = 0;

@@ -1,46 +1,43 @@
 //var ROOM = 'chat';
-var SIGNAL_ROOM = 'signal-room';
-var conference_room = '';
-var halaman_tele_aktif = '';
-var teleAktifUrl = 'proses_teleconsultasi';
+var SIGNAL_ROOM = "signal-room";
+var conference_room = "";
+var halaman_tele_aktif = "";
+var teleAktifUrl = "proses_teleconsultasi";
 // elements
 var username = $("#tele-conference-username");
-var btnCall = $('#panggil');
+var btnCall = $("#panggil");
 //var btnReject = $("#btn-reject");
-var userCall = $('#user-call');
-var labelOnline = $('#label-online');
+var userCall = $("#user-call");
+var labelOnline = $("#label-online");
 var labelOffline = $("#label-offline");
-var btnAnswer = $('#jawab');
-var btnClose = $('.btn-batal');
+var btnAnswer = $("#jawab");
+var btnClose = $(".btn-batal");
 
-var btnStop = $('#btn-stop');
+var btnStop = $("#btn-stop");
 
-var btnReject = $('#tolak');
+var btnReject = $("#tolak");
 
-
-var btnAnswerFarmasi = $('#jawab_farmasi');
-var btnRejectFarmasi = $('#tolak_farmasi');
-var btnEndCallFarmasi = $('#btn-stop-farmasi');
+var btnAnswerFarmasi = $("#jawab_farmasi");
+var btnRejectFarmasi = $("#tolak_farmasi");
+var btnEndCallFarmasi = $("#btn-stop-farmasi");
 
 function checkform(form) {
   // get all the inputs within the submitted form
-  var inputs = form.getElementsByTagName('input');
+  var inputs = form.getElementsByTagName("input");
   for (var i = 0; i < inputs.length; i++) {
     // only validate the inputs that have the required attribute
     if (inputs[i]) {
-      if(inputs[i].name != 'tekanan_darah' || inputs[i].name != 'suhu' )
-      {
-          // console.log(inputs[i].name)
-          if (inputs[i].value == "") {
-            // found an empty field that is required
-            return false;
-          }
+      if (inputs[i].name != "tekanan_darah" || inputs[i].name != "suhu") {
+        // console.log(inputs[i].name)
+        if (inputs[i].value == "") {
+          // found an empty field that is required
+          return false;
+        }
       }
-    
     }
   }
 
-  var textareas = form.getElementsByTagName('textarea');
+  var textareas = form.getElementsByTagName("textarea");
   for (var i = 0; i < textareas.length; i++) {
     // only validate the inputs that have the required attribute
     if (textareas[i]) {
@@ -70,7 +67,7 @@ function checkform(form) {
 // $.ajax({
 //     url: siteUrl + '/api/user/view/' + username.val(),
 //     method: 'get'
-// }).then(function (result) {    
+// }).then(function (result) {
 //     currentUser = result;
 //     io.emit('ready', {init_room: 'INDIHEALTH', user: result, room: room});
 //     io.emit('members::checking', {room: room, init_room: 'INDIHEALTH', user: currentUser});
@@ -78,14 +75,12 @@ function checkform(form) {
 //     io.emit('online::users::video', {room: 'INDIHEALTH'});
 // }, logError);
 
-
 //btnReject.click(function (e) {
 //   alert('tes');
 // io.emit('reject', {init_room: 'INDIHEALTH', user: currentUser});
 // $('#alert-calling').removeClass('hide');
 // e.preventDefault();
 //});
-
 
 // on
 
@@ -108,7 +103,7 @@ function checkform(form) {
 // 	$.ajax({
 //       url: baseUrl + 'api/user/peer_to_peer/' + username.val() + '/' + userCall.val(),
 //       method: 'get'
-//   }).then(function (result) {  		
+//   }).then(function (result) {
 //       var conference_room = window.location.pathname.match(/([^\/]*)\/*$/)[1];
 
 //       io.emit('calling', {room: 'INDIHEALTH', conference_room: conference_room, tele_class: teleAktifUrl, users: [result.caller, result.receiver]});
@@ -118,104 +113,112 @@ function checkform(form) {
 //   }, logError);
 // }
 
-btnAnswerFarmasi.click(function(e){
-  var p_o_d = $(this).data('pd') == 'p' ? 'pasien':'dokter';
-  var id_farmasi = $(this).data('id-farmasi');
-  var room_name = $(this).data('room-name');
+btnAnswerFarmasi.click(function (e) {
+  var p_o_d = $(this).data("pd") == "p" ? "pasien" : "dokter";
+  var id_farmasi = $(this).data("id-farmasi");
+  var room_name = $(this).data("room-name");
   $.ajax({
-    url: baseUrl+p_o_d+'/FarmasiCall/jawab',
-    method: 'POST',
-    data: 'id_farmasi='+id_farmasi,
-    success: function(data){
-      post(baseUrl+p_o_d+'/FarmasiCall', {room_name:room_name, id_farmasi:id_farmasi});
+    url: baseUrl + p_o_d + "/FarmasiCall/jawab",
+    method: "POST",
+    data: "id_farmasi=" + id_farmasi,
+    success: function (data) {
+      post(baseUrl + p_o_d + "/FarmasiCall", {
+        room_name: room_name,
+        id_farmasi: id_farmasi,
+      });
     },
-    error: function(err){
-      console.log('GAGAL: Laporkan hal ini pada admin!');
-    }
+    error: function (err) {
+      console.log("GAGAL: Laporkan hal ini pada admin!");
+    },
   });
-})
-
-btnRejectFarmasi.click(function(e){
-  const p_o_d = $(this).data('pd') == 'p' ? 'pasien':'dokter';
-  const id_farmasi = $(this).data('id-farmasi');
-
-  $.ajax({
-    url: baseUrl+p_o_d+'/FarmasiCall/tolak',
-    method: 'POST',
-    data: 'id_farmasi='+id_farmasi,
-    success: function(data){
-      $('#jawaban_farmasi').modal('hide');
-    },
-    error: function(err){
-      console.log('GAGAL: Laporkan hal ini pada admin!');
-    }
-  })
 });
 
-btnEndCallFarmasi.click(function(e){
-  const id_user = $(this).data('id-user');
-  const p_or_d = $(this).data('pd');
+btnRejectFarmasi.click(function (e) {
+  const p_o_d = $(this).data("pd") == "p" ? "pasien" : "dokter";
+  const id_farmasi = $(this).data("id-farmasi");
 
   $.ajax({
-    url: baseUrl+'admin/FarmasiCall/akhiri',
-    method: 'POST',
-    data: 'id_user='+id_user+'&p_or_d='+p_or_d,
-    success: function(data){
-      var iframes = document.getElementsByTagName('iframe');
-      for (var i = 0; i < iframes.length; i++) {
-          iframes[i].parentNode.removeChild(iframes[i]);
-      }
-      $('#konten-panggilan').prop('hidden', true);
+    url: baseUrl + p_o_d + "/FarmasiCall/tolak",
+    method: "POST",
+    data: "id_farmasi=" + id_farmasi,
+    success: function (data) {
+      $("#jawaban_farmasi").modal("hide");
     },
-    error: function(err){
-      console.log('GAGAL: Laporkan hal ini pada admin!');
-    }
-  })
+    error: function (err) {
+      console.log("GAGAL: Laporkan hal ini pada admin!");
+    },
+  });
+});
+
+btnEndCallFarmasi.click(function (e) {
+  const id_user = $(this).data("id-user");
+  const p_or_d = $(this).data("pd");
+
+  $.ajax({
+    url: baseUrl + "admin/FarmasiCall/akhiri",
+    method: "POST",
+    data: "id_user=" + id_user + "&p_or_d=" + p_or_d,
+    success: function (data) {
+      var iframes = document.getElementsByTagName("iframe");
+      for (var i = 0; i < iframes.length; i++) {
+        iframes[i].parentNode.removeChild(iframes[i]);
+      }
+      $("#konten-panggilan").prop("hidden", true);
+    },
+    error: function (err) {
+      console.log("GAGAL: Laporkan hal ini pada admin!");
+    },
+  });
 });
 
 btnCall.click(function (e) {
-  $('#memanggil').modal('show');
+  $("#memanggil").modal("show");
   // callResult();
-  var pasien_id = $(this).data('id-pasien');
-  var jadwal_konsultasi_id = $(this).data('id-jadwal-konsultasi')
+  var pasien_id = $(this).data("id-pasien");
+  var jadwal_konsultasi_id = $(this).data("id-jadwal-konsultasi");
   $.ajax({
-    method: 'POST',
+    method: "POST",
     url: baseUrl + "Conference/call",
-    data: { reg: reg_id, id_pasien: pasien_id, id_jadwal_konsultasi: jadwal_konsultasi_id, roomName: room_name },
+    data: {
+      reg: reg_id,
+      id_pasien: pasien_id,
+      id_jadwal_konsultasi: jadwal_konsultasi_id,
+      roomName: room_name,
+    },
     success: function (data) {
       console.log(JSON.parse(data).results[0].error);
-      if (JSON.parse(data).results[0].error == 'NotRegistered') {
-        $('#memanggil').modal('hide');
-        $('#pasienError').modal('show');
+      if (JSON.parse(data).results[0].error == "NotRegistered") {
+        $("#memanggil").modal("hide");
+        $("#pasienError").modal("show");
       }
     },
     error: function (data) {
-      alert('Terjadi kesalahan sistem, silahkan hubungi administrator.');
-    }
+      alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
+    },
   });
 });
 
 btnReject.click(function (e) {
-  var id_dokter = $(this).data('id-dokter');
+  var id_dokter = $(this).data("id-dokter");
 
   $.ajax({
-    method: 'POST',
+    method: "POST",
     url: baseUrl + "Conference/reject",
     data: { id_dokter: id_dokter },
     success: function (data) {
       console.log(data);
     },
     error: function (data) {
-      alert('Terjadi kesalahan sistem, silahkan hubungi administrator.');
-    }
+      alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
+    },
   });
 });
 
 btnStop.click(function (e) {
-  var pasien_id = $(this).data('id-pasien');
-  var jadwal_konsultasi_id = $(this).data('id-jadwal-konsultasi');
+  var pasien_id = $(this).data("id-pasien");
+  var jadwal_konsultasi_id = $(this).data("id-jadwal-konsultasi");
 
-  var assesment_pasien = checkform(document.getElementById('formKonsultasi'));
+  var assesment_pasien = checkform(document.getElementById("formKonsultasi"));
   // var keluhan = $('textarea[name="keluhan"]').val();
   // var keluhan_warning = `
   //                                   <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -250,51 +253,58 @@ btnStop.click(function (e) {
   //                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
   //                                   <span aria-hidden="true">&times;</span>
   //                                 </button>
-  //                               </div>    
+  //                               </div>
   //   `;
 
   // if (resep_dokter == '') {
   //   $('#resepDokter').append(resep_dokter_warning);
   // }
 
-  if (diagnosis == 0 || assesment_pasien == false) {// || resep_dokter == '') {
-    alert('Form Harus diisi semua termasuk assesment yang kosong! Jika pasien tidak ada, kontak admin untuk membatalkan konsultasi!');
-    return;
-  }
+  // if (diagnosis == 0 || assesment_pasien == false) {// || resep_dokter == '') {
+  //   alert('Form Harus diisi semua termasuk assesment yang kosong! Jika pasien tidak ada, kontak admin untuk membatalkan konsultasi!');
+  //   return;
+  // }
 
-  var data_konsultasi = $('#formKonsultasi').serialize();
-  var data_konsultasi_2 = $('#formKonsultasi_2').serialize();
+  var data_konsultasi = $("#formKonsultasi").serialize();
+  var data_konsultasi_2 = $("#formKonsultasi_2").serialize();
 
-  if (assesment_pasien != false && diagnosis != 0) {//&& resep_dokter != '') {
+  if (assesment_pasien != false && diagnosis != 0) {
+    //&& resep_dokter != '') {
     var chat_id = `/chats/${id_dokter}_${id_pasien}`;
     $.ajax({
-      method: 'POST',
+      method: "POST",
       url: baseUrl + "Conference/end_call",
-      data: { reg: reg_id, id_pasien: pasien_id, id_jadwal_konsultasi: jadwal_konsultasi_id, chat_id: chat_id, data_konsultasi: data_konsultasi, data_konsultasi_2: data_konsultasi_2 },
+      data: {
+        reg: reg_id,
+        id_pasien: pasien_id,
+        id_jadwal_konsultasi: jadwal_konsultasi_id,
+        chat_id: chat_id,
+        data_konsultasi: data_konsultasi,
+        data_konsultasi_2: data_konsultasi_2,
+      },
       success: function (data) {
         console.log(data);
       },
       error: function (data) {
         // alert(data);
         console.log(data);
-      }
+      },
     });
   }
 });
 // 2.
 // answer here ...
-function post(path, params, method = 'post') {
-
+function post(path, params, method = "post") {
   // The rest of this code assumes you are not using a library.
   // It can be made less wordy if you use one.
-  const form = document.createElement('form');
+  const form = document.createElement("form");
   form.method = method;
   form.action = path;
 
   for (const key in params) {
     if (params.hasOwnProperty(key)) {
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
+      const hiddenField = document.createElement("input");
+      hiddenField.type = "hidden";
       hiddenField.name = key;
       hiddenField.value = params[key];
 
@@ -308,19 +318,30 @@ function post(path, params, method = 'post') {
 
 btnAnswer.click(function (e) {
   var temp = JSON.parse(loadData);
-  var id_jadwal_konsultasi = $(this).data('id-jadwal-konsultasi');
-  var id_dokter = $(this).data('id-dokter');
-  var roomName = $(this).data('room-name');
+  var id_jadwal_konsultasi = $(this).data("id-jadwal-konsultasi");
+  var id_dokter = $(this).data("id-dokter");
+  var roomName = $(this).data("room-name");
 
   var ok = false;
   $.ajax({
-    method: 'POST',
+    method: "POST",
     url: baseUrl + "Conference/jawab",
-    data: { id_dokter: id_dokter, id_jadwal_konsultasi: id_jadwal_konsultasi, roomName: roomName },
+    data: {
+      id_dokter: id_dokter,
+      id_jadwal_konsultasi: id_jadwal_konsultasi,
+      roomName: roomName,
+    },
     success: function (data) {
       if (data) {
         console.log(data);
-        post(baseUrl + 'pasien/Telekonsultasi/konsultasi/' + id_dokter + '/' + id_jadwal_konsultasi, { roomName: roomName });
+        post(
+          baseUrl +
+            "pasien/Telekonsultasi/konsultasi/" +
+            id_dokter +
+            "/" +
+            id_jadwal_konsultasi,
+          { roomName: roomName }
+        );
         //   window.location.href = siteUrl + 'pasien/Telekonsultasi/konsultasi/'+id_dokter+'/'+id_jadwal_konsultasi;
         //location.href = baseUrl+"pasien/Telekonsultasi/konsultasi";
       } else {
@@ -328,10 +349,8 @@ btnAnswer.click(function (e) {
       }
     },
     error: function (data) {
-      alert('Terjadi kesalahan sistem, silahkan hubungi administrator.');
-    }
-
-
+      alert("Terjadi kesalahan sistem, silahkan hubungi administrator.");
+    },
   });
   // e.preventDefault();
   //    io.emit('answered', {room: conference_room});
@@ -348,18 +367,18 @@ btnAnswer.click(function (e) {
   // window.location.href = '/indihealth/conference/room/' + room;
 });
 
-btnClose.click(function(e){
+btnClose.click(function (e) {
   $.ajax({
-    method: 'POST',
-    url: baseUrl+'Conference/cancel_call',
-    data: {id_pasien: id_pasien},
-    success: function(data){
-      console.log('dibatalkan');
+    method: "POST",
+    url: baseUrl + "Conference/cancel_call",
+    data: { id_pasien: id_pasien },
+    success: function (data) {
+      console.log("dibatalkan");
     },
-    error: function(data){
-      console.log('ERROR');
-    }
-  })
+    error: function (data) {
+      console.log("ERROR");
+    },
+  });
 });
 
 // 1.
@@ -367,16 +386,15 @@ btnClose.click(function(e){
 
 //io.on('make::call', function (data) {
 
-    // console.log({
-    //     receiver: data.receiver.id,
-    //     caller: data.caller.id
-    // });
+// console.log({
+//     receiver: data.receiver.id,
+//     caller: data.caller.id
+// });
 
 //     _member = {
 //         receiver: data.receiver,
 //         caller: data.caller
 //     };
-
 
 //     if (data.receiver.id == username.val()) {
 //         conference_room = data.conference_room;
@@ -386,7 +404,6 @@ btnClose.click(function(e){
 //       //  $('#caller').html('<strong>' + data.caller.username + '</strong>');
 //     }
 // });
-
 
 // io.on('online::chat', function (data) {
 //     onlineUsersChat = data.users;
@@ -399,13 +416,11 @@ btnClose.click(function(e){
 
 // });
 
-
 // 3.
 // broadcast message 'Ready to Chat Peer-to-Peer'
 // io.on('announce', function (data) {
 //     // console.log(data);
 // });
-
 
 // io.on('added::member', function (data) {
 
@@ -421,13 +436,12 @@ btnClose.click(function(e){
 //         });
 //     }
 
-
 // });
 
 // io.on('signal::ready', function (data) {
 //     // console.log("masuk signal ready", data);
 
-//     var _findMember = _.find(data.members, {id: username.val()});   
+//     var _findMember = _.find(data.members, {id: username.val()});
 //     if (_findMember) {
 //         // console.log(_findMember);
 
@@ -441,7 +455,7 @@ btnClose.click(function(e){
 // });
 
 //io.on('has::answer', function (data) {
-    // console.log("has answer", data);
+// console.log("has answer", data);
 
 //        window.open(siteUrl + 'conference/room/' + data.room, '_blank', 'location=yes,height='+$(window).height()+',width='+$(window).width()+',scrollbars=yes,status=yes');
 
@@ -454,7 +468,6 @@ btnClose.click(function(e){
 //     $('#alert-rejected').modal('show');
 //     $("#rejector").html('<strong>' + data.user.username + '</strong>');
 // });
-
 
 // function logError(e) {
 //     // console.log(e);
@@ -471,4 +484,3 @@ btnClose.click(function(e){
 //     return ("000000" + (Math.random() * Math.pow(36, 6) << 0).toString(36)).slice(-6)
 //     // return window.location.pathname.match(/([^\/]*)\/*$/)[1];
 // }
-

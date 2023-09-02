@@ -139,27 +139,40 @@ class FarmasiVerifikasiObat extends CI_Controller
                                     $(".hapusObat").click(function(e){
                                         // $(e.target).parents("tr").remove();
                                     });
-
-                                    $("#ModalResep").on("shown.bs.modal", function (e) {
-                                        $("#formResepDokter").trigger("reset");
-                                        $("#formResepDokter").find("#unit").attr("placeholder","Jml");
-                                    });
-
-                                    $("#formResepDokter").submit((e) => {
-                                        e.preventDefault();
-                                        alert(1);
-
-                                        var dataResep = $(this).serializeArray();
+                                    
+                                    $("#buttonTambahResep").click(function(e){
+                                        console.log("tes");
                                         var namaObat = $("select[name=id_obat] option:selected").text();
                                         var listResep = $("#listResep");
 
 
-                                        var templateResep = "<tr><td>"+namaObat+"</td><input type=\'hidden\' name=\'id_obat[]\' value=\'"+dataResep[0].value+"\'><td>"+dataResep[1].value+" "+dataResep[3].value+"</td><input type=\'hidden\' name=\'jumlah_obat[]\' value=\'"+dataResep[1].value+"\'><td>"+dataResep[2].value+"</td><input type=\'hidden\' name=\'keterangan[]\' value=\'"+dataResep[2].value+"\'><td><button class=\'btn btn-secondary\' onclick=\'return (this.parentNode).parentNode.remove();\'><i class=\'fas fa-trash-alt\'></i></button></td></tr>";
+                                        var templateResep = "<tr><td>"+namaObat+"</td><input type=\'hidden\' name=\'id_obat[]\' value=\'"+ $("#obat").value +"\'><td>" + $("#obat").text + "</td><input type=\'hidden\' name=\'jumlah_obat[]\' value=\'" + $("#unit").value + "\'><td>" + $("#unit").value + "</td><input type=\'hidden\' name=\'keterangan[]\' value=\'" + $("#keterangan").value + "\'><td><button class=\'btn btn-secondary\' onclick=\'return (this.parentNode).parentNode.remove();\'><i class=\'fas fa-trash-alt\'></i></button></td></tr>";
 
                                         listResep.append(templateResep);
                                         alert("Resep telah ditambahkan!");
                                         $("#ModalResep").modal("hide");
                                     });
+
+                                    // $("#ModalResep").on("shown.bs.modal", function (e) {
+                                    //     $("#formResepDokter").trigger("reset");
+                                    //     $("#formResepDokter").find("#unit").attr("placeholder","Jml");
+                                    // });
+
+                                    // $("#formResepDokter").submit((e) => {
+                                    //     e.preventDefault();
+                                    //     alert(1);
+
+                                    //     var dataResep = $(this).serializeArray();
+                                    //     var namaObat = $("select[name=id_obat] option:selected").text();
+                                    //     var listResep = $("#listResep");
+
+
+                                    //     var templateResep = "<tr><td>"+namaObat+"</td><input type=\'hidden\' name=\'id_obat[]\' value=\'"+dataResep[0].value+"\'><td>"+dataResep[1].value+" "+dataResep[3].value+"</td><input type=\'hidden\' name=\'jumlah_obat[]\' value=\'"+dataResep[1].value+"\'><td>"+dataResep[2].value+"</td><input type=\'hidden\' name=\'keterangan[]\' value=\'"+dataResep[2].value+"\'><td><button class=\'btn btn-secondary\' onclick=\'return (this.parentNode).parentNode.remove();\'><i class=\'fas fa-trash-alt\'></i></button></td></tr>";
+
+                                    //     listResep.append(templateResep);
+                                    //     alert("Resep telah ditambahkan!");
+                                    //     $("#ModalResep").modal("hide");
+                                    // });
 
                                     // ========================= panggil pasien ================== //
                                     $(".chat-wrap-inner").scrollTop($(".chat-wrap-inner")[0].scrollHeight);
@@ -296,10 +309,10 @@ class FarmasiVerifikasiObat extends CI_Controller
                                                             "responsive": false,
                                                         });
 
-                                    $("#ModalResep").on("shown.bs.modal", function (e) {
-                                        $("#formResepDokter").trigger("reset");
-                                        $("#formResepDokter").find("#unit").attr("placeholder","Jml");
-                                    });
+                                    // $("#ModalResep").on("shown.bs.modal", function (e) {
+                                    //     $("#formResepDokter").trigger("reset");
+                                    //     $("#formResepDokter").find("#unit").attr("placeholder","Jml");
+                                    // });
 
                                     // ========================= panggil pasien ================== //
                                     $(".chat-wrap-inner").scrollTop($(".chat-wrap-inner")[0].scrollHeight);

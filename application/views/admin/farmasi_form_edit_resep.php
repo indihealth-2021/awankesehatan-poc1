@@ -90,8 +90,8 @@
           <span aria-hidden="true" class="pr-3">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <form id="formResepDokter">
+      <form id="formResepDokter">
+        <div class="modal-body">
           <div class="col-12">
             <div class="row">
               <div class="col-12">
@@ -117,26 +117,37 @@
               <div class="col-12">
                 <div class="form-group">
                   <label for="message-text" class="col-form-label font-12">Aturan Pakai</label>
-                  <textarea type="text" rows="3" name="keterangan" class="form-control form-control-sm" placeholder="Aturan Pakai" required></textarea>
+                  <textarea type="text" rows="3" name="keterangan" id="keterangan" class="form-control form-control-sm" placeholder="Aturan Pakai" required></textarea>
                 </div>
               </div>
               <input type="hidden" name="satuan_obat" id="satuan_obat" value="">
               <input type="hidden" name="id_jadwal_konsultasi" value="<?= $id_jadwal_konsultasi ?>">
             </div>
           </div>
-      </div>
-      <div class="modal-footer">
-        <div class="mx-auto">
-          <button id="buttonTambahResep" class="btn btn-simpan-sm">Simpan</button>
-          <button type="button" class="btn btn-batal-sm ml-5" data-dismiss="modal">Batal</button>
         </div>
-      </div>
+        <div class="modal-footer">
+          <div class="mx-auto">
+            <button type="button" id="buttonTambahResep" onClick="TambahResep()" class="btn btn-simpan-sm">Simpan</button>
+            <button type="button" class="btn btn-batal-sm ml-5" data-dismiss="modal">Batal</button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
 </div>
 
 <script>
+  function TambahResep() {
+    var dataResep = $("#formResepDokter").serializeArray();
+    console.log(dataResep);
+    var namaObat = $("select[name=id_obat] option:selected").text();
+    var listResep = $("#listResep");
+    var templateResep = "<tr><td>" + namaObat + "</td><input type=\'hidden\' name=\'id_obat[]\' value=\'" + dataResep[0].value + "\'><td>" + dataResep[1].value + " " + dataResep[3].value + "</td><input type=\'hidden\' name=\'jumlah_obat[]\' value=\'" + dataResep[1].value + "\'><td>" + dataResep[2].value + "</td><input type=\'hidden\' name=\'keterangan[]\' value=\'" + dataResep[2].value + "\'><td><button class=\'btn btn-secondary\' onclick=\'return (this.parentNode).parentNode.remove();\'><i class=\'fas fa-trash-alt\'></i></button></td></tr>";
+    listResep.append(templateResep);
+    alert("Resep telah ditambahkan!");
+    $("#ModalResep").modal("hide");
+  }
+
   function obat_onchange() {
     var obat = document.getElementById('obat');
     var satuan = document.getElementById('obat-' + obat.value);

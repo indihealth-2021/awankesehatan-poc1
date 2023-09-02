@@ -327,14 +327,9 @@ if(data.status == "OK"){
         );
 
         $biaya_pengiriman_isExists = $this->db->query("SELECT id, jumlah_edit,alamat FROM biaya_pengiriman_obat WHERE id_registrasi = '" . $id_registrasi . "'")->row();
-        if ($biaya_pengiriman_isExists == null) {
-            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-            $jml_edit = 1;
-        } else {
-            $jml_edit = $biaya_pengiriman_isExists->jumlah_edit + 1;
-            $alamat_kustom = $alamat != $biaya_pengiriman_isExists->alamat ? 1 : 0;
-            $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi' => $id_jadwal_konsultasi, 'biaya_pengiriman' => $biaya_pengiriman, 'jumlah_edit' => $biaya_pengiriman_isExists->jumlah_edit + 1), array('id' => $biaya_pengiriman_isExists->id));
-        }
+        $jml_edit = $biaya_pengiriman_isExists->jumlah_edit + 1;
+        // $alamat_kustom = $alamat != $biaya_pengiriman_isExists->alamat ? 1 : 0;
+        $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi' => $id_jadwal_konsultasi, 'biaya_pengiriman' => $biaya_pengiriman, 'jumlah_edit' => $jml_edit), array('id' => $biaya_pengiriman_isExists->id));
 
         // echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
         $this->session->set_flashdata('msg_biaya_pengiriman', 'SUKSES: Resep Obat telah disimpan');
@@ -367,14 +362,8 @@ if(data.status == "OK"){
         );
 
         $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = " . $id_jadwal_konsultasi)->row();
-        if (!$biaya_pengiriman_isExists) {
-            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman);
-        }
+        $this->all_model->update('biaya_pengiriman_obat', $data_biaya_pengiriman, ['id' => $biaya_pengiriman_isExists->id]);
 
-        $biaya_pengiriman = $this->db->query('SELECT id,biaya_pengiriman FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = ' . $id_jadwal_konsultasi)->row();
-        if (!$biaya_pengiriman) {
-            $this->db->insert('biaya_pengiriman_obat', array('biaya_pengiriman' => 0, 'id_jadwal_konsultasi' => $id_jadwal_konsultasi));
-        }
         // $data_biaya_pengiriman = array(
         //     'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,
         //     'biaya_pengiriman'=>$biaya_pengiriman
@@ -408,7 +397,6 @@ if(data.status == "OK"){
         //         $total_harga+=$tot_harga;
         //     }
         // }
-
 
         $pasien = $this->db->query('SELECT id,email,name,reg_id FROM master_user WHERE id = ' . $list_resep[0]->id_pasien)->row();
         $verifier = $this->db->query('SELECT name FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();

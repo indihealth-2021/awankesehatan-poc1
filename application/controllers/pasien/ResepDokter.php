@@ -478,7 +478,7 @@ class ResepDokter extends CI_Controller
         $currentTime = date("Y-m-d H:i:s");
         $chargeValue = $total_harga;
         $cardNumber = $data['cardNumber'];
-         if (empty($data['cardNumber'])) {
+        if (empty($data['cardNumber'])) {
             $this->session->set_flashdata('msg_pmbyrn_obat', 'GAGAL: Card Number Wajib Diisi!');
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }
@@ -495,11 +495,11 @@ class ResepDokter extends CI_Controller
         );
 
         // $dataRaw = json_encode($dataRaw);
-        
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('pg_api')."/owlexa/Api/guaranteeObat",
+            CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/guaranteeObat",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -508,13 +508,13 @@ class ResepDokter extends CI_Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $dataRaw,
-            
+
         ));
 
         $result = curl_exec($curl);
 
         $result = json_decode($result, true);
-        
+
         curl_close($curl);
 
         $response['data'] = $result['data'];
@@ -531,7 +531,8 @@ class ResepDokter extends CI_Controller
                 'status' => 1,
             );
 
-            $this->db->insert('bukti_pembayaran_obat', $data_bukti_pembayaran_obat);
+            $this->db->where('id_jadwal_konsultasi', $data_bukti_pembayaran_obat['id_jadwal_konsultasi']);
+            $this->db->update('bukti_pembayaran_obat', $data_bukti_pembayaran_obat);
 
             $notifikasi = 'Pembayaran Obat dengan penjaminan Owlexa berhasil!';
             $now = (new DateTime('now'))->format('Y-m-d H:i:s');

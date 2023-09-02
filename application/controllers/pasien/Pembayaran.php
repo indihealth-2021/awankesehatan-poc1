@@ -1003,13 +1003,8 @@ class Pembayaran extends CI_Controller
                 'biaya_konsultasi' => $jadwal->biaya_konsultasi,
                 'status' => 0, 'metode_pembayaran' => 1
             );
-            if ($bp) {
-                $this->db->set($data_bukti);
-                $this->db->where(array('id' => $bp->id));
-                $this->db->update('bukti_pembayaran');
-            } else {
-                $this->db->insert('bukti_pembayaran', $data_bukti);
-            }
+            $this->db->where('id_registrasi', $data_bukti['id_registrasi']);
+            $this->db->update('bukti_pembayaran', $data_bukti);
 
             $data_regis_update = array('id_status_pembayaran' => 2, 'keterangan' => 'Sedang Diproses');
             $this->db->set($data_regis_update);
@@ -1019,14 +1014,14 @@ class Pembayaran extends CI_Controller
             $message = 'Bukti Pembayaran Berhasil Diupload, tunggu verifikasi dari Admin';
 
             $alamat = $dikirim ? $alamat_pengiriman_obat : "";
-            $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
+            // $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
 
-            $this->db->insert("biaya_pengiriman_obat", [
-                "id" => $latestId,
-                "alamat" => $dikirim ? $alamat_pengiriman_obat : "",
-                "alamat_kustom" => $alamat_kustom,
-                "id_registrasi" => $id_registrasi,
-            ]);
+            // $this->db->insert("biaya_pengiriman_obat", [
+            //     "id" => $latestId,
+            //     "alamat" => $dikirim ? $alamat_pengiriman_obat : "",
+            //     "alamat_kustom" => $alamat_kustom,
+            //     "id_registrasi" => $id_registrasi,
+            // ]);
 
             $this->session->set_flashdata('msg_pmbyrn', $message);
 
@@ -1414,9 +1409,8 @@ class Pembayaran extends CI_Controller
                 "card_number" => $cardNumber,
                 "claim_number" => $claim_number
             );
-            $this->db->set($data_bukti_pembayaran);
             $this->db->where('id_registrasi', $data_bukti_pembayaran['id_registrasi']);
-            $this->db->update('bukti_pembayaran');
+            $this->db->update('bukti_pembayaran', $data_bukti_pembayaran);
 
             $data3 = array(
                 "id_dokter" => $jadwal->id_dokter,
@@ -1433,7 +1427,8 @@ class Pembayaran extends CI_Controller
                 'alamat_kustom' => 0,
                 'id_registrasi' => $id_registrasi
             );
-            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+            $this->db->where('id_registrasi', $data_biaya_pengiriman_obat['id_registrasi']);
+            $this->db->update('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
 
             $hasil = $this->all_model->select_total($id_dokter);
 

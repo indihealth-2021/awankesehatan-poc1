@@ -79,7 +79,9 @@
                           $total_harga = $resep->harga_kustom;
                         } else {
                           for ($i = 0; $i < $jml_data; $i++) {
-                            $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                            if (intval($list_jumlah_obat[$i]) > 0 && intval($list_harga_obat_per_n_unit[$i]) > 0 && intval($list_harga_obat) > 0) {
+                              $list_total_harga[$i] = (intval($list_jumlah_obat[$i]) / intval($list_harga_obat_per_n_unit[$i])) * intval($list_harga_obat[$i]);
+                            }
                           }
 
                           foreach ($list_total_harga as $tot_harga) {
@@ -96,7 +98,7 @@
                         <td width="25%" class="text-center">
                           <!-- <input type="number" name="harga_ongkir" class="form-control" id="id-jadwal-konsultasi-<?php echo $resep->id_jadwal_konsultasi; ?>" placeholder="Biaya Pengiriman"> -->
                           <?php if ($resep->metode_pengambilan_obat == 1) { ?>
-                          <button class="btn btn-submit-biaya btnEdit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman; ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->nama_provinsi && $resep->nama_kota && $resep->nama_kelurahan && $resep->nama_kecamatan && $resep->alamat_jalan && $resep->kode_pos ? '' : ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-is-alamat-kustom="" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalEditBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">Submit Biaya Pengiriman</button>
+                            <button class="btn btn-submit-biaya btnEdit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman; ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->nama_provinsi && $resep->nama_kota && $resep->nama_kelurahan && $resep->nama_kecamatan && $resep->alamat_jalan && $resep->kode_pos ? '' : ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-is-alamat-kustom="" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-tipe="edit" data-toggle="modal" data-target="#modalEditBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">Submit Biaya Pengiriman</button>
                           <?php } ?>
                           <button class="btn btn-kirim-biaya btnSubmit" data-id-jadwal-konsultasi="<?php echo $resep->id_jadwal_konsultasi; ?>" data-alamat="<?php echo $resep->alamat_pengiriman ?>" data-biaya-pengiriman="<?php echo $biaya_pengiriman; ?>" data-biaya-pengiriman-rp="<?php echo 'Rp. ' . number_format($resep->biaya_pengiriman, 2, ',', '.'); ?>" data-is-alamat-lengkap="<?php echo $resep->alamat_pengiriman ?: ' <sup>(<font color=\'red\'>*Alamat Tidak Lengkap*</font>)</sup>'; ?>" data-tipe="submit" data-harga-obat="<?php echo $total_harga; ?>" data-harga-obat-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga, 2, ',', '.')); ?>" data-total-harga="<?php echo $total_harga + $biaya_pengiriman ?>" data-total-harga-rp="<?php echo str_replace(',00', '', 'Rp. ' . number_format($total_harga + $biaya_pengiriman, 2, ',', '.')); ?>" data-nama-pasien="<?php echo $resep->nama_pasien ?>" data-telp-pasien="<?php echo $resep->telp_pasien; ?>" data-email-pasien="<?php echo $resep->email_pasien ?>" data-toggle="modal" data-alamat-inputan="<?php echo $alamat_inputan; ?>" data-target="#modalBiayaPengiriman<?php echo $resep->id_jadwal_konsultasi; ?>">Kirim
                           </button>
@@ -299,7 +301,7 @@
 </div>
 
 <script>
-  function getOngkir(id_jadwal_konsultasi){
+  function getOngkir(id_jadwal_konsultasi) {
     $.ajax({
       method: 'POST',
       url: baseUrl + "admin/PengirimanObat/getOngkir",
@@ -308,7 +310,7 @@
       },
       success: function(data) {
         console.log(data);
-        if (!data.success){
+        if (!data.success) {
           alert(data.message);
         } else {
           alert(data.message);

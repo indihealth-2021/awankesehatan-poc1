@@ -596,7 +596,7 @@ class ResepDokter extends CI_Controller
             $this->session->set_flashdata('msg_pmbyrn_obat', $response['msg']);
             redirect(base_url('pasien/ResepDokter'));
         } else {
-            $response['msg'] = 'GAGAL: ' . $result['msg'];
+            $response['msg'] = 'INFO: ' . $result['msg'];
             $this->session->set_flashdata('msg_pmbyrn_obat', $response['msg']);
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }

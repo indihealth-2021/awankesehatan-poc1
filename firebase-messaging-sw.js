@@ -30,6 +30,8 @@ messaging.setBackgroundMessageHandler(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
   var pyl = JSON.parse(payload.data.body);
+  console.log('PYS',pyl)
+  alert(pyl.name)
   const notificationTitle = pyl.keterangan;
   const notificationOptions = {
     body: 'Background Message body.',

@@ -80,7 +80,7 @@
                             for ($i = 0; $i < $jml_data; $i++) {
                               $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
                             }
-  
+
                             foreach ($list_total_harga as $tot_harga) {
                               $total_harga += $tot_harga;
                             }
@@ -101,6 +101,7 @@
                           </td>
                           <td width="10%">
                             <span class="font-tr-table">Total Biaya</span><br>
+                            <?= 'Rp. ' . number_format($total_harga + $resep->biaya_pengiriman, 2, ',', '.'); ?>
                           </td>
                           <td class="text-center">
                             <span class="font-tr-table">Status</span><br>
@@ -112,16 +113,16 @@
                   </table>
                 </div>
                 <div class="row pt-3">
-                 <div class="col-sm-12">
-                   <div>
-                     <nav aria-label="Page navigation example">
-                       <ul class="pagination justify-content-center">
-                         <?php echo $pagination ?>
-                       </ul>
-                     </nav>
-                   </div>
-                 </div>
-               </div>
+                  <div class="col-sm-12">
+                    <div>
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                          <?php echo $pagination ?>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

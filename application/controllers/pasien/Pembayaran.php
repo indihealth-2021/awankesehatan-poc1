@@ -1362,12 +1362,21 @@ class Pembayaran extends CI_Controller
         //     // "otp" => $otp,
         //     "telemedicineType" => 'TM-001',
         // ); 
+
+        // Verify that the card number is correct
+        $user = $this->all_model->select('master_user', 'row', 'id = ' . $id_pasien, 1); // Get user data reference
+        if ($user->card_number != $cardNumber) {
+            // Set failed message and redirect to previous page
+            $response['msg'] = 'GAGAL: Nomor Kartu Tidak Teridentifikasi!';
+            $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
+            return redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
+        }
+
         $dataRaw = array(
             "userId" => $id_pasien,
             "dokterId" => $id_dokter,
             "registrasiId" => $id_registrasi,
         );
-
 
         $dataRaw = $dataRaw;
 

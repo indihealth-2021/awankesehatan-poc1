@@ -21,35 +21,6 @@ var btnAnswerFarmasi = $("#jawab_farmasi");
 var btnRejectFarmasi = $("#tolak_farmasi");
 var btnEndCallFarmasi = $("#btn-stop-farmasi");
 
-function checkform(form) {
-  // get all the inputs within the submitted form
-  var inputs = form.getElementsByTagName("input");
-  for (var i = 0; i < inputs.length; i++) {
-    // only validate the inputs that have the required attribute
-    if (inputs[i]) {
-      if (inputs[i].name != "tekanan_darah" || inputs[i].name != "suhu") {
-        // console.log(inputs[i].name)
-        if (inputs[i].value == "") {
-          // found an empty field that is required
-          return false;
-        }
-      }
-    }
-  }
-
-  var textareas = form.getElementsByTagName("textarea");
-  for (var i = 0; i < textareas.length; i++) {
-    // only validate the inputs that have the required attribute
-    if (textareas[i]) {
-      if (textareas[i].html == "") {
-        // found an empty field that is required
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
 // console.log(socket);
 //, { secure: true, reconnect: true, rejectUnauthorized : false }
 //var io = io.connect(socket.host + ":" + socket.port);
@@ -218,7 +189,7 @@ btnStop.click(function (e) {
   var pasien_id = $(this).data("id-pasien");
   var jadwal_konsultasi_id = $(this).data("id-jadwal-konsultasi");
 
-  var assesment_pasien = checkform(document.getElementById("formKonsultasi"));
+  // var assesment_pasien = checkform(document.getElementById("formKonsultasi"));
   // var keluhan = $('textarea[name="keluhan"]').val();
   // var keluhan_warning = `
   //                                   <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -268,29 +239,26 @@ btnStop.click(function (e) {
   var data_konsultasi = $("#formKonsultasi").serialize();
   var data_konsultasi_2 = $("#formKonsultasi_2").serialize();
 
-  if (assesment_pasien != false && diagnosis != 0) {
-    //&& resep_dokter != '') {
-    var chat_id = `/chats/${id_dokter}_${id_pasien}`;
-    $.ajax({
-      method: "POST",
-      url: baseUrl + "Conference/end_call",
-      data: {
-        reg: reg_id,
-        id_pasien: pasien_id,
-        id_jadwal_konsultasi: jadwal_konsultasi_id,
-        chat_id: chat_id,
-        data_konsultasi: data_konsultasi,
-        data_konsultasi_2: data_konsultasi_2,
-      },
-      success: function (data) {
-        console.log(data);
-      },
-      error: function (data) {
-        // alert(data);
-        console.log(data);
-      },
-    });
-  }
+  var chat_id = `/chats/${id_dokter}_${id_pasien}`;
+  $.ajax({
+    method: "POST",
+    url: baseUrl + "Conference/end_call",
+    data: {
+      reg: reg_id,
+      id_pasien: pasien_id,
+      id_jadwal_konsultasi: jadwal_konsultasi_id,
+      chat_id: chat_id,
+      data_konsultasi: data_konsultasi,
+      data_konsultasi_2: data_konsultasi_2,
+    },
+    success: function (data) {
+      console.log(data);
+    },
+    error: function (data) {
+      // alert(data);
+      console.log(data);
+    },
+  });
 });
 // 2.
 // answer here ...

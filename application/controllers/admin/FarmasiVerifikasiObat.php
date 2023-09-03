@@ -420,7 +420,7 @@ class FarmasiVerifikasiObat extends CI_Controller
             for ($i = 0; $i < count($post_data["id_obat"]); $i++) {
                 $resepExists = $this->db->query("SELECT * FROM resep_dokter WHERE id_obat=" . $post_data["id_obat"][$i])->row();
                 if (!$resepExists) {
-                    $resep = $this->db->query('SELECT harga, harga_per_n_unit FROM master_obat WHERE id = ' . $post_data['id_obat'][$i])->row();
+                    $obat = $this->db->query('SELECT harga, harga_per_n_unit FROM master_obat WHERE id = ' . $post_data['id_obat'][$i])->row();
                     $data_resep = array(
                         "id_jadwal_konsultasi" => $post_data['id_jadwal_konsultasi'],
                         "id_pasien" => $post_data['id_pasien'],
@@ -429,8 +429,8 @@ class FarmasiVerifikasiObat extends CI_Controller
                         "id_apotek" => $list_resep[0]->id_apotek,
                         "jumlah_obat" => $post_data['jumlah_obat'][$i],
                         "keterangan" => $post_data['keterangan'][$i],
-                        "harga" => $resep->harga,
-                        "harga_per_n_unit" => $resep->harga_per_n_unit,
+                        "harga" => $obat->harga,
+                        "harga_per_n_unit" => $obat->harga_per_n_unit,
                         "diverifikasi" => 0
                     );
                     $this->db->insert('resep_dokter', $data_resep);

@@ -111,7 +111,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <label for="message-text" class="col-form-label font-12">Jumlah Obat</label>
-                  <input type="number" min=1 name="jumlah_obat" class="form-control form-control-sm" id="unit" placeholder="Jumlah" required>
+                  <input type="number" step=0.000001 min=1 name="jumlah_obat" class="form-control form-control-sm" id="unit" placeholder="Jumlah" required>
                 </div>
               </div>
               <div class="col-12">

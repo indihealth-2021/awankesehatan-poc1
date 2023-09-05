@@ -488,6 +488,47 @@ class ResepDokter extends CI_Controller
             redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }
 
+        // Check member verification of user
+        $dataVerification = [
+            'userId' => $id_pasien
+        ];
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/memberVerification",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $dataVerification,
+
+        ));
+
+        $result = curl_exec($curl);
+        $result = json_decode($result, true);
+
+        curl_close($curl);
+
+        if ($result['status'] == false) {
+            // Set failed message and redirect to previous page
+            $response['msg'] = 'GAGAL: Member tidak terverfikasi!';
+            $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
+            return redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
+        }
+
+        // Verify that the card number is correct
+        $user = $this->all_model->select('master_user', 'row', 'id = ' . $id_pasien, 1); // Get user data reference
+        if ($user->card_number != $cardNumber) {
+            // Set failed message and redirect to previous page
+            $response['msg'] = 'GAGAL: Nomor Kartu Tidak Teridentifikasi!';
+            $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
+            return redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
+        }
+
         $dataRaw = array(
             'userId' => $id_pasien,
             'jadwalKonsultasiId' => $id_jadwal_konsultasi,

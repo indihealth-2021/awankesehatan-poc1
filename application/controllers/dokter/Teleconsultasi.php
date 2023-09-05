@@ -172,6 +172,42 @@ class Teleconsultasi extends CI_Controller
             }
         } else {
             $new_diagnosis = $this->db->insert('diagnosis_dokter', $data);
+            $new_diagnosis = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id = ' . $this->db->insert_id())->row();
+            $id_registrasi = $new_diagnosis->id_registrasi;
+
+            // Get transaction number from bukti_pembayaran with latest diagnosis_dokter data
+            $dataBuktiPembayaran = $this->all_model->select('bukti_pembayaran', 'result', 'id_registrasi =' . $id_registrasi, 1);
+
+            $dataRaw = [
+                'transactionNumber' => $dataBuktiPembayaran->trans_id,
+                'diagnosisCode'     => $id_registrasi
+            ];
+
+            // Diagnose Verification from Owlexa API
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/verifyDiagnose",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $dataRaw,
+
+            ));
+
+            $result = curl_exec($curl);
+            $result = json_decode($result, true);
+
+            curl_close($curl);
+
+            if ($result['code'] == 200) {
+                echo 'verify diagnosa berhasil';
+            }
+
             echo 'berhasil';
         }
 
@@ -403,6 +439,40 @@ class Teleconsultasi extends CI_Controller
             $new_diagnosis = $this->db->insert('diagnosis_dokter', $data_diagnosis_dokter);
             $new_diagnosis = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id = ' . $this->db->insert_id())->row();
             $id_registrasi = $new_diagnosis->id_registrasi;
+
+            // Get transaction number from bukti_pembayaran with latest diagnosis_dokter data
+            $dataBuktiPembayaran = $this->all_model->select('bukti_pembayaran', 'result', 'id_registrasi =' . $id_registrasi, 1);
+
+            $dataRaw = [
+                'transactionNumber' => $dataBuktiPembayaran->trans_id,
+                'diagnosisCode'     => $id_registrasi
+            ];
+
+            // Diagnose Verification from Owlexa API
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/verifyDiagnose",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $dataRaw,
+
+            ));
+
+            $result = curl_exec($curl);
+            $result = json_decode($result, true);
+
+            curl_close($curl);
+
+            if ($result['code'] == 200) {
+                echo 'verify diagnosa berhasil';
+            }
+
             echo 'berhasil';
         }
 

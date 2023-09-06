@@ -180,7 +180,7 @@ class Teleconsultasi extends CI_Controller
 
             $dataRaw = [
                 'transactionNumber' => $dataBuktiPembayaran->trans_id,
-                'diagnosisCode'     => $id_registrasi
+                'diagnosisCode'     => $new_diagnosis->diagnosis
             ];
 
             // Diagnose Verification from Owlexa API
@@ -445,7 +445,7 @@ class Teleconsultasi extends CI_Controller
 
             $dataRaw = [
                 'transactionNumber' => $dataBuktiPembayaran->trans_id,
-                'diagnosisCode'     => $id_registrasi
+                'diagnosisCode'     => $new_diagnosis->diagnosis
             ];
 
             // Diagnose Verification from Owlexa API

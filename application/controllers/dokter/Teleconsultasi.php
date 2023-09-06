@@ -434,6 +434,13 @@ class Teleconsultasi extends CI_Controller
         // == Insert to biaya_pengiriman_obat table ==
 
         $user = $this->all_model->select('master_user', 'row', 'id = ' . $data['id_pasien'], 1); // Get user data reference
+        $alamatUser = $this->db->query('
+        SELECT master_user.alamat_jalan as alamat_user, master_kelurahan.name as kelurahan_user, master_kecamatan.name as kecamatan_user, master_kota.name as kota_user, master_provinsi.name as provinsi_user
+        FROM master_user
+        LEFT JOIN master_kelurahan ON master_user.alamat_kelurahan = master_kelurahan.id LEFT JOIN master_kecamatan ON master_user.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kota ON master_user.alamat_kota = master_kota.id LEFT JOIN master_provinsi ON master_user.alamat_provinsi = master_provinsi.id
+        WHERE master_user.id = ' . $data['id_pasien'] . '
+        LIMIT 1
+        ')->row();
 
         // Get all prices for id_jadwal_konsultasi in resep_dokter table
         $resepDokter = $this->all_model->select('resep_dokter', 'result', 'id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi']);
@@ -448,14 +455,17 @@ class Teleconsultasi extends CI_Controller
 
         $data_biaya_pengiriman_obat = [
             'alamat_kustom'         => 1,
-            'alamat'                => $user->alamat_jalan,
+            'alamat'                => $user->alamat_jalan . ', ' . $alamatUser->kelurahan_user . ', ' . $alamatUser->kecamatan_user . ', ' . $alamatUser->kota_user . ', ' . $alamatUser->provinsi_user . '.',
             'id_registrasi'         => $dataRegistrasi->id_registrasi,
             'id_jadwal_konsultasi'  => $data['id_jadwal_konsultasi'],
             'created_at'            => date('Y-m-d H:i:s'),
             'updated_at'            => date('Y-m-d H:i:s'),
             'harga_obat'            => $hargaObat,
         ];
-        $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+
+        if ($data_biaya_pengiriman_obat['id_jadwal_konsultasi'] != '' && $data['id_jadwal_konsultasi'] != '' && $hargaObat != '') {
+            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+        }
 
         // == End of insert to biaya_pengiriman_obat ==
 

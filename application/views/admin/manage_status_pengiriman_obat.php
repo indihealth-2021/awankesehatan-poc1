@@ -81,7 +81,9 @@
                           $total_harga = $resep->harga_kustom;
                         } else {
                           for ($i = 0; $i < $jml_data; $i++) {
-                            $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+                            if (intval($list_jumlah_obat[$i]) > 0 && intval($list_harga_obat_per_n_unit[$i]) > 0 && intval($list_harga_obat) > 0) {
+                              $list_total_harga[$i] = (intval($list_jumlah_obat[$i]) / intval($list_harga_obat_per_n_unit[$i])) * intval($list_harga_obat[$i]);
+                            }
                           }
 
                           foreach ($list_total_harga as $tot_harga) {
@@ -132,7 +134,9 @@
     $total_harga = $resep->harga_kustom;
   } else {
     for ($i = 0; $i < $jml_data; $i++) {
-      $list_total_harga[$i] = ($list_jumlah_obat[$i] / $list_harga_obat_per_n_unit[$i]) * $list_harga_obat[$i];
+      if (intval($list_jumlah_obat[$i]) > 0 && intval($list_harga_obat_per_n_unit[$i]) > 0 && intval($list_harga_obat) > 0) {
+        $list_total_harga[$i] = (intval($list_jumlah_obat[$i]) / intval($list_harga_obat_per_n_unit[$i])) * intval($list_harga_obat[$i]);
+      }
     }
 
     foreach ($list_total_harga as $tot_harga) {

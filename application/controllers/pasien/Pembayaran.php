@@ -1003,13 +1003,8 @@ class Pembayaran extends CI_Controller
                 'biaya_konsultasi' => $jadwal->biaya_konsultasi,
                 'status' => 0, 'metode_pembayaran' => 1
             );
-            if ($bp) {
-                $this->db->set($data_bukti);
-                $this->db->where(array('id' => $bp->id));
-                $this->db->update('bukti_pembayaran');
-            } else {
-                $this->db->insert('bukti_pembayaran', $data_bukti);
-            }
+            $this->db->where('id_registrasi', $data_bukti['id_registrasi']);
+            $this->db->update('bukti_pembayaran', $data_bukti);
 
             $data_regis_update = array('id_status_pembayaran' => 2, 'keterangan' => 'Sedang Diproses');
             $this->db->set($data_regis_update);
@@ -1019,14 +1014,14 @@ class Pembayaran extends CI_Controller
             $message = 'Bukti Pembayaran Berhasil Diupload, tunggu verifikasi dari Admin';
 
             $alamat = $dikirim ? $alamat_pengiriman_obat : "";
-            $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
+            // $latestId = $this->db->query("SELECT id FROM biaya_pengiriman_obat ORDER BY id DESC LIMIT 1")->row()->id + 1;
 
-            $this->db->insert("biaya_pengiriman_obat", [
-                "id" => $latestId,
-                "alamat" => $dikirim ? $alamat_pengiriman_obat : "",
-                "alamat_kustom" => $alamat_kustom,
-                "id_registrasi" => $id_registrasi,
-            ]);
+            // $this->db->insert("biaya_pengiriman_obat", [
+            //     "id" => $latestId,
+            //     "alamat" => $dikirim ? $alamat_pengiriman_obat : "",
+            //     "alamat_kustom" => $alamat_kustom,
+            //     "id_registrasi" => $id_registrasi,
+            // ]);
 
             $this->session->set_flashdata('msg_pmbyrn', $message);
 
@@ -1119,8 +1114,7 @@ class Pembayaran extends CI_Controller
         $currentTime = date("Y-m-d H:i:s");
 
         $post_data = $this->input->post();
-        if(empty($cardNumber))
-        {
+        if (empty($cardNumber)) {
             $response['msg'] = 'Mohon isi no Kartu';
             $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
             //redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true&alamat_kustom='.$alamat_kustom.'&alamat='.$alamat_pengiriman_obat.'#metode-pembayaran'));
@@ -1134,7 +1128,7 @@ class Pembayaran extends CI_Controller
             $alamat_kelurahan = $post_data['alamat_kelurahan'];
             $kode_pos = $post_data['kode_pos'];
             $alamat_detail = $post_data['alamat_detail'];
-            $alamat_pengiriman_obat = $alamat_detail . "," . $alamat_kelurahan . "," . $alamat_kecamatan . "," . $alamat_kota . "," . $alamat_provinsi . "," . $kode_pos; 
+            $alamat_pengiriman_obat = $alamat_detail . "," . $alamat_kelurahan . "," . $alamat_kecamatan . "," . $alamat_kota . "," . $alamat_provinsi . "," . $kode_pos;
             if (!isset($data['cardNumber'])  || !$alamat_pengiriman_obat) {
                 $response['msg'] = 'Data yang anda masukan tidak lengkap!';
                 $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
@@ -1143,7 +1137,7 @@ class Pembayaran extends CI_Controller
                 exit();
             }
         }
-        
+
 
         $pasien = $this->db->query('SELECT id FROM master_user WHERE id = ' . $id_pasien . ' AND id_user_kategori = 0')->row();
         if (!$pasien) {
@@ -1368,19 +1362,28 @@ class Pembayaran extends CI_Controller
         //     // "otp" => $otp,
         //     "telemedicineType" => 'TM-001',
         // ); 
+
+        // Verify that the card number is correct
+        $user = $this->all_model->select('master_user', 'row', 'id = ' . $id_pasien, 1); // Get user data reference
+        if ($user->card_number != $cardNumber) {
+            // Set failed message and redirect to previous page
+            $response['msg'] = 'GAGAL: Nomor Kartu Tidak Teridentifikasi!';
+            $this->session->set_flashdata('msg_pmbyrn', $response['msg']);
+            return redirect(base_url('pasien/Pembayaran/?regid=' . $id_registrasi . '&owlexa=true#metode-pembayaran'));
+        }
+
         $dataRaw = array(
             "userId" => $id_pasien,
             "dokterId" => $id_dokter,
             "registrasiId" => $id_registrasi,
         );
 
-
         $dataRaw = $dataRaw;
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->config->item('pg_api')."/owlexa/Api/guarantee",
+            CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/guarantee",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -1389,13 +1392,13 @@ class Pembayaran extends CI_Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $dataRaw,
-            
+
         ));
 
         $result = curl_exec($curl);
-         // var_dump($result);
+        // var_dump($result);
         $result = json_decode($result, true);
-        
+
         curl_close($curl);
         // exit();
         $response['data'] = $result['data'];
@@ -1415,8 +1418,8 @@ class Pembayaran extends CI_Controller
                 "card_number" => $cardNumber,
                 "claim_number" => $claim_number
             );
-            $this->db->insert('bukti_pembayaran', $data_bukti_pembayaran);
-            $bukti_id = $this->db->insert_id();
+            $this->db->where('id_registrasi', $data_bukti_pembayaran['id_registrasi']);
+            $this->db->update('bukti_pembayaran', $data_bukti_pembayaran);
 
             $data3 = array(
                 "id_dokter" => $jadwal->id_dokter,
@@ -1433,7 +1436,8 @@ class Pembayaran extends CI_Controller
                 'alamat_kustom' => 0,
                 'id_registrasi' => $id_registrasi
             );
-            $this->db->insert('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
+            $this->db->where('id_registrasi', $data_biaya_pengiriman_obat['id_registrasi']);
+            $this->db->update('biaya_pengiriman_obat', $data_biaya_pengiriman_obat);
 
             $hasil = $this->all_model->select_total($id_dokter);
 

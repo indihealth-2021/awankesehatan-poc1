@@ -451,7 +451,12 @@
     pesan.onMessage(function(payload) {
       var test = payload || {};
       loadData = test.data.body;
-      console.log('payload', payload);
+      var pyl = JSON.parse(payload.data.body);
+      console.log('LOAD', pyl);
+      if(pyl.name == 'reject_konsultasi')
+      {
+         $('.modal').modal('hide');
+      }
       // console.log('name',JSON.parse(JSON.parse(payload.data.body).name);
       //  $("#jawaban").modal('show');
       if (loadData == "ok") {

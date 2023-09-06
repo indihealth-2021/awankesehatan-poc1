@@ -101,6 +101,17 @@ if ($resep->harga_kustom) {
         <div style="background: #FFF;border: 1px solid #DEDEDE" class="shadow-sm rounded">
 
           <div class="d-mobile-none_">
+            <div class="row p-4">
+              <div class="col-md-8">
+                <h4 style="color: #01A9AC;" class="font-bold font-20"><span class="fa fa-map-marker pr-2" style="color: #01A9AC"></span>Apotek</h4>
+                <p class="font-15 ml-3 border p-3">
+                  <?= $resep->nama_apotek ?> ( <?= $resep->telp_apotek ?> ) <br />
+                  <?= $resep->alamat_apotek ?>, <?= $resep->kelurahan_apotek ?>, <?= $resep->kecamatan_apotek ?>, <?= $resep->kota_apotek ?>, <?= $resep->provinsi_apotek ?>.
+                  <br /><br />
+                </p>
+                <!-- <p class="font-18 ml-3 font-bold text-right" style="color: #01A9AC; margin-top: -10px;">Ubah</p> -->
+              </div>
+            </div>
             <?php if ($resep->dikirim == 1) { ?>
               <div class="row p-4">
                 <div class="col-md-8">

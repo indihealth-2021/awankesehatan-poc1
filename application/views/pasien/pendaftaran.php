@@ -439,13 +439,20 @@
 
         const form = new FormData();
         form.append('userId', <?= $this->session->userdata("id_user")  ?>);
-        axios.post('<?= config_item('pg_api') ?>/owlexa/Api/plafonCheck', form)
+        axios.post('<?= config_item('pg_api') ?>/owlexa//Api/memberVerification', form)
             .then(function(response) {
                 $('#' + spinner).hide();
-                if (response.data.data < 1000000) {
-                    alert('Tidak dapat melakukan pendaftaran konsultasi karena plafon tidak mencukupi, silahkan cek plafon anda kembali');
+
+                if (!response.data.status) {
+                    alert(response.data.msg);
                     return false;
+
+
                 }
+                // if (response.data.data < 1000000) {
+                //     alert('Tidak dapat melakukan pendaftaran konsultasi karena plafon tidak mencukupi, silahkan cek plafon anda kembali');
+                //     return false;
+                // }
 
                 $('#tac_modal_daftar').modal('show');
                 $("#simpan_toc").on("click", function() {
@@ -459,9 +466,12 @@
             .catch(function(error) {
                 $('#' + spinner).hide();
                 console.log(error.response.data.msg)
+
                 if (error.response.data.msg == "Data tidak ditemukan") {
                     alert("Akun anda belum terdaftar di Owlexa");
 
+                }else{
+                    alert(error.response.data.msg);
                 }
             });
 

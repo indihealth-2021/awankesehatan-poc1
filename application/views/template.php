@@ -453,9 +453,8 @@
       loadData = test.data.body;
       var pyl = JSON.parse(payload.data.body);
       console.log('LOAD', pyl);
-      if(pyl.name == 'reject_konsultasi')
-      {
-         $('.modal').modal('hide');
+      if (pyl.name == 'reject_konsultasi') {
+        $('.modal').modal('hide');
       }
       // console.log('name',JSON.parse(JSON.parse(payload.data.body).name);
       //  $("#jawaban").modal('show');
@@ -630,6 +629,11 @@
           }, 3000);
         }
         if (JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_dokter')) {
+          //console.log('hi mom')
+          $('#memanggil').modal('hide');
+          $('#memanggil').modal('hide');
+          $('#memanggil').modal('hide');
+          $('#memanggil').modal('hide');
           $('#memanggil').modal('hide');
           if ($('textarea[name=keluhan]').val()) {
             startTimer();

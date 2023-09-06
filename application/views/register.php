@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/website/css/jquery.timepicker.css'); ?>">
 
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-      <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=id-ID"></script>
+  <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=id-ID"></script>
   <!-- Font -->
   <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Droid+Sans" />
@@ -47,15 +47,15 @@
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light font-ubuntu" id="ftco-navbar" style="border-bottom:1px; box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);">
     <div class="container">
       <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><?php
-                            $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
-                            foreach ($imageFormats as $format) {
-                                $imagePath = './assets/images/logo/logo.' . $format;
-                                if (file_exists($imagePath)) {
-                                    echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
-                                    break;
-                                }
-                            }
-                            ?></a>
+                                                                      $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+                                                                      foreach ($imageFormats as $format) {
+                                                                        $imagePath = './assets/images/logo/logo.' . $format;
+                                                                        if (file_exists($imagePath)) {
+                                                                          echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
+                                                                          break;
+                                                                        }
+                                                                      }
+                                                                      ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
@@ -119,8 +119,8 @@
                 <label for="exampleFormControlInput1" class="form-label">Card Number</label>
                 <div class="input-icon">
                   <input required type="number" class="form-control" id="card_number" <?php if (!empty($old)) {
-                                                                                    echo "value='" . $old['card_number'] . "'";
-                                                                                  } ?> name="card_number" placeholder="Masukan Card Number" min="0">
+                                                                                        echo "value='" . $old['card_number'] . "'";
+                                                                                      } ?> name="card_number" placeholder="Masukan Card Number" min="0">
                   <!-- <i class="fa fa-user"></i> -->
                   <i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="19" viewBox="0 0 16 19" fill="none">
                       <path d="M10.5984 11.6264C10.4824 11.588 9.7495 11.2535 10.2075 9.84376H10.2009C11.3947 8.5987 12.307 6.59524 12.307 4.6228C12.307 1.58992 10.3154 0 8.00073 0C5.6846 0 3.70392 1.58918 3.70392 4.6228C3.70392 6.60337 4.61112 8.61495 5.81222 9.85705C6.2804 11.1006 5.44321 11.5622 5.26819 11.6272C2.84412 12.5148 0 14.1328 0 15.7301V16.329C0 18.5052 4.167 19 8.02334 19C11.8855 19 16 18.5052 16 16.329V15.7301C16 14.0848 13.142 12.4793 10.5984 11.6264Z" fill="#999999" />
@@ -189,7 +189,7 @@
                 </div>
                 <hr>
                 <div align='center'>
-                <div class="g-recaptcha form-field" data-sitekey='<?= $this->config->item('recaptcha_site_key') ?>'></div>
+                  <div class="g-recaptcha form-field" data-sitekey='<?= $this->config->item('recaptcha_site_key') ?>'></div>
                 </div>
                 <div class="mb-3 mt-4">
                   <input type="hidden" name="id_user_kategori" value="0">
@@ -212,7 +212,8 @@
           <div class="col-lg-4">
             <p class="font-12 text-powered">Powered By</p>
             <div class="row">
-              <img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">
+              <!--<img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">-->
+              <img src="<?php echo base_url('assets/telemedicine/img/owlexa.png') ?>" style="width:150px; height: auto">
               <!-- <img src="<?php echo base_url('assets/telemedicine/img/logo.png') ?>" class="ml-4 img-logo-footer"> -->
             </div>
           </div>
@@ -230,11 +231,11 @@
           <div class="col-lg-5">
             <p class="font-bold font-tele">Hubungi Kami</p>
             <div class="font-black font-18 text-justify">
-                <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
-                <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
-                <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
-                <span></span><br>
-                <span>Telp : +622130003000</span><br>
+              <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
+              <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
+              <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
+              <span></span><br>
+              <span>Telp : +622130003000</span><br>
             </div>
           </div>
           <!-- <div class="col-lg-3 font-18 text-right">
@@ -314,12 +315,12 @@
       this.value = this.value.replace(' ', '');
     }
     window.onload = function() {
-    var $recaptcha = document.querySelector('#g-recaptcha-response');
+      var $recaptcha = document.querySelector('#g-recaptcha-response');
 
-    if($recaptcha) {
+      if ($recaptcha) {
         $recaptcha.setAttribute("required", "required");
-    }
-};
+      }
+    };
   </script>
 
 </body>

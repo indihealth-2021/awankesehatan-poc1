@@ -47,15 +47,15 @@
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><?php
-                            $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
-                            foreach ($imageFormats as $format) {
-                                $imagePath = './assets/images/logo/logo.' . $format;
-                                if (file_exists($imagePath)) {
-                                    echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
-                                    break;
-                                }
-                            }
-                            ?></a>
+                                                                      $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+                                                                      foreach ($imageFormats as $format) {
+                                                                        $imagePath = './assets/images/logo/logo.' . $format;
+                                                                        if (file_exists($imagePath)) {
+                                                                          echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
+                                                                          break;
+                                                                        }
+                                                                      }
+                                                                      ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
@@ -319,7 +319,8 @@
           <div class="col-lg-4">
             <p class="font-12 text-powered">Powered By</p>
             <div class="row">
-              <img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">
+              <!--<img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">-->
+              <img src="<?php echo base_url('assets/telemedicine/img/owlexa.png') ?>" style="width:150px; height: auto">
               <!-- <img src="<?php echo base_url('assets/telemedicine/img/logo.png') ?>" class="ml-4 img-logo-footer"> -->
             </div>
           </div>
@@ -327,21 +328,21 @@
             <p class="font-bold font-tele">Site Map</p>
             <div class="font-18">
               <span><a href="<?php echo base_url('Faq'); ?>" class="font-black">FAQ</a></span><br>
-              <span><a href="<?php echo base_url('Home');?>#beranda" class="font-black">Beranda</a></span><br>
-              <span><a href="<?php echo base_url('Home');?>#layanan" class="font-black">Layanan Kami</a></span><br>
-              <span><a href="<?php echo base_url('Home');?>#mitra-dokter-2" class="font-black">Mitra Dokter</a></span><br>
-              <span><a href="<?php echo base_url('Home');?>#news" class="font-black">Berita</a></span><br>
-              <span><a href="<?php echo base_url('Home');?>#footer" class="font-black">Kontak</a></span>
+              <span><a href="<?php echo base_url('Home'); ?>#beranda" class="font-black">Beranda</a></span><br>
+              <span><a href="<?php echo base_url('Home'); ?>#layanan" class="font-black">Layanan Kami</a></span><br>
+              <span><a href="<?php echo base_url('Home'); ?>#mitra-dokter-2" class="font-black">Mitra Dokter</a></span><br>
+              <span><a href="<?php echo base_url('Home'); ?>#news" class="font-black">Berita</a></span><br>
+              <span><a href="<?php echo base_url('Home'); ?>#footer" class="font-black">Kontak</a></span>
             </div>
           </div>
           <div class="col-lg-5">
             <p class="font-bold font-tele">Hubungi Kami</p>
             <div class="font-black font-18 text-justify">
-                <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
-                <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
-                <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
-                <span></span><br>
-                <span>Telp : +622130003000</span><br>
+              <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
+              <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
+              <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
+              <span></span><br>
+              <span>Telp : +622130003000</span><br>
             </div>
           </div>
           <!-- <div class="col-lg-3 font-18 text-right">
@@ -448,7 +449,7 @@
         $('.footer').removeClass('active');
         $('.layanan').addClass('border-b-3');
         $('.layanan').addClass('active');
-      }else if ($(this).scrollTop() >= $('#mitra-dokter').position().top && $(this).scrollTop() <= $('#news').position().top) {
+      } else if ($(this).scrollTop() >= $('#mitra-dokter').position().top && $(this).scrollTop() <= $('#news').position().top) {
         $('.beranda').removeClass('border-b-3');
         $('.beranda').removeClass('active');
         $('.layanan').removeClass('border-b-3');
@@ -459,7 +460,7 @@
         $('.footer').removeClass('active');
         $('.mitra-dokter').addClass('border-b-3');
         $('.mitra-dokter').addClass('active');
-      }else if ($(this).scrollTop() >= $('#news').position().top && $(this).scrollTop() <= $('#footer').position().top) {
+      } else if ($(this).scrollTop() >= $('#news').position().top && $(this).scrollTop() <= $('#footer').position().top) {
         $('.beranda').removeClass('border-b-3');
         $('.beranda').removeClass('active');
         $('.mitra-dokter').removeClass('border-b-3');
@@ -470,7 +471,7 @@
         $('.footer').removeClass('active');
         $('.news').addClass('border-b-3');
         $('.news').addClass('active');
-      }else if ($(this).scrollTop() >= $('#footer').position().top) {
+      } else if ($(this).scrollTop() >= $('#footer').position().top) {
         $('.beranda').removeClass('border-b-3');
         $('.beranda').removeClass('active');
         $('.mitra-dokter').removeClass('border-b-3');
@@ -481,7 +482,7 @@
         $('.layanan').removeClass('active');
         $('.footer').addClass('border-b-3');
         $('.footer').addClass('active');
-      }else{
+      } else {
         $('.layanan').removeClass('border-b-3');
         $('.layanan').removeClass('active');
         $('.mitra-dokter').removeClass('border-b-3');

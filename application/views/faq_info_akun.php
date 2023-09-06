@@ -41,14 +41,23 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/website/css/style.css'); ?>">
 
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
-  
+
 </head>
 
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light font-ubuntu" id="ftco-navbar" style="border-bottom:1px; box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);">
     <div class="container">
-      <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><img src="<?php echo base_url('assets/telemedicine/img/iDok.png') ?>" class="img-brand"></a>
+      <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><?php
+                                                                      $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+                                                                      foreach ($imageFormats as $format) {
+                                                                        $imagePath = './assets/images/logo/logo.' . $format;
+                                                                        if (file_exists($imagePath)) {
+                                                                          echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
+                                                                          break;
+                                                                        }
+                                                                      }
+                                                                      ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
@@ -73,13 +82,13 @@
     <div class="col-md-10 mx-auto font-ubuntu pb-5">
       <div class="row">
         <div class="col-sm-12 col-12 ">
-         <nav aria-label="">
-           <ol class="breadcrumb" style="background-color: transparent;">
-             <li class="breadcrumb-item active"><a href="<?php echo base_url('Faq'); ?>" class="text-black">FAQ</a></li>
-             <li class="breadcrumb-item" aria-current="page"><a href="<?php echo base_url('Faq/akun') ?>" class="text-black font-bold-7">Info Akun</a></li>
-           </ol>
-         </nav>
-       </div>
+          <nav aria-label="">
+            <ol class="breadcrumb" style="background-color: transparent;">
+              <li class="breadcrumb-item active"><a href="<?php echo base_url('Faq'); ?>" class="text-black">FAQ</a></li>
+              <li class="breadcrumb-item" aria-current="page"><a href="<?php echo base_url('Faq/akun') ?>" class="text-black font-bold-7">Info Akun</a></li>
+            </ol>
+          </nav>
+        </div>
         <h2 class="text-faq col-md-10">Frequently Asked Questions (FAQ)</h2>
 
         <div class="col-md-12">
@@ -142,7 +151,7 @@
               <div class="" id="headingFour">
                 <h2 class="mb-0">
                   <button class="btn btn-faq btn-block text-left" type="button" data-toggle="collapse" data-target="#info4" aria-expanded="false" aria-controls="info4"><i class="fas fa-caret-down"></i>
-                  Bagaimana keamanan privasi data pasien?
+                    Bagaimana keamanan privasi data pasien?
                   </button>
                 </h2>
               </div>
@@ -156,7 +165,7 @@
               <div class="" id="headingFive">
                 <h2 class="mb-0">
                   <button class="btn btn-faq btn-block text-left" type="button" data-toggle="collapse" data-target="#info5" aria-expanded="false" aria-controls="info5"><i class="fas fa-caret-down"></i>
-                  Apakah pasien dapat mengganti nama pengguna?
+                    Apakah pasien dapat mengganti nama pengguna?
                   </button>
                 </h2>
               </div>
@@ -179,7 +188,8 @@
           <div class="col-lg-4">
             <p class="font-12 text-powered">Powered By</p>
             <div class="row">
-              <img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">
+              <!--<img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">-->
+              <img src="<?php echo base_url('assets/telemedicine/img/owlexa.png') ?>" style="width:150px; height: auto">
               <!-- <img src="<?php echo base_url('assets/telemedicine/img/logo.png') ?>" class="ml-4 img-logo-footer"> -->
             </div>
           </div>
@@ -197,11 +207,11 @@
           <div class="col-lg-5">
             <p class="font-bold font-tele">Hubungi Kami</p>
             <div class="font-black font-18 text-justify">
-              	<span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
-              	<span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
-              	<span>Daerah Khusus Ibukota Jakarta 10110</span><br>
-               	<span></span><br>
-              	<span>Telp : +622130003000</span><br>
+              <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
+              <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
+              <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
+              <span></span><br>
+              <span>Telp : +622130003000</span><br>
             </div>
           </div>
           <!-- <div class="col-lg-3 font-18 text-right">
@@ -244,12 +254,13 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="<?php echo base_url('assets/website/js/google-map.js'); ?>"></script>
   <script src="<?php echo base_url('assets/website/js/main.js'); ?>"></script>
-  
+
 </body>
 
 </html>
 <style>
-  .fa, .fas {
+  .fa,
+  .fas {
     font-weight: 900;
     margin-left: 0;
   }

@@ -45,8 +45,16 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light font-ubuntu" id="ftco-navbar" style="border-bottom:1px; box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.25);">
     <div class="container">
-      <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><img src="<?php echo base_url('assets/telemedicine/img/iDok.png') ?>" class="img-brand"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="<?php echo base_url('Home'); ?>"><?php
+                                                                      $imageFormats = ['png', 'jpeg', 'jpg', 'jfif', 'gif'];
+                                                                      foreach ($imageFormats as $format) {
+                                                                        $imagePath = './assets/images/logo/logo.' . $format;
+                                                                        if (file_exists($imagePath)) {
+                                                                          echo '<img class="img-brand" src="' . base_url($imagePath) . '" alt="">';
+                                                                          break;
+                                                                        }
+                                                                      }
+                                                                      ?></a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
 
@@ -85,34 +93,44 @@
       <div class="col-md-10 mx-auto">
         <div class="row mx-auto">
           <div class="col-md-4 text-center bg-white-info pt-4">
-          	<a href="<?php echo base_url('Faq/akun');?>"><div>
-          		<img src="<?php echo base_url('assets/telemedicine/img/info-akun.png') ?>" class="img-info-2 mb-3">
-            	<p>Info Akun</p>
-          	</div></a>
+            <a href="<?php echo base_url('Faq/akun'); ?>">
+              <div>
+                <img src="<?php echo base_url('assets/telemedicine/img/info-akun.png') ?>" class="img-info-2 mb-3">
+                <p>Info Akun</p>
+              </div>
+            </a>
           </div>
           <div class="col-md-4 text-center bg-white-info pt-5">
-          	<a href="<?php echo base_url('Faq/payment');?>"><div>
-            	<img src="<?php echo base_url('assets/telemedicine/img/info-payment.png') ?>" class="img-info-3 mb-4">
-            	<p class="mt-2">Info Payment</p>
-            </div></a>
+            <a href="<?php echo base_url('Faq/payment'); ?>">
+              <div>
+                <img src="<?php echo base_url('assets/telemedicine/img/info-payment.png') ?>" class="img-info-3 mb-4">
+                <p class="mt-2">Info Payment</p>
+              </div>
+            </a>
           </div>
           <div class="col-md-4 text-center bg-white-info py-4">
-            <a href="<?php echo base_url('Faq/konsultasi');?>"><div>
-	            <img src="<?php echo base_url('assets/telemedicine/img/info-konsultasi.png') ?>" class="img-info-4 mb-4">
-	            <p>Info Konsultasi</p>
-	        </div></a>
+            <a href="<?php echo base_url('Faq/konsultasi'); ?>">
+              <div>
+                <img src="<?php echo base_url('assets/telemedicine/img/info-konsultasi.png') ?>" class="img-info-4 mb-4">
+                <p>Info Konsultasi</p>
+              </div>
+            </a>
           </div>
           <div class="col-md-4 text-center bg-white-info py-4 ml-auto">
-			<a href="<?php echo base_url('Faq/beliobat');?>"><div>	            
-	            <img src="<?php echo base_url('assets/telemedicine/img/info-beli-obat.png') ?>" class="img-info-5 mb-5">
-	            <p>Info Beli Obat</p>
-	        </div></a>
+            <a href="<?php echo base_url('Faq/beliobat'); ?>">
+              <div>
+                <img src="<?php echo base_url('assets/telemedicine/img/info-beli-obat.png') ?>" class="img-info-5 mb-5">
+                <p>Info Beli Obat</p>
+              </div>
+            </a>
           </div>
           <div class="col-md-4 text-center bg-white-info py-4 mr-auto">
-	        <a href="<?php echo base_url('Faq/delivery');?>"><div>
-	            <img src="<?php echo base_url('assets/telemedicine/img/info-delivery.png') ?>" class="img-info-6 mb-4">
-	            <p class="mt-3">Info Delivery</p>
-	        </div></a>
+            <a href="<?php echo base_url('Faq/delivery'); ?>">
+              <div>
+                <img src="<?php echo base_url('assets/telemedicine/img/info-delivery.png') ?>" class="img-info-6 mb-4">
+                <p class="mt-3">Info Delivery</p>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -126,7 +144,8 @@
           <div class="col-lg-4">
             <p class="font-12 text-powered">Powered By</p>
             <div class="row">
-              <img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">
+              <!--<img src="<?php echo base_url('assets/telemedicine/img/ooredoo.png') ?>" class="img-logo-footer">-->
+              <img src="<?php echo base_url('assets/telemedicine/img/owlexa.png') ?>" style="width:150px; height: auto">
               <!-- <img src="<?php echo base_url('assets/telemedicine/img/logo.png') ?>" class="ml-4 img-logo-footer"> -->
             </div>
           </div>
@@ -144,11 +163,11 @@
           <div class="col-lg-5">
             <p class="font-bold font-tele">Hubungi Kami</p>
             <div class="font-black font-18 text-justify">
-              	<span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
-              	<span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
-              	<span>Daerah Khusus Ibukota Jakarta 10110</span><br>
-               	<span></span><br>
-              	<span>Telp : +622130003000</span><br>
+              <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
+              <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
+              <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
+              <span></span><br>
+              <span>Telp : +622130003000</span><br>
             </div>
           </div>
           <!-- <div class="col-lg-3 font-18 text-right">
@@ -189,12 +208,14 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="<?php echo base_url('assets/website/js/google-map.js'); ?>"></script>
   <script src="<?php echo base_url('assets/website/js/main.js'); ?>"></script>
-  
+
 </body>
 
 </html>
 <style>
-	a, a:hover, a:visited {
-		color: #000000;
-	}
+  a,
+  a:hover,
+  a:visited {
+    color: #000000;
+  }
 </style>

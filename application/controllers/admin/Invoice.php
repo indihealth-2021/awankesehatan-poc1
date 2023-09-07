@@ -286,11 +286,11 @@ class Invoice extends CI_Controller
             $admission_date = $pembayaran->tanggal_pembayaran->format('d/m/Y');
             $pembayaran->tanggal_pembayaran = $pembayaran->tanggal_pembayaran->format('d/m/Y H:i:s');
 
-            $biaya_adm = $pembayaran->biaya_adm ? $pembayaran->biaya_adm:0;
-            $biaya_adm = 'Rp. '.number_format($biaya_adm, 2, ',', '.');
+            $biaya_adm = $pembayaran->biaya_adm ? $pembayaran->biaya_adm : 0;
+            $biaya_adm = 'Rp. ' . number_format($biaya_adm, 2, ',', '.');
 
-            $biaya_konsultasi = $pembayaran->biaya_konsultasi ? $pembayaran->biaya_konsultasi:0;
-            $biaya_konsultasi = 'Rp. '.number_format($biaya_konsultasi, 2, ',', '.');
+            $biaya_konsultasi = $pembayaran->biaya_konsultasi ? $pembayaran->biaya_konsultasi : 0;
+            $biaya_konsultasi = 'Rp. ' . number_format($biaya_konsultasi, 2, ',', '.');
 
             $pembayaran->harga_poli = 'Rp. ' . number_format($pembayaran->harga_poli, 2, '.', ',');
             $master_web->harga_adm = 'Rp. ' . number_format((float)$master_web->harga_adm, 2, '.', ',');
@@ -780,35 +780,36 @@ class Invoice extends CI_Controller
         $write->save('php://output');
     }
 
-    public function invoice_diagnosa_terbanyak(){
+    public function invoice_diagnosa_terbanyak()
+    {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
             $title = "Laporan 10 Diagnosa Terbanyak",
             $view = "admin/invoice_diagnosa_terbanyak"
-        );        
+        );
 
-        if(isset($_GET['poli'])){
-            if(!empty(trim($_GET['poli']))){
-                $poli = '= '.$_GET['poli'];
-            }else{
+        if (isset($_GET['poli'])) {
+            if (!empty(trim($_GET['poli']))) {
+                $poli = '= ' . $_GET['poli'];
+            } else {
                 $poli = 'IS NOT NULL';
             }
-        }else{
+        } else {
             $poli = 'IS NOT NULL';
         }
 
-        if(isset($_GET['dokter'])){
-            if(!empty(trim($_GET['dokter']))){
-                $dokter = '= '.$_GET['dokter'];
-            }else{
+        if (isset($_GET['dokter'])) {
+            if (!empty(trim($_GET['dokter']))) {
+                $dokter = '= ' . $_GET['dokter'];
+            } else {
                 $dokter = 'IS NOT NULL';
             }
-        }else{
+        } else {
             $dokter = 'IS NOT NULL';
         }
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $from = (new DateTime($from))->format('Y-m-d');
@@ -816,9 +817,8 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$from.' 00:00:00" AND "'.$to.' 23:59:59"';
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+                $tanggal_konsultasi = 'BETWEEN "' . $from . ' 00:00:00" AND "' . $to . ' 23:59:59"';
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -828,8 +828,8 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$_GET['from'].' 00:00:00" AND "'.$_GET['to'].' 23:59:59"';
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+                $tanggal_konsultasi = 'BETWEEN "' . $_GET['from'] . ' 00:00:00" AND "' . $_GET['to'] . ' 23:59:59"';
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -839,12 +839,11 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$_GET['from'].' 00:00:00" AND "'.$_GET['to'].' 23:59:59"';
-            }else{
+                $tanggal_konsultasi = 'BETWEEN "' . $_GET['from'] . ' 00:00:00" AND "' . $_GET['to'] . ' 23:59:59"';
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
         }
 
@@ -858,9 +857,9 @@ class Invoice extends CI_Controller
                                                         INNER JOIN detail_dokter ON detail_dokter.id_dokter = diagnosis_dokter.id_dokter 
                                                         INNER JOIN nominal ON nominal.id = detail_dokter.id_poli 
                                                             WHERE 
-                                                            nominal.id '.$poli.' AND 
-                                                            diagnosis_dokter.id_dokter '.$dokter.' AND
-                                                            (bukti_pembayaran.tanggal_konsultasi '.$tanggal_konsultasi.') 
+                                                            nominal.id ' . $poli . ' AND 
+                                                            diagnosis_dokter.id_dokter ' . $dokter . ' AND
+                                                            (bukti_pembayaran.tanggal_konsultasi ' . $tanggal_konsultasi . ') 
                                                                 GROUP BY diagnosis_dokter.diagnosis 
                                                                     ORDER BY jumlah_diagnosa DESC 
                                                                         LIMIT 0,10')->result();
@@ -928,45 +927,46 @@ class Invoice extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    public function export_to_pdf_diagnosa_terbanyak(){
-        $this->all_controllers->check_user_admin();     
+    public function export_to_pdf_diagnosa_terbanyak()
+    {
+        $this->all_controllers->check_user_admin();
 
-        if(isset($_GET['poli'])){
-            if(!empty(trim($_GET['poli']))){
-                $poli = '= '.$_GET['poli'];
-                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = '.$_GET['poli'])->row();
-                if(!$data['poli']){
+        if (isset($_GET['poli'])) {
+            if (!empty(trim($_GET['poli']))) {
+                $poli = '= ' . $_GET['poli'];
+                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = ' . $_GET['poli'])->row();
+                if (!$data['poli']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Poli tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $poli = 'IS NOT NULL';
                 $data['poli'] = 'Semua';
             }
-        }else{
+        } else {
             $poli = 'IS NOT NULL';
             $data['poli'] = 'Semua';
         }
 
-        if(isset($_GET['dokter'])){
-            if(!empty(trim($_GET['dokter']))){
-                $dokter = '= '.$_GET['dokter'];
-                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = '.$_GET['dokter'])->row();
-                if(!$data['dokter']){
+        if (isset($_GET['dokter'])) {
+            if (!empty(trim($_GET['dokter']))) {
+                $dokter = '= ' . $_GET['dokter'];
+                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = ' . $_GET['dokter'])->row();
+                if (!$data['dokter']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Dokter tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $dokter = 'IS NOT NULL';
                 $data['dokter'] = 'Semua';
             }
-        }else{
+        } else {
             $dokter = 'IS NOT NULL';
             $data['dokter'] = 'Semua';
         }
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $fromEn = (new DateTime($from))->format('Y-m-d');
@@ -977,12 +977,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -995,11 +994,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -1012,17 +1011,16 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else{
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
 
                 $tanggal_konsultasi_id = '';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
 
             $tanggal_konsultasi_id = '';
@@ -1039,9 +1037,9 @@ class Invoice extends CI_Controller
                                                         INNER JOIN detail_dokter ON detail_dokter.id_dokter = diagnosis_dokter.id_dokter 
                                                         INNER JOIN nominal ON nominal.id = detail_dokter.id_poli 
                                                             WHERE 
-                                                            nominal.id '.$poli.' AND 
-                                                            diagnosis_dokter.id_dokter '.$dokter.' AND
-                                                            (bukti_pembayaran.tanggal_konsultasi '.$tanggal_konsultasi.') 
+                                                            nominal.id ' . $poli . ' AND 
+                                                            diagnosis_dokter.id_dokter ' . $dokter . ' AND
+                                                            (bukti_pembayaran.tanggal_konsultasi ' . $tanggal_konsultasi . ') 
                                                                 GROUP BY diagnosis_dokter.diagnosis 
                                                                     ORDER BY jumlah_diagnosa DESC 
                                                                         LIMIT 0,10')->result();
@@ -1053,45 +1051,46 @@ class Invoice extends CI_Controller
         $this->pdf->load_view('template_invoice', $data);
     }
 
-    public function export_to_excel_diagnosa_terbanyak(){
-        $this->all_controllers->check_user_admin();     
+    public function export_to_excel_diagnosa_terbanyak()
+    {
+        $this->all_controllers->check_user_admin();
 
-        if(isset($_GET['poli'])){
-            if(!empty(trim($_GET['poli']))){
-                $poli = '= '.$_GET['poli'];
-                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = '.$_GET['poli'])->row();
-                if(!$data['poli']){
+        if (isset($_GET['poli'])) {
+            if (!empty(trim($_GET['poli']))) {
+                $poli = '= ' . $_GET['poli'];
+                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = ' . $_GET['poli'])->row();
+                if (!$data['poli']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Poli tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $poli = 'IS NOT NULL';
                 $data['poli'] = 'Semua';
             }
-        }else{
+        } else {
             $poli = 'IS NOT NULL';
             $data['poli'] = 'Semua';
         }
 
-        if(isset($_GET['dokter'])){
-            if(!empty(trim($_GET['dokter']))){
-                $dokter = '= '.$_GET['dokter'];
-                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = '.$_GET['dokter'])->row();
-                if(!$data['dokter']){
+        if (isset($_GET['dokter'])) {
+            if (!empty(trim($_GET['dokter']))) {
+                $dokter = '= ' . $_GET['dokter'];
+                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = ' . $_GET['dokter'])->row();
+                if (!$data['dokter']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Dokter tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $dokter = 'IS NOT NULL';
                 $data['dokter'] = 'Semua';
             }
-        }else{
+        } else {
             $dokter = 'IS NOT NULL';
             $data['dokter'] = 'Semua';
         }
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $fromEn = (new DateTime($from))->format('Y-m-d');
@@ -1102,12 +1101,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -1120,11 +1118,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -1137,17 +1135,16 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else{
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
 
                 $tanggal_konsultasi_id = '';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
 
             $tanggal_konsultasi_id = '';
@@ -1164,9 +1161,9 @@ class Invoice extends CI_Controller
                                                         INNER JOIN detail_dokter ON detail_dokter.id_dokter = diagnosis_dokter.id_dokter 
                                                         INNER JOIN nominal ON nominal.id = detail_dokter.id_poli 
                                                             WHERE 
-                                                            nominal.id '.$poli.' AND 
-                                                            diagnosis_dokter.id_dokter '.$dokter.' AND
-                                                            (bukti_pembayaran.tanggal_konsultasi '.$tanggal_konsultasi.') 
+                                                            nominal.id ' . $poli . ' AND 
+                                                            diagnosis_dokter.id_dokter ' . $dokter . ' AND
+                                                            (bukti_pembayaran.tanggal_konsultasi ' . $tanggal_konsultasi . ') 
                                                                 GROUP BY diagnosis_dokter.diagnosis 
                                                                     ORDER BY jumlah_diagnosa DESC 
                                                                         LIMIT 0,10')->result();
@@ -1220,15 +1217,15 @@ class Invoice extends CI_Controller
         $excel->getActiveSheet()->getStyle('A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $excel->getActiveSheet()->getStyle('A3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A5', 'Dokter: '.($data['dokter'] != 'Semua' ? $data['dokter']->name:$data['dokter']));
+        $excel->setActiveSheetIndex(0)->setCellValue('A5', 'Dokter: ' . ($data['dokter'] != 'Semua' ? $data['dokter']->name : $data['dokter']));
         $excel->getActiveSheet()->mergeCells('A5:D5');
         $excel->getActiveSheet()->getStyle('A5')->getFont()->setBold(TRUE);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A6', 'Poli: '.($data['poli'] != 'Semua' ? $data['poli']->poli:$data['poli']));
+        $excel->setActiveSheetIndex(0)->setCellValue('A6', 'Poli: ' . ($data['poli'] != 'Semua' ? $data['poli']->poli : $data['poli']));
         $excel->getActiveSheet()->mergeCells('A6:D6');
         $excel->getActiveSheet()->getStyle('A6')->getFont()->setBold(TRUE);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A7', 'Periode: '.(!empty($data['tanggal_konsultasi']) ? $data['tanggal_konsultasi']:'Semua'));
+        $excel->setActiveSheetIndex(0)->setCellValue('A7', 'Periode: ' . (!empty($data['tanggal_konsultasi']) ? $data['tanggal_konsultasi'] : 'Semua'));
         $excel->getActiveSheet()->mergeCells('A7:D7');
         $excel->getActiveSheet()->getStyle('A7')->getFont()->setBold(TRUE);
 
@@ -1252,7 +1249,7 @@ class Invoice extends CI_Controller
             $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $diagnosa->id);
             $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $diagnosa->nama);
             $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $diagnosa->jumlah_diagnosa);
-            $total_diagnosa+=$diagnosa->jumlah_diagnosa;
+            $total_diagnosa += $diagnosa->jumlah_diagnosa;
 
             $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_body);
             $excel->getActiveSheet()->getStyle('B' . $numrow)->applyFromArray($style_body);
@@ -1267,14 +1264,14 @@ class Invoice extends CI_Controller
             $numrow += 1;
         }
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A'. $numrow, 'Total');
-        $excel->getActiveSheet()->mergeCells('A'.$numrow.':C'.$numrow);
-        $excel->getActiveSheet()->getStyle('A'.$numrow)->getFont()->setBold(TRUE);
-        $excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_body);
+        $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, 'Total');
+        $excel->getActiveSheet()->mergeCells('A' . $numrow . ':C' . $numrow);
+        $excel->getActiveSheet()->getStyle('A' . $numrow)->getFont()->setBold(TRUE);
+        $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_body);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('D'. $numrow, $total_diagnosa);
-        $excel->getActiveSheet()->getStyle('D'.$numrow)->getFont()->setBold(TRUE);
-        $excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_body);
+        $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $total_diagnosa);
+        $excel->getActiveSheet()->getStyle('D' . $numrow)->getFont()->setBold(TRUE);
+        $excel->getActiveSheet()->getStyle('D' . $numrow)->applyFromArray($style_body);
 
 
 
@@ -1295,35 +1292,36 @@ class Invoice extends CI_Controller
         $write->save('php://output');
     }
 
-    public function invoice_telekonsultasi(){
+    public function invoice_telekonsultasi()
+    {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
             $title = "Laporan Telekonsultasi",
             $view = "admin/invoice_telekonsultasi"
-        );        
+        );
 
-        if(isset($_GET['poli'])){
-            if(!empty(trim($_GET['poli']))){
-                $poli = '= '.(int)$_GET['poli'];
-            }else{
+        if (isset($_GET['poli'])) {
+            if (!empty(trim($_GET['poli']))) {
+                $poli = '= ' . (int)$_GET['poli'];
+            } else {
                 $poli = 'IS NOT NULL';
             }
-        }else{
+        } else {
             $poli = 'IS NOT NULL';
         }
 
-        if(isset($_GET['dokter'])){
-            if(!empty(trim($_GET['dokter']))){
-                $dokter = '= '.$_GET['dokter'];
-            }else{
+        if (isset($_GET['dokter'])) {
+            if (!empty(trim($_GET['dokter']))) {
+                $dokter = '= ' . $_GET['dokter'];
+            } else {
                 $dokter = 'IS NOT NULL';
             }
-        }else{
+        } else {
             $dokter = 'IS NOT NULL';
         }
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $from = (new DateTime($from))->format('Y-m-d');
@@ -1331,9 +1329,8 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$from.' 00:00:00" AND "'.$to.' 23:59:59"';
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+                $tanggal_konsultasi = 'BETWEEN "' . $from . ' 00:00:00" AND "' . $to . ' 23:59:59"';
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -1343,8 +1340,8 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$_GET['from'].' 00:00:00" AND "'.$_GET['to'].' 23:59:59"';
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+                $tanggal_konsultasi = 'BETWEEN "' . $_GET['from'] . ' 00:00:00" AND "' . $_GET['to'] . ' 23:59:59"';
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -1354,12 +1351,11 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$_GET['from'].' 00:00:00" AND "'.$_GET['to'].' 23:59:59"';
-            }else{
+                $tanggal_konsultasi = 'BETWEEN "' . $_GET['from'] . ' 00:00:00" AND "' . $_GET['to'] . ' 23:59:59"';
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
         }
 
@@ -1367,7 +1363,7 @@ class Invoice extends CI_Controller
         $this->pagination->initialize($config);
         $data['page'] = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $data['uri_segment'] = $this->uri->segment(4);
-        $limit = ' LIMIT '.$config['per_page'].' OFFSET '.$data['page'];
+        $limit = ' LIMIT ' . $config['per_page'] . ' OFFSET ' . $data['page'];
 
         $data['list_pembayaran_konsultasi'] = $this->_get_telekonsultasi($dokter, $poli, $tanggal_konsultasi, $limit);
         $data['pagination'] = $this->pagination->create_links();
@@ -1423,46 +1419,47 @@ class Invoice extends CI_Controller
                               </script>';
         $this->load->view('template', $data);
     }
-    
-    public function export_to_pdf_telekonsultasi(){
-        $this->all_controllers->check_user_admin();     
 
-        if(isset($_GET['poli'])){
-            if(!empty(trim($_GET['poli']))){
-                $poli = '= '.$_GET['poli'];
-                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = '.$_GET['poli'])->row();
-                if(!$data['poli']){
+    public function export_to_pdf_telekonsultasi()
+    {
+        $this->all_controllers->check_user_admin();
+
+        if (isset($_GET['poli'])) {
+            if (!empty(trim($_GET['poli']))) {
+                $poli = '= ' . $_GET['poli'];
+                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = ' . $_GET['poli'])->row();
+                if (!$data['poli']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Poli tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $poli = 'IS NOT NULL';
                 $data['poli'] = 'Semua';
             }
-        }else{
+        } else {
             $poli = 'IS NOT NULL';
             $data['poli'] = 'Semua';
         }
 
-        if(isset($_GET['dokter'])){
-            if(!empty(trim($_GET['dokter']))){
-                $dokter = '= '.$_GET['dokter'];
-                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = '.$_GET['dokter'])->row();
-                if(!$data['dokter']){
+        if (isset($_GET['dokter'])) {
+            if (!empty(trim($_GET['dokter']))) {
+                $dokter = '= ' . $_GET['dokter'];
+                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = ' . $_GET['dokter'])->row();
+                if (!$data['dokter']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Dokter tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $dokter = 'IS NOT NULL';
                 $data['dokter'] = 'Semua';
             }
-        }else{
+        } else {
             $dokter = 'IS NOT NULL';
             $data['dokter'] = 'Semua';
         }
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $fromEn = (new DateTime($from))->format('Y-m-d');
@@ -1473,12 +1470,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -1491,11 +1487,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -1508,17 +1504,16 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else{
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
 
                 $tanggal_konsultasi_id = '';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
 
             $tanggal_konsultasi_id = '';
@@ -1534,45 +1529,46 @@ class Invoice extends CI_Controller
         $this->pdf->load_view('template_invoice', $data);
     }
 
-    public function export_to_excel_telekonsultasi(){
-        $this->all_controllers->check_user_admin();     
+    public function export_to_excel_telekonsultasi()
+    {
+        $this->all_controllers->check_user_admin();
 
-        if(isset($_GET['poli'])){
-            if(!empty(trim($_GET['poli']))){
-                $poli = '= '.$_GET['poli'];
-                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = '.$_GET['poli'])->row();
-                if(!$data['poli']){
+        if (isset($_GET['poli'])) {
+            if (!empty(trim($_GET['poli']))) {
+                $poli = '= ' . $_GET['poli'];
+                $data['poli'] = $this->db->query('SELECT id, poli FROM nominal WHERE id = ' . $_GET['poli'])->row();
+                if (!$data['poli']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Poli tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $poli = 'IS NOT NULL';
                 $data['poli'] = 'Semua';
             }
-        }else{
+        } else {
             $poli = 'IS NOT NULL';
             $data['poli'] = 'Semua';
         }
 
-        if(isset($_GET['dokter'])){
-            if(!empty(trim($_GET['dokter']))){
-                $dokter = '= '.$_GET['dokter'];
-                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = '.$_GET['dokter'])->row();
-                if(!$data['dokter']){
+        if (isset($_GET['dokter'])) {
+            if (!empty(trim($_GET['dokter']))) {
+                $dokter = '= ' . $_GET['dokter'];
+                $data['dokter'] = $this->db->query('SELECT id, name FROM master_user WHERE id_user_kategori = 2 AND id = ' . $_GET['dokter'])->row();
+                if (!$data['dokter']) {
                     $this->session->set_flashdata('msg_export_invoice', 'GAGAL: Dokter tidak ada!');
                     redirect(base_url('admin/Invoice/invoice_diagnosa_terbanyak'));
                 }
-            }else{
+            } else {
                 $dokter = 'IS NOT NULL';
                 $data['dokter'] = 'Semua';
             }
-        }else{
+        } else {
             $dokter = 'IS NOT NULL';
             $data['dokter'] = 'Semua';
         }
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $fromEn = (new DateTime($from))->format('Y-m-d');
@@ -1583,12 +1579,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -1601,11 +1596,11 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -1618,17 +1613,16 @@ class Invoice extends CI_Controller
                 $toEn = (new DateTime($to))->format('Y-m-d');
                 $toId = (new DateTime($to))->format('d-m-Y');
 
-                $tanggal_konsultasi = 'BETWEEN "'.$fromEn.' 00:00:00" AND "'.$toEn.' 23:59:59"';
+                $tanggal_konsultasi = 'BETWEEN "' . $fromEn . ' 00:00:00" AND "' . $toEn . ' 23:59:59"';
 
-                $tanggal_konsultasi_id = '( '.$fromId.' - '.$toId.' )';
+                $tanggal_konsultasi_id = '( ' . $fromId . ' - ' . $toId . ' )';
                 $tanggal_konsultasi_id = implode('_', explode('/', $tanggal_konsultasi_id));
-            }else{
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
 
                 $tanggal_konsultasi_id = '';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
 
             $tanggal_konsultasi_id = '';
@@ -1644,7 +1638,7 @@ class Invoice extends CI_Controller
         $excel = new PHPExcel();
 
         $style_header = array(
-            'font' => array('bold' => true, 'size'=>7),
+            'font' => array('bold' => true, 'size' => 7),
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
@@ -1688,15 +1682,15 @@ class Invoice extends CI_Controller
         $excel->getActiveSheet()->getStyle('A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $excel->getActiveSheet()->getStyle('A3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A5', 'Dokter: '.($data['dokter'] != 'Semua' ? $data['dokter']->name:$data['dokter']));
+        $excel->setActiveSheetIndex(0)->setCellValue('A5', 'Dokter: ' . ($data['dokter'] != 'Semua' ? $data['dokter']->name : $data['dokter']));
         $excel->getActiveSheet()->mergeCells('A5:K5');
         $excel->getActiveSheet()->getStyle('A5')->getFont()->setBold(TRUE);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A6', 'Poli: '.($data['poli'] != 'Semua' ? $data['poli']->poli:$data['poli']));
+        $excel->setActiveSheetIndex(0)->setCellValue('A6', 'Poli: ' . ($data['poli'] != 'Semua' ? $data['poli']->poli : $data['poli']));
         $excel->getActiveSheet()->mergeCells('A6:K6');
         $excel->getActiveSheet()->getStyle('A6')->getFont()->setBold(TRUE);
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A7', 'Periode: '.(!empty($data['tanggal_konsultasi']) ? $data['tanggal_konsultasi']:'Semua'));
+        $excel->setActiveSheetIndex(0)->setCellValue('A7', 'Periode: ' . (!empty($data['tanggal_konsultasi']) ? $data['tanggal_konsultasi'] : 'Semua'));
         $excel->getActiveSheet()->mergeCells('A7:K7');
         $excel->getActiveSheet()->getStyle('A7')->getFont()->setBold(TRUE);
 
@@ -1725,8 +1719,8 @@ class Invoice extends CI_Controller
         $excel->getActiveSheet()->getStyle('K9')->applyFromArray($style_header);
 
         $numrow = 10;
-        foreach($data['list_pembayaran_konsultasi'] as $idx=>$pembayaran_konsultasi){
-            if($pembayaran_konsultasi->selesai_konsultasi != null){
+        foreach ($data['list_pembayaran_konsultasi'] as $idx => $pembayaran_konsultasi) {
+            if ($pembayaran_konsultasi->selesai_konsultasi != null) {
                 $awal_konsultasi = (new DateTime($pembayaran_konsultasi->tanggal_konsultasi))->format('H:i');
                 $awal_konsultasi = new DateTime($awal_konsultasi);
 
@@ -1735,15 +1729,15 @@ class Invoice extends CI_Controller
 
                 $diff = $awal_konsultasi->diff($akhir_konsultasi);
 
-                if($diff->h < 1){
-                    $durasi = $diff->i. ' Menit';
-                }else{
+                if ($diff->h < 1) {
+                    $durasi = $diff->i . ' Menit';
+                } else {
                     $jam_menit = $diff->h * 60;
-                    $durasi = ($diff->i + $jam_menit). ' Menit';
+                    $durasi = ($diff->i + $jam_menit) . ' Menit';
                 }
-              }else{
+            } else {
                 $durasi = 'NOT SET';
-              }
+            }
 
             $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $idx + 1);
             $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, (new DateTime($pembayaran_konsultasi->tanggal_konsultasi))->format('d-m-Y'));
@@ -1754,7 +1748,7 @@ class Invoice extends CI_Controller
             $excel->setActiveSheetIndex(0)->setCellValue('G' . $numrow, $pembayaran_konsultasi->nama_pasien);
             $excel->setActiveSheetIndex(0)->setCellValue('H' . $numrow, $pembayaran_konsultasi->poli);
             $excel->setActiveSheetIndex(0)->setCellValue('I' . $numrow, $pembayaran_konsultasi->nama_dokter);
-            $excel->setActiveSheetIndex(0)->setCellValue('J' . $numrow, '( '.$pembayaran_konsultasi->kode_diagnosa.' ) '.$pembayaran_konsultasi->nama_diagnosa);
+            $excel->setActiveSheetIndex(0)->setCellValue('J' . $numrow, '( ' . $pembayaran_konsultasi->kode_diagnosa . ' ) ' . $pembayaran_konsultasi->nama_diagnosa);
             $excel->setActiveSheetIndex(0)->setCellValue('K' . $numrow, $pembayaran_konsultasi->nama_obat);
 
             $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_body);
@@ -1771,13 +1765,13 @@ class Invoice extends CI_Controller
             $excel->getActiveSheet()->getStyle('K' . $numrow)->applyFromArray($style_body);
 
             $excel->getActiveSheet()->getRowDimension($numrow)->setRowHeight(-1);
-            
-            $numrow+=1;
+
+            $numrow += 1;
         }
 
-        $excel->getActiveSheet()->getRowDimension('4')->setRowHeight(20);   
-        $excel->getActiveSheet()->getRowDimension('9')->setRowHeight(10);       
-        
+        $excel->getActiveSheet()->getRowDimension('4')->setRowHeight(20);
+        $excel->getActiveSheet()->getRowDimension('9')->setRowHeight(10);
+
         // $excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         // $excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         // $excel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
@@ -1814,15 +1808,16 @@ class Invoice extends CI_Controller
         $write->save('php://output');
     }
 
-    public function invoice_pengeluaran_obat(){
+    public function invoice_pengeluaran_obat()
+    {
         $this->all_controllers->check_user_admin();
         $data = $this->all_controllers->get_data_view(
             $title = "Laporan Pengeluaran Obat",
             $view = "admin/invoice_pengeluaran_obat"
-        );    
+        );
 
-        if(isset($_GET['from'])){
-            if(!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))){
+        if (isset($_GET['from'])) {
+            if (!empty(trim($_GET['from'])) && !empty(trim($_GET['to']))) {
                 $from = explode("/", $_GET['from']);
                 $from = implode("-", $from);
                 $from = (new DateTime($from))->format('Y-m-d');
@@ -1830,9 +1825,8 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$from.' 00:00:00" AND "'.$to.' 23:59:59"';
-            }
-            else if(!empty(trim($_GET['from'])) && empty(trim($_GET['to']))){
+                $tanggal_konsultasi = 'BETWEEN "' . $from . ' 00:00:00" AND "' . $to . ' 23:59:59"';
+            } else if (!empty(trim($_GET['from'])) && empty(trim($_GET['to']))) {
                 $_GET['to'] = $_GET['from'];
 
                 $from = explode("/", $_GET['from']);
@@ -1842,8 +1836,8 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$_GET['from'].' 00:00:00" AND "'.$_GET['to'].' 23:59:59"';
-            }else if(!empty(trim($_GET['to'])) && empty(trim($_GET['from']))){
+                $tanggal_konsultasi = 'BETWEEN "' . $_GET['from'] . ' 00:00:00" AND "' . $_GET['to'] . ' 23:59:59"';
+            } else if (!empty(trim($_GET['to'])) && empty(trim($_GET['from']))) {
                 $_GET['from'] = $_GET['to'];
 
                 $from = explode("/", $_GET['from']);
@@ -1853,12 +1847,11 @@ class Invoice extends CI_Controller
                 $to = explode("/", $_GET['to']);
                 $to = implode("-", $to);
                 $to = (new DateTime($to))->format('Y-m-d');
-                $tanggal_konsultasi = 'BETWEEN "'.$_GET['from'].' 00:00:00" AND "'.$_GET['to'].' 23:59:59"';
-            }else{
+                $tanggal_konsultasi = 'BETWEEN "' . $_GET['from'] . ' 00:00:00" AND "' . $_GET['to'] . ' 23:59:59"';
+            } else {
                 $tanggal_konsultasi = 'IS NOT NULL';
             }
-        }
-        else{
+        } else {
             $tanggal_konsultasi = 'IS NOT NULL';
         }
 
@@ -1873,17 +1866,17 @@ class Invoice extends CI_Controller
                                                     INNER JOIN master_obat ON master_obat.id = resep_dokter.id_obat
                                                 WHERE 
                                                     bukti_pembayaran_obat.order_status = 1 AND
-                                                    (bukti_pembayaran.tanggal_konsultasi '.$tanggal_konsultasi.')
+                                                    (bukti_pembayaran.tanggal_konsultasi ' . $tanggal_konsultasi . ')
                                                 GROUP BY master_obat.id
         ')->result();
 
         $data['total_obat'] = 0;
-        foreach($data['list_obat'] as $idx=>$obat){
+        foreach ($data['list_obat'] as $idx => $obat) {
             $list_jml_obat = explode(',', $obat->jml_obat);
             $obat->total_jml_obat = 0;
-            foreach($list_jml_obat as $jml_obat){
-                $obat->total_jml_obat+=$jml_obat;
-                $data['total_obat']+=$jml_obat;
+            foreach ($list_jml_obat as $jml_obat) {
+                $obat->total_jml_obat += $jml_obat;
+                $data['total_obat'] += $jml_obat;
             }
         }
 
@@ -1908,7 +1901,8 @@ class Invoice extends CI_Controller
         $this->load->view('template', $data);
     }
 
-    private function _get_telekonsultasi($dokter, $poli, $tanggal_konsultasi, $limit=''){
+    private function _get_telekonsultasi($dokter, $poli, $tanggal_konsultasi, $limit = '')
+    {
         return $this->db->query('SELECT 
                                     bukti_pembayaran.id_registrasi, 
                                     bukti_pembayaran.metode_pembayaran, 
@@ -1932,11 +1926,11 @@ class Invoice extends CI_Controller
                                         INNER JOIN resep_dokter ON resep_dokter.id_jadwal_konsultasi = diagnosis_dokter.id_jadwal_konsultasi 
                                         INNER JOIN master_obat ON resep_dokter.id_obat = master_obat.id 
                                             WHERE 
-                                            dokter.id '.$dokter.' AND 
-                                            nominal.id '.$poli.' AND 
-                                            (bukti_pembayaran.tanggal_konsultasi '.$tanggal_konsultasi.') 
+                                            dokter.id ' . $dokter . ' AND 
+                                            nominal.id ' . $poli . ' AND 
+                                            (bukti_pembayaran.tanggal_konsultasi ' . $tanggal_konsultasi . ') 
                                                 GROUP BY diagnosis_dokter.id_registrasi
-                                                    ORDER BY bukti_pembayaran.tanggal_konsultasi DESC'.$limit)->result();
+                                                    ORDER BY bukti_pembayaran.tanggal_konsultasi DESC' . $limit)->result();
     }
 
     private function _get_pembayaran_obat($between)
@@ -1976,7 +1970,7 @@ class Invoice extends CI_Controller
                                                 INNER JOIN biaya_pengiriman_obat ON biaya_pengiriman_obat.id_jadwal_konsultasi = resep_dokter.id_jadwal_konsultasi 
                                                 INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis 
                                                     WHERE bpo.status != 0 
-                                                        AND bpo.metode_pembayaran = 2" . $between . " 
+                                                        AND bpo.metode_pembayaran = 2 " . $between . " 
                                                             GROUP BY resep_dokter.id_jadwal_konsultasi ORDER BY bpo.created_at DESC")->result();
         return $data;
     }
@@ -2004,7 +1998,8 @@ class Invoice extends CI_Controller
                     LEFT JOIN nominal ON detail_dokter.id_poli = nominal.id 
                     LEFT JOIN jadwal_konsultasi ON jadwal_konsultasi.id_registrasi = bukti_pembayaran.id_registrasi 
                     LEFT JOIN diagnosis_dokter ON diagnosis_dokter.id_registrasi = bukti_pembayaran.id_registrasi 
-                    INNER JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis WHERE bukti_pembayaran.status != 0 AND bukti_pembayaran.metode_pembayaran = 2' . $between . ' ORDER BY bukti_pembayaran.created_at ASC')->result();
+                    LEFT JOIN master_diagnosa ON master_diagnosa.id = diagnosis_dokter.diagnosis WHERE bukti_pembayaran.status != 0 AND bukti_pembayaran.metode_pembayaran = 2 ' . $between . ' ORDER BY bukti_pembayaran.created_at DESC'
+        )->result();
         return $data;
     }
 }

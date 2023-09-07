@@ -422,62 +422,63 @@ if ($resep->harga_kustom) {
       </div>
     </div>
   </div>
+</div>
 
 
 
 
-  <?php if ($this->session->flashdata('msg_pmbyrn_obat')) { ?>
-    <script>
-      alert("<?php echo $this->session->flashdata('msg_pmbyrn_obat'); ?>")
-    </script>
-  <?php } ?>
+<?php if ($this->session->flashdata('msg_pmbyrn_obat')) { ?>
+  <script>
+    alert("<?php echo $this->session->flashdata('msg_pmbyrn_obat'); ?>")
+  </script>
+<?php } ?>
 
 
-  <style>
-    div span li {
-      margin-left: 10px;
+<style>
+  div span li {
+    margin-left: 10px;
+  }
+
+  .img-permata {
+    width: 70px;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  @media (max-width: 769px) {
+    .pl-5 {
+      padding-left: .5rem !important;
     }
 
     .img-permata {
-      width: 70px;
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
+      width: 60px;
+      margin-left: .5rem;
+      margin-right: .5rem;
     }
-
-    @media (max-width: 769px) {
-      .pl-5 {
-        padding-left: .5rem !important;
-      }
-
-      .img-permata {
-        width: 60px;
-        margin-left: .5rem;
-        margin-right: .5rem;
-      }
-    }
-  </style>
+  }
+</style>
 
 
-  <style>
-    div span li {
-      margin-left: 10px;
+<style>
+  div span li {
+    margin-left: 10px;
+  }
+
+  .img-permata {
+    width: 70px;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  @media (max-width: 769px) {
+    .pl-5 {
+      padding-left: .5rem !important;
     }
 
     .img-permata {
-      width: 70px;
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
+      width: 60px;
+      margin-left: .5rem;
+      margin-right: .5rem;
     }
-
-    @media (max-width: 769px) {
-      .pl-5 {
-        padding-left: .5rem !important;
-      }
-
-      .img-permata {
-        width: 60px;
-        margin-left: .5rem;
-        margin-right: .5rem;
-      }
-    }
-  </style>
+  }
+</style>

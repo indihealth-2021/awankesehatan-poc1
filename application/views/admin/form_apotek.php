@@ -17,13 +17,19 @@
         <?= form_open_multipart('admin/apotek/addApotek', 'id="form-add-apotek" onsubmit="return ubah();" autocomplete="off"'); ?>
         <p class="title-form">Data Apotek</p>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group form-focus">
               <label class="focus-label">Nama</label>
               <input type="text" class="form-control floating" name="nama" id="name" <?php echo isset($old) ? 'value="' . $old['name'] . '"' : ''; ?> required placeholder="Masukan Nama Apotek">
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <div class="form-group form-focus">
+              <label class="focus-label">ID Provider</label>
+              <input type="number" class="form-control floating" name="provider_code" id="provider_code" <?php echo isset($old) ? 'value="' . $old['provider_code'] . '"' : ''; ?> required placeholder="Masukan ID Provider">
+            </div>
+          </div>
+          <div class="col-md-4">
             <div class="form-group form-focus">
               <label class="focus-label">Nomor Telepon</label>
               <input type="number" class="form-control floating" name="telp" id="telp" <?php echo isset($old) ? 'value="' . $old['telp'] . '"' : ''; ?> required placeholder="Masukan Nomor Telepon">

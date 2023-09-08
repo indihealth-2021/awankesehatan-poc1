@@ -332,7 +332,7 @@ class Teleconsultasi extends CI_Controller
             $arr["pemeriksaan_penunjang_radiologi"] = json_encode($arr["pemeriksaan_penunjang_radiologi"]);
         }
 
-        $arr["id"] = $this->db->query("SELECT id FROM data_penunjang ORDER BY id DESC")->row()->id + 1;
+        $arr["id"] = $this->db->select('*')->order_by('id', 'DESC')->get('data_penunjang', 1)->row()->id + 1;
 
         $this->db->insert("data_penunjang", $arr);
     }
@@ -353,16 +353,6 @@ class Teleconsultasi extends CI_Controller
 
         $id_dokter = $this->session->userdata('id_user');
         $data = $this->input->post();
-
-        // if(!$data) {
-        //     // This will read the raw POST data from the request body and parse it into an associative array.
-        //     // The resulting array will contain key-value pairs for each form field in the serialized data.
-        //     parse_str($this->input->raw_input_stream, $data);
-        // }
-
-        if (!$data["apotek"]) {
-            echo "Apotek null";
-        }
 
         $data['tekanan_darah'] = isset($data['tekanan_darah']) ? $data['tekanan_darah'] : '-';
         $data['suhu'] = isset($data['suhu']) ? $data['suhu'] : '-';
@@ -389,17 +379,12 @@ class Teleconsultasi extends CI_Controller
             "keluhan" => $data['keluhan']
         );
 
-        $assesment = $this->db->query('SELECT * FROM assesment WHERE id_pasien = ' . $data['id_pasien'] . ' AND id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'])->row();
-        if ($assesment) {
-            $update = $this->all_model->update('assesment', $data_assesment, array('id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'], 'id_pasien' => $data['id_pasien']));
-            if ($update != 0) {
-                if ($update == -1) {
-                    echo 'gagal';
-                } else {
-                    echo 'berhasil';
-                }
+        $updateAssesment = $this->all_model->update('assesment', $data_assesment, array('id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'], 'id_pasien' => $data['id_pasien']));
+        if ($updateAssesment != 0) {
+            if ($updateAssesment == -1) {
+                echo 'gagal';
             } else {
-                echo 'tidak ada yang disimpan';
+                echo 'berhasil';
             }
         } else {
             $new_assesment = $this->db->insert('assesment', $data_assesment);
@@ -410,7 +395,7 @@ class Teleconsultasi extends CI_Controller
         $this->db->insert('data_history_log_dokter', $data_history);
 
         $data["id_registrasi"] = isset($data["id_registrasi"]) ?
-            $data["id_registrasi"]  : $this->db->query("SELECT id_registrasi FROM jadwal_konsultasi WHERE jadwal_konsultasi.id=" . $data["id_jadwal_konsultasi"])->row()->id_registrasi;
+            $data["id_registrasi"]  : $this->db->where('id', $data["id_jadwal_konsultasi"])->get('jadwal_konsultasi', 1)->row()->id_registrasi;
 
         $kronis = isset($data["kronis"]) ? $data["kronis"] : 0;
 
@@ -422,61 +407,57 @@ class Teleconsultasi extends CI_Controller
             "diagnosis" => $data['diagnosis'],
             "kronis" => $kronis,
         );
-        $diagnosis = $this->db->query('SELECT diagnosis,id_registrasi FROM diagnosis_dokter WHERE id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi'] . ' AND id_pasien = ' . $data['id_pasien'])->row();
-        if ($diagnosis) {
-            $update = $this->all_model->update('diagnosis_dokter', $data_diagnosis_dokter, array('id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'], 'id_pasien' => $data['id_pasien']));
-            $id_registrasi = $diagnosis->id_registrasi;
-            if ($update != 0) {
-                if ($update == -1) {
-                    echo 'gagal';
-                } else {
-                    echo 'berhasil';
-                }
+
+        $id_registrasi = $data["id_registrasi"];
+
+        $updateDiagnosisDokter = $this->all_model->update('diagnosis_dokter', $data_diagnosis_dokter, array('id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'], 'id_pasien' => $data['id_pasien']));
+        if ($updateDiagnosisDokter != 0) {
+            if ($updateDiagnosisDokter == -1) {
+                echo 'gagal';
             } else {
-                echo 'tidak ada yang disimpan';
+                echo 'berhasil';
             }
         } else {
-            $new_diagnosis = $this->db->insert('diagnosis_dokter', $data_diagnosis_dokter);
-            $new_diagnosis = $this->db->query('SELECT id_registrasi FROM diagnosis_dokter WHERE id = ' . $this->db->insert_id())->row();
-            $id_registrasi = $new_diagnosis->id_registrasi;
+            $insertDiagnosisDokter = $this->db->insert('diagnosis_dokter', $data_diagnosis_dokter);
+            if ($insertDiagnosisDokter) {
+                // Get transaction number from bukti_pembayaran with latest diagnosis_dokter data
+                $dataBuktiPembayaran = $this->all_model->select('bukti_pembayaran', 'result', 'id_registrasi =' . $data_diagnosis_dokter['id_registrasi'], 1);
 
-            // Get transaction number from bukti_pembayaran with latest diagnosis_dokter data
-            $dataBuktiPembayaran = $this->all_model->select('bukti_pembayaran', 'result', 'id_registrasi =' . $id_registrasi, 1);
+                $dataRaw = [
+                    'transactionNumber' => $dataBuktiPembayaran->trans_id,
+                    'diagnosisCode'     => $data_diagnosis_dokter['diagnosis']
+                ];
 
-            $dataRaw = [
-                'transactionNumber' => $dataBuktiPembayaran->trans_id,
-                'diagnosisCode'     => $new_diagnosis->diagnosis
-            ];
+                // Diagnose Verification from Owlexa API
+                $curl = curl_init();
 
-            // Diagnose Verification from Owlexa API
-            $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/verifyDiagnose",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $dataRaw,
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/verifyDiagnose",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => $dataRaw,
+                ));
 
-            ));
+                $result = curl_exec($curl);
+                $result = json_decode($result, true);
 
-            $result = curl_exec($curl);
-            $result = json_decode($result, true);
+                curl_close($curl);
 
-            curl_close($curl);
+                if ($result['code'] == 200) {
+                    echo 'verify diagnosa berhasil';
+                }
 
-            if ($result['code'] == 200) {
-                echo 'verify diagnosa berhasil';
+                echo 'berhasil';
             }
-
-            echo 'berhasil';
         }
 
-        $bukti_pembayaran = $this->db->query('SELECT id FROM bukti_pembayaran WHERE id_registrasi = "' . $id_registrasi . '" AND status = 1')->row();
+        $bukti_pembayaran = $this->db->where('id_registrasi', $data["id_registrasi"])->where('status', 1)->get('bukti_pembayaran', 1)->row();
         $this->all_model->update('bukti_pembayaran', array('selesai_konsultasi' => (new DateTime('now'))->format('Y/m/d H:i:s')), array('id' => $bukti_pembayaran->id));
 
         $data_history = array("activity" => "Diagnosis", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
@@ -486,7 +467,7 @@ class Teleconsultasi extends CI_Controller
 
         $jml_data_resep = count($data['keterangan']);
         for ($i = 0; $i < $jml_data_resep; $i++) {
-            $obat = $this->db->query('SELECT harga_per_n_unit, harga FROM master_obat WHERE id = ' . $data['id_obat'][$i])->row();
+            $obat = $this->db->where('id', $data['id_obat'][$i])->get('master_obat')->row();
             $data_resep = array(
                 "id_jadwal_konsultasi" => $data['id_jadwal_konsultasi'],
                 "id_pasien" => $data['id_pasien'],
@@ -503,17 +484,19 @@ class Teleconsultasi extends CI_Controller
 
         // == Insert to biaya_pengiriman_obat table ==
 
-        $user = $this->all_model->select('master_user', 'row', 'id = ' . $data['id_pasien'], 1); // Get user data reference
-        $alamatUser = $this->db->query('
-        SELECT master_user.alamat_jalan as alamat_user, master_kelurahan.name as kelurahan_user, master_kecamatan.name as kecamatan_user, master_kota.name as kota_user, master_provinsi.name as provinsi_user
-        FROM master_user
-        LEFT JOIN master_kelurahan ON master_user.alamat_kelurahan = master_kelurahan.id LEFT JOIN master_kecamatan ON master_user.alamat_kecamatan = master_kecamatan.id LEFT JOIN master_kota ON master_user.alamat_kota = master_kota.id LEFT JOIN master_provinsi ON master_user.alamat_provinsi = master_provinsi.id
-        WHERE master_user.id = ' . $data['id_pasien'] . '
-        LIMIT 1
-        ')->row();
+        $user = $this->db->where('id', $data['id_pasien'])->get('master_user', 1)->row(); // Get user data reference
+        $alamatUser = $this->db->select('
+            master_user.alamat_jalan as alamat_user, master_kelurahan.name as kelurahan_user, master_kecamatan.name as kecamatan_user, master_kota.name as kota_user, master_provinsi.name as provinsi_user
+        ')
+            ->join('master_kelurahan', 'master_user.alamat_kelurahan = master_kelurahan.id', 'left')
+            ->join('master_kecamatan', 'master_user.alamat_kecamatan = master_kecamatan.id', 'left')
+            ->join('master_kota', 'master_user.alamat_kota = master_kota.id', 'left')
+            ->join('master_provinsi', 'master_user.alamat_provinsi = master_provinsi.id', 'left')
+            ->where('master_user.id', $data['id_pasien'])->get('master_user', 1)
+            ->row();
 
         // Get all prices for id_jadwal_konsultasi in resep_dokter table
-        $resepDokter = $this->all_model->select('resep_dokter', 'result', 'id_jadwal_konsultasi = ' . $data['id_jadwal_konsultasi']);
+        $resepDokter = $this->db->where('id_jadwal_konsultasi', $data['id_jadwal_konsultasi'])->get('resep_dokter')->result();
         $hargaObat = 0;
         // Sum all prices and save it to harga_obat variable
         foreach ($resepDokter as $resep) {
@@ -542,7 +525,7 @@ class Teleconsultasi extends CI_Controller
         $this->send_data_penunjang($data);
         $this->all_controllers->setHargaObatFrom([$data["id_jadwal_konsultasi"]]);
 
-        $farmasi = $this->db->query('SELECT * FROM master_user WHERE id_user_kategori = 5 AND id_user_level = 2')->row();
+        $farmasi = $this->db->where('id_user_kategori', 5)->where('id_user_level', 2)->get('master_user')->row();
         $id_notif = $this->db->insert_id();
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         $notifikasi = "Ada resep baru yang dikirimkan dokter.";
@@ -819,7 +802,7 @@ $(document).ready(function() {
             countTr = 0;
         }
         countTr+=1;
-        var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td>'+dataResep[3].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
+        var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
         listResep.append(templateListResep);
         $(this)[0].reset();
         // $('#ModalResep').modal('hide');
@@ -849,7 +832,7 @@ $(document).ready(function() {
                         countTr = 0;
                     }
                     countTr+=1;
-                    var templateListResep = '<tr id=\''+res.id+'\'><td>'+res.name+'</td><td id=\''+'jumlah_obat'+'\'>'+res.jumlah_obat+'</td><td>'+''+'</td><td id=\''+'keterangan'+'\'>'+res.keterangan+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+'id_obat'+'[]\' value=\''+res.id+'\'><input type=\'hidden\' name=\''+'jumlah_obat'+'[]\' value=\''+res.jumlah_obat+'\'><input type=\'hidden\' name=\''+'keterangan'+'[]\' value=\''+res.keterangan+'\'></tr>';
+                    var templateListResep = '<tr id=\''+res.id+'\'><td>'+res.name+'</td><td id=\''+'jumlah_obat'+'\'>'+res.jumlah_obat+'</td><td id=\''+'keterangan'+'\'>'+res.keterangan+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+'id_obat'+'[]\' value=\''+res.id+'\'><input type=\'hidden\' name=\''+'jumlah_obat'+'[]\' value=\''+res.jumlah_obat+'\'><input type=\'hidden\' name=\''+'keterangan'+'[]\' value=\''+res.keterangan+'\'></tr>';
                     listResep.append(templateListResep);
                     $('#formRacikanDokter')[0].reset();
                     // $('#ModalResep').modal('hide');
@@ -866,7 +849,7 @@ $(document).ready(function() {
         //     countTr = 0;
         // }
         // countTr+=1;
-        // var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td>'+dataResep[3].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
+        // var templateListResep = '<tr id=\''+dataResep[0].value+'\'><td>'+namaObat+'</td><td id=\''+dataResep[1].name+'\'>'+dataResep[1].value+'</td><td id=\''+dataResep[2].name+'\'>'+dataResep[2].value+'</td><td><button class=\'btn btn-secondary\' type=\'button\' onclick=\'return (this.parentNode).parentNode.remove();\' ><i class=\'fas fa-trash-alt\'></i></button></td><input type=\'hidden\' name=\''+dataResep[0].name+'[]\' value=\''+dataResep[0].value+'\'><input type=\'hidden\' name=\''+dataResep[1].name+'[]\' value=\''+dataResep[1].value+'\'><input type=\'hidden\' name=\''+dataResep[2].name+'[]\' value=\''+dataResep[2].value+'\'></tr>';
         // listResep.append(templateListResep);
         // $(this)[0].reset();
         // // $('#ModalResep').modal('hide');

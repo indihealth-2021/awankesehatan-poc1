@@ -497,6 +497,8 @@ class ResepDokter extends CI_Controller
             return redirect(base_url('pasien/ResepDokter/pembayaran/' . $id_jadwal_konsultasi . '/?owlexa=true#metode-pembayaran'));
         }
 
+        $getProviderCode = $this->db->query('SELECT master_apotek.provider_code FROM resep_dokter LEFT JOIN master_apotek ON resep_dokter.id_apotek = master_apotek.id WHERE resep_dokter.id_jadwal_konsultasi = ' . $id_jadwal_konsultasi . ' AND resep_dokter.diverifikasi = 1 AND resep_dokter.dirilis = 1 LIMIT 1')->result();
+
         $dataRaw = array(
             'userId' => $id_pasien,
             'jadwalKonsultasiId' => $id_jadwal_konsultasi,

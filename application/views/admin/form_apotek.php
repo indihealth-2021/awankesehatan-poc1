@@ -80,13 +80,13 @@
           <div class="col-sm-6">
             <div class="form-group form-focus">
               <label class="focus-label">Latitude</label>
-              <input type="text" class="form-control floating" name="latitude" <?php echo isset($old) ? 'value="' . $old['latitude'] . '"' : ''; ?> required placeholder="Masukan Kode Pos">
+              <input type="text" class="form-control floating" name="latitude" <?php echo isset($old) ? 'value="' . $old['latitude'] . '"' : ''; ?> required placeholder="Masukan latitude">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group form-focus">
               <label for="" class="focus-label">Longitude</label>
-              <input type="text" name="longitude" id="longitude" class="form-control floating" <?php echo isset($old) ? 'value="' . $old['longitude'] . '"' : ''; ?>>
+              <input type="text" name="longitude" id="longitude" class="form-control floating" <?php echo isset($old) ? 'value="' . $old['longitude'] . '"' : ''; ?>required placeholder="Masukan longitude">
             </div>
           </div>
         </div>

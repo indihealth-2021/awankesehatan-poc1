@@ -1092,9 +1092,7 @@ class Pembayaran extends CI_Controller
             }
         }
 
-        $id_user = $this->session->userdata('id_user');
-        $user = $this->db->query('SELECT id, name, lahir_tanggal, email FROM master_user WHERE id = ' . $id_user)->row();
-        $id_pasien = $user->id;
+        $id_pasien = $this->session->userdata('id_user');
         //$fullName = $user->name;
         $fullName = $this->input->post('fullName');
         $birthDate = $this->input->post('birthDate');
@@ -1106,8 +1104,6 @@ class Pembayaran extends CI_Controller
         // $otp = $this->input->post('otp');
         $id_dokter = $this->input->post('id_dokter');
         $id_registrasi = $this->input->post('id_registrasi');
-        // echo var_dump($this->input->post());
-        // die;
 
         $data = $this->input->post();
         $admissionDate = date("Y-m-d");
@@ -1424,10 +1420,10 @@ class Pembayaran extends CI_Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $dataRaw,
+
         ));
 
         $result = curl_exec($curl);
-        // var_dump($result);
         $result = json_decode($result, true);
 
         curl_close($curl);
@@ -1435,7 +1431,7 @@ class Pembayaran extends CI_Controller
         $response['data'] = $result['data'];
         // $this->response($result, REST_Controller::HTTP_OK);
         if ($result['code'] == 200) {
-            $claim_number = $result['data']['claimNumber'];
+            $claim_number = $result['data']['claim_number'];
 
             $data_bukti_pembayaran = array(
                 "id_registrasi" => $id_registrasi,
@@ -1447,19 +1443,14 @@ class Pembayaran extends CI_Controller
                 'metode_pengambilan_obat' => $this->input->post('dikirim'),
                 "status" => 1,
                 "card_number" => $cardNumber,
-                "claim_number" => $claim_number
             );
+            if ($claim_number != '' || $claim_number != null) {
+                $data_bukti_pembayaran['claim_number'] = $claim_number;
+            }
             $this->db->where('id_registrasi', $data_bukti_pembayaran['id_registrasi']);
             $this->db->update('bukti_pembayaran', $data_bukti_pembayaran);
 
-            $data3 = array(
-                "id_dokter" => $jadwal->id_dokter,
-                "id_pasien" => $id_pasien,
-                "id_registrasi" => $id_registrasi,
-                "tanggal" => $tanggal,
-                "jam" => $jam,
-            );
-            // $this->db->insert('jadwal_konsultasi', $data3);
+            //  $dataJadwalKonsultasi = $this->all_model->select('jadwal_konsultasi', 'row', 'id_registrasi = ' . $id_registrasi, 1);
             $id_jadwal_konsultasi = $this->db->insert_id();
 
             $data_biaya_pengiriman_obat = array(

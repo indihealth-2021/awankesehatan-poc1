@@ -59,10 +59,10 @@ class Payment extends CI_Controller
 		foreach ($temp as $key => $value) {
 			$value->photo = base_url('assets/images/bukti_pembayaran/' . $value->photo);
 			if ($value->poli_dokter) {
-				$biaya_adm = $value->biaya_adm ? $value->biaya_adm:0;
-				$biaya_konsultasi = $value->biaya_konsultasi ? $value->biaya_konsultasi:0;
+				$biaya_adm = $value->biaya_adm ? $value->biaya_adm : 0;
+				$biaya_konsultasi = $value->biaya_konsultasi ? $value->biaya_konsultasi : 0;
 				$harga_poli = $this->db->query('SELECT harga FROM nominal WHERE poli = "' . strtoupper($value->poli_dokter) . '"')->row();
-				$value->total_biaya = 'Rp. ' . number_format($biaya_konsultasi+$biaya_adm, 2, ',', '.');
+				$value->total_biaya = 'Rp. ' . number_format($biaya_konsultasi + $biaya_adm, 2, ',', '.');
 			} else {
 				$value->total_biaya = '';
 			}
@@ -282,11 +282,11 @@ var alt = $(this).attr('alt');
 
 		$id_jadwal = $this->db->query('SELECT id_jadwal FROM data_registrasi WHERE id = "' . $bukti[0]->id_registrasi . '"')->row();
 		$jadwal = $this->db->query('SELECT waktu, id, tanggal, id_dokter,hari FROM jadwal_dokter WHERE id = ' . $id_jadwal->id_jadwal)->row();
-		if($jadwal->tanggal){
+		if ($jadwal->tanggal) {
 			$tgl_dokter = new DateTime($jadwal->tanggal);
 			$now = new DateTime('now');
 			$diff_spare_now_tgl_dokter = $now->diff($tgl_dokter);
-			if($diff_spare_now_tgl_dokter->invert){
+			if ($diff_spare_now_tgl_dokter->invert) {
 				$this->session->set_flashdata('msg_payment', 'Tidak dapat mendaftar ke jadwal yang sudah kadaluarsa');
 				redirect(base_url('admin/Payment'));
 			}
@@ -451,7 +451,7 @@ var alt = $(this).attr('alt');
 						break;
 				}
 				$jam_terakhir = new DateTime($hari_dokter . ' ' . $spare_waktu_dokter[1]);
-				$jam_awal = new DateTime($hari_dokter. ' ' . $spare_waktu_dokter[0]);
+				$jam_awal = new DateTime($hari_dokter . ' ' . $spare_waktu_dokter[0]);
 				$hari_dokter = $jam_awal;
 				$diff_hari = $hari_sekarang->diff($hari_dokter);
 
@@ -482,14 +482,16 @@ var alt = $(this).attr('alt');
 			"tanggal" => $tanggal,
 			"jam" => $jam,
 		);
-		$this->db->insert('jadwal_konsultasi', $data3);
+		$this->db->where('id_registrasi', $data3['id_registrasi']);
+		$this->db->update('jadwal_konsultasi', $data3);
 		// echo var_dump($data3);
 		// die;
-		$id_jadwal_konsultasi = $this->db->insert_id();
+		$dataJadwalKonsultasi = $this->all_model->select('jadwal_konsultasi', 'row', 'id_registrasi = ' . $data3['id_registrasi'], 1);
+		$id_jadwal_konsultasi = $dataJadwalKonsultasi->id;
 
-		$this->db->update($table="biaya_pengiriman_obat",$set=[
+		$this->db->update($table = "biaya_pengiriman_obat", $set = [
 			"id_jadwal_konsultasi" => $id_jadwal_konsultasi
-		],$where=[
+		], $where = [
 			"id_registrasi" => $bukti[0]->id_registrasi
 		]);
 
@@ -565,7 +567,7 @@ var alt = $(this).attr('alt');
 		$save = $this->all_model->update_($data, array('id' => $bukti[0]->id), 'bukti_pembayaran');
 		$save1 = $this->all_model->update_($data1, array('id' => $bukti[0]->id_registrasi), 'data_registrasi');
 		if ($save && $save1) {
-			$hasil = $this->db->query('SELECT id FROM no_antrian WHERE id_jadwal = '.$jadwal->id);
+			$hasil = $this->db->query('SELECT id FROM no_antrian WHERE id_jadwal = ' . $jadwal->id);
 			if (empty($hasil->result())) {
 				$data2['created_at'] = date('Y-m-d');
 				$data2['antrian'] = 1;
@@ -626,7 +628,7 @@ var alt = $(this).attr('alt');
 		$this->db->where('id', $id_regis);
 		$this->db->update('data_registrasi');
 		//$this->db->delete('data_registrasi', array('id' => $id_regis));
-		$this->db->delete('biaya_pengiriman_obat', array('id_registrasi'=>$id_regis));
+		$this->db->delete('biaya_pengiriman_obat', array('id_registrasi' => $id_regis));
 		$verifier = $this->db->query('SELECT name,reg_id FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
 		if ($this->all_model->update('bukti_pembayaran', array("status" => 2), array('id' => $id))) {
 			$this->session->set_flashdata('msg_payment', 'Bukti Pembayaran berhasil dihapus');

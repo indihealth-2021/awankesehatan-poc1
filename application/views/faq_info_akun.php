@@ -207,10 +207,10 @@
           <div class="col-lg-5">
             <p class="font-bold font-tele">Hubungi Kami</p>
             <div class="font-black font-18 text-justify">
-              <span>Jl. Medan Merdeka Barat N0. 21, RT.2/RW.3</span><br>
-              <span>Gambir, Kecamatan Gambir, Kota Jakarta Pusat</span><br>
-              <span>Daerah Khusus Ibukota Jakarta 10110</span><br>
-              <span></span><br>
+              <span>Gedung Arcadia, Thamrin Menara Tower,</span><br>
+              <span>Jl. M.H. Thamrin No.Kav. 3, RT.2/RW.1,</span><br>
+              <span>Kb. Sirih, Kec. Menteng, Kota Jakarta Pusat, </span><br>
+              <span>Daerah Khusus Ibukota Jakarta 10250</span><br>
               <span>Telp : +622130003000</span><br>
             </div>
           </div>
@@ -222,7 +222,7 @@
       </div>
     </div>
     <div class="col-md-12 text-center p-1" style="background: #59A799;">
-      <span class="font-12 text-white font-droid">Version 1.0 Copyright © 2020. Lintasarta & Indosat. All rights reserved.</span>
+      <span class="font-12 text-white font-droid">Version 1.0 Copyright © 2023. Lintasarta & Indosat. All rights reserved.</span>
     </div>
   </footer>
 

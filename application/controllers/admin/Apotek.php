@@ -110,17 +110,15 @@ class Apotek extends CI_Controller
                 // ============================================================ //
                 $result->message = 'Data apotek berhasil disimpan';
                 $this->session->set_flashdata('msg_add_apotek', $result->message);
-                redirect(base_url('admin/apotek'));
             } else {
                 $result->message = 'Data apotek gagal disimpan';
                 $this->session->set_flashdata('msg_add_apotek', $this->db->last_query());
-                redirect(base_url('admin/apotek/form_apotek'));
             }
         } else {
             $result->message = 'Maaf kategori user bukan admin fasyankes';
             $this->session->set_flashdata('msg_add_apotek', $result->message);
-            redirect(base_url('admin/apotek/'));
         }
+        redirect(base_url('admin/apotek'));
         //   echo var_dump($data);
         //   die;
     }

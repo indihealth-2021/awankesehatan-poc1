@@ -58,48 +58,37 @@ if ($resep->harga_kustom) {
             <div class="profile-basic">
               <div class="row">
                 <div class="col-md-4 col-12">
-                  <div class="">
-                    <p class="font-15">Dokter</p>
-                    <p class="font-24" style="line-height: 30px !important;"><?php echo ucwords($resep->nama_dokter) ?></p>
-                    <p class="font-15">Poli : <?php echo ucwords($resep->poli_dokter) ?></p>
-                    <p class="font-15 pt-3 text-abu">Resep Obat: </p>
-                    <p class="font-15 pl-3">
-                      <?php echo $resep->detail_obat ?>
-                    </p>
-                  </div>
+                  <p class="font-15">Dokter</p>
+                  <p class="font-24" style="line-height: 30px !important;"><?php echo ucwords($resep->nama_dokter) ?></p>
+                  <p class="font-15">Poli : <?php echo ucwords($resep->poli_dokter) ?></p>
+                  <p class="font-15 pt-3 text-abu">Resep Obat: </p>
+                  <ul><?php echo $resep->detail_obat ?></ul>
                 </div>
                 <div class="col-md-3 col-12">
-                  <div class="">
-                    <p class="font-15 text-abu">Tanggal Konsultasi</p>
-                    <?php
-                    $tanggal_konsul = $resep->tanggal_konsultasi ? (new DateTime($resep->tanggal_konsultasi)) : '-';
-                    ?>
-                    <span class="font-15"><?php echo $tanggal_konsul != '-' ? $tanggal_konsul->format('D, d/m/Y') : '-' ?></span>
-                    <p class="font-15"><?php echo $tanggal_konsul != '-' ? $tanggal_konsul->format('H:i') . ' WIB' : '-'; ?></p>
-                  </div>
+                  <p class="font-15 text-abu">Tanggal Konsultasi</p>
+                  <?php
+                  $tanggal_konsul = $resep->tanggal_konsultasi ? (new DateTime($resep->tanggal_konsultasi)) : '-';
+                  ?>
+                  <span class="font-15"><?php echo $tanggal_konsul != '-' ? $tanggal_konsul->format('D, d/m/Y') : '-' ?></span>
+                  <p class="font-15"><?php echo $tanggal_konsul != '-' ? $tanggal_konsul->format('H:i') . ' WIB' : '-'; ?></p>
                 </div>
                 <div class="col-md-5 col-12">
-                  <div class="">
-                    <p class="font-15 text-abu">No Registrasi</p>
-                    <p class="font-15"><?php echo $resep->id_registrasi ?></p>
-                  </div>
+                  <p class="font-15 text-abu">No Registrasi</p>
+                  <p class="font-15"><?php echo $resep->id_registrasi ?></p>
                 </div>
                 <div class="col-md-5 col-12">
-                  <div class="">
-                    <p class="font-15 text-abu">Pengambilan Obat</p>
-                    <?php if ($resep->dikirim == 1) { ?>
-                      <p class="font-15">Dikirim</p>
-                    <?php } else { ?>
-                      <p class="font-15">Diambil Sendiri</p>
-                    <?php } ?>
-                  </div>
+                  <p class="font-15 text-abu">Pengambilan Obat</p>
+                  <?php if ($resep->dikirim == 1) { ?>
+                    <p class="font-15">Dikirim</p>
+                  <?php } else { ?>
+                    <p class="font-15">Diambil Sendiri</p>
+                  <?php } ?>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div style="background: #FFF;border: 1px solid #DEDEDE" class="shadow-sm rounded">
-
           <div class="d-mobile-none_">
             <div class="row p-4">
               <div class="col-md-8">
@@ -423,7 +412,6 @@ if ($resep->harga_kustom) {
     </div>
   </div>
 </div>
-
 
 
 

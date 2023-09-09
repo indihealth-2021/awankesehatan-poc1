@@ -329,20 +329,21 @@ if(data.status == "OK"){
         $biaya_pengiriman_isExists = $this->db->query("SELECT id, jumlah_edit,alamat FROM biaya_pengiriman_obat WHERE id_registrasi = '" . $id_registrasi . "'")->row();
         $jml_edit = $biaya_pengiriman_isExists->jumlah_edit + 1;
         // $alamat_kustom = $alamat != $biaya_pengiriman_isExists->alamat ? 1 : 0;
-        $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi' => $id_jadwal_konsultasi, 'biaya_pengiriman' => $biaya_pengiriman, 'jumlah_edit' => $jml_edit), array('id' => $biaya_pengiriman_isExists->id));
+        // $this->all_model->update('biaya_pengiriman_obat', array('id_jadwal_konsultasi' => $id_jadwal_konsultasi, 'biaya_pengiriman' => $biaya_pengiriman, 'jumlah_edit' => $jml_edit), array('id' => $biaya_pengiriman_isExists->id));
+        $updateBiayaPengiriman = $this->db->where('id_registrasi', $id_registrasi)->update('biaya_pengiriman_obat', ['biaya_pengiriman' => $biaya_pengiriman, 'jumlah_edit' => $jml_edit]);
 
         // echo json_encode(array('status'=>'OK', 'jml_edit'=>$jml_edit));
-        $this->session->set_flashdata('msg_biaya_pengiriman', 'SUKSES: Resep Obat telah disimpan');
+        if ($updateBiayaPengiriman) {
+            $this->session->set_flashdata('msg_biaya_pengiriman', 'SUKSES: Resep Obat telah disimpan');
+        } else {
+            $this->session->set_flashdata('msg_biaya_pengiriman', 'GAGAL: Biaya Pengiriman Gagal Disimpan');
+        }
         redirect(base_url('admin/PengirimanObat'));
     }
 
     public function rilis_obat($id_jadwal_konsultasi)
     {
         $this->all_controllers->check_user_farmasi();
-
-        // $id_jadwal_konsultasi = $this->input->post('id_jadwal_konsultasi');
-        $biaya_pengiriman = $this->input->post('biaya_pengiriman');
-        $biaya_pengiriman = $biaya_pengiriman ? $biaya_pengiriman : 0;
 
         $alamat = $this->input->post('alamat');
         $alamat = $alamat ? $alamat : "";
@@ -355,14 +356,6 @@ if(data.status == "OK"){
             $this->session->set_flashdata('msg_biaya_pengiriman', $message);
             redirect(base_url('admin/PengirimanObat'));
         }
-
-        $data_biaya_pengiriman = array(
-            'id_jadwal_konsultasi' => $id_jadwal_konsultasi,
-            'biaya_pengiriman' => $biaya_pengiriman,
-        );
-
-        $biaya_pengiriman_isExists = $this->db->query("SELECT id FROM biaya_pengiriman_obat WHERE id_jadwal_konsultasi = " . $id_jadwal_konsultasi)->row();
-        $this->all_model->update('biaya_pengiriman_obat', $data_biaya_pengiriman, ['id' => $biaya_pengiriman_isExists->id]);
 
         // $data_biaya_pengiriman = array(
         //     'id_jadwal_konsultasi'=>$id_jadwal_konsultasi,

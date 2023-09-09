@@ -342,7 +342,7 @@ class Teleconsultasi extends CI_Controller
         if (!$this->session->userdata('is_login')) {
             redirect(base_url('Login'));
         }
-        $valid = $this->db->query('SELECT id_user_kategori FROM master_user WHERE id = ' . $this->session->userdata('id_user'))->row();
+        $valid = $this->db->where('id', $this->session->userdata('id_user'))->get('master_user')->row();
         if ($valid->id_user_kategori != 2) {
             if ($valid->id_user_kategori == 0) {
                 redirect(base_url('pasien/Pasien'));
@@ -380,15 +380,8 @@ class Teleconsultasi extends CI_Controller
         );
 
         $updateAssesment = $this->all_model->update('assesment', $data_assesment, array('id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'], 'id_pasien' => $data['id_pasien']));
-        if ($updateAssesment != 0) {
-            if ($updateAssesment == -1) {
-                echo 'gagal';
-            } else {
-                echo 'berhasil';
-            }
-        } else {
+        if ($updateAssesment == 0) {
             $new_assesment = $this->db->insert('assesment', $data_assesment);
-            echo 'berhasil';
         }
 
         $data_history = array("activity" => "Assesment", "id_user" => $this->session->userdata('id_user'), "target_id_user" => $data['id_pasien']);
@@ -411,49 +404,45 @@ class Teleconsultasi extends CI_Controller
         $id_registrasi = $data["id_registrasi"];
 
         $updateDiagnosisDokter = $this->all_model->update('diagnosis_dokter', $data_diagnosis_dokter, array('id_jadwal_konsultasi' => $data['id_jadwal_konsultasi'], 'id_pasien' => $data['id_pasien']));
-        if ($updateDiagnosisDokter != 0) {
-            if ($updateDiagnosisDokter == -1) {
-                echo 'gagal';
-            } else {
-                echo 'berhasil';
-            }
-        } else {
+        if ($updateDiagnosisDokter == 0) {
             $insertDiagnosisDokter = $this->db->insert('diagnosis_dokter', $data_diagnosis_dokter);
             if ($insertDiagnosisDokter) {
                 // Get transaction number from bukti_pembayaran with latest diagnosis_dokter data
-                $dataBuktiPembayaran = $this->all_model->select('bukti_pembayaran', 'result', 'id_registrasi =' . $data_diagnosis_dokter['id_registrasi'], 1);
+                $dataBuktiPembayaran = $this->db->where('id_registrasi', $data["id_registrasi"])->get('bukti_pembayaran', 1)->result();
 
-                $dataRaw = [
-                    'transactionNumber' => $dataBuktiPembayaran->trans_id,
-                    'diagnosisCode'     => $data_diagnosis_dokter['diagnosis']
-                ];
+                if ($dataBuktiPembayaran) {
+                    $dataRaw = [
+                        'transactionNumber' => $dataBuktiPembayaran->trans_id,
+                        'diagnosisCode'     => $data_diagnosis_dokter['diagnosis']
+                    ];
 
-                // Diagnose Verification from Owlexa API
-                $curl = curl_init();
+                    // Diagnose Verification from Owlexa API
+                    $curl = curl_init();
 
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/verifyDiagnose",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_POSTFIELDS => $dataRaw,
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => $this->config->item('pg_api') . "/owlexa/Api/verifyDiagnose",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "POST",
+                        CURLOPT_POSTFIELDS => $dataRaw,
 
-                ));
+                    ));
 
-                $result = curl_exec($curl);
-                $result = json_decode($result, true);
+                    $result = curl_exec($curl);
+                    $result = json_decode($result, true);
 
-                curl_close($curl);
+                    curl_close($curl);
 
-                if ($result['code'] == 200) {
-                    echo 'verify diagnosa berhasil';
+                    if ($result['code'] == 200) {
+                        echo 'verify diagnosa berhasil';
+                    }
+
+                    echo 'berhasil';
                 }
-
-                echo 'berhasil';
             }
         }
 
@@ -547,6 +536,7 @@ class Teleconsultasi extends CI_Controller
         $this->db->insert('data_history_log_dokter', $data_history);
 
         echo "OK";
+        echo $this->db->error();
     }
 
     private function update_diagnosa()
@@ -924,7 +914,8 @@ $(document).ready(function() {
 if(JSON.parse(JSON.parse(payload.data.body).id_user).includes(userid.toString())){
     if(JSON.parse(JSON.parse(payload.data.body).name == 'panggilan_konsultasi_berakhir_dokter')){
             console.log('test');
-            console.log(JSON.parse(payload.data.body).chat_id);
+            // console.log(JSON.parse(payload.data.body).chat_id);
+            console.log(JSON.parse(payload.data.body).data_konsultasi);
             $.ajax({
                 method : 'POST',
                 url    : baseUrl+'dokter/Teleconsultasi/send_data_konsultasi',

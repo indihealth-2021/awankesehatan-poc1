@@ -133,7 +133,8 @@ class Apotek extends CI_Controller {
 					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
 					$calc = $distance*0.20;
 					$distance = number_format($distance-$calc,2,',','.');
-					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
+					// $temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
+					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . "";
 				}
 			}else {
 				for($i = 0; $i < count($temp); $i ++) {
@@ -142,7 +143,8 @@ class Apotek extends CI_Controller {
 					$distance = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination)["travelDistance"];
 					$calc = $distance*0.20;
 					$distance = number_format($distance-$calc,2,',','.');
-					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
+					// $temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . " - ±" . $distance . " km dari lokasi pasien";
+					$temp[$i]["text"] = $temp[$i]["id"]." - ".$temp[$i]["text"] . "" ;
 				}
 			}
 
@@ -189,7 +191,8 @@ class Apotek extends CI_Controller {
 				$distanceAndDuration = $this->getTravelDistanceAndDuration($origin=$origin, $destination=$destination);
 
 				$apotek[$i]["distanceAndDuration"] = $distanceAndDuration;
-				$apotek[$i]["text"] .= " - ±".$distanceAndDuration["travelDistance"]. " km dari lokasi pasien";
+				// $apotek[$i]["text"] .= " - ±".$distanceAndDuration["travelDistance"]. " km dari lokasi pasien";
+				$apotek[$i]["text"] .= "";
 			}
 
 			# Sorting (ASC) an associative array

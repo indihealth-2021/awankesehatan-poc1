@@ -115,7 +115,17 @@ class Pendaftaran extends CI_Controller
         // 		$this->session->unset_userdata('_token');
         $id_pasien = $this->session->userdata('id_user');
         $id_jadwal = $this->input->get('id_jadwal');
-
+        $fasyankes = $this->db->query('SELECT * FROM master_rs ORDER BY id DESC')->row();
+        if(empty($fasyankes))
+        {
+            $this->session->set_flashdata('msg', 'Info Rumah sakit tidak ditemukan.');
+            redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+        }
+        if(empty($fasyankes->kode_rs))
+        {
+            $this->session->set_flashdata('msg', 'Kode Rumah belum di set.');
+            redirect(base_url('pasien/Pendaftaran?poli=&hari=all'));
+        }
         if (!$id_jadwal) {
             show_404();
         }
@@ -364,14 +374,14 @@ class Pendaftaran extends CI_Controller
         $last_num_regid = (string) $last_num_regid;
 
         $new_num = str_pad($last_num_regid, 5, "0", STR_PAD_LEFT);
-
+        
         // Menambah data untuk table data_registrasi
         //        $id_registrasi = 'REG-'.$daftar_id.'-'.$id_pasien;
         $now = (new DateTime('now'))->format('YmdHis');
-        $id_registrasi = $pasien->id_fasyankes . '-' . $new_num . '-' . $now;
+        $id_registrasi =  $fasyankes->kode_rs . '-' . $new_num . '-' . $now;
         $id_status_pembayaran = 0;
         $keterangan = 'Belum Bayar';
-        $id_fasyankes = $pasien->id_fasyankes;
+        $id_fasyankes =  $fasyankes->kode_rs;
         $data_registrasi = array('id' => $id_registrasi, 'id_status_pembayaran' => $id_status_pembayaran, 'keterangan' => $keterangan, 'id_fasyankes' => $id_fasyankes, 'id_pasien' => $id_pasien, 'id_jadwal' => $id_jadwal);
         $regis = $this->db->insert('data_registrasi', $data_registrasi);
 

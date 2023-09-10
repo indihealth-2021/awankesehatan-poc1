@@ -31,6 +31,10 @@
                             <input type="number" name="telp_fax" class="form-control" id="no-telp-fax" value="<?php echo $rs ? ($rs->telp_fax ? $rs->telp_fax : ''):'' ?>" required>
                         </div>
                         <div class="form-group">
+                            <label for="no-telp-fax">Kode Rumah Sakit</label>
+                            <input type="number" name="kode_rs" class="form-control" id="kode-rs" value="<?php echo $rs ? ($rs->kode_rs ? $rs->kode_rs : ''):'' ?>" placeholder="cth: 1103010" required>
+                        </div>
+                        <div class="form-group">
                             <label for="">Alamat</label>
                             <div class="row">
                                 <div class="col-md-6">

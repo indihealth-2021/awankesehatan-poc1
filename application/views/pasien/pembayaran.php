@@ -138,7 +138,7 @@ $total_harga = $biaya_konsultasi + $biaya_adm;
                       <!-- <option value="5">Credit Card / Debit Card</option> -->
                     </select>
                   <?php } else { ?>
-                    <p class="mt-2"><?php echo $bukti_pembayaran->metode_pembayaran == 1 ? 'Transfer' : ($bukti_pembayaran->metode_pembayaran == 2 ? 'Owlexa' : ($bukti_pembayaran->metode_pembayaran == 3 ? 'Virtual Account' : ($bukti_pembayaran->metode_pembayaran == 4 ? 'Dompet Digital' : 'Credit Card / Debit Card'))); ?></p>
+                    <p class="mt-2"><?php echo @$bukti_pembayaran->metode_pembayaran == 1 ? 'Transfer' : (@$bukti_pembayaran->metode_pembayaran == 2 ? 'Owlexa' : (@$bukti_pembayaran->metode_pembayaran == 3 ? 'Virtual Account' : (@$bukti_pembayaran->metode_pembayaran == 4 ? 'Dompet Digital' : 'Credit Card / Debit Card'))); ?></p>
                   <?php } ?>
                 </div>
               </div>

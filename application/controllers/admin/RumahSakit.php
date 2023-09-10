@@ -161,11 +161,12 @@ class RumahSakit extends CI_Controller
         $alamat_provinsi = $post_data['alamat_provinsi'];
         $alamat_kota = $post_data['alamat_kota'];
         $alamat_kecamatan = $post_data['alamat_kecamatan'];
+        $kode_rs = $post_data['kode_rs'];
         $alamat_kelurahan = $post_data['alamat_kelurahan'];
         $alamat_detail = $post_data['alamat_detail'];
         $kode_pos = $post_data['kode_pos'];
         $direktur = $post_data['direktur'];
-        if(!$nama || !$telp_fax || !$alamat_provinsi || $alamat_provinsi == "PILIH PROVINSI" || !$alamat_kota || $alamat_kota == "PILIH KABUPATEN/KOTA" || !$alamat_kecamatan || $alamat_kecamatan == "PILIH KECAMATAN" || !$alamat_kelurahan || $alamat_kelurahan == "PILIH KELURAHAN" || !$alamat_detail || !$kode_pos || !$direktur){
+        if(!$nama || !$telp_fax || !$alamat_provinsi  || !$kode_rs|| $alamat_provinsi == "PILIH PROVINSI" || !$alamat_kota || $alamat_kota == "PILIH KABUPATEN/KOTA" || !$alamat_kecamatan || $alamat_kecamatan == "PILIH KECAMATAN" || !$alamat_kelurahan || $alamat_kelurahan == "PILIH KELURAHAN" || !$alamat_detail || !$kode_pos || !$direktur){
             $this->session->set_flashdata('msg', 'GAGAL: Data Tidak Lengkap!');
             redirect(base_url('admin/RumahSakit/manage_rs'));
         }
@@ -179,6 +180,7 @@ class RumahSakit extends CI_Controller
             "alamat_detail"=>$alamat_detail,
             "kode_pos"=>$kode_pos,
             "direktur"=>$direktur,
+            "kode_rs"=>$kode_rs,
         ];
 
         $master_rs = $this->db->query('SELECT id FROM master_rs')->row();

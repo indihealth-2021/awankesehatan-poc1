@@ -126,7 +126,7 @@
                                           }
                                 ?>
                                 <td class="text-center"><?php echo $day_ind ?></td>
-                                <td class="text-center"><?php echo $jadwal_konsultasi->jam.' - '.(new DateTime($jadwal_konsultasi->jam))->modify('+30 Minutes')->format('H:i').' WIB' ?></td>
+                                <td class="text-center"><?php echo $jadwal_konsultasi->jam.' - '.(new DateTime($jadwal_konsultasi->jam))->modify('+'.$jadwal_konsultasi->durasi.' Seconds')->format('H:i').' WIB' ?></td>
                               </tr>
                             <?php } ?>
                             </tbody>

@@ -120,7 +120,7 @@
                           </td>
                           <td class="text-center"><?php echo $tanggal->format('d-m-Y'); ?></td>
                           <td class="text-center"><?php echo $hari ?></td>
-                          <td class="text-center"><?php echo $jadwal_konsultasi->jam . ' WIB' ?></td>
+                          <td class="text-center"><?php echo $jadwal_konsultasi->jam.' - '.(new DateTime($jadwal_konsultasi->jam))->modify('+'.$jadwal_konsultasi->durasi.' Seconds')->format('H:i'). ' WIB' ?></td>
                         </tr>
                       <?php } ?>
                     </tbody>

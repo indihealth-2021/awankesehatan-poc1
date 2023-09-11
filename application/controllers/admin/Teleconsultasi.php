@@ -18,7 +18,7 @@ class Teleconsultasi extends CI_Controller {
 			$view = "admin/manage_teleconsultasi"
 		);
 
-		$data['list_jadwal_telekonsultasi'] = $this->db->query('SELECT jk.*,n.poli, d.name as nama_dokter,p.name as nama_pasien FROM jadwal_konsultasi jk INNER JOIN master_user d ON jk.id_dokter=d.id INNER JOIN master_user p ON jk.id_pasien=p.id INNER JOIN detail_dokter dd ON dd.id_dokter = d.id INNER JOIN nominal n ON dd.id_poli = n.id ORDER BY jk.tanggal ASC, jk.jam ASC')->result();
+		$data['list_jadwal_telekonsultasi'] = $this->db->query('SELECT jk.*,n.poli,n.durasi, d.name as nama_dokter,p.name as nama_pasien FROM jadwal_konsultasi jk INNER JOIN master_user d ON jk.id_dokter=d.id INNER JOIN master_user p ON jk.id_pasien=p.id INNER JOIN detail_dokter dd ON dd.id_dokter = d.id INNER JOIN nominal n ON dd.id_poli = n.id ORDER BY jk.tanggal ASC, jk.jam ASC')->result();
         $data['css_addons'] = '<link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css').'"><link rel="stylesheet" href="'.base_url('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css').'">';
         $data['js_addons'] = '
                                 <script src="'.base_url('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js').'"></script>

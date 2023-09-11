@@ -77,7 +77,7 @@
                                                 }
                                                 $tanggal = $tanggal->format('d-m-Y');
                                                 echo "<td>".$hari."</td>";
-                                                echo "<td>".$konsultasi->jam." (Max. 30 Menit)</td>";
+                                                echo "<td>".$konsultasi->jam." (Max. ".($konsultasi->durasi/60)." Menit)</td>";
                                                 echo "<td>".$tanggal."</td>";
                                                 echo "<td style='text-align:center;'><a href='".base_url('dokter/Teleconsultasi/proses_teleconsultasi/?id_jadwal_konsultasi='.$konsultasi->id.'&id_pasien='.$konsultasi->id_pasien)."' class='btn btn-mulai'>Mulai</a>
                                       <a href='".base_url('dokter/HistoryMedisPasien/index/'.$konsultasi->id_pasien)."' class='btn btn-medrec' target='_blank'>Medrec</a>

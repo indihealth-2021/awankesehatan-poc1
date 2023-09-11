@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Jadwal_telekonsultasi_model extends CI_Model{
     public function get_all_by_id_pasien($id_pasien, $dokter_aktif = null, $limit = null){
-        $this->db->select('jk.id, jk.tanggal, jk.jam, d.name as nama_dokter, d.foto as foto_dokter, d.id as id_dokter, n.poli');
+        $this->db->select('jk.id, jk.tanggal, jk.jam, d.name as nama_dokter, d.foto as foto_dokter, d.id as id_dokter, n.poli,n.durasi');
         $this->db->from('jadwal_konsultasi as jk');
         $this->db->join('master_user as d', 'jk.id_dokter = d.id', 'inner');
         $this->db->join('detail_dokter as dd', 'dd.id_dokter = d.id', 'inner');
@@ -22,7 +22,7 @@ class Jadwal_telekonsultasi_model extends CI_Model{
     }
 
     public function get_all_by_id_dokter($id_dokter, $pasien_aktif = null, $limit = null){
-        $this->db->select('jk.id, jk.tanggal, jk.jam, p.name as nama_pasien, p.foto as foto_pasien, p.id as id_pasien, n.poli');
+        $this->db->select('jk.id, jk.tanggal, jk.jam, p.name as nama_pasien, p.foto as foto_pasien, p.id as id_pasien, n.poli, n.durasi');
         $this->db->from('jadwal_konsultasi as jk');
         $this->db->join('master_user as p', 'jk.id_pasien = p.id', 'inner');
         $this->db->join('master_user as d', 'jk.id_dokter = d.id', 'inner');

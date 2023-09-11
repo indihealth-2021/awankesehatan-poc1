@@ -90,7 +90,7 @@
                                     $tanggal = $tanggal->format('d-m-Y');
                                     echo "<td>".$tanggal."</td>";
                                     echo "<td>".$hari."</td>";
-                                    echo "<td>".$jadwal_konsultasi->jam." (Max. 30 Menit)</td>";
+                                    echo "<td>".$jadwal_konsultasi->jam." (Max. ".($jadwal_konsultasi->durasi/60)." Menit)</td>";
                                     // echo "<td style='text-align:center;'><a target='_blank' href='".base_url('pasien/Chat/index/'.$jadwal_konsultasi->id_dokter)."' class='btn btn-success'><i class='far fa-comment-dots'></i> Chat</a></td>";
                                     echo "</tr>";
                                 }

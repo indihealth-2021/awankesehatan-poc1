@@ -165,7 +165,7 @@
 
                             </div>
                             <div class="">
-                                <div id="meet" width="800" height="700" style="background: #000;"></div>
+                                <div id="meet" width="100%" height="700" style="background: #000;"></div>
                                 <!-- <video autoplay id="video-other" style="background-color: #000;" width="100%" height="100%"></video>
                                           <video autoplay id="video-ku" style="background-color: #000; position: absolute; bottom: 75px; right: 8px; width: 40%; height: 40%;"></video> -->
                             </div>
@@ -761,7 +761,7 @@
     const domain = 'telekonsultasi2.telemedical.id';
     const options = {
         roomName: room_name,
-        width: 535,
+        width: '100%',
         height: 400,
         parentNode: document.querySelector('#meet'),
         configOverwrite: {

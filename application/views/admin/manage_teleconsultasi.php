@@ -86,7 +86,7 @@
                             $tanggal = $tanggal->format('d-m-Y');                  
                           ?>
                           <td class="text-center"><?php echo $hari.', '.$tanggal ?></td>
-                          <td><?php echo ucwords($jt->jam)?> (Max. 30 Menit)</td>
+                          <td><?php echo $jt->jam.' - '.(new DateTime($jt->jam))->modify('+'.$jt->durasi.' Seconds')->format('H:i').' WIB'." (Max. ".($jt->durasi/60)." menit)" ?></td>
                           <td>
                               <a class="font-icon" href="#modalHapus" data-toggle="modal" data-href="<?php echo base_url('admin/Teleconsultasi/hapusJadwal/'.$jt->id.'/'.$jt->id_dokter.'/'.$jt->id_pasien);?>" data-nama="<?php echo 'Pasien '.$jt->nama_pasien.' dengan Dokter '.$jt->nama_dokter.' [ '.(new DateTime($jt->tanggal))->format('d-m-Y').' ]' ?>" onclick="$('#modalHapus #form')" >
                                 <i><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">

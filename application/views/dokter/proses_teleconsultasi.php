@@ -752,6 +752,7 @@
         return result;
     }
 
+
     var uniqid = makeid(12);
     reg_id = '<?php echo $pasien->reg_id; ?>';
     name = '<?php echo $user->name; ?>';
